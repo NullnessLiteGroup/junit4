@@ -1,12 +1,13 @@
 package org.junit.internal.builders;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.junit.internal.runners.SuiteMethod;
 import org.junit.runner.Runner;
 import org.junit.runners.model.RunnerBuilder;
 
 public class SuiteMethodBuilder extends RunnerBuilder {
     @Override
-    public Runner runnerForClass(Class<?> each) throws Throwable {
+    public @Nullable Runner runnerForClass(Class<?> each) throws Throwable {
         if (hasSuiteMethod(each)) {
             return new SuiteMethod(each);
         }

@@ -20,6 +20,7 @@ import junit.framework.Test;
 import junit.framework.TestListener;
 import junit.framework.TestSuite;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.junit.internal.Throwables;
 
 /**
@@ -92,12 +93,12 @@ public abstract class BaseTestRunner implements TestListener {
      * Returns the Test corresponding to the given suite. This is
      * a template method, subclasses override runFailed(), clearStatus().
      */
-    public Test getTest(String suiteClassName) {
+    public @Nullable Test getTest(String suiteClassName) {
         if (suiteClassName.length() <= 0) {
             clearStatus();
             return null;
         }
-        Class<?> testClass = null;
+        @Nullable Class<?> testClass = null;
         try {
             testClass = loadSuiteClass(suiteClassName);
         } catch (ClassNotFoundException e) {
@@ -111,7 +112,7 @@ public abstract class BaseTestRunner implements TestListener {
             runFailed("Error: " + e.toString());
             return null;
         }
-        Method suiteMethod = null;
+        @Nullable Method suiteMethod = null;
         try {
             suiteMethod = testClass.getMethod(SUITE_METHODNAME);
         } catch (Exception e) {
@@ -123,7 +124,7 @@ public abstract class BaseTestRunner implements TestListener {
             runFailed("Suite() method must be static");
             return null;
         }
-        Test test = null;
+        @Nullable Test test = null;
         try {
             test = (Test) suiteMethod.invoke(null); // static method
             if (test == null) {
@@ -152,8 +153,8 @@ public abstract class BaseTestRunner implements TestListener {
      * Processes the command line arguments and
      * returns the name of the suite class to run or null
      */
-    protected String processArguments(String[] args) {
-        String suiteName = null;
+    protected @Nullable String processArguments(String[] args) {
+        @Nullable String suiteName = null;
         for (int i = 0; i < args.length; i++) {
             if (args[i].equals("-noloading")) {
                 setLoading(false);
@@ -229,7 +230,7 @@ public abstract class BaseTestRunner implements TestListener {
     }
 
     private static void readPreferences() {
-        InputStream is = null;
+        @Nullable InputStream is = null;
         try {
             is = new FileInputStream(getPreferencesFile());
             setPreferences(new Properties(getPreferences()));
@@ -246,12 +247,12 @@ public abstract class BaseTestRunner implements TestListener {
         }
     }
 
-    public static String getPreference(String key) {
+    public static @Nullable String getPreference(String key) {
         return getPreferences().getProperty(key);
     }
 
     public static int getPreference(String key, int dflt) {
-        String value = getPreference(key);
+        @Nullable String value = getPreference(key);
         int intValue = dflt;
         if (value == null) {
             return intValue;

@@ -2,6 +2,7 @@ package org.junit.runner;
 
 import java.util.Comparator;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.junit.internal.builders.AllDefaultPossibilitiesBuilder;
 import org.junit.internal.requests.ClassRequest;
 import org.junit.internal.requests.FilterRequest;
@@ -117,7 +118,7 @@ public abstract class Request {
      *
      * @return corresponding {@link Runner} for this Request
      */
-    public abstract Runner getRunner();
+    public abstract @Nullable Runner getRunner();
 
     /**
      * Returns a Request that only contains those tests that should run when

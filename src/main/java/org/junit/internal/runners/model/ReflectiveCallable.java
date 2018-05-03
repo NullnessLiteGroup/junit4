@@ -1,5 +1,7 @@
 package org.junit.internal.runners.model;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 import java.lang.reflect.InvocationTargetException;
 
 /**
@@ -7,7 +9,7 @@ import java.lang.reflect.InvocationTargetException;
  * wrapping it in an InvocationTargetException.
  */
 public abstract class ReflectiveCallable {
-    public Object run() throws Throwable {
+    public @Nullable Object run() throws Throwable {
         try {
             return runReflectiveCall();
         } catch (InvocationTargetException e) {
@@ -15,5 +17,5 @@ public abstract class ReflectiveCallable {
         }
     }
 
-    protected abstract Object runReflectiveCall() throws Throwable;
+    protected abstract @Nullable Object runReflectiveCall() throws Throwable;
 }

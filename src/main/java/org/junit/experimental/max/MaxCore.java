@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.List;
 
 import junit.framework.TestSuite;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.junit.internal.requests.SortingRequest;
 import org.junit.internal.runners.ErrorReportingRunner;
 import org.junit.internal.runners.JUnit38ClassRunner;
@@ -109,7 +110,7 @@ public class MaxCore {
         }
         return new Request() {
             @Override
-            public Runner getRunner() {
+            public @Nullable Runner getRunner() {
                 try {
                     return new Suite((Class<?>) null, runners) {
                     };
@@ -120,7 +121,7 @@ public class MaxCore {
         };
     }
 
-    private Runner buildRunner(Description each) {
+    private @Nullable Runner buildRunner(Description each) {
         if (each.toString().equals("TestSuite with 0 tests")) {
             return Suite.emptySuite();
         }
@@ -142,7 +143,7 @@ public class MaxCore {
         return Request.method(type, methodName).getRunner();
     }
 
-    private Class<?> getMalformedTestClass(Description each) {
+    private @Nullable Class<?> getMalformedTestClass(Description each) {
         try {
             return Class.forName(each.toString().replace(MALFORMED_JUNIT_3_TEST_CLASS_PREFIX, ""));
         } catch (ClassNotFoundException e) {
@@ -165,7 +166,7 @@ public class MaxCore {
         return results;
     }
 
-    private void findLeaves(Description parent, Description description, List<Description> results) {
+    private void findLeaves(@Nullable Description parent, Description description, List<Description> results) {
         if (description.getChildren().isEmpty()) {
             if (description.toString().equals("warning(junit.framework.TestSuite$1)")) {
                 results.add(Description.createSuiteDescription(MALFORMED_JUNIT_3_TEST_CLASS_PREFIX + parent));

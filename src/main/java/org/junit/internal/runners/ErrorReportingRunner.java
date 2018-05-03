@@ -3,6 +3,7 @@ package org.junit.internal.runners;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.junit.runner.Description;
 import org.junit.runner.Runner;
 import org.junit.runner.notification.Failure;
@@ -17,11 +18,11 @@ public class ErrorReportingRunner extends Runner {
 
     private final String classNames;
 
-    public ErrorReportingRunner(Class<?> testClass, Throwable cause) {
+    public ErrorReportingRunner(@Nullable Class<?> testClass, Throwable cause) {
         this(cause, testClass);
     }
     
-    public ErrorReportingRunner(Throwable cause, Class<?>... testClasses) {
+    public ErrorReportingRunner(Throwable cause, @Nullable Class<?>... testClasses) {
         if (testClasses == null || testClasses.length == 0) {
             throw new NullPointerException("Test classes cannot be null or empty");
         }

@@ -1,5 +1,7 @@
 package junit.framework;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
@@ -33,7 +35,7 @@ public class TestResult {
      * Adds an error to the list of errors. The passed in exception
      * caused the error.
      */
-    public synchronized void addError(Test test, Throwable e) {
+    public synchronized void addError(Test test, @Nullable Throwable e) {
         fErrors.add(new TestFailure(test, e));
         for (TestListener each : cloneListeners()) {
             each.addError(test, e);

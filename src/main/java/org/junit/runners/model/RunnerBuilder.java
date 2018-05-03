@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.junit.internal.runners.ErrorReportingRunner;
 import org.junit.runner.Runner;
 
@@ -46,7 +47,7 @@ public abstract class RunnerBuilder {
      * @return a Runner
      * @throws Throwable if a runner cannot be constructed
      */
-    public abstract Runner runnerForClass(Class<?> testClass) throws Throwable;
+    public abstract @Nullable Runner runnerForClass(Class<?> testClass) throws Throwable;
 
     /**
      * Always returns a runner for the given test class.
@@ -61,7 +62,7 @@ public abstract class RunnerBuilder {
      * @param testClass class to be run
      * @return a Runner
      */
-    public Runner safeRunnerForClass(Class<?> testClass) {
+    public @Nullable Runner safeRunnerForClass(Class<?> testClass) {
         try {
             return runnerForClass(testClass);
         } catch (Throwable e) {
@@ -69,14 +70,14 @@ public abstract class RunnerBuilder {
         }
     }
 
-    Class<?> addParent(Class<?> parent) throws InitializationError {
+    @Nullable Class<?> addParent(@Nullable Class<?> parent) throws InitializationError {
         if (!parents.add(parent)) {
             throw new InitializationError(String.format("class '%s' (possibly indirectly) contains itself as a SuiteClass", parent.getName()));
         }
         return parent;
     }
 
-    void removeParent(Class<?> klass) {
+    void removeParent(@Nullable Class<?> klass) {
         parents.remove(klass);
     }
 
@@ -86,7 +87,7 @@ public abstract class RunnerBuilder {
      * this builder will throw an exception if it is requested for another
      * runner for {@code parent} before this call completes.
      */
-    public List<Runner> runners(Class<?> parent, Class<?>[] children)
+    public List<Runner> runners(@Nullable Class<?> parent, Class<?>[] children)
             throws InitializationError {
         addParent(parent);
 
@@ -105,7 +106,7 @@ public abstract class RunnerBuilder {
     private List<Runner> runners(Class<?>[] children) {
         List<Runner> runners = new ArrayList<Runner>();
         for (Class<?> each : children) {
-            Runner childRunner = safeRunnerForClass(each);
+            @Nullable Runner childRunner = safeRunnerForClass(each);
             if (childRunner != null) {
                 runners.add(childRunner);
             }

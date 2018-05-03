@@ -1,5 +1,7 @@
 package junit.framework;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 public class ComparisonCompactor {
 
     private static final String ELLIPSIS = "...";
@@ -19,7 +21,7 @@ public class ComparisonCompactor {
     }
 
     @SuppressWarnings("deprecation")
-    public String compact(String message) {
+    public String compact(@Nullable String message) {
         if (fExpected == null || fActual == null || areStringsEqual()) {
             return Assert.format(message, fExpected, fActual);
         }

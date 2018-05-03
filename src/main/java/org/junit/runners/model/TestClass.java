@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -32,7 +33,7 @@ public class TestClass implements Annotatable {
     private static final FieldComparator FIELD_COMPARATOR = new FieldComparator();
     private static final MethodComparator METHOD_COMPARATOR = new MethodComparator();
 
-    private final Class<?> clazz;
+    private final @Nullable Class<?> clazz;
     private final Map<Class<? extends Annotation>, List<FrameworkMethod>> methodsForAnnotations;
     private final Map<Class<? extends Annotation>, List<FrameworkField>> fieldsForAnnotations;
 
@@ -159,7 +160,7 @@ public class TestClass implements Annotatable {
         if (!map.containsKey(type) && fillIfAbsent) {
             map.put(type, new ArrayList<T>());
         }
-        List<T> members = map.get(type);
+        @Nullable List<T> members = map.get(type);
         return members == null ? Collections.<T>emptyList() : members;
     }
 
@@ -168,9 +169,9 @@ public class TestClass implements Annotatable {
                 || annotation.equals(BeforeClass.class);
     }
 
-    private static List<Class<?>> getSuperClasses(Class<?> testClass) {
+    private static List<Class<?>> getSuperClasses(@Nullable Class<?> testClass) {
         List<Class<?>> results = new ArrayList<Class<?>>();
-        Class<?> current = testClass;
+        @Nullable Class<?> current = testClass;
         while (current != null) {
             results.add(current);
             current = current.getSuperclass();
@@ -216,7 +217,7 @@ public class TestClass implements Annotatable {
         return clazz.getAnnotations();
     }
 
-    public <T extends Annotation> T getAnnotation(Class<T> annotationType) {
+    public <T extends Annotation> @Nullable T getAnnotation(Class<T> annotationType) {
         if (clazz == null) {
             return null;
         }
@@ -241,7 +242,7 @@ public class TestClass implements Annotatable {
      *
      * @since 4.13
      */
-    public <T> void collectAnnotatedFieldValues(Object test,
+    public <T> void collectAnnotatedFieldValues(@Nullable Object test,
             Class<? extends Annotation> annotationClass, Class<T> valueClass,
             MemberValueConsumer<T> consumer) {
         for (FrameworkField each : getAnnotatedFields(annotationClass)) {
@@ -275,7 +276,7 @@ public class TestClass implements Annotatable {
      *
      * @since 4.13
      */
-    public <T> void collectAnnotatedMethodValues(Object test,
+    public <T> void collectAnnotatedMethodValues(@Nullable Object test,
             Class<? extends Annotation> annotationClass, Class<T> valueClass,
             MemberValueConsumer<T> consumer) {
         for (FrameworkMethod each : getAnnotatedMethods(annotationClass)) {
@@ -313,7 +314,7 @@ public class TestClass implements Annotatable {
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(@Nullable Object obj) {
         if (this == obj) {
             return true;
         }

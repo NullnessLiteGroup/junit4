@@ -4,6 +4,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.junit.internal.AssumptionViolatedException;
 import org.junit.runner.Description;
 import org.junit.runner.notification.Failure;
@@ -34,7 +35,7 @@ public class ClassRoadie {
         runnable.run();
     }
 
-    protected void addFailure(Throwable targetException) {
+    protected void addFailure(@Nullable Throwable targetException) {
         notifier.fireTestFailure(new Failure(description, targetException));
     }
 

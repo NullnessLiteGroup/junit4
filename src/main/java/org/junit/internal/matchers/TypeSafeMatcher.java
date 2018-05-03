@@ -2,6 +2,7 @@ package org.junit.internal.matchers;
 
 import java.lang.reflect.Method;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.hamcrest.BaseMatcher;
 import org.junit.internal.MethodSorter;
 
@@ -29,7 +30,7 @@ public abstract class TypeSafeMatcher<T> extends BaseMatcher<T> {
 
     private static Class<?> findExpectedType(Class<?> fromClass) {
         for (Class<?> c = fromClass; c != Object.class; c = c.getSuperclass()) {
-            for (Method method : MethodSorter.getDeclaredMethods(c)) {
+            for (@Nullable Method method : MethodSorter.getDeclaredMethods(c)) {
                 if (isMatchesSafelyMethod(method)) {
                     return method.getParameterTypes()[0];
                 }

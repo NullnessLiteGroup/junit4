@@ -10,6 +10,7 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.junit.internal.AssumptionViolatedException;
 import org.junit.runner.Description;
 import org.junit.runner.notification.Failure;
@@ -60,7 +61,7 @@ public class MethodRoadie {
             public void run() {
                 ExecutorService service = Executors.newSingleThreadExecutor();
                 Callable<Object> callable = new Callable<Object>() {
-                    public Object call() throws Exception {
+                    public @Nullable Object call() throws Exception {
                         runTestMethod();
                         return null;
                     }
@@ -156,7 +157,7 @@ public class MethodRoadie {
         }
     }
 
-    protected void addFailure(Throwable e) {
+    protected void addFailure(@Nullable Throwable e) {
         notifier.fireTestFailure(new Failure(description, e));
     }
 }

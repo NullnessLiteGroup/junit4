@@ -1,5 +1,6 @@
 package org.junit.rules;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.junit.runner.Description;
 
 /**
@@ -25,7 +26,7 @@ import org.junit.runner.Description;
  * @since 4.7
  */
 public class TestName extends TestWatcher {
-    private volatile String name;
+    private volatile @Nullable String name;
 
     @Override
     protected void starting(Description d) {

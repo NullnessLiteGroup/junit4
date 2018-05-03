@@ -1,5 +1,6 @@
 package org.junit.internal.management;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.junit.internal.Classes;
 
 import java.lang.reflect.InvocationTargetException;
@@ -14,9 +15,9 @@ final class ReflectiveRuntimeMXBean implements RuntimeMXBean {
   private final Object runtimeMxBean;
 
   private static final class Holder {
-    private static final Method getInputArgumentsMethod;
+    private static final @Nullable Method getInputArgumentsMethod;
     static {
-      Method inputArguments = null;
+      @Nullable Method inputArguments = null;
       try {
         Class<?> threadMXBeanClass = Classes.getClass("java.lang.management.RuntimeMXBean");
         inputArguments = threadMXBeanClass.getMethod("getInputArguments");
@@ -40,7 +41,7 @@ final class ReflectiveRuntimeMXBean implements RuntimeMXBean {
    * {@inheritDoc}
    */
   @SuppressWarnings("unchecked")
-  public List<String> getInputArguments() {
+  public @Nullable List<String> getInputArguments() {
     if (Holder.getInputArgumentsMethod != null) {
       try {
         return (List<String>) Holder.getInputArgumentsMethod.invoke(runtimeMxBean);

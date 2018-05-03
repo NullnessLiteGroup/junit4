@@ -1,5 +1,7 @@
 package org.junit.validator;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -20,8 +22,8 @@ public class AnnotationValidatorFactory {
      *
      * @since 4.12
      */
-    public AnnotationValidator createAnnotationValidator(ValidateWith validateWithAnnotation) {
-        AnnotationValidator validator = VALIDATORS_FOR_ANNOTATION_TYPES.get(validateWithAnnotation);
+    public @Nullable AnnotationValidator createAnnotationValidator(ValidateWith validateWithAnnotation) {
+        @Nullable AnnotationValidator validator = VALIDATORS_FOR_ANNOTATION_TYPES.get(validateWithAnnotation);
         if (validator != null) {
             return validator;
         }

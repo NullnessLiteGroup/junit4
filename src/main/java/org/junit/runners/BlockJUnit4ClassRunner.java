@@ -9,6 +9,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.TimeUnit;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -452,8 +453,8 @@ public class BlockJUnit4ClassRunner extends ParentRunner<FrameworkMethod> {
         return annotation.timeout();
     }
 
-    private static final ThreadLocal<RuleContainer> CURRENT_RULE_CONTAINER =
-            new ThreadLocal<RuleContainer>();
+    private static final ThreadLocal<@Nullable RuleContainer> CURRENT_RULE_CONTAINER =
+            new ThreadLocal<@Nullable RuleContainer>();
 
     private static class RuleCollector<T> implements MemberValueConsumer<T> {
         final List<T> result = new ArrayList<T>();

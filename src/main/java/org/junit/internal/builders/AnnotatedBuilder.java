@@ -1,5 +1,6 @@
 package org.junit.internal.builders;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.junit.runner.RunWith;
 import org.junit.runner.Runner;
 import org.junit.runners.model.InitializationError;
@@ -78,7 +79,7 @@ public class AnnotatedBuilder extends RunnerBuilder {
     }
 
     @Override
-    public Runner runnerForClass(Class<?> testClass) throws Exception {
+    public @Nullable Runner runnerForClass(Class<?> testClass) throws Exception {
         for (Class<?> currentTestClass = testClass; currentTestClass != null;
              currentTestClass = getEnclosingClassForNonStaticMemberClass(currentTestClass)) {
             RunWith annotation = currentTestClass.getAnnotation(RunWith.class);
@@ -90,7 +91,7 @@ public class AnnotatedBuilder extends RunnerBuilder {
         return null;
     }
 
-    private Class<?> getEnclosingClassForNonStaticMemberClass(Class<?> currentTestClass) {
+    private @Nullable Class<?> getEnclosingClassForNonStaticMemberClass(Class<?> currentTestClass) {
         if (currentTestClass.isMemberClass() && !Modifier.isStatic(currentTestClass.getModifiers())) {
             return currentTestClass.getEnclosingClass();
         } else {

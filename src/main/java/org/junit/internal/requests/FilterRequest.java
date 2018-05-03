@@ -1,5 +1,6 @@
 package org.junit.internal.requests;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.junit.internal.runners.ErrorReportingRunner;
 import org.junit.runner.Request;
 import org.junit.runner.Runner;
@@ -31,7 +32,7 @@ public final class FilterRequest extends Request {
     }
 
     @Override
-    public Runner getRunner() {
+    public @Nullable Runner getRunner() {
         try {
             Runner runner = request.getRunner();
             fFilter.apply(runner);
