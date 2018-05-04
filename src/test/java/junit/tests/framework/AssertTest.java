@@ -109,6 +109,10 @@ public class AssertTest extends TestCase {
     public void testAssertNotNull() {
         assertNotNull(new Object());
         try {
+            // The following line is a false positive, since this method is just testing whether 
+            // the method assertNotNull in Assert.java (line 247) throws AssertionFailedError when the argument is null. 
+            // If it throws that error, this method directly return; otherwise it calls fail(), which throws
+            // an AssertionFailedError in Assert.java (line 55)
             assertNotNull(null);
         } catch (AssertionFailedError e) {
             return;

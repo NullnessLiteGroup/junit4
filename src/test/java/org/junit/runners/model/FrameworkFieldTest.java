@@ -22,6 +22,9 @@ public class FrameworkFieldTest {
     public void cannotBeCreatedWithoutUnderlyingField() {
         thrown.expect(NullPointerException.class);
         thrown.expectMessage("FrameworkField cannot be created without an underlying field.");
+        // This is a false positive, since this method is used to check whether a FrameworkField can be created
+        // without underlying field. In FrameworkField.java line 19, we can see the constructor of FrameworkField
+        // will throw a NullPointerException if we pass null, which is what this method wants to test.
         new FrameworkField(null);
     }
 

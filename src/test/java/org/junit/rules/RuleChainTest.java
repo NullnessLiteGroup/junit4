@@ -77,6 +77,9 @@ public class RuleChainTest {
     }
 
     public static class RuleChainWithNullRules {
+        // This is a false positive, since this class is named RuleChainWithNullRules, which 
+        // means it is intended to define a RuleChain will a null argument. 
+        // We can see the following method (line 96) tests whether running this class will give a failure.
         @Rule
         public final RuleChain chain = outerRule(new LoggingRule("outer rule"))
                 .around(null);
