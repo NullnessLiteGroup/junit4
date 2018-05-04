@@ -85,7 +85,7 @@ public final class AnnotationsValidator implements TestClassValidator {
 
         @Override
         List<Exception> validateAnnotatable(
-                AnnotationValidator validator, TestClass testClass) {
+                @Nullable AnnotationValidator validator, TestClass testClass) {
             return validator.validateAnnotatedClass(testClass);
         }
     }
@@ -100,7 +100,7 @@ public final class AnnotationsValidator implements TestClassValidator {
 
         @Override
         List<Exception> validateAnnotatable(
-                AnnotationValidator validator, FrameworkMethod method) {
+                @Nullable AnnotationValidator validator, FrameworkMethod method) {
             return validator.validateAnnotatedMethod(method);
         }
     }
@@ -114,7 +114,7 @@ public final class AnnotationsValidator implements TestClassValidator {
 
         @Override
         List<Exception> validateAnnotatable(
-                AnnotationValidator validator, FrameworkField field) {
+                @Nullable AnnotationValidator validator, FrameworkField field) {
             return validator.validateAnnotatedField(field);
         }
     }

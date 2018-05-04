@@ -97,7 +97,7 @@ public class Description implements Serializable {
      * @param name the name of the test (a method name for test annotated with {@link org.junit.Test})
      * @return a <code>Description</code> named <code>name</code>
      */
-    public static Description createTestDescription(Class<?> clazz, @Nullable String name) {
+    public static Description createTestDescription(@Nullable Class<?> clazz, @Nullable String name) {
         return new Description(clazz, formatDisplayName(name, clazz.getName()));
     }
 

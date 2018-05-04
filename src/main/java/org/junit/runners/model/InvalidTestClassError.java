@@ -21,7 +21,7 @@ public class InvalidTestClassError extends InitializationError {
         this.message = createMessage(offendingTestClass, validationErrors);
     }
 
-    private static String createMessage(Class<?> testClass, List<Throwable> validationErrors) {
+    private static String createMessage(@Nullable Class<?> testClass, List<Throwable> validationErrors) {
         StringBuilder sb = new StringBuilder();
         sb.append(String.format("Invalid test class '%s':", testClass.getName()));
         int i = 1;

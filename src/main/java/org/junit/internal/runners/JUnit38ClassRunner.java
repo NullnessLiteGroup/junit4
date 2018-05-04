@@ -96,7 +96,7 @@ public class JUnit38ClassRunner extends Runner implements Filterable, Sortable {
         return makeDescription(getTest());
     }
 
-    private static Description makeDescription(Test test) {
+    private static Description makeDescription(@Nullable Test test) {
         if (test instanceof TestCase) {
             TestCase tc = (TestCase) test;
             return Description.createTestDescription(tc.getClass(), tc.getName(),
@@ -175,7 +175,7 @@ public class JUnit38ClassRunner extends Runner implements Filterable, Sortable {
         this.test = test;
     }
 
-    private Test getTest() {
+    private @Nullable Test getTest() {
         return test;
     }
 }

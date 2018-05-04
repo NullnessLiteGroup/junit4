@@ -11,8 +11,8 @@ public class ComparisonFailure extends AssertionFailedError {
     private static final int MAX_CONTEXT_LENGTH = 20;
     private static final long serialVersionUID = 1L;
 
-    private String fExpected;
-    private String fActual;
+    private @Nullable String fExpected;
+    private @Nullable String fActual;
 
     /**
      * Constructs a comparison failure.
@@ -43,7 +43,7 @@ public class ComparisonFailure extends AssertionFailedError {
      *
      * @return the actual string value
      */
-    public String getActual() {
+    public @Nullable String getActual() {
         return fActual;
     }
 
@@ -52,7 +52,7 @@ public class ComparisonFailure extends AssertionFailedError {
      *
      * @return the expected string value
      */
-    public String getExpected() {
+    public @Nullable String getExpected() {
         return fExpected;
     }
 }

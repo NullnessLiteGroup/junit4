@@ -121,7 +121,7 @@ public class AllMembersSupplier extends ParameterSupplier {
     }
     
     private void addDataPointsValues(Class<?> type, ParameterSignature sig, String name, 
-            List<PotentialAssignment> list, Object value) {
+            List<PotentialAssignment> list, @Nullable Object value) {
         if (type.isArray()) {
             addArrayValues(sig, name, list, value);
         }
@@ -130,7 +130,7 @@ public class AllMembersSupplier extends ParameterSupplier {
         }
     }
 
-    private void addArrayValues(ParameterSignature sig, String name, List<PotentialAssignment> list, Object array) {
+    private void addArrayValues(ParameterSignature sig, String name, List<PotentialAssignment> list, @Nullable Object array) {
         for (int i = 0; i < Array.getLength(array); i++) {
             Object value = Array.get(array, i);
             if (sig.canAcceptValue(value)) {
@@ -139,7 +139,7 @@ public class AllMembersSupplier extends ParameterSupplier {
         }
     }
     
-    private void addIterableValues(ParameterSignature sig, String name, List<PotentialAssignment> list, Iterable<?> iterable) {
+    private void addIterableValues(ParameterSignature sig, String name, List<PotentialAssignment> list, @Nullable Iterable<?> iterable) {
         Iterator<?> iterator = iterable.iterator();
         int i = 0;
         while (iterator.hasNext()) {
