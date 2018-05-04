@@ -1,5 +1,7 @@
 package org.junit.runners.model;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 import java.util.List;
 
 /**
@@ -14,7 +16,7 @@ public class InvalidTestClassError extends InitializationError {
 
     private final String message;
 
-    public InvalidTestClassError(Class<?> offendingTestClass, List<Throwable> validationErrors) {
+    public InvalidTestClassError(@Nullable Class<?> offendingTestClass, List<Throwable> validationErrors) {
         super(validationErrors);
         this.message = createMessage(offendingTestClass, validationErrors);
     }

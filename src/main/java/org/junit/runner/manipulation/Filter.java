@@ -31,7 +31,7 @@ public abstract class Filter {
         }
 
         @Override
-        public void apply(Object child) throws NoTestsRemainException {
+        public void apply(@Nullable Object child) throws NoTestsRemainException {
             // do nothing
         }
 

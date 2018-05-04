@@ -1,5 +1,7 @@
 package junit.framework;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 /**
  * A Listener for test progress
  */
@@ -7,7 +9,7 @@ public interface TestListener {
     /**
      * An error occurred.
      */
-    public void addError(Test test, Throwable e);
+    public void addError(Test test, @Nullable Throwable e);
 
     /**
      * A failure occurred.

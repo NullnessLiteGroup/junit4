@@ -43,7 +43,7 @@ public class TestClass implements Annotatable {
      * an expensive process (we hope in future JDK's it will not be.) Therefore,
      * try to share instances of {@code TestClass} where possible.
      */
-    public TestClass(Class<?> clazz) {
+    public TestClass(@Nullable Class<?> clazz) {
         this.clazz = clazz;
         if (clazz != null && clazz.getConstructors().length > 1) {
             throw new IllegalArgumentException(
@@ -182,7 +182,7 @@ public class TestClass implements Annotatable {
     /**
      * Returns the underlying Java class.
      */
-    public Class<?> getJavaClass() {
+    public @Nullable Class<?> getJavaClass() {
         return clazz;
     }
 

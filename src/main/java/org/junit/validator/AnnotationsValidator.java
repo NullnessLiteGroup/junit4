@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.junit.runners.model.Annotatable;
 import org.junit.runners.model.FrameworkField;
 import org.junit.runners.model.FrameworkMethod;
@@ -46,7 +47,7 @@ public final class AnnotationsValidator implements TestClassValidator {
         abstract Iterable<T> getAnnotatablesForTestClass(TestClass testClass);
 
         abstract List<Exception> validateAnnotatable(
-                AnnotationValidator validator, T annotatable);
+                @Nullable AnnotationValidator validator, T annotatable);
 
         public List<Exception> validateTestClass(TestClass testClass) {
             List<Exception> validationErrors= new ArrayList<Exception>();

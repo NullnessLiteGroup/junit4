@@ -104,7 +104,7 @@ public abstract class Request {
      * @param runner the runner to return
      * @return a <code>Request</code> that will run the given runner when invoked
      */
-    public static Request runner(final Runner runner) {
+    public static Request runner(final @Nullable Runner runner) {
         return new Request() {
             @Override
             public Runner getRunner() {

@@ -73,7 +73,7 @@ public abstract class BaseTestRunner implements TestListener {
         testEnded(test.toString());
     }
 
-    public synchronized void addError(final Test test, final Throwable e) {
+    public synchronized void addError(final Test test, final @Nullable Throwable e) {
         testFailed(TestRunListener.STATUS_ERROR, test, e);
     }
 
@@ -87,7 +87,7 @@ public abstract class BaseTestRunner implements TestListener {
 
     public abstract void testEnded(String testName);
 
-    public abstract void testFailed(int status, Test test, Throwable e);
+    public abstract void testFailed(int status, Test test, @Nullable Throwable e);
 
     /**
      * Returns the Test corresponding to the given suite. This is

@@ -56,7 +56,7 @@ public abstract class TypeSafeMatcher<T> extends BaseMatcher<T> {
      * Instead, extend the {@link BaseMatcher}.
      */
     @SuppressWarnings({"unchecked"})
-    public final boolean matches(Object item) {
+    public final boolean matches(@Nullable Object item) {
         return item != null
                 && expectedType.isInstance(item)
                 && matchesSafely((T) item);

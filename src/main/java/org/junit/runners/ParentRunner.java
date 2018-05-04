@@ -85,7 +85,7 @@ public abstract class ParentRunner<T> extends Runner implements Filterable,
     /**
      * Constructs a new {@code ParentRunner} that will run {@code @TestClass}
      */
-    protected ParentRunner(Class<?> testClass) throws InitializationError {
+    protected ParentRunner(@Nullable Class<?> testClass) throws InitializationError {
         this.testClass = createTestClass(testClass);
         validate();
     }
@@ -105,7 +105,7 @@ public abstract class ParentRunner<T> extends Runner implements Filterable,
      * @since 4.12
      */
     @Deprecated
-    protected TestClass createTestClass(Class<?> testClass) {
+    protected TestClass createTestClass(@Nullable Class<?> testClass) {
         return new TestClass(testClass);
     }
 

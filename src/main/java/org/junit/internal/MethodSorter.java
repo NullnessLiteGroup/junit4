@@ -4,6 +4,7 @@ import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Comparator;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.junit.FixMethodOrder;
 
 public class MethodSorter {
@@ -48,7 +49,7 @@ public class MethodSorter {
      * @see <a href="http://bugs.sun.com/view_bug.do?bug_id=7023180">JDK
      *      (non-)bug #7023180</a>
      */
-    public static Method[] getDeclaredMethods(Class<?> clazz) {
+    public static Method[] getDeclaredMethods(@Nullable Class<?> clazz) {
         Comparator<Method> comparator = getSorter(clazz.getAnnotation(FixMethodOrder.class));
 
         Method[] methods = clazz.getDeclaredMethods();
@@ -62,7 +63,7 @@ public class MethodSorter {
     private MethodSorter() {
     }
 
-    private static Comparator<Method> getSorter(FixMethodOrder fixMethodOrder) {
+    private static @Nullable Comparator<Method> getSorter(FixMethodOrder fixMethodOrder) {
         if (fixMethodOrder == null) {
             return DEFAULT;
         }

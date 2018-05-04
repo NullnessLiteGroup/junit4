@@ -84,7 +84,7 @@ public class Description implements Serializable {
      * @param annotations meta-data about the test, for downstream interpreters
      * @return a <code>Description</code> named <code>name</code>
      */
-    public static Description createTestDescription(Class<?> clazz, String name, Annotation... annotations) {
+    public static Description createTestDescription(Class<?> clazz, @Nullable String name, Annotation... annotations) {
         return new Description(clazz, formatDisplayName(name, clazz.getName()), annotations);
     }
 
@@ -97,7 +97,7 @@ public class Description implements Serializable {
      * @param name the name of the test (a method name for test annotated with {@link org.junit.Test})
      * @return a <code>Description</code> named <code>name</code>
      */
-    public static Description createTestDescription(Class<?> clazz, String name) {
+    public static Description createTestDescription(Class<?> clazz, @Nullable String name) {
         return new Description(clazz, formatDisplayName(name, clazz.getName()));
     }
 
@@ -112,7 +112,7 @@ public class Description implements Serializable {
         return new Description(null, formatDisplayName(name, className), uniqueId);
     }
 
-    private static String formatDisplayName(String name, String className) {
+    private static String formatDisplayName(@Nullable String name, String className) {
         return String.format("%s(%s)", name, className);
     }
 

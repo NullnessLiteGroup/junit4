@@ -822,7 +822,7 @@ public class Assert {
     }
 
     private static void failNotSame(@Nullable String message, @Nullable Object expected,
-            Object actual) {
+            @Nullable Object actual) {
         String formatted = "";
         if (message != null) {
             formatted = message + " ";

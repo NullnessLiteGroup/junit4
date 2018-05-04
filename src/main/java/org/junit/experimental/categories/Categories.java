@@ -164,8 +164,8 @@ public class Categories extends Suite {
             excluded = copyAndRefine(excludes);
         }
 
-        private CategoryFilter(boolean matchAnyIncludes, @Nullable Class<?>[] inclusions,
-                               boolean matchAnyExcludes, @Nullable Class<?>[] exclusions) {
+        private CategoryFilter(boolean matchAnyIncludes, Class<?> @Nullable [] inclusions,
+                               boolean matchAnyExcludes, Class<?> @Nullable [] exclusions) {
             includedAny = matchAnyIncludes; 
             excludedAny = matchAnyExcludes;
             included = createSet(inclusions);
@@ -349,7 +349,7 @@ public class Categories extends Suite {
         return false;
     }
 
-    private static Set<Class<?>> createSet(@Nullable Class<?>[] classes) {
+    private static Set<Class<?>> createSet(Class<?> @Nullable [] classes) {
         // Not throwing a NPE if t is null is a bad idea, but it's the behavior from JUnit 4.12
         // for include(boolean, Class<?>...) and exclude(boolean, Class<?>...)
         if (classes == null || classes.length == 0) {

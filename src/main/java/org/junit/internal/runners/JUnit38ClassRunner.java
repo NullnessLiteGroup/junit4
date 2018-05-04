@@ -7,6 +7,7 @@ import junit.framework.TestCase;
 import junit.framework.TestListener;
 import junit.framework.TestResult;
 import junit.framework.TestSuite;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.junit.runner.Describable;
 import org.junit.runner.Description;
 import org.junit.runner.Runner;
@@ -38,7 +39,7 @@ public class JUnit38ClassRunner extends Runner implements Filterable, Sortable {
         }
 
         // Implement junit.framework.TestListener
-        public void addError(Test test, Throwable e) {
+        public void addError(Test test, @Nullable Throwable e) {
             Failure failure = new Failure(asDescription(test), e);
             notifier.fireTestFailure(failure);
         }
@@ -55,7 +56,7 @@ public class JUnit38ClassRunner extends Runner implements Filterable, Sortable {
             return test.getClass();
         }
 
-        private String getName(Test test) {
+        private @Nullable String getName(Test test) {
             if (test instanceof TestCase) {
                 return ((TestCase) test).getName();
             } else {
@@ -68,13 +69,13 @@ public class JUnit38ClassRunner extends Runner implements Filterable, Sortable {
         }
     }
 
-    private volatile Test test;
+    private volatile @Nullable Test test;
 
     public JUnit38ClassRunner(Class<?> klass) {
         this(new TestSuite(klass.asSubclass(TestCase.class)));
     }
 
-    public JUnit38ClassRunner(Test test) {
+    public JUnit38ClassRunner(@Nullable Test test) {
         super();
         setTest(test);
     }
@@ -170,7 +171,7 @@ public class JUnit38ClassRunner extends Runner implements Filterable, Sortable {
         }
     }
 
-    private void setTest(Test test) {
+    private void setTest(@Nullable Test test) {
         this.test = test;
     }
 

@@ -36,7 +36,7 @@ public enum MethodSorters {
         this.comparator = comparator;
     }
 
-    public Comparator<Method> getComparator() {
+    public @Nullable Comparator<Method> getComparator() {
         return comparator;
     }
 }
