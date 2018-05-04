@@ -211,6 +211,18 @@ public class TemporaryFolder extends ExternalResource {
             }
         }
         if (!lastMkdirsCallSuccessful) {
+            /**
+                This is a false positive because relativePath won't be null (line 227). 
+                relativePath is first declared null (line 239).
+                And then it guarantees to enter the for-loop the program checked paths.length before
+                to make sure that when it reaches line 203, paths.length > 0
+                And later, the only statement that may change relativePath is (line 204) 
+                "relativePath = new File(relativePath, paths[i])".
+                However, the construction of a new File will either create a new File instance or
+                throw an exception, which means relativePath will never be null after it enters 
+                the for-loop. Therefore, after it jumps out of the for-loop and reaches line 227, 
+                it is never null and won't cause a NullPointerException.
+            */
             throw new IOException(
                     "a folder with the path \'" + relativePath.getPath() + "\' already exists");
         }
@@ -240,6 +252,17 @@ public class TemporaryFolder extends ExternalResource {
             }
             tmpFile.delete();
         }
+        /**
+            This is a false positive because createFolder won't be null (line 268). 
+            createFolder is first declared null (line 240).
+            And then it guarantees to enter the for-loop because TEMP_DIR_ATTEMPTS is greater than 0.
+            In the for-loop, the only statement which 
+            may change createFolder is (line 248) "createdFolder = new File(folderName)".
+            However, the construction of a new File will either create a new File instance or
+            throw an exception, which means createdFolder will never be null after it enters 
+            the for-loop. Therefore, after it jumps out of the for-loop and reaches line 268, 
+            it is never null and won't cause a NullPointerException.
+         */
         throw new IOException("Unable to create temporary directory in: "
             + parentFolder.toString() + ". Tried " + TEMP_DIR_ATTEMPTS + " times. "
             + "Last attempted to create: " + createdFolder.toString());

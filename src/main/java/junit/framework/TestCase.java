@@ -169,6 +169,16 @@ public abstract class TestCase extends Assert implements Test {
         } catch (NoSuchMethodException e) {
             fail("Method \"" + fName + "\" not found");
         }
+
+        /**
+            This is a false positive because runMethod won't be null (line 182). 
+            runMethod is first declared null (line 162).
+            And then, the only statement which may change it is (line 168) 
+            "runMethod = getClass().getMethod(fName, (Class[]) null)".
+            However, getMethod(fName, (Class[]) null) will either return a Method object or
+            throw an exception, which means createdFolder will never be null when it enters 
+            the if-branch (line 182), and therefore it won't cause a NullPointerException.
+        */
         if (!Modifier.isPublic(runMethod.getModifiers())) {
             fail("Method \"" + fName + "\" should be public");
         }
