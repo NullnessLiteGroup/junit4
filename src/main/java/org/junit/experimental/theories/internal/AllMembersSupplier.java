@@ -151,7 +151,7 @@ public class AllMembersSupplier extends ParameterSupplier {
         }
     }
 
-    private Object getStaticFieldValue(final Field field) {
+    private @Nullable Object getStaticFieldValue(final Field field) {
         try {
             return field.get(null);
         } catch (IllegalArgumentException e) {

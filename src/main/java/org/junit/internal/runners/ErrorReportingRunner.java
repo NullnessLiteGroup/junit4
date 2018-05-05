@@ -14,7 +14,7 @@ import org.junit.runners.model.InitializationError;
 import static java.util.Collections.singletonList;
 
 public class ErrorReportingRunner extends Runner {
-    private final List<Throwable> causes;
+    private final List<@Nullable Throwable> causes;
 
     private final String classNames;
 
@@ -51,7 +51,7 @@ public class ErrorReportingRunner extends Runner {
         }
     }
 
-    private String getClassNames(Class<?>... testClasses) {
+    private String getClassNames(@Nullable Class<?>... testClasses) {
         final StringBuilder builder = new StringBuilder();
         for (Class<?> testClass : testClasses) {
             if (builder.length() != 0) {
@@ -63,7 +63,7 @@ public class ErrorReportingRunner extends Runner {
     }
 
     @SuppressWarnings("deprecation")
-    private List<Throwable> getCauses(Throwable cause) {
+    private List<@Nullable Throwable> getCauses(@Nullable Throwable cause) {
         if (cause instanceof InvocationTargetException) {
             return getCauses(cause.getCause());
         }
@@ -84,7 +84,7 @@ public class ErrorReportingRunner extends Runner {
         return Description.createTestDescription(classNames, "initializationError");
     }
 
-    private void runCause(Throwable child, RunNotifier notifier) {
+    private void runCause(@Nullable Throwable child, RunNotifier notifier) {
         Description description = describeCause();
         notifier.fireTestStarted(description);
         notifier.fireTestFailure(new Failure(description, child));

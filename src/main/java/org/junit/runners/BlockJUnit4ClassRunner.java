@@ -330,7 +330,7 @@ public class BlockJUnit4ClassRunner extends ParentRunner<FrameworkMethod> {
     /**
      * Returns a {@link Statement} that invokes {@code method} on {@code test}
      */
-    protected Statement methodInvoker(FrameworkMethod method, Object test) {
+    protected Statement methodInvoker(FrameworkMethod method, @Nullable Object test) {
         return new InvokeMethod(method, test);
     }
 
@@ -341,7 +341,7 @@ public class BlockJUnit4ClassRunner extends ParentRunner<FrameworkMethod> {
      * otherwise.
      */
     protected Statement possiblyExpectingExceptions(FrameworkMethod method,
-            Object test, Statement next) {
+            @Nullable Object test, Statement next) {
         Test annotation = method.getAnnotation(Test.class);
         Class<? extends Throwable> expectedExceptionClass = getExpectedException(annotation);
         return expectedExceptionClass != null ? new ExpectException(next, expectedExceptionClass) : next;
@@ -355,7 +355,7 @@ public class BlockJUnit4ClassRunner extends ParentRunner<FrameworkMethod> {
      */
     @Deprecated
     protected Statement withPotentialTimeout(FrameworkMethod method,
-            Object test, Statement next) {
+            @Nullable Object test, Statement next) {
         long timeout = getTimeout(method.getAnnotation(Test.class));
         if (timeout <= 0) {
             return next;
@@ -370,7 +370,7 @@ public class BlockJUnit4ClassRunner extends ParentRunner<FrameworkMethod> {
      * methods on this class and superclasses before running {@code next}; if
      * any throws an Exception, stop execution and pass the exception on.
      */
-    protected Statement withBefores(FrameworkMethod method, Object target,
+    protected Statement withBefores(FrameworkMethod method, @Nullable Object target,
             Statement statement) {
         List<FrameworkMethod> befores = getTestClass().getAnnotatedMethods(
                 Before.class);
@@ -385,7 +385,7 @@ public class BlockJUnit4ClassRunner extends ParentRunner<FrameworkMethod> {
      * are combined, if necessary, with exceptions from After methods into a
      * {@link MultipleFailureException}.
      */
-    protected Statement withAfters(FrameworkMethod method, Object target,
+    protected Statement withAfters(FrameworkMethod method, @Nullable Object target,
             Statement statement) {
         List<FrameworkMethod> afters = getTestClass().getAnnotatedMethods(
                 After.class);
@@ -393,7 +393,7 @@ public class BlockJUnit4ClassRunner extends ParentRunner<FrameworkMethod> {
                 target);
     }
 
-    private Statement withRules(FrameworkMethod method, Object target, Statement statement) {
+    private Statement withRules(FrameworkMethod method, @Nullable Object target, Statement statement) {
         RuleContainer ruleContainer = new RuleContainer();
         CURRENT_RULE_CONTAINER.set(ruleContainer);
         try {
@@ -417,7 +417,7 @@ public class BlockJUnit4ClassRunner extends ParentRunner<FrameworkMethod> {
      * @return a list of MethodRules that should be applied when executing this
      *         test
      */
-    protected List<MethodRule> rules(Object target) {
+    protected List<MethodRule> rules(@Nullable Object target) {
         RuleCollector<MethodRule> collector = new RuleCollector<MethodRule>();
         getTestClass().collectAnnotatedMethodValues(target, Rule.class, MethodRule.class,
                 collector);
@@ -431,14 +431,14 @@ public class BlockJUnit4ClassRunner extends ParentRunner<FrameworkMethod> {
      * @return a list of TestRules that should be applied when executing this
      *         test
      */
-    protected List<TestRule> getTestRules(Object target) {
+    protected List<TestRule> getTestRules(@Nullable Object target) {
         RuleCollector<TestRule> collector = new RuleCollector<TestRule>();
         getTestClass().collectAnnotatedMethodValues(target, Rule.class, TestRule.class, collector);
         getTestClass().collectAnnotatedFieldValues(target, Rule.class, TestRule.class, collector);
         return collector.result;
     }
 
-    private Class<? extends Throwable> getExpectedException(Test annotation) {
+    private @Nullable Class<? extends Throwable> getExpectedException(@Nullable Test annotation) {
         if (annotation == null || annotation.expected() == None.class) {
             return null;
         } else {
@@ -446,7 +446,7 @@ public class BlockJUnit4ClassRunner extends ParentRunner<FrameworkMethod> {
         }
     }
 
-    private long getTimeout(Test annotation) {
+    private long getTimeout(@Nullable Test annotation) {
         if (annotation == null) {
             return 0;
         }

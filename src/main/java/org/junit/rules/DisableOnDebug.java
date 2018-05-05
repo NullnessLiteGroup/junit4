@@ -2,6 +2,7 @@ package org.junit.rules;
 
 import java.util.List;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.junit.internal.management.ManagementFactory;
 import org.junit.internal.management.RuntimeMXBean;
 import org.junit.runner.Description;
@@ -65,7 +66,7 @@ public class DisableOnDebug implements TestRule {
      * @param inputArguments
      *            arguments provided to the Java runtime
      */
-    DisableOnDebug(TestRule rule, List<String> inputArguments) {
+    DisableOnDebug(TestRule rule, @Nullable List<String> inputArguments) {
         this.rule = rule;
         debugging = isDebugging(inputArguments);
     }
@@ -101,7 +102,7 @@ public class DisableOnDebug implements TestRule {
      * @return true if the current JVM was started in debug mode, false
      *         otherwise.
      */
-    private static boolean isDebugging(List<String> arguments) {
+    private static boolean isDebugging(@Nullable List<String> arguments) {
         for (final String argument : arguments) {
             if ("-Xdebug".equals(argument)) {
                 return true;

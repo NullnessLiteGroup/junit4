@@ -84,7 +84,7 @@ public final class Throwables {
         return result.toString();
     }
 
-    private static List<String> getTrimmedStackTraceLines(Throwable exception) {
+    private static List<String> getTrimmedStackTraceLines(@Nullable Throwable exception) {
         List<StackTraceElement> stackTraceElements = Arrays.asList(exception.getStackTrace());
         int linesToInclude = stackTraceElements.size();
 

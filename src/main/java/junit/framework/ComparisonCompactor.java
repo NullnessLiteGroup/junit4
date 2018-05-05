@@ -9,8 +9,8 @@ public class ComparisonCompactor {
     private static final String DELTA_START = "[";
 
     private int fContextLength;
-    private String fExpected;
-    private String fActual;
+    private @Nullable String fExpected;
+    private @Nullable String fActual;
     private int fPrefix;
     private int fSuffix;
 
@@ -33,7 +33,7 @@ public class ComparisonCompactor {
         return Assert.format(message, expected, actual);
     }
 
-    private String compactString(String source) {
+    private String compactString(@Nullable String source) {
         String result = DELTA_START + source.substring(fPrefix, source.length() - fSuffix + 1) + DELTA_END;
         if (fPrefix > 0) {
             result = computeCommonPrefix() + result;
