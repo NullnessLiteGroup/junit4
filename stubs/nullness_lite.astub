@@ -14,7 +14,7 @@ public final class Method {
     // conservatively issue a warning whenever null is passed, in order to
     // give a guarantee that no nullness-related exception will be thrown
     // by the invoked method.
-    public @Nullable Object invoke(@Nullable Object obj, @Nullable Object ... args);
+    public @Nullable Object invoke(@Nullable Object obj, @Nullable Object @Nullable ... args);
 
 }
 
