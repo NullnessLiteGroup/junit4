@@ -13,4 +13,6 @@ public interface Description {
     Description appendValue(@Nullable Object value);
 }
 
-
+public class MatcherAssert {
+	public static <T> void assertThat(@Nullable String reason, T actual, Matcher<? super T> matcher);
+}

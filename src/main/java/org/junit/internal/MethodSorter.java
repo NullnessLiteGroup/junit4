@@ -63,7 +63,7 @@ public class MethodSorter {
     private MethodSorter() {
     }
 
-    private static @Nullable Comparator<Method> getSorter(FixMethodOrder fixMethodOrder) {
+    private static @Nullable Comparator<Method> getSorter(@Nullable FixMethodOrder fixMethodOrder) {
         if (fixMethodOrder == null) {
             return DEFAULT;
         }

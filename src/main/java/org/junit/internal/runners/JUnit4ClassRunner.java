@@ -79,7 +79,7 @@ public class JUnit4ClassRunner extends Runner implements Filterable, Sortable {
         return getTestClass().getName();
     }
 
-    protected Object createTest() throws Exception {
+    protected @Nullable Object createTest() throws Exception {
         return getTestClass().getConstructor().newInstance();
     }
 

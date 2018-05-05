@@ -69,7 +69,7 @@ class RuleContainer {
     /**
      * Applies all the rules ordered accordingly to the specified {@code statement}.
      */
-    public Statement apply(FrameworkMethod method, Description description, Object target,
+    public Statement apply(FrameworkMethod method, Description description, @Nullable Object target,
             Statement statement) {
         if (methodRules.isEmpty() && testRules.isEmpty()) {
             return statement;

@@ -14,18 +14,36 @@ public final class Method {
     // conservatively issue a warning whenever null is passed, in order to
     // give a guarantee that no nullness-related exception will be thrown
     // by the invoked method.
-    public @Nullable Object invoke(@Nullable Object obj, Object ... args);
+    public @Nullable Object invoke(@Nullable Object obj, @Nullable Object ... args);
 
 }
+
+public final class Array { 
+	public static native int getLength(@Nullable Object array);
+	public static native Object get(@Nullable Object array, int index);
+}
+
+public final class Constructor<T> extends Executable {
+	public T newInstance(@Nullable Object ... initargs);
+}
+
 
 package java.lang;
 
 public final class Class<T> {
     public <A extends java.lang.annotation.Annotation> @Nullable A getAnnotation(@Nullable Class<A> a1);
     public T cast(@Nullable Object obj);
+	public Method getMethod(@Nullable String name, Class<?>... parameterTypes);
+	public native boolean isAssignableFrom(@Nullable Class<?> cls);
 }
 
+public final class Long extends Number implements Comparable<Long> {
+	public int compareTo(@Nullable Long anotherLong);
+}
+
+
 package java.util;
+
 public interface Set<E> extends Collection<E> {
     boolean add(@Nullable E e);
     boolean remove(@Nullable Object o);
@@ -33,6 +51,18 @@ public interface Set<E> extends Collection<E> {
 
 public interface List<E>  {
     boolean add(@Nullable E e);
+}
+
+public class ArrayList<E> {
+	public ArrayList(@Nullable Collection<? extends E> c);
+}
+
+public class IdentityHashMap<K,V> {
+	public V put(@Nullable K key, V value);
+}
+
+public class Vector<E> {
+	public synchronized boolean add(@Nullable E e);
 }
 
 package java.io;
@@ -51,6 +81,11 @@ package java.io;
 //}
 
 package java.util.concurrent;
+
 public class CopyOnWriteArrayList<E> {
     public CopyOnWriteArrayList(@Nullable Collection<? extends E> c);
+}
+
+public interface Callable<V> {
+	@Nullable V call() throws Exception;
 }

@@ -1,5 +1,6 @@
 package org.junit.rules;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.junit.internal.AssumptionViolatedException;
 import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.Statement;
@@ -44,7 +45,7 @@ import org.junit.runners.model.Statement;
 @Deprecated
 public class TestWatchman implements MethodRule {
     public Statement apply(final Statement base, final FrameworkMethod method,
-            Object target) {
+            @Nullable Object target) {
         return new Statement() {
             @Override
             public void evaluate() throws Throwable {

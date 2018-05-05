@@ -47,7 +47,7 @@ public class TestSuite implements Test {
      * ...as the moon sets over the early morning Merlin, Oregon
      * mountains, our intrepid adventurers type...
      */
-    static public Test createTest(Class<?> theClass, String name) {
+    static public @Nullable Test createTest(Class<?> theClass, String name) {
         Constructor<?> constructor;
         try {
             constructor = getTestConstructor(theClass);
@@ -195,7 +195,7 @@ public class TestSuite implements Test {
     /**
      * Adds a test to the suite.
      */
-    public void addTest(Test test) {
+    public void addTest(@Nullable Test test) {
         fTests.add(test);
     }
 

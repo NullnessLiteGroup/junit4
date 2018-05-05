@@ -96,7 +96,7 @@ public class Assignments {
         }
     }
 
-    private ParameterSupplier getSupplier(ParameterSignature unassigned)
+    private @Nullable ParameterSupplier getSupplier(ParameterSignature unassigned)
             throws Exception {
         ParametersSuppliedBy annotation = unassigned
                 .findDeepAnnotation(ParametersSuppliedBy.class);
@@ -108,7 +108,7 @@ public class Assignments {
         }
     }
 
-    private ParameterSupplier buildParameterSupplierFromClass(
+    private @Nullable ParameterSupplier buildParameterSupplierFromClass(
             Class<? extends ParameterSupplier> cls) throws Exception {
         Constructor<?>[] supplierConstructors = cls.getConstructors();
 

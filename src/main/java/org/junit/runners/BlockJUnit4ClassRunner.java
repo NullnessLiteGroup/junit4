@@ -247,7 +247,7 @@ public class BlockJUnit4ClassRunner extends ParentRunner<FrameworkMethod> {
      * the test class's no-argument constructor (validation should have ensured
      * one exists).
      */
-    protected Object createTest() throws Exception {
+    protected @Nullable Object createTest() throws Exception {
         return getTestClass().getOnlyConstructor().newInstance();
     }
 
@@ -257,7 +257,7 @@ public class BlockJUnit4ClassRunner extends ParentRunner<FrameworkMethod> {
      *
      * @since 4.13
      */
-    protected Object createTest(FrameworkMethod method) throws Exception {
+    protected @Nullable Object createTest(FrameworkMethod method) throws Exception {
         return createTest();
     }
 
@@ -306,7 +306,7 @@ public class BlockJUnit4ClassRunner extends ParentRunner<FrameworkMethod> {
         try {
             test = new ReflectiveCallable() {
                 @Override
-                protected Object runReflectiveCall() throws Throwable {
+                protected @Nullable Object runReflectiveCall() throws Throwable {
                     return createTest(method);
                 }
             }.run();
