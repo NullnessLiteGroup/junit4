@@ -36,6 +36,11 @@ public class Result implements Serializable {
     /** Only set during deserialization process. */
     private SerializedForm serializedForm;
 
+    /**
+     * <NullnessLiteGroup_Report> FALSE_POSITIVE
+     * The comment of serializedForm above indicates developers are
+     * aware of uninitalized serializedForm.
+     */
     public Result() {
         count = new AtomicInteger();
         ignoreCount = new AtomicInteger();
