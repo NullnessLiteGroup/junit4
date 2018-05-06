@@ -75,15 +75,23 @@ public class JUnit38ClassRunner extends Runner implements Filterable, Sortable {
         this(new TestSuite(klass.asSubclass(TestCase.class)));
     }
 
+    @SuppressWarnings("nullness")
     public JUnit38ClassRunner(@Nullable Test test) {
         super();
+        // [method.invocation.invalid] FALSE_POSITIVE
+        //  helper method to set field
         setTest(test);
     }
 
     @Override
+    @SuppressWarnings("nullness")
     public void run(RunNotifier notifier) {
         TestResult result = new TestResult();
         result.addListener(createAdaptingListener(notifier));
+        // [dereference.of.nullable] TRUE_POSITIVE
+        //  de-referencing getTest() can raise NPE
+        // because test, returned by getTest(), can be initialized to be null
+        // from its public constructor.
         getTest().run(result);
     }
 
@@ -96,6 +104,7 @@ public class JUnit38ClassRunner extends Runner implements Filterable, Sortable {
         return makeDescription(getTest());
     }
 
+    @SuppressWarnings("nullness")
     private static Description makeDescription(@Nullable Test test) {
         if (test instanceof TestCase) {
             TestCase tc = (TestCase) test;
@@ -119,6 +128,10 @@ public class JUnit38ClassRunner extends Runner implements Filterable, Sortable {
             return makeDescription(decorator.getTest());
         } else {
             // This is the best we can do in this case
+
+            // [dereference.of.nullable] TRUE_POSITIVE
+            //  test.getClass() can raise NPE here
+            // one way is to call getDescription on a instance of this class with null test
             return Description.createSuiteDescription(test.getClass());
         }
     }
@@ -143,12 +156,23 @@ public class JUnit38ClassRunner extends Runner implements Filterable, Sortable {
         return String.format("TestSuite with %s tests%s", count, example);
     }
 
+    @SuppressWarnings("nullness")
     public void filter(Filter filter) throws NoTestsRemainException {
         if (getTest() instanceof Filterable) {
             Filterable adapter = (Filterable) getTest();
+            // [dereference.of.nullable] FALSE_POSITIVE
+            //  de-referencing adapter cannot raise NPE here
+            // since getTest() is deterministic
+            // if getTest() returns an instanceof non-null object,
+            // it will not raise NPE here
             adapter.filter(filter);
         } else if (getTest() instanceof TestSuite) {
             TestSuite suite = (TestSuite) getTest();
+            // [dereference.of.nullable] FALSE_POSITIVE
+            //  de-referencing suite cannot raise NPE here
+            // since getTest() is deterministic,
+            // if getTest() returns an instanceof non-null object,
+            // it will not raise NPE here
             TestSuite filtered = new TestSuite(suite.getName());
             int n = suite.testCount();
             for (int i = 0; i < n; i++) {
@@ -164,9 +188,15 @@ public class JUnit38ClassRunner extends Runner implements Filterable, Sortable {
         }
     }
 
+    @SuppressWarnings("nullness")
     public void sort(Sorter sorter) {
         if (getTest() instanceof Sortable) {
             Sortable adapter = (Sortable) getTest();
+            // [dereference.of.nullable] FALSE_POSITIVE
+            //  de-referencing adapter cannot raise NPE here
+            // since getTest() is deterministic
+            // if getTest() returns an instanceof non-null object,
+            // it will not raise NPE here
             adapter.sort(sorter);
         }
     }
