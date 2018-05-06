@@ -43,6 +43,7 @@ public class TestClass implements Annotatable {
      * an expensive process (we hope in future JDK's it will not be.) Therefore,
      * try to share instances of {@code TestClass} where possible.
      */
+    @SuppressWarnings("nullness")
     public TestClass(@Nullable Class<?> clazz) {
         this.clazz = clazz;
         if (clazz != null && clazz.getConstructors().length > 1) {
@@ -55,6 +56,8 @@ public class TestClass implements Annotatable {
         Map<Class<? extends Annotation>, List<FrameworkField>> fieldsForAnnotations =
                 new LinkedHashMap<Class<? extends Annotation>, List<FrameworkField>>();
 
+        // [method.invocation.invalid] FALSE_POSITIVE
+        // helper method for constructor
         scanAnnotatedMembers(methodsForAnnotations, fieldsForAnnotations);
 
         this.methodsForAnnotations = makeDeeplyUnmodifiable(methodsForAnnotations);
@@ -200,8 +203,11 @@ public class TestClass implements Annotatable {
      * Returns the only public constructor in the class, or throws an {@code
      * AssertionError} if there are more or less than one.
      */
-
+    @SuppressWarnings("nullness")
     public Constructor<?> getOnlyConstructor() {
+        // [method.invocation.invalid] TRUE_POSITIVE
+        // clazz can be null if users passed the null in the constructor
+        // this method is public
         Constructor<?>[] constructors = clazz.getConstructors();
         Assert.assertEquals(1, constructors.length);
         return constructors[0];
@@ -300,11 +306,19 @@ public class TestClass implements Annotatable {
         }
     }
 
+    @SuppressWarnings("nullness")
     public boolean isPublic() {
+        // [method.invocation.invalid] TRUE_POSITIVE
+        // clazz can be null if users passed the null in the constructor
+        // this method is public
         return Modifier.isPublic(clazz.getModifiers());
     }
 
+    @SuppressWarnings("nullness")
     public boolean isANonStaticInnerClass() {
+        // [method.invocation.invalid] TRUE_POSITIVE
+        // clazz can be null if users passed the null in the constructor
+        // this method is public
         return clazz.isMemberClass() && !isStatic(clazz.getModifiers());
     }
 
