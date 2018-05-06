@@ -25,6 +25,7 @@ public class SuiteMethod extends JUnit38ClassRunner {
         super(testFromSuiteMethod(klass));
     }
 
+    @SuppressWarnings("nullness")
     public static @Nullable Test testFromSuiteMethod(Class<?> klass) throws Throwable {
         @Nullable Method suiteMethod = null;
         @Nullable Test suite = null;
@@ -35,6 +36,8 @@ public class SuiteMethod extends JUnit38ClassRunner {
             }
             suite = (Test) suiteMethod.invoke(null); // static method
         } catch (InvocationTargetException e) {
+            // [throwing.nullable] TRUE_POSITIVE
+            // getCause is documented that it can return null
             throw e.getCause();
         }
         return suite;
