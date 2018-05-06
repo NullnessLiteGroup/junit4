@@ -16,7 +16,7 @@ import org.junit.runners.BlockJUnit4ClassRunner;
 public class FrameworkField extends FrameworkMember<FrameworkField> {
     private final Field field;
 
-    @SuppressWarnings("nullness")
+    // @SuppressWarnings("nullness") WHY？？
     FrameworkField(Field field) {
         if (field == null) {
             throw new NullPointerException(

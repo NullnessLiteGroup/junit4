@@ -23,7 +23,7 @@ public class FrameworkMethod extends FrameworkMember<FrameworkMethod> {
     /**
      * Returns a new {@code FrameworkMethod} for {@code method}
      */
-    @SuppressWarnings("nullness")
+    // @SuppressWarnings("nullness") WHY？？
     public FrameworkMethod(Method method) {
         if (method == null) {
             throw new NullPointerException(
@@ -53,7 +53,7 @@ public class FrameworkMethod extends FrameworkMember<FrameworkMethod> {
      * parameters {@code params}. {@link InvocationTargetException}s thrown are
      * unwrapped, and their causes rethrown.
      */
-    public @Nullable Object invokeExplosively(final @Nullable Object target, final @Nullable Object... params)
+    public @Nullable Object invokeExplosively(final @Nullable Object target, final @Nullable Object @Nullable ... params)
             throws Throwable {
         return new ReflectiveCallable() {
             @Override

@@ -1,6 +1,5 @@
 // stub file for the Nullness Checker
 // The method being invoked permits null.
-import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 package java.lang.reflect;
@@ -14,7 +13,7 @@ public final class Method {
     // conservatively issue a warning whenever null is passed, in order to
     // give a guarantee that no nullness-related exception will be thrown
     // by the invoked method.
-    public @Nullable Object invoke(@Nullable Object obj, @Nullable Object ... args);
+    public @Nullable Object invoke(@Nullable Object obj, @Nullable Object @Nullable ... args);
 
 }
 
