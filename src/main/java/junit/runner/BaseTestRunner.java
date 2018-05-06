@@ -30,6 +30,11 @@ import org.junit.internal.Throwables;
 public abstract class BaseTestRunner implements TestListener {
     public static final String SUITE_METHODNAME = "suite";
 
+    // [uninitialized] FALSE_POSITIVE
+    //  fPreference is a safe field, which will not raise NPE
+    // because it's private, and the only place to access it
+    // getPreferences() ensures the returned value non-null
+    @SuppressWarnings("nullness")
     private static Properties fPreferences;
     static int fgMaxMessageLength = 500;
     static boolean fgFilterStack = true;
@@ -93,6 +98,7 @@ public abstract class BaseTestRunner implements TestListener {
      * Returns the Test corresponding to the given suite. This is
      * a template method, subclasses override runFailed(), clearStatus().
      */
+    @SuppressWarnings("nullness")
     public @Nullable Test getTest(String suiteClassName) {
         if (suiteClassName.length() <= 0) {
             clearStatus();
@@ -131,6 +137,10 @@ public abstract class BaseTestRunner implements TestListener {
                 return test;
             }
         } catch (InvocationTargetException e) {
+            // [dereference.of.nullable] TRUE_POSITIVE
+            //  de-referencing e.getTargetException() can raise NPE
+            // InvocationTargetException can be initialized with target null,
+            // which will returned by getTargetException()
             runFailed("Failed to invoke suite():" + e.getTargetException().toString());
             return null;
         } catch (IllegalAccessException e) {
@@ -220,7 +230,12 @@ public abstract class BaseTestRunner implements TestListener {
     protected void clearStatus() { // Belongs in the GUI TestRunner class
     }
 
+    @SuppressWarnings("nullness")
     protected boolean useReloadingTestSuiteLoader() {
+        // [dereference.of.nullable] FALSE_POSITIVE
+        //  de-referencing getPreference("loading") cannot raise NPE
+        // getPreferences, called by getPreference, always returns
+        // Properties that has key "loading"
         return getPreference("loading").equals("true") && fLoading;
     }
 
@@ -297,7 +312,12 @@ public abstract class BaseTestRunner implements TestListener {
         return sw.toString();
     }
 
+    @SuppressWarnings("nullness")
     protected static boolean showStackRaw() {
+        // [dereference.of.nullable] FALSE_POSITIVE
+        //  de-referencing getPreference("filterstack") cannot raise NPE
+        // getPreferences, called by getPreference, always returns
+        // Properties that has key "filterstack"
         return !getPreference("filterstack").equals("true") || fgFilterStack == false;
     }
 
