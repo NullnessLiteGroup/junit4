@@ -114,8 +114,8 @@ public class Categories extends Suite {
     }
 
     public static class CategoryFilter extends Filter {
-        private final @Nullable Set<Class<?>> included;
-        private final @Nullable Set<Class<?>> excluded;
+        private final Set<Class<?>> included;
+        private final Set<Class<?>> excluded;
         private final boolean includedAny;
         private final boolean excludedAny;
 
