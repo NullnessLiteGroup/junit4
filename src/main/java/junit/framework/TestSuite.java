@@ -106,7 +106,10 @@ public class TestSuite implements Test {
     /**
      * Constructs an empty TestSuite.
      */
+    @SuppressWarnings("nullness")
     public TestSuite() {
+        // [uninitialized] FALSE_POSITIVE
+        // String is immutable, and fName is not de-referenced inside this class.
     }
 
     /**
@@ -115,11 +118,20 @@ public class TestSuite implements Test {
      * Parts of this method were written at 2337 meters in the Hueffihuette,
      * Kanton Uri
      */
+    @SuppressWarnings("nullness")
     public TestSuite(final @Nullable Class<?> theClass) {
+        // [uninitialized] FALSE_POSITIVE
+        // String is immutable, and fName is not de-referenced inside this class.
+        //
+        // [method.invocation.invalid] FALSE_POSITIVE
+        // constructor helper methods
         addTestsFromTestCase(theClass);
     }
 
+    @SuppressWarnings("nullness")
     private void addTestsFromTestCase(final @Nullable Class<?> theClass) {
+        // [dereference.of.nullable] TRUE_POSITIVE
+        // This method is called by constructor where users can pass null
         fName = theClass.getName();
         try {
             getTestConstructor(theClass); // Avoid generating multiple error messages
@@ -139,6 +151,8 @@ public class TestSuite implements Test {
             for (Method each : MethodSorter.getDeclaredMethods(superClass)) {
                 addTestMethod(each, names, theClass);
             }
+            // [dereference.of.nullable] FALSE_POSITIVE
+            // null will be caught by code above, and return before executing this line
             superClass = superClass.getSuperclass();
         }
         if (fTests.size() == 0) {
@@ -151,15 +165,24 @@ public class TestSuite implements Test {
      *
      * @see TestSuite#TestSuite(Class)
      */
+    @SuppressWarnings("nullness")
     public TestSuite(Class<? extends TestCase> theClass, String name) {
         this(theClass);
+        // [method.invocation.invalid] FALSE_POSITIVE
+        // constructor helper methods
         setName(name);
     }
 
     /**
      * Constructs an empty TestSuite.
      */
+    @SuppressWarnings("nullness")
     public TestSuite(String name) {
+        // [uninitialized] FALSE_POSITIVE
+        // String is immutable, and fName is not de-referenced inside this class.
+        //
+        // [method.invocation.invalid] FALSE_POSITIVE
+        // constructor helper methods
         setName(name);
     }
 
@@ -168,8 +191,15 @@ public class TestSuite implements Test {
      *
      * @param classes {@link TestCase}s
      */
+    @SuppressWarnings("nullness")
     public TestSuite(Class<?>... classes) {
+        // [uninitialized] FALSE_POSITIVE
+        // String is immutable, and fName is not de-referenced inside this class.
         for (Class<?> each : classes) {
+            // [method.invocation.invalid] FALSE_POSITIVE
+            // constructor helper methods: addTest
+            // [method.invocation.invalid] FALSE_POSITIVE
+            // constructor helper methods: testCaseForClass
             addTest(testCaseForClass(each));
         }
     }
@@ -187,8 +217,11 @@ public class TestSuite implements Test {
      *
      * @see TestSuite#TestSuite(Class[])
      */
+    @SuppressWarnings("nullness")
     public TestSuite(Class<? extends TestCase>[] classes, String name) {
         this(classes);
+        // [method.invocation.invalid] FALSE_POSITIVE
+        // constructor helper methods
         setName(name);
     }
 
