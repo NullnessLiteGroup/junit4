@@ -129,11 +129,15 @@ public class JUnitCore {
     /**
      * Do not use. Testing purposes only.
      */
+    @SuppressWarnings("nullness")
     public Result run(@Nullable Runner runner) {
         Result result = new Result();
         RunListener listener = result.createListener();
         notifier.addFirstListener(listener);
         try {
+            // [uninitialized] TRUE_POSITIVE
+            //  de-referencing runner can raise NPE
+            // users can call this method with null, from an instance of this class.
             notifier.fireTestRunStarted(runner.getDescription());
             runner.run(notifier);
             notifier.fireTestRunFinished(result);
