@@ -83,12 +83,14 @@ public class MultipleFailureException extends Exception {
      * @param errors list to check
      * @throws Exception or Error if the list is not empty
      */
-    @SuppressWarnings("deprecation")
+    @SuppressWarnings({"deprecation","nullness"})
     public static void assertEmpty(List<Throwable> errors) throws Exception {
         if (errors.isEmpty()) {
             return;
         }
         if (errors.size() == 1) {
+            // [method.invocation.invalid] FALSE_POSITIVE
+            // rethrowAsException is declared to re-throw the exception and never return any thing
             throw Throwables.rethrowAsException(errors.get(0));
         }
 
