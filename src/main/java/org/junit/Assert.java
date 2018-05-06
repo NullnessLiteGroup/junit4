@@ -130,7 +130,7 @@ public class Assert {
         return isEquals(expected, actual);
     }
 
-    private static boolean isEquals(Object expected, Object actual) {
+    private static boolean isEquals(Object expected, @Nullable Object actual) {
         return expected.equals(actual);
     }
 
