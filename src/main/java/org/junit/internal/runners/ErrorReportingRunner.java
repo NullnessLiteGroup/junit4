@@ -51,7 +51,7 @@ public class ErrorReportingRunner extends Runner {
         }
     }
 
-    private String getClassNames(@Nullable Class<?>... testClasses) {
+    private String getClassNames(Class<?>... testClasses) {
         final StringBuilder builder = new StringBuilder();
         for (Class<?> testClass : testClasses) {
             if (builder.length() != 0) {
