@@ -49,7 +49,10 @@ public class MethodSorter {
      * @see <a href="http://bugs.sun.com/view_bug.do?bug_id=7023180">JDK
      *      (non-)bug #7023180</a>
      */
+    @SuppressWarnings("nullness")
     public static Method[] getDeclaredMethods(@Nullable Class<?> clazz) {
+        // [dereference.of.nullable] TRUE_POSITIVE
+        // public static method passing null
         Comparator<Method> comparator = getSorter(clazz.getAnnotation(FixMethodOrder.class));
 
         Method[] methods = clazz.getDeclaredMethods();
