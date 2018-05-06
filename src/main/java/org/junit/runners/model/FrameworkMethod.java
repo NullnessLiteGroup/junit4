@@ -23,7 +23,7 @@ public class FrameworkMethod extends FrameworkMember<FrameworkMethod> {
     /**
      * Returns a new {@code FrameworkMethod} for {@code method}
      */
-    @SuppressWarnings("nullness")
+    // @SuppressWarnings("nullness") WHY？？
     public FrameworkMethod(Method method) {
         if (method == null) {
             throw new NullPointerException(

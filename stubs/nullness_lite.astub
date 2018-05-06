@@ -1,6 +1,5 @@
 // stub file for the Nullness Checker
 // The method being invoked permits null.
-import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 package java.lang.reflect;
