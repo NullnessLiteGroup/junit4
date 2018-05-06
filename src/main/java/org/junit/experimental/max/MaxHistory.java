@@ -114,8 +114,11 @@ public class MaxHistory implements Serializable {
         }
 
         @Override
+        @SuppressWarnings("nullness")
         public void testFinished(Description description) throws Exception {
             long end = System.nanoTime();
+            // [unboxing.of.nullable] TRUE_POSITIVE
+            // this method is public, no guarantee for description to exists.
             long start = starts.get(description);
             putTestDuration(description, end - start);
         }
@@ -131,6 +134,7 @@ public class MaxHistory implements Serializable {
         }
     }
 
+    @SuppressWarnings("nullness")
     private class TestComparator implements Comparator<Description> {
         public int compare(Description o1, Description o2) {
             // Always prefer new tests
@@ -144,6 +148,8 @@ public class MaxHistory implements Serializable {
             int result = getFailure(o2).compareTo(getFailure(o1));
             return result != 0 ? result
                     // Then shorter tests first
+                    // [dereference.of.nullable] FALSE_POSITIVE
+                    // isNullTest(o1) caught the null
                     : getTestDuration(o1).compareTo(getTestDuration(o2));
         }
 
