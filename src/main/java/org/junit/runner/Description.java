@@ -84,7 +84,11 @@ public class Description implements Serializable {
      * @param annotations meta-data about the test, for downstream interpreters
      * @return a <code>Description</code> named <code>name</code>
      */
+    @SuppressWarnings("nullness")
     public static Description createTestDescription(@Nullable Class<?> clazz, @Nullable String name, Annotation... annotations) {
+        // [dereference.of.nullable] TRUE_POSITIVE
+        //  class.getName() can raise NPE
+        // since the method is public static that users can pass null as clazz
         return new Description(clazz, formatDisplayName(name, clazz.getName()), annotations);
     }
 
@@ -97,7 +101,11 @@ public class Description implements Serializable {
      * @param name the name of the test (a method name for test annotated with {@link org.junit.Test})
      * @return a <code>Description</code> named <code>name</code>
      */
+    @SuppressWarnings("nullness")
     public static Description createTestDescription(@Nullable Class<?> clazz, @Nullable String name) {
+        // [dereference.of.nullable] TRUE_POSITIVE
+        //  class.getName() can raise NPE
+        // since the method is public static that users can pass null as clazz
         return new Description(clazz, formatDisplayName(name, clazz.getName()));
     }
 
