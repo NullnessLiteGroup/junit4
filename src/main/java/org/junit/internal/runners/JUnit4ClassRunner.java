@@ -8,6 +8,7 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.junit.runner.Description;
 import org.junit.runner.Runner;
 import org.junit.runner.manipulation.Filter;
@@ -29,9 +30,14 @@ public class JUnit4ClassRunner extends Runner implements Filterable, Sortable {
     private final List<Method> testMethods;
     private TestClass testClass;
 
+    @SuppressWarnings("nullness")
     public JUnit4ClassRunner(Class<?> klass) throws InitializationError {
         testClass = new TestClass(klass);
+        // [method.invocation.invalid] FALSE_POSITIVE
+        // helper method in the constructor
         testMethods = getTestMethods();
+        // [method.invocation.invalid] FALSE_POSITIVE
+        // helper method in the constructor
         validate();
     }
 
@@ -99,7 +105,7 @@ public class JUnit4ClassRunner extends Runner implements Filterable, Sortable {
     }
 
     private void testAborted(RunNotifier notifier, Description description,
-            Throwable e) {
+            @Nullable Throwable e) {
         notifier.fireTestStarted(description);
         notifier.fireTestFailure(new Failure(description, e));
         notifier.fireTestFinished(description);
