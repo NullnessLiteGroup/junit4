@@ -9,6 +9,7 @@ import java.util.Enumeration;
 import java.util.List;
 import java.util.Vector;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.junit.internal.MethodSorter;
 import org.junit.internal.Throwables;
 
@@ -114,7 +115,13 @@ public class TestSuite implements Test {
      * Parts of this method were written at 2337 meters in the Hueffihuette,
      * Kanton Uri
      */
-    public TestSuite(final Class<?> theClass) {
+    @SuppressWarnings("nullness")
+    public TestSuite(final @Nullable Class<?> theClass) {
+        // [uninitialized] FALSE_POSITIVE
+        // String is immutable, and fName is not de-referenced inside this class.
+        //
+        // [method.invocation.invalid] FALSE_POSITIVE
+        // constructor helper methods
         addTestsFromTestCase(theClass);
     }
 
@@ -150,8 +157,11 @@ public class TestSuite implements Test {
      *
      * @see TestSuite#TestSuite(Class)
      */
+    @SuppressWarnings("nullness")
     public TestSuite(Class<? extends TestCase> theClass, String name) {
         this(theClass);
+        // [method.invocation.invalid] FALSE_POSITIVE
+        // constructor helper methods
         setName(name);
     }
 

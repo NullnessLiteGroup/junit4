@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
@@ -69,7 +70,7 @@ public abstract class ParentRunner<T> extends Runner implements Filterable,
     private final TestClass testClass;
 
     // Guarded by childrenLock
-    private volatile Collection<T> filteredChildren = null;
+    private volatile @Nullable Collection<T> filteredChildren = null;
 
     private volatile RunnerScheduler scheduler = new RunnerScheduler() {
         public void schedule(Runnable childStatement) {
@@ -84,8 +85,13 @@ public abstract class ParentRunner<T> extends Runner implements Filterable,
     /**
      * Constructs a new {@code ParentRunner} that will run {@code @TestClass}
      */
-    protected ParentRunner(Class<?> testClass) throws InitializationError {
+    @SuppressWarnings("nullness")
+    protected ParentRunner(@Nullable Class<?> testClass) throws InitializationError {
+        // [method.invocation.invalid] FALSE_POSITIVE
+        // constructor helper methods
         this.testClass = createTestClass(testClass);
+        // [method.invocation.invalid] FALSE_POSITIVE
+        // constructor helper methods
         validate();
     }
 
@@ -94,8 +100,11 @@ public abstract class ParentRunner<T> extends Runner implements Filterable,
     *
     * @since 4.13
     */
-    protected ParentRunner(TestClass testClass) throws InitializationError {
+   @SuppressWarnings("nullness")
+   protected ParentRunner(TestClass testClass) throws InitializationError {
        this.testClass = notNull(testClass);
+       // [method.invocation.invalid] FALSE_POSITIVE
+       // constructor helper methods
        validate();
     }
 
