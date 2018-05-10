@@ -47,9 +47,9 @@ public class SpecificDataPointsSupplier extends AllMembersSupplier {
         List<Field> fieldsWithMatchingNames = new ArrayList<Field>();
         
         for (Field field : fields) {
-            // [dereference.of.nullable] TRUE_POSITIVE
-            // dereference of possibly-null reference sig.getAnnotation(DataPoint.class)
-            // sig.getAnnotation() may return null if not found
+            // [dereference.of.nullable] FALSE_POSITIVE
+            // fields are specified to include those with annotations,
+            // so getAnnotation() is thus guaranteed to return nonnull
             String[] fieldNames = field.getAnnotation(DataPoints.class).value();
             if (Arrays.asList(fieldNames).contains(requestedName)) {
                 fieldsWithMatchingNames.add(field);
