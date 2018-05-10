@@ -70,8 +70,6 @@ public abstract class RunnerBuilder {
         }
     }
 
-    @SuppressWarnings("nullness")
-    // TP: true positive: addParent(null) is called somewhere
     @Nullable Class<?> addParent(@Nullable Class<?> parent) throws InitializationError {
         if (!parents.add(parent)) {
             throw new InitializationError(String.format("class '%s' (possibly indirectly) contains itself as a SuiteClass", parent.getName()));
