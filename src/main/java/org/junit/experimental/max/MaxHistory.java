@@ -118,7 +118,7 @@ public class MaxHistory implements Serializable {
         public void testFinished(Description description) throws Exception {
             long end = System.nanoTime();
             // [unboxing.of.nullable] TRUE_POSITIVE
-            // this method is public, no guarantee for description to exists.
+            // this method is public, no guarantee for description to be non-null.
             long start = starts.get(description);
             putTestDuration(description, end - start);
         }
@@ -148,8 +148,11 @@ public class MaxHistory implements Serializable {
             int result = getFailure(o2).compareTo(getFailure(o1));
             return result != 0 ? result
                     // Then shorter tests first
-                    // [dereference.of.nullable] FALSE_POSITIVE
-                    // isNullTest(o1) caught the null
+                    // [dereference.of.nullable] TRUE_POSITIVE
+                    // de-referencing getTestDuration(o1) can raise NPE here
+                    // although the private inner class is not used in this class
+                    // developers can make a new instance of the inner class,
+                    // and call compare with invalid parameter
                     : getTestDuration(o1).compareTo(getTestDuration(o2));
         }
 
