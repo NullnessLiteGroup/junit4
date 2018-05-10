@@ -1,5 +1,7 @@
 package org.junit.runners.model;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 import java.lang.reflect.Modifier;
 import java.util.List;
 
@@ -18,7 +20,7 @@ public abstract class FrameworkMember<T extends FrameworkMember<T>> implements
      * 
      * @return member that should be used, or {@code null} if no member should be used.
      */
-    final T handlePossibleShadowedMember(List<T> members) {
+    final @Nullable T handlePossibleShadowedMember(List<T> members) {
         for (int i = members.size() - 1; i >=0; i--) {
             T otherMember = members.get(i);
             if (isShadowedBy(otherMember)) {
