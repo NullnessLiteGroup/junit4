@@ -3,6 +3,7 @@ package org.junit.runners;
 import java.lang.reflect.Method;
 import java.util.Comparator;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.junit.internal.MethodSorter;
 
 /**
@@ -31,7 +32,7 @@ public enum MethodSorters {
 
     private final Comparator<Method> comparator;
 
-    private MethodSorters(Comparator<Method> comparator) {
+    private MethodSorters(@Nullable Comparator<Method> comparator) {
         this.comparator = comparator;
     }
 
