@@ -117,9 +117,6 @@ public class TestSuite implements Test {
      */
     @SuppressWarnings("nullness")
     public TestSuite(final @Nullable Class<?> theClass) {
-        // [uninitialized] FALSE_POSITIVE
-        // String is immutable, and fName is not de-referenced inside this class.
-        //
         // [method.invocation.invalid] FALSE_POSITIVE
         // constructor helper methods
         addTestsFromTestCase(theClass);
