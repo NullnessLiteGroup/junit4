@@ -14,7 +14,7 @@ import org.junit.runners.model.InitializationError;
 import static java.util.Collections.singletonList;
 
 public class ErrorReportingRunner extends Runner {
-    private final List<Throwable> causes;
+    private final List<@Nullable Throwable> causes;
 
     private final String classNames;
 
@@ -69,8 +69,8 @@ public class ErrorReportingRunner extends Runner {
         return builder.toString();
     }
 
-    @SuppressWarnings("deprecation")
-    private List<Throwable> getCauses(@Nullable Throwable cause) {
+    @SuppressWarnings({"deprecation","nullness"})
+    private List<@Nullable Throwable> getCauses(@Nullable Throwable cause) {
         if (cause instanceof InvocationTargetException) {
             return getCauses(cause.getCause());
         }
@@ -78,9 +78,11 @@ public class ErrorReportingRunner extends Runner {
             return singletonList(cause);
         }
         if (cause instanceof InitializationError) {
+            // incompatible between List<@Nullable Throwable> and List<Throwable>
             return ((InitializationError) cause).getCauses();
         }
         if (cause instanceof org.junit.internal.runners.InitializationError) {
+            // incompatible between List<@Nullable Throwable> and List<Throwable>
             return ((org.junit.internal.runners.InitializationError) cause)
                     .getCauses();
         }
@@ -91,7 +93,7 @@ public class ErrorReportingRunner extends Runner {
         return Description.createTestDescription(classNames, "initializationError");
     }
 
-    private void runCause(Throwable child, RunNotifier notifier) {
+    private void runCause(@Nullable Throwable child, RunNotifier notifier) {
         Description description = describeCause();
         notifier.fireTestStarted(description);
         notifier.fireTestFailure(new Failure(description, child));
