@@ -28,7 +28,7 @@ public class Computer {
             Class<?>[] classes) throws InitializationError {
         return new Suite(new RunnerBuilder() {
             @Override
-            public Runner runnerForClass(Class<?> testClass) throws Throwable {
+            public @Nullable Runner runnerForClass(Class<?> testClass) throws Throwable {
                 return getRunner(builder, testClass);
             }
         }, classes) {

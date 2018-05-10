@@ -70,7 +70,7 @@ public abstract class RunnerBuilder {
         }
     }
 
-    Class<?> addParent(Class<?> parent) throws InitializationError {
+    Class<?> addParent(@Nullable Class<?> parent) throws InitializationError {
         if (!parents.add(parent)) {
             throw new InitializationError(String.format("class '%s' (possibly indirectly) contains itself as a SuiteClass", parent.getName()));
         }
@@ -87,7 +87,7 @@ public abstract class RunnerBuilder {
      * this builder will throw an exception if it is requested for another
      * runner for {@code parent} before this call completes.
      */
-    public List<Runner> runners(Class<?> parent, Class<?>[] children)
+    public List<Runner> runners(@Nullable Class<?> parent, Class<?>[] children)
             throws InitializationError {
         addParent(parent);
 

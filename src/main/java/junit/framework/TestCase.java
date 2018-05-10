@@ -1,5 +1,7 @@
 package junit.framework;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -78,7 +80,7 @@ public abstract class TestCase extends Assert implements Test {
     /**
      * the name of the test case
      */
-    private String fName;
+    private @Nullable String fName;
 
     /**
      * No-arg constructor to enable serialization. This method
@@ -157,6 +159,7 @@ public abstract class TestCase extends Assert implements Test {
      *
      * @throws Throwable if any exception is thrown
      */
+    @SuppressWarnings("nullness")
     protected void runTest() throws Throwable {
         assertNotNull("TestCase.fName cannot be null", fName); // Some VMs crash when calling getMethod(null,null);
         Method runMethod = null;
@@ -169,6 +172,9 @@ public abstract class TestCase extends Assert implements Test {
         } catch (NoSuchMethodException e) {
             fail("Method \"" + fName + "\" not found");
         }
+
+        // [dereference.of.nullable] FALSE_POSITIVE
+        // We catch NoSuchMethodException above
         if (!Modifier.isPublic(runMethod.getModifiers())) {
             fail("Method \"" + fName + "\" should be public");
         }
@@ -177,6 +183,8 @@ public abstract class TestCase extends Assert implements Test {
             runMethod.invoke(this);
         } catch (InvocationTargetException e) {
             e.fillInStackTrace();
+            // [throwing.nullable] TRUE_POSITIVE
+            // getTargetException possibly return null
             throw e.getTargetException();
         } catch (IllegalAccessException e) {
             e.fillInStackTrace();
