@@ -3,6 +3,7 @@ package org.junit.internal;
 import java.lang.reflect.Array;
 import java.util.Arrays;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.junit.Assert;
 
 /**
@@ -23,12 +24,12 @@ public abstract class ComparisonCriteria {
      * @param actuals Object array or array of arrays (multi-dimensional array) with
      * actual values
      */
-    public void arrayEquals(String message, Object expecteds, Object actuals)
+    public void arrayEquals(@Nullable String message, @Nullable Object expecteds, @Nullable Object actuals)
             throws ArrayComparisonFailure {
         arrayEquals(message, expecteds, actuals, true);
     }
 
-    private void arrayEquals(String message, Object expecteds, Object actuals, boolean outer)
+    private void arrayEquals(@Nullable String message, @Nullable Object expecteds, @Nullable Object actuals, boolean outer)
             throws ArrayComparisonFailure {
         if (expecteds == actuals
             || Arrays.deepEquals(new Object[] {expecteds}, new Object[] {actuals})) {
