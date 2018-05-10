@@ -48,7 +48,7 @@ public class AssumptionViolatedException extends RuntimeException implements Sel
      * @deprecated Please use {@link org.junit.AssumptionViolatedException} instead.
      */
     @Deprecated
-    public AssumptionViolatedException(Object value, Matcher<?> matcher) {
+    public AssumptionViolatedException(@Nullable Object value, Matcher<?> matcher) {
         this(null, true, value, matcher);
     }
 
@@ -59,7 +59,7 @@ public class AssumptionViolatedException extends RuntimeException implements Sel
      * @deprecated Please use {@link org.junit.AssumptionViolatedException} instead.
      */
     @Deprecated
-    public AssumptionViolatedException(String assumption, Object value, Matcher<?> matcher) {
+    public AssumptionViolatedException(String assumption, @Nullable Object value, Matcher<?> matcher) {
         this(assumption, true, value, matcher);
     }
 

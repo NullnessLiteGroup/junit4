@@ -1,5 +1,6 @@
 package org.junit.internal.management;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.junit.internal.Classes;
 
 import java.lang.reflect.InvocationTargetException;
@@ -21,7 +22,7 @@ public class ManagementFactory {
       MANAGEMENT_FACTORY_CLASS = managementFactoryClass;
     }
 
-    static Object getBeanObject(String methodName) {
+    static @Nullable Object getBeanObject(String methodName) {
       if (MANAGEMENT_FACTORY_CLASS != null) {
         try {
           return MANAGEMENT_FACTORY_CLASS.getMethod(methodName).invoke(null);
