@@ -104,10 +104,14 @@ public class MethodRoadie {
         }
     }
 
+    @SuppressWarnings("nullness")
     protected void runTestMethod() {
         try {
             testMethod.invoke(test);
             if (testMethod.expectsException()) {
+                // [dereference.of.nullable] FALSE_POSITIVE
+                // testMethod.getExpectedException() could not be null
+                // because expectsException() ensures it
                 addFailure(new AssertionError("Expected exception: " + testMethod.getExpectedException().getName()));
             }
         } catch (InvocationTargetException e) {
@@ -117,6 +121,11 @@ public class MethodRoadie {
             } else if (!testMethod.expectsException()) {
                 addFailure(actual);
             } else if (testMethod.isUnexpected(actual)) {
+                // 1) [dereference.of.nullable] FALSE_POSITIVE
+                // testMethod.getExpectedException() could not be null
+                // because last if statement checks !expectsException() which ensures it
+                // 2) [dereference.of.nullable] TRUE_POSITIVE
+                // dereference of possibly-null reference actual
                 String message = "Unexpected exception, expected<" + testMethod.getExpectedException().getName() + "> but was<"
                         + actual.getClass().getName() + ">";
                 addFailure(new Exception(message, actual));
@@ -126,6 +135,7 @@ public class MethodRoadie {
         }
     }
 
+    @SuppressWarnings("nullness")
     private void runBefores() throws FailedBefore {
         try {
             try {
@@ -134,6 +144,9 @@ public class MethodRoadie {
                     before.invoke(test);
                 }
             } catch (InvocationTargetException e) {
+                // [throwing.nullable] FALSE_POSITIVE
+                //  e.getTargetException() will never be null
+                // becausee was just caught
                 throw e.getTargetException();
             }
         } catch (AssumptionViolatedException e) {

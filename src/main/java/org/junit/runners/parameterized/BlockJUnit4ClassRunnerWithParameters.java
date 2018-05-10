@@ -57,6 +57,7 @@ public class BlockJUnit4ClassRunnerWithParameters extends
         return getTestClass().getOnlyConstructor().newInstance(parameters);
     }
 
+    @SuppressWarnings("nullness")
     private Object createTestUsingFieldInjection() throws Exception {
         List<FrameworkField> annotatedFieldsByParameter = getAnnotatedFieldsByParameter();
         if (annotatedFieldsByParameter.size() != parameters.length) {
@@ -67,10 +68,16 @@ public class BlockJUnit4ClassRunnerWithParameters extends
                             + ", available parameters: " + parameters.length
                             + ".");
         }
+        // [dereference.of.nullable] TRUE_POSITIVE
+        // dereference of possibly-null reference getTestClass().getJavaClass()
+        // getJavaClass() could return null which will cause NPE
         Object testClassInstance = getTestClass().getJavaClass().newInstance();
         for (FrameworkField each : annotatedFieldsByParameter) {
             Field field = each.getField();
             Parameter annotation = field.getAnnotation(Parameter.class);
+            // [dereference.of.nullable] TRUE_POSITIVE
+            // dereference of possibly-null reference annotation
+            // annotation could be null because field.getAnnotation() may return null
             int index = annotation.value();
             try {
                 field.set(testClassInstance, parameters[index]);
@@ -113,12 +120,16 @@ public class BlockJUnit4ClassRunnerWithParameters extends
     }
 
     @Override
+    @SuppressWarnings("nullness")
     protected void validateFields(List<Throwable> errors) {
         super.validateFields(errors);
         if (getInjectionType() == InjectionType.FIELD) {
             List<FrameworkField> annotatedFieldsByParameter = getAnnotatedFieldsByParameter();
             int[] usedIndices = new int[annotatedFieldsByParameter.size()];
             for (FrameworkField each : annotatedFieldsByParameter) {
+                // [dereference.of.nullable] TRUE_POSITIVE
+                // dereference of possibly-null reference each.getField().getAnnotation(Parameter.class)
+                // it could be null because getAnnotation() may return null
                 int index = each.getField().getAnnotation(Parameter.class)
                         .value();
                 if (index < 0 || index > annotatedFieldsByParameter.size() - 1) {
