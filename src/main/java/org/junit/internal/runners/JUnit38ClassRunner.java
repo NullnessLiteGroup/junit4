@@ -7,6 +7,7 @@ import junit.framework.TestCase;
 import junit.framework.TestListener;
 import junit.framework.TestResult;
 import junit.framework.TestSuite;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.junit.runner.Describable;
 import org.junit.runner.Description;
 import org.junit.runner.Runner;
@@ -55,7 +56,7 @@ public class JUnit38ClassRunner extends Runner implements Filterable, Sortable {
             return test.getClass();
         }
 
-        private String getName(Test test) {
+        private @Nullable String getName(Test test) {
             if (test instanceof TestCase) {
                 return ((TestCase) test).getName();
             } else {
