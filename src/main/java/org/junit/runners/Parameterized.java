@@ -288,8 +288,11 @@ public class Parameterized extends Suite {
         this(klass, new RunnersFactory(klass));
     }
 
+    @SuppressWarnings("nullness")
     private Parameterized(Class<?> klass, RunnersFactory runnersFactory) throws Exception {
         super(klass, runnersFactory.createRunners());
+        // [method.invocation.invalid] FALSE_POSITIVE
+        // constructor helper methods
         validateBeforeParamAndAfterParamMethods(runnersFactory.parameterCount);
     }
 
@@ -369,11 +372,14 @@ public class Parameterized extends Suite {
                     allParameters.isEmpty() ? 0 : normalizeParameters(allParameters.get(0)).length;
         }
 
+        @SuppressWarnings("nullness")
         private List<Runner> createRunners() throws Exception {
             if (runnerOverride != null) {
                 return Collections.singletonList(runnerOverride);
             }
             Parameters parameters = parametersMethod.getAnnotation(Parameters.class);
+            // [dereference.of.nullable] TRUE_POSITIVE
+            // dereference of possibly-null reference parameters
             return Collections.unmodifiableList(createRunnersForParameters(
                     allParameters, parameters.name(),
                     getParametersRunnerFactory()));

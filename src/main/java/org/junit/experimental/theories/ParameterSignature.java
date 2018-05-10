@@ -106,6 +106,7 @@ public class ParameterSignature {
         return findDeepAnnotation(annotations2, annotationType, 3);
     }
 
+    @SuppressWarnings("nullness")
     private <T extends Annotation> @Nullable T findDeepAnnotation(
             Annotation[] annotations, Class<T> annotationType, int depth) {
         if (depth == 0) {
@@ -118,6 +119,8 @@ public class ParameterSignature {
             Annotation candidate = findDeepAnnotation(each.annotationType()
                     .getAnnotations(), annotationType, depth - 1);
             if (candidate != null) {
+                // [argument.type.incompatible] FALSE_POSITIVE
+                // candidate is refined to non-null by if statement
                 return annotationType.cast(candidate);
             }
         }

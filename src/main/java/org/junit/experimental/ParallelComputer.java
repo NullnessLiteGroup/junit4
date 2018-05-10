@@ -30,7 +30,7 @@ public class ParallelComputer extends Computer {
         return new ParallelComputer(false, true);
     }
 
-    private static @Nullable Runner parallelize(@Nullable Runner runner) {
+    private static Runner parallelize(Runner runner) {
         if (runner instanceof ParentRunner) {
             ((ParentRunner<?>) runner).setScheduler(new RunnerScheduler() {
                 private final ExecutorService fService = Executors.newCachedThreadPool();
@@ -53,14 +53,14 @@ public class ParallelComputer extends Computer {
     }
 
     @Override
-    public @Nullable Runner getSuite(RunnerBuilder builder, java.lang.Class<?>[] classes)
+    public Runner getSuite(RunnerBuilder builder, java.lang.Class<?>[] classes)
             throws InitializationError {
         Runner suite = super.getSuite(builder, classes);
         return this.classes ? parallelize(suite) : suite;
     }
 
     @Override
-    protected @Nullable Runner getRunner(RunnerBuilder builder, Class<?> testClass)
+    protected Runner getRunner(RunnerBuilder builder, Class<?> testClass)
             throws Throwable {
         Runner runner = super.getRunner(builder, testClass);
         return methods ? parallelize(runner) : runner;

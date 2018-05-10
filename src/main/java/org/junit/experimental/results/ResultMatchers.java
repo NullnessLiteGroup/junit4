@@ -51,9 +51,12 @@ public class ResultMatchers {
     /**
      * Matches if the result has exactly one failure, and it contains {@code string}
      */
+    @SuppressWarnings("nullness")
     public static Matcher<Object> hasSingleFailureContaining(final String string) {
         return new BaseMatcher<Object>() {
             public boolean matches(@Nullable Object item) {
+                // [dereference.of.nullable] TRUE_POSITIVE
+                // dereference of possibly-null reference item
                 return item.toString().contains(string) && failureCountIs(1).matches(item);
             }
 

@@ -110,7 +110,7 @@ public class MaxCore {
         }
         return new Request() {
             @Override
-            public @Nullable Runner getRunner() {
+            public Runner getRunner() {
                 try {
                     return new Suite((Class<?>) null, runners) {
                     };

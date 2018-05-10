@@ -205,7 +205,10 @@ public class BlockJUnit4ClassRunner extends ParentRunner<FrameworkMethod> {
         }
     }
 
+    @SuppressWarnings("nullness")
     private boolean hasOneConstructor() {
+        // [dereference.of.nullable] TRUE_POSITIVE
+        // dereference of possibly-null reference getTestClass().getJavaClass()
         return getTestClass().getJavaClass().getConstructors().length == 1;
     }
 

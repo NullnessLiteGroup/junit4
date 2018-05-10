@@ -70,8 +70,11 @@ public abstract class RunnerBuilder {
         }
     }
 
+    @SuppressWarnings("nullness")
     @Nullable Class<?> addParent(@Nullable Class<?> parent) throws InitializationError {
         if (!parents.add(parent)) {
+            // [dereference.of.nullable] TRUE_POSITIVE
+            // dereference of parent can raise NPE since parent @Nullable
             throw new InitializationError(String.format("class '%s' (possibly indirectly) contains itself as a SuiteClass", parent.getName()));
         }
         return parent;

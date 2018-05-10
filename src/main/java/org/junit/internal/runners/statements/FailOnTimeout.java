@@ -231,7 +231,11 @@ public class FailOnTimeout extends Statement {
      * if this cannot be determined, e.g. because new threads are being created at an
      * extremely fast rate.
      */
+    @SuppressWarnings("nullness")
     private List<Thread> getThreadsInGroup(@Nullable ThreadGroup group) {
+        // [dereference.of.nullable] TRUE_POSITIVE
+        // dereference of possibly-null reference group
+        // group could be nullable which may raise NPE
         final int activeThreadCount = group.activeCount(); // this is just an estimate
         int threadArraySize = Math.max(activeThreadCount * 2, 100);
         for (int loopCount = 0; loopCount < 5; loopCount++) {

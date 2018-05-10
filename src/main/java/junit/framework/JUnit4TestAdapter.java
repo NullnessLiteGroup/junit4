@@ -27,7 +27,7 @@ import org.junit.runner.manipulation.Sorter;
 public class JUnit4TestAdapter implements Test, Filterable, Sortable, Describable {
     private final Class<?> fNewTestClass;
 
-    private final @Nullable Runner fRunner;
+    private final Runner fRunner;
 
     private final JUnit4TestAdapterCache fCache;
 

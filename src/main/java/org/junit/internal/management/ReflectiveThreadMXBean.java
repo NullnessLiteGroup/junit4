@@ -46,10 +46,14 @@ final class ReflectiveThreadMXBean implements ThreadMXBean {
   /**
    * {@inheritDoc}
    */
+  @SuppressWarnings("nullness")
   public long getThreadCpuTime(long id) {
     if (Holder.getThreadCpuTimeMethod != null) {
       Exception error = null;
       try {
+        // [unboxing.of.nullable] TRUE_POSITIVE
+        // unboxing a possibly-null reference (Long)Holder.getThreadCpuTimeMethod.invoke(threadMxBean, id)
+        // invoke() may return null which could raise NPE
         return (Long) Holder.getThreadCpuTimeMethod.invoke(threadMxBean, id);
       } catch (ClassCastException e) {
         error = e;
@@ -72,9 +76,13 @@ final class ReflectiveThreadMXBean implements ThreadMXBean {
   /**
    * {@inheritDoc}
    */
+  @SuppressWarnings("nullness")
   public boolean isThreadCpuTimeSupported() {
     if (Holder.isThreadCpuTimeSupportedMethod != null) {
       try {
+        // [unboxing.of.nullable] TRUE_POSITIVE
+        // unboxing a possibly-null reference (Boolean)Holder.isThreadCpuTimeSupportedMethod.invoke(threadMxBean)
+        // invoke() may return null which may cause NPE
         return (Boolean) Holder.isThreadCpuTimeSupportedMethod.invoke(threadMxBean);
       } catch (ClassCastException e) {
         // fallthrough

@@ -85,8 +85,13 @@ public abstract class ParentRunner<T> extends Runner implements Filterable,
     /**
      * Constructs a new {@code ParentRunner} that will run {@code @TestClass}
      */
+    @SuppressWarnings("nullness")
     protected ParentRunner(@Nullable Class<?> testClass) throws InitializationError {
+        // [method.invocation.invalid] FALSE_POSITIVE
+        // constructor helper methods
         this.testClass = createTestClass(testClass);
+        // [method.invocation.invalid] FALSE_POSITIVE
+        // constructor helper methods
         validate();
     }
 
@@ -95,8 +100,11 @@ public abstract class ParentRunner<T> extends Runner implements Filterable,
     *
     * @since 4.13
     */
-    protected ParentRunner(TestClass testClass) throws InitializationError {
+   @SuppressWarnings("nullness")
+   protected ParentRunner(TestClass testClass) throws InitializationError {
        this.testClass = notNull(testClass);
+       // [method.invocation.invalid] FALSE_POSITIVE
+       // constructor helper methods
        validate();
     }
 
@@ -217,7 +225,11 @@ public abstract class ParentRunner<T> extends Runner implements Filterable,
         return statement;
     }
 
+    @SuppressWarnings("nullness")
     private boolean areAllChildrenIgnored() {
+        // [iterating.over.nullable] TRUE_POSITIVE
+        // iterating over possibly-null reference getFilteredChildren()
+        // JDK 8 doc: NullPointerException - if the specified action is null
         for (T child : getFilteredChildren()) {
             if (!isIgnored(child)) {
                 return false;
@@ -303,9 +315,13 @@ public abstract class ParentRunner<T> extends Runner implements Filterable,
         return false;
     }
 
+    @SuppressWarnings("nullness")
     private void runChildren(final RunNotifier notifier) {
         final RunnerScheduler currentScheduler = scheduler;
         try {
+            // [iterating.over.nullable] TRUE_POSITIVE
+            // iterating over possibly-null reference getFilteredChildren()
+            // JDK 8 doc: NullPointerException - if the specified action is null
             for (final T each : getFilteredChildren()) {
                 currentScheduler.schedule(new Runnable() {
                     public void run() {
@@ -367,6 +383,7 @@ public abstract class ParentRunner<T> extends Runner implements Filterable,
     //
 
     @Override
+    @SuppressWarnings("nullness")
     public Description getDescription() {
         Class<?> clazz = getTestClass().getJavaClass();
         Description description;
@@ -378,6 +395,9 @@ public abstract class ParentRunner<T> extends Runner implements Filterable,
             description = Description.createSuiteDescription(clazz, getRunnerAnnotations());
         }
 
+        // [iterating.over.nullable] TRUE_POSITIVE
+        // iterating over possibly-null reference getFilteredChildren()
+        // JDK 8 doc: NullPointerException - if the specified action is null
         for (T child : getFilteredChildren()) {
             description.addChild(describeChild(child));
         }
@@ -432,9 +452,13 @@ public abstract class ParentRunner<T> extends Runner implements Filterable,
         }
     }
 
+    @SuppressWarnings("nullness")
     public void sort(Sorter sorter) {
         childrenLock.lock();
         try {
+            // [iterating.over.nullable] TRUE_POSITIVE
+            // iterating over possibly-null reference getFilteredChildren()
+            // JDK 8 doc: NullPointerException - if the specified action is null
             for (T each : getFilteredChildren()) {
                 sorter.apply(each);
             }

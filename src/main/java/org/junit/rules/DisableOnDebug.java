@@ -102,7 +102,11 @@ public class DisableOnDebug implements TestRule {
      * @return true if the current JVM was started in debug mode, false
      *         otherwise.
      */
+    @SuppressWarnings("nullness")
     private static boolean isDebugging(@Nullable List<String> arguments) {
+        // [iterating.over.nullable] TRUE_POSITIVE
+        // iterating over possibly-null reference arguments
+        // arguments could be passed in as null which will cause NPE
         for (final String argument : arguments) {
             if ("-Xdebug".equals(argument)) {
                 return true;

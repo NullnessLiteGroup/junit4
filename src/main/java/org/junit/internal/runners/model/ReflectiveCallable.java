@@ -10,7 +10,7 @@ import java.lang.reflect.InvocationTargetException;
  */
 @SuppressWarnings("nullness")
 public abstract class ReflectiveCallable {
-    public @Nullable Object run() throws Throwable {
+    public Object run() throws Throwable {
         try {
             return runReflectiveCall();
         } catch (InvocationTargetException e) {

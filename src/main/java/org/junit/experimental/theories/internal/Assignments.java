@@ -63,9 +63,9 @@ public class Assignments {
                 unassigned.size()), clazz);
     }
 
-    public @Nullable Object[] getActualValues(int start, int stop)
+    public Object[] getActualValues(int start, int stop)
             throws CouldNotGenerateValueException {
-        @Nullable Object [] values = new Object[stop - start];
+        Object [] values = new Object[stop - start];
         for (int i = start; i < stop; i++) {
             values[i - start] = assigned.get(i).getValue();
         }
@@ -128,7 +128,7 @@ public class Assignments {
         return getActualValues(0, getConstructorParameterCount());
     }
 
-    public @Nullable Object[] getMethodArguments() throws CouldNotGenerateValueException {
+    public Object[] getMethodArguments() throws CouldNotGenerateValueException {
         return getActualValues(getConstructorParameterCount(), assigned.size());
     }
 

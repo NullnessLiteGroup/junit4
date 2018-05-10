@@ -55,7 +55,7 @@ public class FrameworkMethod extends FrameworkMember<FrameworkMethod> {
      * parameters {@code params}. {@link InvocationTargetException}s thrown are
      * unwrapped, and their causes rethrown.
      */
-    public @Nullable Object invokeExplosively(final @Nullable Object target, final @Nullable Object @Nullable ... params)
+    public Object invokeExplosively(final @Nullable Object target, final Object @Nullable ... params)
             throws Throwable {
         return new ReflectiveCallable() {
             @Override

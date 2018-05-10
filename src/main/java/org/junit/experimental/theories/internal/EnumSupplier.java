@@ -16,10 +16,13 @@ public class EnumSupplier extends ParameterSupplier {
     }
 
     @Override
+    @SuppressWarnings("nullness")
     public List<PotentialAssignment> getValueSources(ParameterSignature sig) {
         Object[] enumValues = enumType.getEnumConstants();
         
         List<PotentialAssignment> assignments = new ArrayList<PotentialAssignment>();
+        // [iterating.over.nullable] TRUE_POSITIVE
+        // iterating over possibly-null reference enumValues
         for (Object value : enumValues) {
             assignments.add(PotentialAssignment.forValue(value.toString(), value));
         }

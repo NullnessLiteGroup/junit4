@@ -31,10 +31,13 @@ public class ArrayComparisonFailure extends AssertionError {
      * @param index the array position of the objects that are not equal.
      * @see Assert#assertArrayEquals(String, Object[], Object[])
      */
+    @SuppressWarnings("nullness")
     public ArrayComparisonFailure(String message, AssertionError cause, int index) {
         this.fMessage = message;
         this.fCause = cause;
         initCause(fCause);
+        // [method.invocation.invalid] FALSE_POSITIVE
+        // constructor helper methods
         addDimension(index);
     }
 

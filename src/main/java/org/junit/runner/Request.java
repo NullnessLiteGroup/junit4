@@ -104,10 +104,10 @@ public abstract class Request {
      * @param runner the runner to return
      * @return a <code>Request</code> that will run the given runner when invoked
      */
-    public static Request runner(final @Nullable Runner runner) {
+    public static Request runner(final Runner runner) {
         return new Request() {
             @Override
-            public @Nullable Runner getRunner() {
+            public Runner getRunner() {
                 return runner;
             }
         };
@@ -118,7 +118,7 @@ public abstract class Request {
      *
      * @return corresponding {@link Runner} for this Request
      */
-    public abstract @Nullable Runner getRunner();
+    public abstract Runner getRunner();
 
     /**
      * Returns a Request that only contains those tests that should run when

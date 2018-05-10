@@ -22,8 +22,9 @@ public class AnnotationValidatorFactory {
      *
      * @since 4.12
      */
-    public @Nullable AnnotationValidator createAnnotationValidator(ValidateWith validateWithAnnotation) {
-        @Nullable AnnotationValidator validator = VALIDATORS_FOR_ANNOTATION_TYPES.get(validateWithAnnotation);
+    @SuppressWarnings("nullness")
+    public AnnotationValidator createAnnotationValidator(ValidateWith validateWithAnnotation) {
+        AnnotationValidator validator = VALIDATORS_FOR_ANNOTATION_TYPES.get(validateWithAnnotation);
         if (validator != null) {
             return validator;
         }
@@ -32,6 +33,9 @@ public class AnnotationValidatorFactory {
         try {
             AnnotationValidator annotationValidator = clazz.newInstance();
             VALIDATORS_FOR_ANNOTATION_TYPES.putIfAbsent(validateWithAnnotation, annotationValidator);
+            // [return.type.incompatible] FALSE_POSITIVE
+            // validateWithAnnotation was just added to the map above
+            // AnnotationValidator will never be null
             return VALIDATORS_FOR_ANNOTATION_TYPES.get(validateWithAnnotation);
         } catch (Exception e) {
             throw new RuntimeException("Exception received when creating AnnotationValidator class " + clazz.getName(), e);

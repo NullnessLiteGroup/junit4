@@ -49,7 +49,12 @@ public class TestMethod {
         }
     }
 
+    @SuppressWarnings("nullness")
     boolean isUnexpected(@Nullable Throwable exception) {
+        // 1) [dereference.of.nullable] TRUE_POSITIVE
+        // dereference of possibly-null reference getExpectedException()
+        // 2) [dereference.of.nullable] TRUE_POSITIVE
+        // dereference of possibly-null reference exception
         return !getExpectedException().isAssignableFrom(exception.getClass());
     }
 

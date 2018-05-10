@@ -32,7 +32,7 @@ public final class FilterRequest extends Request {
     }
 
     @Override
-    public @Nullable Runner getRunner() {
+    public Runner getRunner() {
         try {
             Runner runner = request.getRunner();
             fFilter.apply(runner);

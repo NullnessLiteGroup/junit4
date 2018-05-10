@@ -271,7 +271,7 @@ public class Theories extends BlockJUnit4ClassRunner {
             return new Statement() {
                 @Override
                 public void evaluate() throws Throwable {
-                    final @Nullable Object[] values = complete.getMethodArguments();
+                    final Object [] values = complete.getMethodArguments();
                     
                     if (!nullsOk()) {
                         Assume.assumeNotNull(values);
