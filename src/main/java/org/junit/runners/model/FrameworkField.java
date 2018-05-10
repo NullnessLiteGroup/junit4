@@ -4,6 +4,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.List;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.junit.runners.BlockJUnit4ClassRunner;
 
 /**
@@ -15,6 +16,7 @@ import org.junit.runners.BlockJUnit4ClassRunner;
 public class FrameworkField extends FrameworkMember<FrameworkField> {
     private final Field field;
 
+    @SuppressWarnings("nullness")
     FrameworkField(Field field) {
         if (field == null) {
             throw new NullPointerException(
@@ -22,6 +24,8 @@ public class FrameworkField extends FrameworkMember<FrameworkField> {
         }
         this.field = field;
 
+        // [method.invocation.invalid] FALSE_POSITIVE
+        // pure helper method in the constructor
         if (isPublic()) {
             // This field could be a public field in a package-scope base class
             try {
@@ -41,7 +45,7 @@ public class FrameworkField extends FrameworkMember<FrameworkField> {
         return field.getAnnotations();
     }
 
-    public <T extends Annotation> T getAnnotation(Class<T> annotationType) {
+    public <T extends Annotation> @Nullable T getAnnotation(Class<T> annotationType) {
         return field.getAnnotation(annotationType);
     }
 
@@ -84,7 +88,7 @@ public class FrameworkField extends FrameworkMember<FrameworkField> {
     /**
      * Attempts to retrieve the value of this field on {@code target}
      */
-    public Object get(Object target) throws IllegalArgumentException, IllegalAccessException {
+    public @Nullable Object get(@Nullable Object target) throws IllegalArgumentException, IllegalAccessException {
         return field.get(target);
     }
 

@@ -1,5 +1,6 @@
 package junit.framework;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.junit.internal.Throwables;
 
 
@@ -54,7 +55,7 @@ public class TestFailure {
     /**
      * Returns a String containing the message from the thrown exception.
      */
-    public String exceptionMessage() {
+    public @Nullable String exceptionMessage() {
         return thrownException().getMessage();
     }
 

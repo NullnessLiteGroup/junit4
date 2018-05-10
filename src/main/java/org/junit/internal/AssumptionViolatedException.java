@@ -21,10 +21,10 @@ public class AssumptionViolatedException extends RuntimeException implements Sel
      * serialization compatibility. 
      * See https://github.com/junit-team/junit4/issues/976
      */
-    private final String fAssumption;
+    private final @Nullable String fAssumption;
     private final boolean fValueMatcher;
-    private final Object fValue;
-    private final Matcher<?> fMatcher;
+    private final @Nullable Object fValue;
+    private final @Nullable Matcher<?> fMatcher;
 
     /**
      * @deprecated Please use {@link org.junit.AssumptionViolatedException} instead.
@@ -48,7 +48,7 @@ public class AssumptionViolatedException extends RuntimeException implements Sel
      * @deprecated Please use {@link org.junit.AssumptionViolatedException} instead.
      */
     @Deprecated
-    public AssumptionViolatedException(Object value, Matcher<?> matcher) {
+    public AssumptionViolatedException(@Nullable Object value, Matcher<?> matcher) {
         this(null, true, value, matcher);
     }
 
@@ -59,7 +59,7 @@ public class AssumptionViolatedException extends RuntimeException implements Sel
      * @deprecated Please use {@link org.junit.AssumptionViolatedException} instead.
      */
     @Deprecated
-    public AssumptionViolatedException(String assumption, Object value, Matcher<?> matcher) {
+    public AssumptionViolatedException(String assumption, @Nullable Object value, Matcher<?> matcher) {
         this(assumption, true, value, matcher);
     }
 
