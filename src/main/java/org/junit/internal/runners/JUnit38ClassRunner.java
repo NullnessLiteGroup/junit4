@@ -76,6 +76,8 @@ public class JUnit38ClassRunner extends Runner implements Filterable, Sortable {
 
     public JUnit38ClassRunner(Test test) {
         super();
+        // [method.invocation.invalid] FALSE_POSITIVE
+        //  helper method to set field
         setTest(test);
     }
 
