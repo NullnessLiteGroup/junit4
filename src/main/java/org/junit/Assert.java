@@ -122,7 +122,7 @@ public class Assert {
         }
     }
 
-    private static boolean equalsRegardingNull(Object expected, Object actual) {
+    private static boolean equalsRegardingNull(@Nullable Object expected, @Nullable Object actual) {
         if (expected == null) {
             return actual == null;
         }
@@ -130,7 +130,7 @@ public class Assert {
         return isEquals(expected, actual);
     }
 
-    private static boolean isEquals(Object expected, Object actual) {
+    private static boolean isEquals(Object expected, @Nullable Object actual) {
         return expected.equals(actual);
     }
 
@@ -178,7 +178,7 @@ public class Assert {
         assertNotEquals(null, unexpected, actual);
     }
 
-    private static void failEquals(String message, Object actual) {
+    private static void failEquals(@Nullable String message, @Nullable Object actual) {
         String formatted = "Values should be different. ";
         if (message != null) {
             formatted = message + ". ";
@@ -530,8 +530,8 @@ public class Assert {
      * @param actuals Object array or array of arrays (multi-dimensional array) with
      * actual values
      */
-    private static void internalArrayEquals(String message, Object expecteds,
-            Object actuals) throws ArrayComparisonFailure {
+    private static void internalArrayEquals(@Nullable String message, @Nullable Object expecteds,
+            @Nullable Object actuals) throws ArrayComparisonFailure {
         new ExactComparisonCriteria().arrayEquals(message, expecteds, actuals);
     }
 
@@ -749,7 +749,7 @@ public class Assert {
         assertNull(null, object);
     }
 
-    private static void failNotNull(String message, Object actual) {
+    private static void failNotNull(@Nullable String message, @Nullable Object actual) {
         String formatted = "";
         if (message != null) {
             formatted = message + " ";
@@ -766,7 +766,7 @@ public class Assert {
      * @param expected the expected object
      * @param actual the object to compare to <code>expected</code>
      */
-    public static void assertSame(String message, Object expected, Object actual) {
+    public static void assertSame(@Nullable String message, @Nullable Object expected, @Nullable Object actual) {
         if (expected == actual) {
             return;
         }
@@ -813,7 +813,7 @@ public class Assert {
         assertNotSame(null, unexpected, actual);
     }
 
-    private static void failSame(String message) {
+    private static void failSame(@Nullable String message) {
         String formatted = "";
         if (message != null) {
             formatted = message + " ";
@@ -821,8 +821,8 @@ public class Assert {
         fail(formatted + "expected not same");
     }
 
-    private static void failNotSame(String message, Object expected,
-            Object actual) {
+    private static void failNotSame(@Nullable String message, @Nullable Object expected,
+            @Nullable Object actual) {
         String formatted = "";
         if (message != null) {
             formatted = message + " ";
@@ -831,12 +831,12 @@ public class Assert {
                 + ">");
     }
 
-    private static void failNotEquals(String message, Object expected,
-            Object actual) {
+    private static void failNotEquals(@Nullable String message, @Nullable Object expected,
+            @Nullable Object actual) {
         fail(format(message, expected, actual));
     }
 
-    static String format(String message, Object expected, Object actual) {
+    static String format(@Nullable String message, @Nullable Object expected, @Nullable Object actual) {
         String formatted = "";
         if (message != null && !"".equals(message)) {
             formatted = message + " ";
@@ -858,7 +858,7 @@ public class Assert {
         return className == null ? value.getName() : className;
     }
 
-    private static String formatClassAndValue(Object value, String valueString) {
+    private static String formatClassAndValue(@Nullable Object value, @Nullable String valueString) {
         String className = value == null ? "null" : value.getClass().getName();
         return className + "<" + valueString + ">";
     }
@@ -1031,7 +1031,7 @@ public class Assert {
         throw new AssertionError(notThrownMessage);
     }
 
-    private static String buildPrefix(String message) {
+    private static String buildPrefix(@Nullable String message) {
         return message != null && message.length() != 0 ? message + ": " : "";
     }
 }
