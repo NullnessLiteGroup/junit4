@@ -1,5 +1,7 @@
 package org.junit.runner;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 import java.io.Serializable;
 import java.lang.annotation.Annotation;
 import java.util.ArrayList;
@@ -158,11 +160,11 @@ public class Description implements Serializable {
     private final Annotation[] fAnnotations;
     private volatile /* write-once */ Class<?> fTestClass;
 
-    private Description(Class<?> clazz, String displayName, Annotation... annotations) {
+    private Description(@Nullable Class<?> clazz, String displayName, Annotation... annotations) {
         this(clazz, displayName, displayName, annotations);
     }
 
-    private Description(Class<?> testClass, String displayName, Serializable uniqueId, Annotation... annotations) {
+    private Description(@Nullable Class<?> testClass, String displayName, Serializable uniqueId, Annotation... annotations) {
         if ((displayName == null) || (displayName.length() == 0)) {
             throw new IllegalArgumentException(
                     "The display name must not be empty.");
