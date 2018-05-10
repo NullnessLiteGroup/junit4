@@ -31,8 +31,8 @@ public class Result implements Serializable {
     // since SerializedFrom.class implements Serializable so that lookup() will not return null
     private static final ObjectStreamField[] serialPersistentFields =
             ObjectStreamClass.lookup(SerializedForm.class).getFields();
-    private final AtomicInteger count;
-    private final AtomicInteger ignoreCount;
+    private final @Nullable AtomicInteger count;
+    private final @Nullable AtomicInteger ignoreCount;
     private final CopyOnWriteArrayList<Failure> failures;
     private final AtomicLong runTime;
     private final AtomicLong startTime;
@@ -59,7 +59,14 @@ public class Result implements Serializable {
     /**
      * @return the number of tests run
      */
+    @SuppressWarnings("nullness")
     public int getRunCount() {
+        // [dereference.of.nullable] FALSE_POSITIVE
+        //  count.get() cannot raise NPE
+        // count can only be null if the private constructor is called,
+        // and the private constructor is only called from another private method,
+        // readResolve,which is called nowhere in this scope.
+        // Besides, count is final.
         return count.get();
     }
 
@@ -87,7 +94,14 @@ public class Result implements Serializable {
     /**
      * @return the number of tests ignored during the run
      */
+    @SuppressWarnings("nullness")
     public int getIgnoreCount() {
+        // [dereference.of.nullable] FALSE_POSITIVE
+        //  ignoreCount.get() cannot raise NPE
+        // ignoreCount can only be null if the private constructor is called,
+        // and the private constructor is only called from another private method,
+        // readResolve,which is called nowhere in this scope.
+        // Besides, ignoreCount is final.
         return ignoreCount.get();
     }
 
@@ -126,7 +140,14 @@ public class Result implements Serializable {
         }
 
         @Override
+        @SuppressWarnings("nullness")
         public void testFinished(Description description) throws Exception {
+            // [dereference.of.nullable] FALSE_POSITIVE
+            //  de-referencing count cannot raise NPE
+            // count can only be null if the private constructor is called,
+            // and the private constructor is only called from another private method,
+            // readResolve,which is called nowhere in this scope.
+            // Besides, count is final.
             count.getAndIncrement();
         }
 
@@ -136,7 +157,14 @@ public class Result implements Serializable {
         }
 
         @Override
+        @SuppressWarnings("nullness")
         public void testIgnored(Description description) throws Exception {
+            // [dereference.of.nullable] FALSE_POSITIVE
+            //  de-referencing ignoreCount cannot raise NPE
+            // ignoreCount can only be null if the private constructor is called,
+            // and the private constructor is only called from another private method,
+            // readResolve,which is called nowhere in this scope.
+            // Besides, ignoreCount is final.
             ignoreCount.getAndIncrement();
         }
 
