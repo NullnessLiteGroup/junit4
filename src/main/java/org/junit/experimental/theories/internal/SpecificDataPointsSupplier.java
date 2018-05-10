@@ -27,6 +27,9 @@ public class SpecificDataPointsSupplier extends AllMembersSupplier {
         List<Field> fieldsWithMatchingNames = new ArrayList<Field>();
         
         for (Field field : fields) {
+            // [dereference.of.nullable] TRUE_POSITIVE
+            // dereference of possibly-null reference sig.getAnnotation(DataPoint.class)
+            // sig.getAnnotation() may return null if not found
             String[] fieldNames = field.getAnnotation(DataPoint.class).value();
             if (Arrays.asList(fieldNames).contains(requestedName)) {
                 fieldsWithMatchingNames.add(field);
@@ -44,6 +47,9 @@ public class SpecificDataPointsSupplier extends AllMembersSupplier {
         List<Field> fieldsWithMatchingNames = new ArrayList<Field>();
         
         for (Field field : fields) {
+            // [dereference.of.nullable] TRUE_POSITIVE
+            // dereference of possibly-null reference sig.getAnnotation(DataPoint.class)
+            // sig.getAnnotation() may return null if not found
             String[] fieldNames = field.getAnnotation(DataPoints.class).value();
             if (Arrays.asList(fieldNames).contains(requestedName)) {
                 fieldsWithMatchingNames.add(field);
@@ -61,6 +67,9 @@ public class SpecificDataPointsSupplier extends AllMembersSupplier {
         List<FrameworkMethod> methodsWithMatchingNames = new ArrayList<FrameworkMethod>();
         
         for (FrameworkMethod method : methods) {
+            // [dereference.of.nullable] TRUE_POSITIVE
+            // dereference of possibly-null reference sig.getAnnotation(DataPoint.class)
+            // sig.getAnnotation() may return null if not found
             String[] methodNames = method.getAnnotation(DataPoint.class).value();
             if (Arrays.asList(methodNames).contains(requestedName)) {
                 methodsWithMatchingNames.add(method);
@@ -78,6 +87,9 @@ public class SpecificDataPointsSupplier extends AllMembersSupplier {
         List<FrameworkMethod> methodsWithMatchingNames = new ArrayList<FrameworkMethod>();
         
         for (FrameworkMethod method : methods) {
+            // [dereference.of.nullable] TRUE_POSITIVE
+            // dereference of possibly-null reference sig.getAnnotation(DataPoints.class)
+            // sig.getAnnotation() may return null if not found
             String[] methodNames = method.getAnnotation(DataPoints.class).value();
             if (Arrays.asList(methodNames).contains(requestedName)) {
                 methodsWithMatchingNames.add(method);
