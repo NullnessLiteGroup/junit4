@@ -174,7 +174,8 @@ public abstract class TestCase extends Assert implements Test {
         }
 
         // [dereference.of.nullable] FALSE_POSITIVE
-        // We catch NoSuchMethodException above
+        // de-referencing runMethod cannot raise NPE here
+        // since we catch NoSuchMethodException above
         if (!Modifier.isPublic(runMethod.getModifiers())) {
             fail("Method \"" + fName + "\" should be public");
         }
