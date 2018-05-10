@@ -6,6 +6,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 import java.util.List;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.junit.internal.runners.model.ReflectiveCallable;
 
 /**
@@ -22,6 +23,7 @@ public class FrameworkMethod extends FrameworkMember<FrameworkMethod> {
     /**
      * Returns a new {@code FrameworkMethod} for {@code method}
      */
+    @SuppressWarnings("nullness")
     public FrameworkMethod(Method method) {
         if (method == null) {
             throw new NullPointerException(
@@ -29,6 +31,8 @@ public class FrameworkMethod extends FrameworkMember<FrameworkMethod> {
         }
         this.method = method;
 
+        // [method.invocation.invalid] FALSE_POSITIVE
+        // method is initialized above, isPublic is helper method
         if (isPublic()) {
             // This method could be a public method in a package-scope base class
             try {
@@ -55,7 +59,7 @@ public class FrameworkMethod extends FrameworkMember<FrameworkMethod> {
             throws Throwable {
         return new ReflectiveCallable() {
             @Override
-            protected Object runReflectiveCall() throws Throwable {
+            protected @Nullable Object runReflectiveCall() throws Throwable {
                 return method.invoke(target, params);
             }
         }.run();
@@ -163,7 +167,7 @@ public class FrameworkMethod extends FrameworkMember<FrameworkMethod> {
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(@Nullable Object obj) {
         if (!FrameworkMethod.class.isInstance(obj)) {
             return false;
         }
@@ -205,7 +209,7 @@ public class FrameworkMethod extends FrameworkMember<FrameworkMethod> {
      * Returns the annotation of type {@code annotationType} on this method, if
      * one exists.
      */
-    public <T extends Annotation> T getAnnotation(Class<T> annotationType) {
+    public <T extends Annotation> @Nullable T getAnnotation(Class<T> annotationType) {
         return method.getAnnotation(annotationType);
     }
 
