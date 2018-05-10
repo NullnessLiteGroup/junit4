@@ -196,8 +196,11 @@ public class TestSuite implements Test {
      *
      * @see TestSuite#TestSuite(Class[])
      */
+    @SuppressWarnings("nullness")
     public TestSuite(Class<? extends TestCase>[] classes, String name) {
         this(classes);
+        // [method.invocation.invalid] FALSE_POSITIVE
+        // constructor helper methods
         setName(name);
     }
 
