@@ -131,6 +131,10 @@ public abstract class BaseTestRunner implements TestListener {
                 return test;
             }
         } catch (InvocationTargetException e) {
+            // [dereference.of.nullable] TRUE_POSITIVE
+            //  de-referencing e.getTargetException() can raise NPE
+            // InvocationTargetException can be initialized with target null,
+            // which will returned by getTargetException()
             runFailed("Failed to invoke suite():" + e.getTargetException().toString());
             return null;
         } catch (IllegalAccessException e) {
@@ -220,7 +224,12 @@ public abstract class BaseTestRunner implements TestListener {
     protected void clearStatus() { // Belongs in the GUI TestRunner class
     }
 
+    @SuppressWarnings("nullness")
     protected boolean useReloadingTestSuiteLoader() {
+        // [dereference.of.nullable] FALSE_POSITIVE
+        //  de-referencing getPreference("loading") cannot raise NPE
+        // getPreferences, called by getPreference, always returns
+        // Properties that has key "loading"
         return getPreference("loading").equals("true") && fLoading;
     }
 
@@ -297,7 +306,12 @@ public abstract class BaseTestRunner implements TestListener {
         return sw.toString();
     }
 
+    @SuppressWarnings("nullness")
     protected static boolean showStackRaw() {
+        // [dereference.of.nullable] FALSE_POSITIVE
+        //  de-referencing getPreference("filterstack") cannot raise NPE
+        // getPreferences, called by getPreference, always returns
+        // Properties that has key "filterstack"
         return !getPreference("filterstack").equals("true") || fgFilterStack == false;
     }
 

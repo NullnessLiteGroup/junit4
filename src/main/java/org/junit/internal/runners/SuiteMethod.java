@@ -5,6 +5,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 
 import junit.framework.Test;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 /**
  * Runner for use with JUnit 3.8.x-style AllTests classes
@@ -24,7 +25,7 @@ public class SuiteMethod extends JUnit38ClassRunner {
         super(testFromSuiteMethod(klass));
     }
 
-    public static Test testFromSuiteMethod(Class<?> klass) throws Throwable {
+    public static @Nullable Test testFromSuiteMethod(Class<?> klass) throws Throwable {
         Method suiteMethod = null;
         Test suite = null;
         try {
@@ -34,6 +35,8 @@ public class SuiteMethod extends JUnit38ClassRunner {
             }
             suite = (Test) suiteMethod.invoke(null); // static method
         } catch (InvocationTargetException e) {
+            // [throwing.nullable] TRUE_POSITIVE
+            // getCause is documented that it can return null
             throw e.getCause();
         }
         return suite;

@@ -9,6 +9,7 @@ import junit.framework.TestResult;
 import junit.framework.TestSuite;
 import junit.runner.BaseTestRunner;
 import junit.runner.Version;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 /**
  * A command line based tool to run tests.
@@ -109,7 +110,7 @@ public class TestRunner extends BaseTestRunner {
         return doRun(test, false);
     }
 
-    public TestResult doRun(Test suite, boolean wait) {
+    public TestResult doRun(@Nullable Test suite, boolean wait) {
         TestResult result = createTestResult();
         result.addListener(fPrinter);
         long startTime = System.currentTimeMillis();

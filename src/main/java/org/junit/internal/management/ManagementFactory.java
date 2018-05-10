@@ -46,7 +46,7 @@ public class ManagementFactory {
     private static final RuntimeMXBean RUNTIME_MX_BEAN =
         getBean(FactoryHolder.getBeanObject("getRuntimeMXBean"));
 
-    private static final RuntimeMXBean getBean(Object runtimeMxBean) {
+    private static final RuntimeMXBean getBean(@Nullable Object runtimeMxBean) {
       return runtimeMxBean != null
           ? new ReflectiveRuntimeMXBean(runtimeMxBean) : new FakeRuntimeMXBean();
     }
