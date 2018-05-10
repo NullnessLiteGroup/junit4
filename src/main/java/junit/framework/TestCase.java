@@ -502,7 +502,7 @@ public abstract class TestCase extends Assert implements Test {
      *
      * @return the name of the TestCase
      */
-    public String getName() {
+    public @Nullable String getName() {
         return fName;
     }
 

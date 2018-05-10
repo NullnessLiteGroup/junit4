@@ -142,6 +142,9 @@ public class TestSuite implements Test {
         Class<?> superClass = theClass;
         List<String> names = new ArrayList<String>();
         while (Test.class.isAssignableFrom(superClass)) {
+            // [argument.type.incompatible] FALSE_POSITIVE?
+            // superClass cannot be null here because NPE is
+            // caught by Test.class.isAssignableFrom(superClass)
             for (Method each : MethodSorter.getDeclaredMethods(superClass)) {
                 addTestMethod(each, names, theClass);
             }
@@ -168,7 +171,10 @@ public class TestSuite implements Test {
     /**
      * Constructs an empty TestSuite.
      */
+    @SuppressWarnings("nullness")
     public TestSuite(String name) {
+        // [method.invocation.invalid] FALSE_POSITIVE
+        // constructor helper methods
         setName(name);
     }
 
@@ -177,8 +183,13 @@ public class TestSuite implements Test {
      *
      * @param classes {@link TestCase}s
      */
+    @SuppressWarnings("nullness")
     public TestSuite(Class<?>... classes) {
         for (Class<?> each : classes) {
+            // [method.invocation.invalid] FALSE_POSITIVE
+            // constructor helper methods: addTest
+            // [method.invocation.invalid] FALSE_POSITIVE
+            // constructor helper methods: testCaseForClass
             addTest(testCaseForClass(each));
         }
     }
@@ -196,8 +207,11 @@ public class TestSuite implements Test {
      *
      * @see TestSuite#TestSuite(Class[])
      */
+    @SuppressWarnings("nullness")
     public TestSuite(Class<? extends TestCase>[] classes, String name) {
         this(classes);
+        // [method.invocation.invalid] FALSE_POSITIVE
+        // constructor helper methods
         setName(name);
     }
 
