@@ -8,6 +8,7 @@ import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.junit.runner.Description;
 import org.junit.runner.manipulation.Filter;
 import org.junit.runner.manipulation.NoTestsRemainException;
@@ -155,16 +156,16 @@ public class Categories extends Suite {
             excluded = nullableClassToSet(excludedCategory);
         }
 
-        protected CategoryFilter(boolean matchAnyIncludes, Set<Class<?>> includes,
-                                 boolean matchAnyExcludes, Set<Class<?>> excludes) {
+        protected CategoryFilter(boolean matchAnyIncludes, @Nullable Set<Class<?>> includes,
+                                 boolean matchAnyExcludes, @Nullable Set<Class<?>> excludes) {
             includedAny = matchAnyIncludes;
             excludedAny = matchAnyExcludes;
             included = copyAndRefine(includes);
             excluded = copyAndRefine(excludes);
         }
 
-        private CategoryFilter(boolean matchAnyIncludes, Class<?>[] inclusions,
-                               boolean matchAnyExcludes, Class<?>[] exclusions) {
+        private CategoryFilter(boolean matchAnyIncludes, Class<?> @Nullable [] inclusions,
+                               boolean matchAnyExcludes, Class<?> @Nullable [] exclusions) {
             includedAny = matchAnyIncludes; 
             excludedAny = matchAnyExcludes;
             included = createSet(inclusions);
@@ -281,7 +282,7 @@ public class Categories extends Suite {
             return categories;
         }
 
-        private static Description parentDescription(Description description) {
+        private static @Nullable Description parentDescription(Description description) {
             Class<?> testClass= description.getTestClass();
             return testClass == null ? null : Description.createSuiteDescription(testClass);
         }
@@ -305,6 +306,7 @@ public class Categories extends Suite {
         }
     }
 
+    @SuppressWarnings("nullness")
     public Categories(Class<?> klass, RunnerBuilder builder) throws InitializationError {
         super(klass, builder);
         try {
@@ -313,6 +315,8 @@ public class Categories extends Suite {
             boolean isAnyIncluded= isAnyIncluded(klass);
             boolean isAnyExcluded= isAnyExcluded(klass);
 
+            // [method.invocation.invalid] FALSE_POSITIVE
+            // helper method in the constructor
             filter(CategoryFilter.categoryFilter(isAnyIncluded, included, isAnyExcluded, excluded));
         } catch (NoTestsRemainException e) {
             throw new InitializationError(e);
@@ -348,7 +352,7 @@ public class Categories extends Suite {
         return false;
     }
 
-    private static Set<Class<?>> createSet(Class<?>[] classes) {
+    private static Set<Class<?>> createSet(Class<?> @Nullable [] classes) {
         // Not throwing a NPE if t is null is a bad idea, but it's the behavior from JUnit 4.12
         // for include(boolean, Class<?>...) and exclude(boolean, Class<?>...)
         if (classes == null || classes.length == 0) {

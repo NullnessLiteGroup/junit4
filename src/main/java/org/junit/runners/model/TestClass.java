@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -54,6 +55,8 @@ public class TestClass implements Annotatable {
         Map<Class<? extends Annotation>, List<FrameworkField>> fieldsForAnnotations =
                 new LinkedHashMap<Class<? extends Annotation>, List<FrameworkField>>();
 
+        // [method.invocation.invalid] FALSE_POSITIVE
+        // helper method for constructor
         scanAnnotatedMembers(methodsForAnnotations, fieldsForAnnotations);
 
         this.methodsForAnnotations = makeDeeplyUnmodifiable(methodsForAnnotations);
@@ -216,7 +219,7 @@ public class TestClass implements Annotatable {
         return clazz.getAnnotations();
     }
 
-    public <T extends Annotation> T getAnnotation(Class<T> annotationType) {
+    public <T extends Annotation> @Nullable T getAnnotation(Class<T> annotationType) {
         if (clazz == null) {
             return null;
         }
