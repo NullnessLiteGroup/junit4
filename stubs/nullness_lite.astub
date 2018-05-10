@@ -14,7 +14,7 @@ public final class Array {
 }
 
 public final class Constructor<T> extends Executable {
-	public T newInstance(@Nullable Object ... initargs);
+	public @NonNullT newInstance(@Nullable Object ... initargs);
 }
 
 

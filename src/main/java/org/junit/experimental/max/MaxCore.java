@@ -160,8 +160,11 @@ public class MaxCore {
         return findLeaves(sortRequest(request));
     }
 
+    @SuppressWarnings("nullness")
     private List<Description> findLeaves(Request request) {
         List<Description> results = new ArrayList<Description>();
+        // [dereference.of.nullable] TRUE_POSITIVE
+        // dereference of possibly-null reference request.getRunner()
         findLeaves(null, request.getRunner().getDescription(), results);
         return results;
     }

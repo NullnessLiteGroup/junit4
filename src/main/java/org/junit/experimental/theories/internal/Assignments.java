@@ -63,9 +63,9 @@ public class Assignments {
                 unassigned.size()), clazz);
     }
 
-    public Object[] getActualValues(int start, int stop)
+    public @Nullable Object [] getActualValues(int start, int stop)
             throws CouldNotGenerateValueException {
-        Object [] values = new Object[stop - start];
+        @Nullable Object [] values = new Object[stop - start];
         for (int i = start; i < stop; i++) {
             values[i - start] = assigned.get(i).getValue();
         }
@@ -96,7 +96,7 @@ public class Assignments {
         }
     }
 
-    private @Nullable ParameterSupplier getSupplier(ParameterSignature unassigned)
+    private ParameterSupplier getSupplier(ParameterSignature unassigned)
             throws Exception {
         ParametersSuppliedBy annotation = unassigned
                 .findDeepAnnotation(ParametersSuppliedBy.class);
@@ -108,7 +108,7 @@ public class Assignments {
         }
     }
 
-    private @Nullable ParameterSupplier buildParameterSupplierFromClass(
+    private ParameterSupplier buildParameterSupplierFromClass(
             Class<? extends ParameterSupplier> cls) throws Exception {
         Constructor<?>[] supplierConstructors = cls.getConstructors();
 
@@ -128,7 +128,7 @@ public class Assignments {
         return getActualValues(0, getConstructorParameterCount());
     }
 
-    public Object[] getMethodArguments() throws CouldNotGenerateValueException {
+    public @Nullable Object[] getMethodArguments() throws CouldNotGenerateValueException {
         return getActualValues(getConstructorParameterCount(), assigned.size());
     }
 

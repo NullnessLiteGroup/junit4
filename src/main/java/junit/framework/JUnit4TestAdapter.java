@@ -27,7 +27,7 @@ import org.junit.runner.manipulation.Sorter;
 public class JUnit4TestAdapter implements Test, Filterable, Sortable, Describable {
     private final Class<?> fNewTestClass;
 
-    private final Runner fRunner;
+    private final @Nullable Runner fRunner;
 
     private final JUnit4TestAdapterCache fCache;
 
@@ -41,11 +41,17 @@ public class JUnit4TestAdapter implements Test, Filterable, Sortable, Describabl
         fRunner = Request.classWithoutSuiteMethod(newTestClass).getRunner();
     }
 
+    @SuppressWarnings("nullness")
     public int countTestCases() {
+        // [dereference.of.nullable] TRUE_POSITIVE
+        // dereference of possibly-null reference fRunner
         return fRunner.testCount();
     }
 
+    @SuppressWarnings("nullness")
     public void run(TestResult result) {
+        // [dereference.of.nullable] TRUE_POSITIVE
+        // dereference of possibly-null reference fRunner
         fRunner.run(fCache.getNotifier(result, this));
     }
 
@@ -59,7 +65,10 @@ public class JUnit4TestAdapter implements Test, Filterable, Sortable, Describabl
         return fNewTestClass;
     }
 
+    @SuppressWarnings("nullness")
     public Description getDescription() {
+        // [dereference.of.nullable] TRUE_POSITIVE
+        // dereference of possibly-null reference fRunner
         Description description = fRunner.getDescription();
         return removeIgnored(description);
     }

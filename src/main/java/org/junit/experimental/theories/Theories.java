@@ -86,7 +86,10 @@ public class Theories extends BlockJUnit4ClassRunner {
         validateDataPointMethods(errors);
     }
 
+    @SuppressWarnings("nullness")
     private void validateDataPointFields(List<Throwable> errors) {
+        // [dereference.of.nullable] TRUE_POSITIVE
+        // dereference of possibly-null reference getTestClass().getJavaClass()
         Field[] fields = getTestClass().getJavaClass().getDeclaredFields();
 
         for (Field field : fields) {
@@ -102,7 +105,10 @@ public class Theories extends BlockJUnit4ClassRunner {
         }
     }
 
+    @SuppressWarnings("nullness")
     private void validateDataPointMethods(List<Throwable> errors) {
+        // [dereference.of.nullable] TRUE_POSITIVE
+        // dereference of possibly-null reference getTestClass().getJavaClass()
         Method[] methods = getTestClass().getJavaClass().getDeclaredMethods();
         
         for (Method method : methods) {

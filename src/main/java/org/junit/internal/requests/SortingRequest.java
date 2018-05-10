@@ -18,7 +18,7 @@ public class SortingRequest extends Request {
     }
 
     @Override
-    public Runner getRunner() {
+    public @Nullable Runner getRunner() {
         Runner runner = request.getRunner();
         new Sorter(comparator).apply(runner);
         return runner;
