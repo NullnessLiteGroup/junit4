@@ -103,9 +103,9 @@ public class SpecificDataPointsSupplier extends AllMembersSupplier {
         List<FrameworkMethod> methodsWithMatchingNames = new ArrayList<FrameworkMethod>();
         
         for (FrameworkMethod method : methods) {
-            // [dereference.of.nullable] TRUE_POSITIVE
-            // dereference of possibly-null reference sig.getAnnotation(DataPoints.class)
-            // sig.getAnnotation() may return null if not found
+            // [dereference.of.nullable] FALSE_POSITIVE
+            // fields are specified to include those with annotations,
+            // so getAnnotation() is thus guaranteed to return nonnull
             String[] methodNames = method.getAnnotation(DataPoints.class).value();
             if (Arrays.asList(methodNames).contains(requestedName)) {
                 methodsWithMatchingNames.add(method);
