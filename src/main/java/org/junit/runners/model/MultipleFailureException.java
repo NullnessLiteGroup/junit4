@@ -90,7 +90,7 @@ public class MultipleFailureException extends Exception {
         }
         if (errors.size() == 1) {
             // [method.invocation.invalid] FALSE_POSITIVE
-            // rethrowAsException is declared to re-throw the exception and never return any thing
+            // rethrowAsException is declared to re-throw the exception and never return anything
             throw Throwables.rethrowAsException(errors.get(0));
         }
 
