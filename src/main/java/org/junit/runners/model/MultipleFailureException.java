@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.jetbrains.annotations.NotNull;
 import org.junit.TestCouldNotBeSkippedException;
 import org.junit.internal.AssumptionViolatedException;
 import org.junit.internal.Throwables;
@@ -88,6 +89,15 @@ public class MultipleFailureException extends Exception {
         if (errors.isEmpty()) {
             return;
         }
+        /*
+          This is a false positive. Since we've checked above to ensure that errors is not empty,
+          errors.get(0) won't cause NullPointerException.
+          Then the only possible cause of NullPointerException is Throwables.rethrowAsException(Throwable e)
+          By looking at the implementation of Throwables.rethrowAsException(Throwable e), we get to know that
+          although there is a statement "return null;" inside it, it will never reach that line (due to the
+          developer's comments).
+          So this is a false positive, and we cannot add any annotations to eliminate it (@NotNull does not support jdk 1.5).
+        **/
         if (errors.size() == 1) {
             throw Throwables.rethrowAsException(errors.get(0));
         }
