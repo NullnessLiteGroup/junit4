@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
 import org.junit.TestCouldNotBeSkippedException;
 import org.junit.internal.AssumptionViolatedException;
 import org.junit.internal.Throwables;
