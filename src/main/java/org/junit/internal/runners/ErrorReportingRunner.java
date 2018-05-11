@@ -3,6 +3,7 @@ package org.junit.internal.runners;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
+import org.checkerframework.checker.initialization.qual.UnderInitialization;
 import org.junit.runner.Description;
 import org.junit.runner.Runner;
 import org.junit.runner.notification.Failure;
@@ -50,7 +51,8 @@ public class ErrorReportingRunner extends Runner {
         }
     }
 
-    private String getClassNames(Class<?>... testClasses) {
+    // helper method for the constructor of ErrorReportingRunner
+    private String getClassNames(@UnderInitialization ErrorReportingRunner this, Class<?>... testClasses) {
         final StringBuilder builder = new StringBuilder();
         for (Class<?> testClass : testClasses) {
             if (builder.length() != 0) {
@@ -62,7 +64,8 @@ public class ErrorReportingRunner extends Runner {
     }
 
     @SuppressWarnings("deprecation")
-    private List<Throwable> getCauses(Throwable cause) {
+    // helper method for the constructor of ErrorReportingRunner
+    private List<Throwable> getCauses(@UnderInitialization ErrorReportingRunner this, Throwable cause) {
         if (cause instanceof InvocationTargetException) {
             return getCauses(cause.getCause());
         }

@@ -8,6 +8,7 @@ import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.junit.runner.Description;
 import org.junit.runner.manipulation.Filter;
 import org.junit.runner.manipulation.NoTestsRemainException;
@@ -155,7 +156,8 @@ public class Categories extends Suite {
             excluded = nullableClassToSet(excludedCategory);
         }
 
-        protected CategoryFilter(boolean matchAnyIncludes, Set<Class<?>> includes,
+        // @Nullable includes from new ExcludesAny(Set<Class<?>> categories)
+        protected CategoryFilter(boolean matchAnyIncludes, @Nullable Set<Class<?>> includes,
                                  boolean matchAnyExcludes, Set<Class<?>> excludes) {
             includedAny = matchAnyIncludes;
             excludedAny = matchAnyExcludes;

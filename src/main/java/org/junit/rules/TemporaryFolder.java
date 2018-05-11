@@ -5,6 +5,7 @@ import static org.junit.Assert.fail;
 import java.io.File;
 import java.io.IOException;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.junit.Rule;
 
 /**
@@ -62,7 +63,8 @@ public class TemporaryFolder extends ExternalResource {
      * @param parentFolder folder where temporary resources will be created.
      * If {@code null} then system default temporary-file directory is used.
      */
-    public TemporaryFolder(File parentFolder) {
+    // @Nullable parentFolder from new TemporaryFolder()
+    public TemporaryFolder(@Nullable File parentFolder) {
         this.parentFolder = parentFolder;
         this.assureDeletion = false;
     }
