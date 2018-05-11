@@ -244,7 +244,8 @@ public class TestClass implements Annotatable {
      *
      * @since 4.13
      */
-    public <T> void collectAnnotatedFieldValues(Object test,
+    // @Nullable test from ParentRunner: classRules()
+    public <T> void collectAnnotatedFieldValues(@Nullable Object test,
             Class<? extends Annotation> annotationClass, Class<T> valueClass,
             MemberValueConsumer<T> consumer) {
         for (FrameworkField each : getAnnotatedFields(annotationClass)) {
@@ -278,7 +279,8 @@ public class TestClass implements Annotatable {
      *
      * @since 4.13
      */
-    public <T> void collectAnnotatedMethodValues(Object test,
+    // @Nullable test from ParentRunner: classRules()
+    public <T> void collectAnnotatedMethodValues(@Nullable Object test,
             Class<? extends Annotation> annotationClass, Class<T> valueClass,
             MemberValueConsumer<T> consumer) {
         for (FrameworkMethod each : getAnnotatedMethods(annotationClass)) {

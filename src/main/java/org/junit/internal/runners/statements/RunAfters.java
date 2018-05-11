@@ -3,6 +3,7 @@ package org.junit.internal.runners.statements;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.MultipleFailureException;
 import org.junit.runners.model.Statement;
@@ -14,7 +15,8 @@ public class RunAfters extends Statement {
 
     private final List<FrameworkMethod> afters;
 
-    public RunAfters(Statement next, List<FrameworkMethod> afters, Object target) {
+    // @Nullable target from ParentRunner: withAfterClasses(Statement statement)
+    public RunAfters(Statement next, List<FrameworkMethod> afters, @Nullable Object target) {
         this.next = next;
         this.afters = afters;
         this.target = target;
