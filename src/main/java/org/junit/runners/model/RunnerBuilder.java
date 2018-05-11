@@ -63,7 +63,8 @@ public abstract class RunnerBuilder {
      * @param testClass class to be run
      * @return a Runner
      */
-    public Runner safeRunnerForClass(Class<?> testClass) {
+    // @Nullable Runner returned from RunnerBuilder:runnerForClass(Class<?> testClass)
+    public @Nullable Runner safeRunnerForClass(Class<?> testClass) {
         try {
             return runnerForClass(testClass);
         } catch (Throwable e) {

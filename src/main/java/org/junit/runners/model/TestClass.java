@@ -18,6 +18,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.checkerframework.checker.initialization.qual.UnderInitialization;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -60,7 +62,8 @@ public class TestClass implements Annotatable {
         this.fieldsForAnnotations = makeDeeplyUnmodifiable(fieldsForAnnotations);
     }
 
-    protected void scanAnnotatedMembers(Map<Class<? extends Annotation>, List<FrameworkMethod>> methodsForAnnotations, Map<Class<? extends Annotation>, List<FrameworkField>> fieldsForAnnotations) {
+    // helper method of TestClass constructor
+    protected void scanAnnotatedMembers(@UnderInitialization TestClass this, Map<Class<? extends Annotation>, List<FrameworkMethod>> methodsForAnnotations, Map<Class<? extends Annotation>, List<FrameworkField>> fieldsForAnnotations) {
         for (Class<?> eachClass : getSuperClasses(clazz)) {
             for (Method eachMethod : MethodSorter.getDeclaredMethods(eachClass)) {
                 addToAnnotationLists(new FrameworkMethod(eachMethod), methodsForAnnotations);
@@ -313,7 +316,8 @@ public class TestClass implements Annotatable {
     }
 
     @Override
-    public boolean equals(Object obj) {
+    // @Nullable obj override super requires
+    public boolean equals(@Nullable Object obj) {
         if (this == obj) {
             return true;
         }

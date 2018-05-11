@@ -9,6 +9,7 @@ import java.util.Enumeration;
 import java.util.List;
 import java.util.Vector;
 
+import org.checkerframework.checker.initialization.qual.UnderInitialization;
 import org.checkerframework.checker.initialization.qual.UnknownInitialization;;
 import org.junit.internal.MethodSorter;
 import org.junit.internal.Throwables;
@@ -120,7 +121,7 @@ public class TestSuite implements Test {
     }
 
     // helper method to for the constructor of TestSuite
-    private void addTestsFromTestCase(@UnknownInitialization() TestSuite this, final Class<?> theClass) {
+    private void addTestsFromTestCase(@UnknownInitialization TestSuite this, final Class<?> theClass) {
         fName = theClass.getName();
         try {
             getTestConstructor(theClass); // Avoid generating multiple error messages
@@ -175,7 +176,8 @@ public class TestSuite implements Test {
         }
     }
 
-    private Test testCaseForClass(@UnknownInitialization() TestSuite this, Class<?> each) {
+    // // helper method to for the constructor of TestSuite
+    private Test testCaseForClass(@UnknownInitialization TestSuite this, Class<?> each) {
         if (TestCase.class.isAssignableFrom(each)) {
             return new TestSuite(each.asSubclass(TestCase.class));
         } else {
@@ -196,7 +198,8 @@ public class TestSuite implements Test {
     /**
      * Adds a test to the suite.
      */
-    public void addTest(@UnknownInitialization(TestSuite.class) TestSuite this, Test test) {
+    // helper method to for the constructor of TestSuite
+    public void addTest(@UnknownInitialization TestSuite this, Test test) {
         fTests.add(test);
     }
 
@@ -249,7 +252,7 @@ public class TestSuite implements Test {
      * @param name the name to set
      */
     // helper method for the constructor of TestSuite
-    public void setName(@UnknownInitialization() TestSuite this, String name) {
+    public void setName(@UnknownInitialization TestSuite this, String name) {
         fName = name;
     }
 
@@ -284,7 +287,8 @@ public class TestSuite implements Test {
         return super.toString();
     }
 
-    private void addTestMethod(Method m, List<String> names, Class<?> theClass) {
+    // call from addTestsFromTestCase: helper method to for the constructor of TestSuite
+    private void addTestMethod(@UnderInitialization TestSuite this, Method m, List<String> names, Class<?> theClass) {
         String name = m.getName();
         if (names.contains(name)) {
             return;

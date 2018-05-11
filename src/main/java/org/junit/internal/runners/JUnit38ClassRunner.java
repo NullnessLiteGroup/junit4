@@ -172,7 +172,7 @@ public class JUnit38ClassRunner extends Runner implements Filterable, Sortable {
     }
 
     // helper method for constructor of JUnit38ClassRunner
-    private void setTest(@UnknownInitialization() JUnit38ClassRunner this, Test test) {
+    private void setTest(@UnknownInitialization JUnit38ClassRunner this, Test test) {
         this.test = test;
     }
 

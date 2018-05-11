@@ -268,7 +268,8 @@ public class Assert {
      * an AssertionFailedError is thrown with the given message.
      */
     // @Nullable message from Assert.assertNotNull(Object object)
-    static public void assertNotNull(@Nullable String message, Object object) {
+    // @Nullable object from Assert.assertNotNull(String message,@Nullable Object object)
+    static public void assertNotNull(@Nullable String message, @Nullable Object object) {
         assertTrue(message, object != null);
     }
 
@@ -350,7 +351,8 @@ public class Assert {
         fail(format(message, expected, actual));
     }
 
-    public static String format(String message, Object expected, Object actual) {
+    // @Nullable message from Assert.failNotEquals(@Nullable String message, Object expected, Object actual)
+    public static String format(@Nullable String message, Object expected, Object actual) {
         String formatted = "";
         if (message != null && message.length() > 0) {
             formatted = message + " ";

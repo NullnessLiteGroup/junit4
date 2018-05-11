@@ -167,10 +167,16 @@ public abstract class TestCase extends Assert implements Test {
             // methods. getDeclaredMethods returns all
             // methods of this class but excludes the
             // inherited ones.
+
+            // [argument.type.incompatible] FALSE_POSITIVE
+            // fName is @NonNull here because assertNotNull above catches the fName being null
             runMethod = getClass().getMethod(fName, (Class[]) null);
         } catch (NoSuchMethodException e) {
             fail("Method \"" + fName + "\" not found");
         }
+        // [dereference.of.nullable] FALSE_POSITIVE
+        // de-referencing runMethod cannot raise NPE here
+        // since we catch NoSuchMethodException above
         if (!Modifier.isPublic(runMethod.getModifiers())) {
             fail("Method \"" + fName + "\" should be public");
         }
