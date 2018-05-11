@@ -25,7 +25,11 @@ import org.junit.runner.notification.RunListener;
  */
 public class Result implements Serializable {
     private static final long serialVersionUID = 1L;
+    @SuppressWarnings("nullness")
     private static final ObjectStreamField[] serialPersistentFields =
+            // [dereference.of.nullable] FALSE_POSITIVE
+            //  de-referencing lookup() cannot raise NPE in this case,
+            // since SerializedFrom.class implements Serializable so that lookup() will not return null
             ObjectStreamClass.lookup(SerializedForm.class).getFields();
     private final @Nullable AtomicInteger count;
     private final @Nullable AtomicInteger ignoreCount;
@@ -36,12 +40,11 @@ public class Result implements Serializable {
     /** Only set during deserialization process. */
     private SerializedForm serializedForm;
 
-    /**
-     * <NullnessLiteGroup_Report> FALSE_POSITIVE
-     * The comment of serializedForm above indicates developers are
-     * aware of uninitalized serializedForm.
-     */
+    @SuppressWarnings("nullness")
     public Result() {
+        // [uninitialized] FALSE_POSITIVE
+        //  serializedForm is uninitialized with purpose, see
+        // comments on declaration of serializedForm
         count = new AtomicInteger();
         ignoreCount = new AtomicInteger();
         failures = new CopyOnWriteArrayList<Failure>();
@@ -49,12 +52,11 @@ public class Result implements Serializable {
         startTime = new AtomicLong();
     }
 
-    /**
-     * <NullnessLiteGroup_Report> FALSE_POSITIVE
-     * The comment of serializedForm above indicates developers are
-     * aware of uninitalized serializedForm.
-     */
+    @SuppressWarnings("nullness")
     private Result(SerializedForm serializedForm) {
+        // [uninitialized] FALSE_POSITIVE
+        //  serializedForm is uninitialized with purpose, see
+        // comments on declaration of serializedForm
         count = serializedForm.fCount;
         ignoreCount = serializedForm.fIgnoreCount;
         failures = new CopyOnWriteArrayList<Failure>(serializedForm.fFailures);
@@ -65,7 +67,14 @@ public class Result implements Serializable {
     /**
      * @return the number of tests run
      */
+    @SuppressWarnings("nullness")
     public int getRunCount() {
+        // [dereference.of.nullable] FALSE_POSITIVE
+        //  count.get() cannot raise NPE
+        // count can only be null if the private constructor is called,
+        // and the private constructor is only called from another private method,
+        // readResolve,which is called nowhere in this scope.
+        // Besides, count is final.
         return count.get();
     }
 
@@ -93,7 +102,14 @@ public class Result implements Serializable {
     /**
      * @return the number of tests ignored during the run
      */
+    @SuppressWarnings("nullness")
     public int getIgnoreCount() {
+        // [dereference.of.nullable] FALSE_POSITIVE
+        //  ignoreCount.get() cannot raise NPE
+        // ignoreCount can only be null if the private constructor is called,
+        // and the private constructor is only called from another private method,
+        // readResolve,which is called nowhere in this scope.
+        // Besides, ignoreCount is final.
         return ignoreCount.get();
     }
 
@@ -132,7 +148,14 @@ public class Result implements Serializable {
         }
 
         @Override
+        @SuppressWarnings("nullness")
         public void testFinished(Description description) throws Exception {
+            // [dereference.of.nullable] FALSE_POSITIVE
+            //  de-referencing count cannot raise NPE
+            // count can only be null if the private constructor is called,
+            // and the private constructor is only called from another private method,
+            // readResolve,which is called nowhere in this scope.
+            // Besides, count is final.
             count.getAndIncrement();
         }
 
@@ -142,7 +165,14 @@ public class Result implements Serializable {
         }
 
         @Override
+        @SuppressWarnings("nullness")
         public void testIgnored(Description description) throws Exception {
+            // [dereference.of.nullable] FALSE_POSITIVE
+            //  de-referencing ignoreCount cannot raise NPE
+            // ignoreCount can only be null if the private constructor is called,
+            // and the private constructor is only called from another private method,
+            // readResolve,which is called nowhere in this scope.
+            // Besides, ignoreCount is final.
             ignoreCount.getAndIncrement();
         }
 

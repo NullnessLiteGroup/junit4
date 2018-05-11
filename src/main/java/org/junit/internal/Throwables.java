@@ -59,9 +59,13 @@ public final class Throwables {
      *
      * @since 4.13
      */
+    @SuppressWarnings("nullness")
     public static String getStacktrace(@Nullable Throwable exception) {
         StringWriter stringWriter = new StringWriter();
         PrintWriter writer = new PrintWriter(stringWriter);
+        // [dereference.of.nullable] TRUE_POSITIVE
+        //  exception.printStackTrace(writer) can raise NPE
+        // the public static method cannot prevent NPE if users pass null
         exception.printStackTrace(writer);
         return stringWriter.toString();
     }
@@ -72,19 +76,27 @@ public final class Throwables {
      *
      * @return a trimmed stack trace, or the original trace if trimming wasn't possible
      */
+    @SuppressWarnings("nullness")
     public static String getTrimmedStackTrace(@Nullable Throwable exception) {
         List<String> trimmedStackTraceLines = getTrimmedStackTraceLines(exception);
         if (trimmedStackTraceLines.isEmpty()) {
             return getFullStackTrace(exception);
         }
 
+        // [dereference.of.nullable] TRUE_POSITIVE
+        //  exception.toString() can raise NPE
+        // the public static method cannot prevent NPE if users pass null
         StringBuilder result = new StringBuilder(exception.toString());
         appendStackTraceLines(trimmedStackTraceLines, result);
         appendStackTraceLines(getCauseStackTraceLines(exception), result);
         return result.toString();
     }
 
+    @SuppressWarnings("nullness")
     private static List<String> getTrimmedStackTraceLines(@Nullable Throwable exception) {
+        // [dereference.of.nullable] TRUE_POSITIVE
+        //   exception.getStackTrace() can raise NPE
+        // this method is only called by getTrimmedStackTrace, which can accept null as the parameter
         List<StackTraceElement> stackTraceElements = Arrays.asList(exception.getStackTrace());
         int linesToInclude = stackTraceElements.size();
 
@@ -117,12 +129,17 @@ public final class Throwables {
         }
     }
 
+    @SuppressWarnings("nullness")
     private static boolean hasSuppressed(Throwable exception) {
         if (getSuppressed == null) {
             return false;
         }
         try {
             Throwable[] suppressed = (Throwable[]) getSuppressed.invoke(exception);
+            // [dereference.of.nullable] FALSE_POSITIVE
+            //   suppressed.length is safe in this case
+            // getSuppressed.invoke(exception) is guaranteed to return an array
+            // otherwise, it throws exception, which is caught below
             return suppressed.length != 0;
         } catch (Throwable e) {
             return false;
@@ -155,9 +172,15 @@ public final class Throwables {
         return Collections.emptyList();
     }
 
+    @SuppressWarnings("nullness")
     private static String getFullStackTrace(@Nullable Throwable exception) {
         StringWriter stringWriter = new StringWriter();
         PrintWriter writer = new PrintWriter(stringWriter);
+        // [dereference.of.nullable] FALSE_POSITIVE
+        // exception.printStackTrace(writer) cannot raise NPE at runtime
+        // the only way to make exception null is to pass null to its callers,
+        // both of the callers are public static methods and dereference the parameter
+        // thus the NPE is caught before this line being executed
         exception.printStackTrace(writer);
         return stringWriter.toString();
     }
