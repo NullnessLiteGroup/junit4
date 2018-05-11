@@ -121,7 +121,7 @@ public class TestSuite implements Test {
     }
 
     // helper method to for the constructor of TestSuite
-    private void addTestsFromTestCase(@UnknownInitialization TestSuite this, final Class<?> theClass) {
+    private void addTestsFromTestCase(@UnderInitialization TestSuite this, final Class<?> theClass) {
         fName = theClass.getName();
         try {
             getTestConstructor(theClass); // Avoid generating multiple error messages
@@ -303,11 +303,13 @@ public class TestSuite implements Test {
         addTest(createTest(theClass, name));
     }
 
-    private boolean isPublicTestMethod(Method m) {
+    // call from addTestMethod: helper method to for the constructor of TestSuite
+    private boolean isPublicTestMethod(@UnderInitialization TestSuite this,Method m) {
         return isTestMethod(m) && Modifier.isPublic(m.getModifiers());
     }
 
-    private boolean isTestMethod(Method m) {
+    // call from addTestMethod: helper method to for the constructor of TestSuite
+    private boolean isTestMethod(@UnderInitialization TestSuite this, Method m) {
         return m.getParameterTypes().length == 0 &&
                 m.getName().startsWith("test") &&
                 m.getReturnType().equals(Void.TYPE);
