@@ -10,6 +10,7 @@ import java.util.concurrent.FutureTask;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.junit.internal.management.ManagementFactory;
 import org.junit.internal.management.ThreadMXBean;
 import org.junit.runners.model.MultipleFailureException;
@@ -197,7 +198,7 @@ public class FailOnTimeout extends Statement {
      * problem or if the thread cannot be determined.  The return value is never equal 
      * to {@code mainThread}.
      */
-    private Thread getStuckThread(Thread mainThread) {
+    private @Nullable Thread getStuckThread(Thread mainThread) {
         List<Thread> threadsInGroup = getThreadsInGroup(mainThread.getThreadGroup());
         if (threadsInGroup.isEmpty()) {
             return null;
@@ -268,7 +269,7 @@ public class FailOnTimeout extends Statement {
     private class CallableStatement implements Callable<Throwable> {
         private final CountDownLatch startLatch = new CountDownLatch(1);
 
-        public Throwable call() throws Exception {
+        public @Nullable Throwable call() throws Exception {
             try {
                 startLatch.countDown();
                 originalStatement.evaluate();

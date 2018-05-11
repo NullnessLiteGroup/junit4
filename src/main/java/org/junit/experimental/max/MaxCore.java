@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.List;
 
 import junit.framework.TestSuite;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.junit.internal.requests.SortingRequest;
 import org.junit.internal.runners.ErrorReportingRunner;
 import org.junit.internal.runners.JUnit38ClassRunner;
@@ -165,7 +166,7 @@ public class MaxCore {
         return results;
     }
 
-    private void findLeaves(Description parent, Description description, List<Description> results) {
+    private void findLeaves(@Nullable Description parent, Description description, List<Description> results) {
         if (description.getChildren().isEmpty()) {
             if (description.toString().equals("warning(junit.framework.TestSuite$1)")) {
                 results.add(Description.createSuiteDescription(MALFORMED_JUNIT_3_TEST_CLASS_PREFIX + parent));

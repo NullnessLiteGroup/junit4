@@ -1,5 +1,7 @@
 package org.junit.experimental.theories;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
@@ -104,7 +106,8 @@ public class ParameterSignature {
         return findDeepAnnotation(annotations2, annotationType, 3);
     }
 
-    private <T extends Annotation> T findDeepAnnotation(
+    @SuppressWarnings("nullness")
+    private <T extends Annotation> @Nullable T findDeepAnnotation(
             Annotation[] annotations, Class<T> annotationType, int depth) {
         if (depth == 0) {
             return null;
@@ -116,6 +119,8 @@ public class ParameterSignature {
             Annotation candidate = findDeepAnnotation(each.annotationType()
                     .getAnnotations(), annotationType, depth - 1);
             if (candidate != null) {
+                // [argument.type.incompatible] FALSE_POSITIVE
+                // candidate is refined to non-null by if statement
                 return annotationType.cast(candidate);
             }
         }
@@ -123,7 +128,7 @@ public class ParameterSignature {
         return null;
     }
 
-    public <T extends Annotation> T getAnnotation(Class<T> annotationType) {
+    public <T extends Annotation> @Nullable T getAnnotation(Class<T> annotationType) {
         for (Annotation each : getAnnotations()) {
             if (annotationType.isInstance(each)) {
                 return annotationType.cast(each);

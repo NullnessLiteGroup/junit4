@@ -18,7 +18,7 @@ public class ErrorReportingRunner extends Runner {
 
     private final String classNames;
 
-    public ErrorReportingRunner(Class<?> testClass, Throwable cause) {
+    public ErrorReportingRunner(@Nullable Class<?> testClass, Throwable cause) {
         this(cause, testClass);
     }
 

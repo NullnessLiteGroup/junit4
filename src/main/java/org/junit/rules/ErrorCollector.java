@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.junit.function.ThrowingRunnable;
 import org.junit.internal.AssumptionViolatedException;
 import org.hamcrest.Matcher;
@@ -91,7 +92,7 @@ public class ErrorCollector extends Verifier {
      * Execution continues, but the test will fail at the end if
      * {@code callable} threw an exception.
      */
-    public <T> T checkSucceeds(Callable<T> callable) {
+    public <T> @Nullable T checkSucceeds(Callable<T> callable) {
         try {
             return callable.call();
         } catch (AssumptionViolatedException e) {

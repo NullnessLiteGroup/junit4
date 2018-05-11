@@ -32,6 +32,7 @@ public class ClassRequest extends Request {
     }
 
     @Override
+    @SuppressWarnings("nullness")
     public Runner getRunner() {
         if (runner == null) {
             runnerLock.lock();
@@ -43,6 +44,8 @@ public class ClassRequest extends Request {
                 runnerLock.unlock();
             }
         }
+        // [return.type.incompatible] FALSE_POSITIVE
+        // runner is reassigned if it's null above
         return runner;
     }
 

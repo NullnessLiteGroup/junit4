@@ -70,6 +70,7 @@ public abstract class RunnerBuilder {
         }
     }
 
+    @SuppressWarnings("nullness")
     @Nullable Class<?> addParent(@Nullable Class<?> parent) throws InitializationError {
         if (!parents.add(parent)) {
             // [dereference.of.nullable] TRUE_POSITIVE
@@ -80,7 +81,7 @@ public abstract class RunnerBuilder {
         return parent;
     }
 
-    void removeParent(Class<?> klass) {
+    void removeParent(@Nullable Class<?> klass) {
         parents.remove(klass);
     }
 

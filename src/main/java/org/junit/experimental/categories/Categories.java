@@ -296,7 +296,7 @@ public class Categories extends Suite {
             return annotation == null ? new Class<?>[0] : annotation.value();
         }
 
-        private static Set<Class<?>> copyAndRefine(Set<Class<?>> classes) {
+        private static Set<Class<?>> copyAndRefine(@Nullable Set<Class<?>> classes) {
             Set<Class<?>> c= new LinkedHashSet<Class<?>>();
             if (classes != null) {
                 c.addAll(classes);
