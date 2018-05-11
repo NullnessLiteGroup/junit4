@@ -120,7 +120,7 @@ public class Assert {
      * value is infinity then the delta value is ignored.
      */
     // @Nullable message from Assert.assertEquals(double expected, double actual, double delta)
-    static public void assertEquals(String message, double expected, double actual, double delta) {
+    static public void assertEquals(@Nullable String message, double expected, double actual, double delta) {
         if (Double.compare(expected, actual) == 0) {
             return;
         }
@@ -333,17 +333,20 @@ public class Assert {
         assertNotSame(null, expected, actual);
     }
 
-    static public void failSame(String message) {
+    // @Nullable message from Assert.assertNotSame(@Nullable String message, Object expected, Object actual)
+    static public void failSame(@Nullable String message) {
         String formatted = (message != null) ? message + " " : "";
         fail(formatted + "expected not same");
     }
 
-    static public void failNotSame(String message, Object expected, Object actual) {
+    // @Nullable message from Assert.assertSame(@Nullable String message, Object expected, Object actual)
+    static public void failNotSame(@Nullable String message, Object expected, Object actual) {
         String formatted = (message != null) ? message + " " : "";
         fail(formatted + "expected same:<" + expected + "> was not:<" + actual + ">");
     }
 
-    static public void failNotEquals(String message, Object expected, Object actual) {
+    // @Nullable message from Assert.assertEquals(@Nullable String message, Object expected, Object actual)
+    static public void failNotEquals(@Nullable String message, Object expected, Object actual) {
         fail(format(message, expected, actual));
     }
 

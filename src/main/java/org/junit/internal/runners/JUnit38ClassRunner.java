@@ -7,6 +7,7 @@ import junit.framework.TestCase;
 import junit.framework.TestListener;
 import junit.framework.TestResult;
 import junit.framework.TestSuite;
+import org.checkerframework.checker.initialization.qual.UnknownInitialization;;
 import org.junit.runner.Describable;
 import org.junit.runner.Description;
 import org.junit.runner.Runner;
@@ -170,7 +171,8 @@ public class JUnit38ClassRunner extends Runner implements Filterable, Sortable {
         }
     }
 
-    private void setTest(Test test) {
+    // helper method for constructor of JUnit38ClassRunner
+    private void setTest(@UnknownInitialization() JUnit38ClassRunner this, Test test) {
         this.test = test;
     }
 

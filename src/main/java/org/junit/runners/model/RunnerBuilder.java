@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.junit.internal.runners.ErrorReportingRunner;
 import org.junit.runner.Runner;
 
@@ -46,7 +47,8 @@ public abstract class RunnerBuilder {
      * @return a Runner
      * @throws Throwable if a runner cannot be constructed
      */
-    public abstract Runner runnerForClass(Class<?> testClass) throws Throwable;
+    // @Nullable Runner override from SuiteMethodBuilder:runnerForClass
+    public abstract @Nullable Runner runnerForClass(Class<?> testClass) throws Throwable;
 
     /**
      * Always returns a runner for the given test class.
