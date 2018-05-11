@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.checkerframework.checker.initialization.qual.UnderInitialization;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.junit.Assert;
 import org.junit.Before;
@@ -63,7 +64,7 @@ public class TestClass implements Annotatable {
         this.fieldsForAnnotations = makeDeeplyUnmodifiable(fieldsForAnnotations);
     }
 
-    protected void scanAnnotatedMembers(Map<Class<? extends Annotation>, List<FrameworkMethod>> methodsForAnnotations, Map<Class<? extends Annotation>, List<FrameworkField>> fieldsForAnnotations) {
+    protected void scanAnnotatedMembers(@UnderInitialization TestClass this, Map<Class<? extends Annotation>, List<FrameworkMethod>> methodsForAnnotations, Map<Class<? extends Annotation>, List<FrameworkField>> fieldsForAnnotations) {
         for (Class<?> eachClass : getSuperClasses(clazz)) {
             for (Method eachMethod : MethodSorter.getDeclaredMethods(eachClass)) {
                 addToAnnotationLists(new FrameworkMethod(eachMethod), methodsForAnnotations);
@@ -171,7 +172,7 @@ public class TestClass implements Annotatable {
                 || annotation.equals(BeforeClass.class);
     }
 
-    private static List<Class<?>> getSuperClasses(Class<?> testClass) {
+    private static List<Class<?>> getSuperClasses(@Nullable Class<?> testClass) {
         List<Class<?>> results = new ArrayList<Class<?>>();
         Class<?> current = testClass;
         while (current != null) {

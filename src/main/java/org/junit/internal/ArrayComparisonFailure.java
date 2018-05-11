@@ -3,6 +3,7 @@ package org.junit.internal;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.checkerframework.checker.initialization.qual.UnderInitialization;
 import org.junit.Assert;
 
 /**
@@ -38,7 +39,7 @@ public class ArrayComparisonFailure extends AssertionError {
         addDimension(index);
     }
 
-    public void addDimension(int index) {
+    public void addDimension(@UnderInitialization(ArrayComparisonFailure.class) int index) {
         fIndices.add(0, index);
     }
 

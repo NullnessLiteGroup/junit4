@@ -7,6 +7,7 @@ import junit.framework.TestCase;
 import junit.framework.TestListener;
 import junit.framework.TestResult;
 import junit.framework.TestSuite;
+import org.checkerframework.checker.initialization.qual.UnderInitialization;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.junit.runner.Describable;
 import org.junit.runner.Description;
@@ -75,7 +76,7 @@ public class JUnit38ClassRunner extends Runner implements Filterable, Sortable {
         this(new TestSuite(klass.asSubclass(TestCase.class)));
     }
 
-    public JUnit38ClassRunner(Test test) {
+    public JUnit38ClassRunner(@Nullable Test test) {
         super();
         // [method.invocation.invalid] FALSE_POSITIVE
         //  helper method to set field
@@ -173,7 +174,7 @@ public class JUnit38ClassRunner extends Runner implements Filterable, Sortable {
         }
     }
 
-    private void setTest(Test test) {
+    private void setTest(@UnderInitialization JUnit38ClassRunner this, Test test) {
         this.test = test;
     }
 

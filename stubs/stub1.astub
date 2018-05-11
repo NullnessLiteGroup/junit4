@@ -23,7 +23,7 @@ package java.lang;
 
 public final class Class<T> {
     public <A extends java.lang.annotation.Annotation> @Nullable A getAnnotation(@Nullable Class<A> a1);
-//    public T cast(@Nullable Object obj);
+    public T cast(@Nullable Object obj);
 	public Method getMethod(@Nullable String name, Class<?>... parameterTypes);
 	public native boolean isAssignableFrom(@Nullable Class<?> cls);
 }
