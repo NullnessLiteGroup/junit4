@@ -306,6 +306,7 @@ public class Categories extends Suite {
         }
     }
 
+    @SuppressWarnings("nullness")
     public Categories(Class<?> klass, RunnerBuilder builder) throws InitializationError {
         super(klass, builder);
         try {
@@ -314,6 +315,8 @@ public class Categories extends Suite {
             boolean isAnyIncluded= isAnyIncluded(klass);
             boolean isAnyExcluded= isAnyExcluded(klass);
 
+            // [method.invocation.invalid] FALSE_POSITIVE
+            // helper method in the constructor
             filter(CategoryFilter.categoryFilter(isAnyIncluded, included, isAnyExcluded, excluded));
         } catch (NoTestsRemainException e) {
             throw new InitializationError(e);

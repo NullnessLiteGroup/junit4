@@ -40,7 +40,10 @@ public class TestFailure {
      * Returns a short description of the failure.
      */
     @Override
+    @SuppressWarnings("nullness")
     public String toString() {
+        // [dereference.of.nullable] TRUE_POSITIVE
+        // fThrownException can be null, toString() is public
         return fFailedTest + ": " + fThrownException.getMessage();
     }
     
@@ -55,7 +58,10 @@ public class TestFailure {
     /**
      * Returns a String containing the message from the thrown exception.
      */
+    @SuppressWarnings("nullness")
     public @Nullable String exceptionMessage() {
+        // [dereference.of.nullable] TRUE_POSITIVE
+        // thrownExcption() can return null, this method is public
         return thrownException().getMessage();
     }
 

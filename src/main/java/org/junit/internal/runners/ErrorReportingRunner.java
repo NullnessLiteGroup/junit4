@@ -21,7 +21,8 @@ public class ErrorReportingRunner extends Runner {
     public ErrorReportingRunner(@Nullable Class<?> testClass, Throwable cause) {
         this(cause, testClass);
     }
-    
+
+    @SuppressWarnings("nullness")
     public ErrorReportingRunner(Throwable cause, @Nullable Class<?>... testClasses) {
         if (testClasses == null || testClasses.length == 0) {
             throw new NullPointerException("Test classes cannot be null or empty");
@@ -31,7 +32,13 @@ public class ErrorReportingRunner extends Runner {
                 throw new NullPointerException("Test class cannot be null");
             }
         }
+        // [method.invocation.invalid] FALSE_POSITIVE
+        // helper method in the constructor: getClassNames
+        // [argument.type.incompatible] FALSE_POSITIVE
+        // the code above actually prevent testClasses to be null
         classNames = getClassNames(testClasses);
+        // [method.invocation.invalid] FALSE_POSITIVE
+        // helper method in the constructor: getCauses
         causes = getCauses(cause);
     }
     
@@ -62,7 +69,7 @@ public class ErrorReportingRunner extends Runner {
         return builder.toString();
     }
 
-    @SuppressWarnings("deprecation")
+    @SuppressWarnings({"deprecation","nullness"})
     private List<@Nullable Throwable> getCauses(@Nullable Throwable cause) {
         if (cause instanceof InvocationTargetException) {
             return getCauses(cause.getCause());
@@ -71,9 +78,11 @@ public class ErrorReportingRunner extends Runner {
             return singletonList(cause);
         }
         if (cause instanceof InitializationError) {
+            // incompatible between List<@Nullable Throwable> and List<Throwable>
             return ((InitializationError) cause).getCauses();
         }
         if (cause instanceof org.junit.internal.runners.InitializationError) {
+            // incompatible between List<@Nullable Throwable> and List<Throwable>
             return ((org.junit.internal.runners.InitializationError) cause)
                     .getCauses();
         }

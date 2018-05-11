@@ -110,10 +110,13 @@ public class TestRunner extends BaseTestRunner {
         return doRun(test, false);
     }
 
+    @SuppressWarnings("nullness")
     public TestResult doRun(@Nullable Test suite, boolean wait) {
         TestResult result = createTestResult();
         result.addListener(fPrinter);
         long startTime = System.currentTimeMillis();
+        // [dereference.of.nullable] TRUE_POSITIVE
+        // the code cannot prevent malformed call from a instance calling doRun(null,...)
         suite.run(result);
         long endTime = System.currentTimeMillis();
         long runTime = endTime - startTime;

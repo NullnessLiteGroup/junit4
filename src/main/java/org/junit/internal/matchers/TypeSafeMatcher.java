@@ -28,7 +28,13 @@ public abstract class TypeSafeMatcher<T> extends BaseMatcher<T> {
         expectedType = findExpectedType(getClass());
     }
 
+    @SuppressWarnings("nullness")
     private static Class<?> findExpectedType(Class<?> fromClass) {
+        // [dereference.of.nullable] FALSE_POSITIVE
+        // This method is private so users can not call this method with fromClass being null,
+        // which is the only case that c can be de-referenced to be null in the following case.
+        // Besides, the Nullness Checker issues no warning for incompatible param fromClass,
+        // which means the source code by developers doesn't call this method with null.
         for (Class<?> c = fromClass; c != Object.class; c = c.getSuperclass()) {
             for (@Nullable Method method : MethodSorter.getDeclaredMethods(c)) {
                 if (isMatchesSafelyMethod(method)) {

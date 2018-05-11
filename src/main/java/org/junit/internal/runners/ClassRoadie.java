@@ -49,6 +49,7 @@ public class ClassRoadie {
         }
     }
 
+    @SuppressWarnings("nullness")
     private void runBefores() throws FailedBefore {
         try {
             try {
@@ -57,6 +58,9 @@ public class ClassRoadie {
                     before.invoke(null);
                 }
             } catch (InvocationTargetException e) {
+                // [throwing.nullable] TRUE_POSITIVE
+                // the getTargetException has same behavior as getCause,
+                // which is documented that can return null
                 throw e.getTargetException();
             }
         } catch (AssumptionViolatedException e) {

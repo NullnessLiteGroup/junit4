@@ -60,7 +60,10 @@ public class Failure implements Serializable {
     }
 
     @Override
+    @SuppressWarnings("nullness")
     public String toString() {
+        // [dereference.of.nullable] TRUE_POSITIVE
+        // fThrownException can be null, toString() is public
         return getTestHeader() + ": " + fThrownException.getMessage();
     }
 
@@ -85,7 +88,10 @@ public class Failure implements Serializable {
      *
      * @return the message of the thrown exception
      */
+    @SuppressWarnings("nullness")
     public @Nullable String getMessage() {
+        // [dereference.of.nullable] TRUE_POSITIVE
+        // getExcption() can return null, this method is public
         return getException().getMessage();
     }
 }

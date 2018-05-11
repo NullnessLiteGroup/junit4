@@ -23,7 +23,7 @@ public class FrameworkMethod extends FrameworkMember<FrameworkMethod> {
     /**
      * Returns a new {@code FrameworkMethod} for {@code method}
      */
-    // @SuppressWarnings("nullness") WHY？？
+    @SuppressWarnings("nullness")
     public FrameworkMethod(Method method) {
         if (method == null) {
             throw new NullPointerException(
@@ -31,6 +31,8 @@ public class FrameworkMethod extends FrameworkMember<FrameworkMethod> {
         }
         this.method = method;
 
+        // [method.invocation.invalid] FALSE_POSITIVE
+        // method is initialized above, isPublic is helper method
         if (isPublic()) {
             // This method could be a public method in a package-scope base class
             try {
