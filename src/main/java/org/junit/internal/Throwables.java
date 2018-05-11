@@ -42,6 +42,8 @@ public final class Throwables {
      * @return does not return anything
      * @since 4.12
      */
+    // [return.type.incompatible] FALSE_POSITIVE
+    //   As documented, we never return, why the method isn't void?
     public static Exception rethrowAsException(Throwable e) throws Exception {
         Throwables.<Exception>rethrow(e);
         return null; // we never get here

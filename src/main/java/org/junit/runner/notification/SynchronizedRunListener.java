@@ -1,5 +1,6 @@
 package org.junit.runner.notification;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.junit.runner.Description;
 import org.junit.runner.Result;
 
@@ -115,7 +116,8 @@ final class SynchronizedRunListener extends RunListener {
     }
 
     @Override
-    public boolean equals(Object other) {
+    // @Nullable other override super requires
+    public boolean equals(@Nullable Object other) {
         if (this == other) {
             return true;
         }
