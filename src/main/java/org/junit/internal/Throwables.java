@@ -1,5 +1,7 @@
 package org.junit.internal;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -42,7 +44,7 @@ public final class Throwables {
      * @return does not return anything
      * @since 4.12
      */
-    public static Exception rethrowAsException(Throwable e) throws Exception {
+    public static @Nullable Exception rethrowAsException(Throwable e) throws Exception {
         Throwables.<Exception>rethrow(e);
         return null; // we never get here
     }
@@ -57,7 +59,7 @@ public final class Throwables {
      *
      * @since 4.13
      */
-    public static String getStacktrace(Throwable exception) {
+    public static String getStacktrace(@Nullable Throwable exception) {
         StringWriter stringWriter = new StringWriter();
         PrintWriter writer = new PrintWriter(stringWriter);
         exception.printStackTrace(writer);
@@ -70,7 +72,7 @@ public final class Throwables {
      *
      * @return a trimmed stack trace, or the original trace if trimming wasn't possible
      */
-    public static String getTrimmedStackTrace(Throwable exception) {
+    public static String getTrimmedStackTrace(@Nullable Throwable exception) {
         List<String> trimmedStackTraceLines = getTrimmedStackTraceLines(exception);
         if (trimmedStackTraceLines.isEmpty()) {
             return getFullStackTrace(exception);
@@ -82,7 +84,7 @@ public final class Throwables {
         return result.toString();
     }
 
-    private static List<String> getTrimmedStackTraceLines(Throwable exception) {
+    private static List<String> getTrimmedStackTraceLines(@Nullable Throwable exception) {
         List<StackTraceElement> stackTraceElements = Arrays.asList(exception.getStackTrace());
         int linesToInclude = stackTraceElements.size();
 
@@ -105,9 +107,9 @@ public final class Throwables {
         return Collections.emptyList();
     }
 
-    private static final Method getSuppressed = initGetSuppressed();
+    private static final @Nullable Method getSuppressed = initGetSuppressed();
 
-    private static Method initGetSuppressed() {
+    private static @Nullable Method initGetSuppressed() {
         try {
             return Throwable.class.getMethod("getSuppressed");
         } catch (Throwable e) {
@@ -153,7 +155,7 @@ public final class Throwables {
         return Collections.emptyList();
     }
 
-    private static String getFullStackTrace(Throwable exception) {
+    private static String getFullStackTrace(@Nullable Throwable exception) {
         StringWriter stringWriter = new StringWriter();
         PrintWriter writer = new PrintWriter(stringWriter);
         exception.printStackTrace(writer);

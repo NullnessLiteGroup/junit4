@@ -1,5 +1,6 @@
 package org.junit.runner;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.junit.runners.Suite;
 import org.junit.runners.model.InitializationError;
 import org.junit.runners.model.RunnerBuilder;
@@ -23,11 +24,11 @@ public class Computer {
      * Create a suite for {@code classes}, building Runners with {@code builder}.
      * Throws an InitializationError if Runner construction fails
      */
-    public Runner getSuite(final RunnerBuilder builder,
+    public @Nullable Runner getSuite(final RunnerBuilder builder,
             Class<?>[] classes) throws InitializationError {
         return new Suite(new RunnerBuilder() {
             @Override
-            public Runner runnerForClass(Class<?> testClass) throws Throwable {
+            public @Nullable Runner runnerForClass(Class<?> testClass) throws Throwable {
                 return getRunner(builder, testClass);
             }
         }, classes) {
@@ -46,7 +47,7 @@ public class Computer {
     /**
      * Create a single-class runner for {@code testClass}, using {@code builder}
      */
-    protected Runner getRunner(RunnerBuilder builder, Class<?> testClass) throws Throwable {
+    protected @Nullable Runner getRunner( RunnerBuilder builder, Class<?> testClass) throws Throwable {
         return builder.runnerForClass(testClass);
     }
 }

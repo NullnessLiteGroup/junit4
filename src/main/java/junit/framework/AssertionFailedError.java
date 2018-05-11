@@ -1,5 +1,7 @@
 package junit.framework;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 /**
  * Thrown when an assertion failed.
  */
@@ -19,11 +21,11 @@ public class AssertionFailedError extends AssertionError {
      * @param message the detail message. The detail message is saved for later 
      * retrieval by the {@code Throwable.getMessage()} method.
      */
-    public AssertionFailedError(String message) {
+    public AssertionFailedError(@Nullable String message) {
         super(defaultString(message));
     }
 
-    private static String defaultString(String message) {
+    private static String defaultString(@Nullable String message) {
         return message == null ? "" : message;
     }
 }

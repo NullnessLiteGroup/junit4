@@ -1,5 +1,7 @@
 package junit.framework;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 public class ComparisonCompactor {
 
     private static final String ELLIPSIS = "...";
@@ -7,19 +9,19 @@ public class ComparisonCompactor {
     private static final String DELTA_START = "[";
 
     private int fContextLength;
-    private String fExpected;
-    private String fActual;
+    private @Nullable String fExpected;
+    private @Nullable String fActual;
     private int fPrefix;
     private int fSuffix;
 
-    public ComparisonCompactor(int contextLength, String expected, String actual) {
+    public ComparisonCompactor(int contextLength, @Nullable String expected, @Nullable String actual) {
         fContextLength = contextLength;
         fExpected = expected;
         fActual = actual;
     }
 
     @SuppressWarnings("deprecation")
-    public String compact(String message) {
+    public String compact(@Nullable String message) {
         if (fExpected == null || fActual == null || areStringsEqual()) {
             return Assert.format(message, fExpected, fActual);
         }

@@ -3,6 +3,7 @@ package org.junit.internal;
 import java.lang.reflect.Array;
 import java.util.Arrays;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.junit.Assert;
 
 /**
@@ -23,12 +24,12 @@ public abstract class ComparisonCriteria {
      * @param actuals Object array or array of arrays (multi-dimensional array) with
      * actual values
      */
-    public void arrayEquals(String message, Object expecteds, Object actuals)
+    public void arrayEquals(@Nullable String message, @Nullable Object expecteds, @Nullable Object actuals)
             throws ArrayComparisonFailure {
         arrayEquals(message, expecteds, actuals, true);
     }
 
-    private void arrayEquals(String message, Object expecteds, Object actuals, boolean outer)
+    private void arrayEquals(@Nullable String message, @Nullable Object expecteds, @Nullable Object actuals, boolean outer)
             throws ArrayComparisonFailure {
         if (expecteds == actuals
             || Arrays.deepEquals(new Object[] {expecteds}, new Object[] {actuals})) {
@@ -37,10 +38,10 @@ public abstract class ComparisonCriteria {
             // the arrays are exactly equal.
             return;
         }
-        String header = message == null ? "" : message + ": ";
+        @Nullable String header = message == null ? "" : message + ": ";
 
         // Only include the user-provided message in the outer exception.
-        String exceptionMessage = outer ? header : "";
+        @Nullable String exceptionMessage = outer ? header : "";
 
         if (expecteds == null) {
             Assert.fail(exceptionMessage + "expected array was null");
@@ -93,7 +94,7 @@ public abstract class ComparisonCriteria {
 
     private static final Object END_OF_ARRAY_SENTINEL = objectWithToString("end of array");
 
-    private Object getToStringableArrayElement(Object array, int length, int index) {
+    private Object getToStringableArrayElement(@Nullable Object array, int length, int index) {
         if (index < length) {
             Object element = Array.get(array, index);
             if (isArray(element)) {

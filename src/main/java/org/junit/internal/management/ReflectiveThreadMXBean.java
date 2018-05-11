@@ -1,5 +1,6 @@
 package org.junit.internal.management;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.junit.internal.Classes;
 
 import java.lang.reflect.InvocationTargetException;
@@ -13,14 +14,14 @@ final class ReflectiveThreadMXBean implements ThreadMXBean {
 
 
   private static final class Holder {
-    static final Method getThreadCpuTimeMethod;
-    static final Method isThreadCpuTimeSupportedMethod;
+    static final @Nullable Method getThreadCpuTimeMethod;
+    static final @Nullable Method isThreadCpuTimeSupportedMethod;
 
     private static final String FAILURE_MESSAGE = "Unable to access ThreadMXBean";
 
     static {
-      Method threadCpuTime = null;
-      Method threadCpuTimeSupported = null;
+      @Nullable Method threadCpuTime = null;
+      @Nullable Method threadCpuTimeSupported = null;
       try {
         Class<?> threadMXBeanClass = Classes.getClass("java.lang.management.ThreadMXBean");
         threadCpuTime = threadMXBeanClass.getMethod("getThreadCpuTime", long.class);

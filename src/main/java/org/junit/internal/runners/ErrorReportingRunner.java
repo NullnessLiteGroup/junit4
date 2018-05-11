@@ -3,6 +3,7 @@ package org.junit.internal.runners;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.junit.runner.Description;
 import org.junit.runner.Runner;
 import org.junit.runner.notification.Failure;
@@ -13,15 +14,15 @@ import org.junit.runners.model.InitializationError;
 import static java.util.Collections.singletonList;
 
 public class ErrorReportingRunner extends Runner {
-    private final List<Throwable> causes;
+    private final List<@Nullable Throwable> causes;
 
     private final String classNames;
 
-    public ErrorReportingRunner(Class<?> testClass, Throwable cause) {
+    public ErrorReportingRunner(@Nullable Class<?> testClass, Throwable cause) {
         this(cause, testClass);
     }
     
-    public ErrorReportingRunner(Throwable cause, Class<?>... testClasses) {
+    public ErrorReportingRunner(Throwable cause, @Nullable Class<?>... testClasses) {
         if (testClasses == null || testClasses.length == 0) {
             throw new NullPointerException("Test classes cannot be null or empty");
         }
@@ -62,7 +63,7 @@ public class ErrorReportingRunner extends Runner {
     }
 
     @SuppressWarnings("deprecation")
-    private List<Throwable> getCauses(Throwable cause) {
+    private List<@Nullable Throwable> getCauses(@Nullable Throwable cause) {
         if (cause instanceof InvocationTargetException) {
             return getCauses(cause.getCause());
         }
@@ -83,7 +84,7 @@ public class ErrorReportingRunner extends Runner {
         return Description.createTestDescription(classNames, "initializationError");
     }
 
-    private void runCause(Throwable child, RunNotifier notifier) {
+    private void runCause(@Nullable Throwable child, RunNotifier notifier) {
         Description description = describeCause();
         notifier.fireTestStarted(description);
         notifier.fireTestFailure(new Failure(description, child));

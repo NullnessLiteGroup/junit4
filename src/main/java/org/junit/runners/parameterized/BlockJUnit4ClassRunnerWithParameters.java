@@ -4,6 +4,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.List;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.junit.internal.runners.statements.RunAfters;
 import org.junit.internal.runners.statements.RunBefores;
 import org.junit.runner.RunWith;
@@ -39,7 +40,7 @@ public class BlockJUnit4ClassRunnerWithParameters extends
     }
 
     @Override
-    public Object createTest() throws Exception {
+    public @Nullable Object createTest() throws Exception {
         InjectionType injectionType = getInjectionType();
         switch (injectionType) {
             case CONSTRUCTOR:
@@ -52,7 +53,7 @@ public class BlockJUnit4ClassRunnerWithParameters extends
         }
     }
 
-    private Object createTestUsingConstructorInjection() throws Exception {
+    private @Nullable Object createTestUsingConstructorInjection() throws Exception {
         return getTestClass().getOnlyConstructor().newInstance(parameters);
     }
 

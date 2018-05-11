@@ -1,5 +1,7 @@
 package junit.samples.money;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 /**
  * A simple Money.
  */
@@ -43,7 +45,7 @@ public class Money implements IMoney {
     }
 
     @Override
-    public boolean equals(Object anObject) {
+    public boolean equals(@Nullable Object anObject) {
         if (isZero()) {
             if (anObject instanceof IMoney) {
                 return ((IMoney) anObject).isZero();

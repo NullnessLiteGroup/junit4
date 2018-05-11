@@ -1,5 +1,7 @@
 package org.junit.runner;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 import java.io.Serializable;
 import java.lang.annotation.Annotation;
 import java.util.ArrayList;
@@ -82,7 +84,7 @@ public class Description implements Serializable {
      * @param annotations meta-data about the test, for downstream interpreters
      * @return a <code>Description</code> named <code>name</code>
      */
-    public static Description createTestDescription(Class<?> clazz, String name, Annotation... annotations) {
+    public static Description createTestDescription(@Nullable Class<?> clazz, @Nullable String name, Annotation... annotations) {
         return new Description(clazz, formatDisplayName(name, clazz.getName()), annotations);
     }
 
@@ -95,7 +97,7 @@ public class Description implements Serializable {
      * @param name the name of the test (a method name for test annotated with {@link org.junit.Test})
      * @return a <code>Description</code> named <code>name</code>
      */
-    public static Description createTestDescription(Class<?> clazz, String name) {
+    public static Description createTestDescription(@Nullable Class<?> clazz, @Nullable String name) {
         return new Description(clazz, formatDisplayName(name, clazz.getName()));
     }
 
@@ -110,7 +112,7 @@ public class Description implements Serializable {
         return new Description(null, formatDisplayName(name, className), uniqueId);
     }
 
-    private static String formatDisplayName(String name, String className) {
+    private static String formatDisplayName(@Nullable String name, String className) {
         return String.format("%s(%s)", name, className);
     }
 
@@ -156,13 +158,13 @@ public class Description implements Serializable {
     private final String fDisplayName;
     private final Serializable fUniqueId;
     private final Annotation[] fAnnotations;
-    private volatile /* write-once */ Class<?> fTestClass;
+    private volatile /* write-once */ @Nullable Class<?> fTestClass;
 
-    private Description(Class<?> clazz, String displayName, Annotation... annotations) {
+    private Description(@Nullable Class<?> clazz, String displayName, Annotation... annotations) {
         this(clazz, displayName, displayName, annotations);
     }
 
-    private Description(Class<?> testClass, String displayName, Serializable uniqueId, Annotation... annotations) {
+    private Description(@Nullable Class<?> testClass, String displayName, Serializable uniqueId, Annotation... annotations) {
         if ((displayName == null) || (displayName.length() == 0)) {
             throw new IllegalArgumentException(
                     "The display name must not be empty.");
@@ -235,7 +237,7 @@ public class Description implements Serializable {
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(@Nullable Object obj) {
         if (!(obj instanceof Description)) {
             return false;
         }
@@ -267,7 +269,7 @@ public class Description implements Serializable {
      * @return the annotation of type annotationType that is attached to this description node,
      *         or null if none exists
      */
-    public <T extends Annotation> T getAnnotation(Class<T> annotationType) {
+    public @Nullable <T extends Annotation> T getAnnotation(Class<T> annotationType) {
         for (Annotation each : fAnnotations) {
             if (each.annotationType().equals(annotationType)) {
                 return annotationType.cast(each);
@@ -287,7 +289,7 @@ public class Description implements Serializable {
      * @return If this describes a method invocation,
      *         the class of the test instance.
      */
-    public Class<?> getTestClass() {
+    public @Nullable Class<?> getTestClass() {
         if (fTestClass != null) {
             return fTestClass;
         }
@@ -307,7 +309,7 @@ public class Description implements Serializable {
      * @return If this describes a method invocation,
      *         the name of the class of the test instance
      */
-    public String getClassName() {
+    public @Nullable String getClassName() {
         return fTestClass != null ? fTestClass.getName() : methodAndClassNamePatternGroupOrDefault(2, toString());
     }
 
@@ -315,12 +317,12 @@ public class Description implements Serializable {
      * @return If this describes a method invocation,
      *         the name of the method (or null if not)
      */
-    public String getMethodName() {
+    public @Nullable String getMethodName() {
         return methodAndClassNamePatternGroupOrDefault(1, null);
     }
 
-    private String methodAndClassNamePatternGroupOrDefault(int group,
-            String defaultString) {
+    private @Nullable String methodAndClassNamePatternGroupOrDefault(int group,
+            @Nullable String defaultString) {
         Matcher matcher = METHOD_AND_CLASS_NAME_PATTERN.matcher(toString());
         return matcher.matches() ? matcher.group(group) : defaultString;
     }

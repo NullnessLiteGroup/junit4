@@ -2,6 +2,7 @@ package org.junit.runner.notification;
 
 import java.io.Serializable;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.junit.internal.Throwables;
 import org.junit.runner.Description;
 
@@ -23,7 +24,7 @@ public class Failure implements Serializable {
      * See https://github.com/junit-team/junit4/issues/976
      */
     private final Description fDescription;
-    private final Throwable fThrownException;
+    private final @Nullable Throwable fThrownException;
 
     /**
      * Constructs a <code>Failure</code> with the given description and exception.
@@ -31,7 +32,7 @@ public class Failure implements Serializable {
      * @param description a {@link org.junit.runner.Description} of the test that failed
      * @param thrownException the exception that was thrown while running the test
      */
-    public Failure(Description description, Throwable thrownException) {
+    public Failure(Description description, @Nullable Throwable thrownException) {
         this.fThrownException = thrownException;
         this.fDescription = description;
     }
@@ -54,7 +55,7 @@ public class Failure implements Serializable {
      * @return the exception thrown
      */
 
-    public Throwable getException() {
+    public @Nullable Throwable getException() {
         return fThrownException;
     }
 
@@ -84,7 +85,7 @@ public class Failure implements Serializable {
      *
      * @return the message of the thrown exception
      */
-    public String getMessage() {
+    public @Nullable String getMessage() {
         return getException().getMessage();
     }
 }

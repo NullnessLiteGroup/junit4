@@ -7,6 +7,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.junit.Assume;
 import org.junit.experimental.theories.DataPoint;
 import org.junit.experimental.theories.DataPoints;
@@ -29,7 +30,7 @@ public class AllMembersSupplier extends ParameterSupplier {
         }
 
         @Override
-        public Object getValue() throws CouldNotGenerateValueException {
+        public @Nullable Object getValue() throws CouldNotGenerateValueException {
             try {
                 return method.invokeExplosively(null);
             } catch (IllegalArgumentException e) {
@@ -120,7 +121,7 @@ public class AllMembersSupplier extends ParameterSupplier {
     }
     
     private void addDataPointsValues(Class<?> type, ParameterSignature sig, String name, 
-            List<PotentialAssignment> list, Object value) {
+            List<PotentialAssignment> list, @Nullable Object value) {
         if (type.isArray()) {
             addArrayValues(sig, name, list, value);
         }
@@ -129,7 +130,7 @@ public class AllMembersSupplier extends ParameterSupplier {
         }
     }
 
-    private void addArrayValues(ParameterSignature sig, String name, List<PotentialAssignment> list, Object array) {
+    private void addArrayValues(ParameterSignature sig, String name, List<PotentialAssignment> list, @Nullable Object array) {
         for (int i = 0; i < Array.getLength(array); i++) {
             Object value = Array.get(array, i);
             if (sig.canAcceptValue(value)) {
@@ -138,7 +139,7 @@ public class AllMembersSupplier extends ParameterSupplier {
         }
     }
     
-    private void addIterableValues(ParameterSignature sig, String name, List<PotentialAssignment> list, Iterable<?> iterable) {
+    private void addIterableValues(ParameterSignature sig, String name, List<PotentialAssignment> list, @Nullable Iterable<?> iterable) {
         Iterator<?> iterator = iterable.iterator();
         int i = 0;
         while (iterator.hasNext()) {
@@ -150,7 +151,7 @@ public class AllMembersSupplier extends ParameterSupplier {
         }
     }
 
-    private Object getStaticFieldValue(final Field field) {
+    private @Nullable Object getStaticFieldValue(final Field field) {
         try {
             return field.get(null);
         } catch (IllegalArgumentException e) {

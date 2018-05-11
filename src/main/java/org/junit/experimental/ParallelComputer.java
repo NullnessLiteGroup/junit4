@@ -4,6 +4,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.junit.runner.Computer;
 import org.junit.runner.Runner;
 import org.junit.runners.ParentRunner;
@@ -29,7 +30,7 @@ public class ParallelComputer extends Computer {
         return new ParallelComputer(false, true);
     }
 
-    private static Runner parallelize(Runner runner) {
+    private static @Nullable Runner parallelize(@Nullable Runner runner) {
         if (runner instanceof ParentRunner) {
             ((ParentRunner<?>) runner).setScheduler(new RunnerScheduler() {
                 private final ExecutorService fService = Executors.newCachedThreadPool();
@@ -52,14 +53,14 @@ public class ParallelComputer extends Computer {
     }
 
     @Override
-    public Runner getSuite(RunnerBuilder builder, java.lang.Class<?>[] classes)
+    public @Nullable Runner getSuite(RunnerBuilder builder, java.lang.Class<?>[] classes)
             throws InitializationError {
         Runner suite = super.getSuite(builder, classes);
         return this.classes ? parallelize(suite) : suite;
     }
 
     @Override
-    protected Runner getRunner(RunnerBuilder builder, Class<?> testClass)
+    protected @Nullable Runner getRunner(RunnerBuilder builder, Class<?> testClass)
             throws Throwable {
         Runner runner = super.getRunner(builder, testClass);
         return methods ? parallelize(runner) : runner;

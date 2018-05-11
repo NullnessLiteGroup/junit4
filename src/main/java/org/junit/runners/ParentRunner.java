@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
@@ -69,7 +70,7 @@ public abstract class ParentRunner<T> extends Runner implements Filterable,
     private final TestClass testClass;
 
     // Guarded by childrenLock
-    private volatile Collection<T> filteredChildren = null;
+    private volatile @Nullable Collection<T> filteredChildren = null;
 
     private volatile RunnerScheduler scheduler = new RunnerScheduler() {
         public void schedule(Runnable childStatement) {
@@ -84,7 +85,7 @@ public abstract class ParentRunner<T> extends Runner implements Filterable,
     /**
      * Constructs a new {@code ParentRunner} that will run {@code @TestClass}
      */
-    protected ParentRunner(Class<?> testClass) throws InitializationError {
+    protected ParentRunner(@Nullable Class<?> testClass) throws InitializationError {
         this.testClass = createTestClass(testClass);
         validate();
     }
@@ -104,7 +105,7 @@ public abstract class ParentRunner<T> extends Runner implements Filterable,
      * @since 4.12
      */
     @Deprecated
-    protected TestClass createTestClass(Class<?> testClass) {
+    protected TestClass createTestClass(@Nullable Class<?> testClass) {
         return new TestClass(testClass);
     }
 
@@ -457,7 +458,7 @@ public abstract class ParentRunner<T> extends Runner implements Filterable,
         }
     }
 
-    private Collection<T> getFilteredChildren() {
+    private @Nullable Collection<T> getFilteredChildren() {
         if (filteredChildren == null) {
             childrenLock.lock();
             try {

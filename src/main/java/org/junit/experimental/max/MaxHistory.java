@@ -11,6 +11,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.junit.runner.Description;
 import org.junit.runner.Result;
 import org.junit.runner.notification.Failure;
@@ -81,7 +82,7 @@ public class MaxHistory implements Serializable {
         stream.close();
     }
 
-    Long getFailureTimestamp(Description key) {
+    @Nullable Long getFailureTimestamp(Description key) {
         return fFailureTimestamps.get(key.toString());
     }
 
@@ -93,7 +94,7 @@ public class MaxHistory implements Serializable {
         return !fDurations.containsKey(key.toString());
     }
 
-    Long getTestDuration(Description key) {
+    @Nullable Long getTestDuration(Description key) {
         return fDurations.get(key.toString());
     }
 

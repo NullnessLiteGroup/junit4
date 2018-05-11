@@ -10,6 +10,7 @@ import junit.framework.TestFailure;
 import junit.framework.TestListener;
 import junit.framework.TestResult;
 import junit.runner.BaseTestRunner;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 public class ResultPrinter implements TestListener {
     PrintStream fWriter;
@@ -106,7 +107,7 @@ public class ResultPrinter implements TestListener {
     /**
      * @see junit.framework.TestListener#addError(Test, Throwable)
      */
-    public void addError(Test test, Throwable e) {
+    public void addError(Test test, @Nullable Throwable e) {
         getWriter().print("E");
     }
 

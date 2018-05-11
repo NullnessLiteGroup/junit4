@@ -7,6 +7,7 @@ import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.junit.Assert;
 import org.junit.Assume;
 import org.junit.experimental.theories.internal.Assignments;
@@ -248,13 +249,13 @@ public class Theories extends BlockJUnit4ClassRunner {
                 }
 
                 @Override
-                protected Statement methodInvoker(FrameworkMethod method, Object test) {
+                protected Statement methodInvoker(FrameworkMethod method, @Nullable Object test) {
                     return methodCompletesWithParameters(method, complete, test);
                 }
 
                 @Override
-                public Object createTest() throws Exception {
-                    Object[] params = complete.getConstructorArguments();
+                public @Nullable Object createTest() throws Exception {
+                    @Nullable Object[] params = complete.getConstructorArguments();
                     
                     if (!nullsOk()) {
                         Assume.assumeNotNull(params);
@@ -266,11 +267,11 @@ public class Theories extends BlockJUnit4ClassRunner {
         }
 
         private Statement methodCompletesWithParameters(
-                final FrameworkMethod method, final Assignments complete, final Object freshInstance) {
+                final FrameworkMethod method, final Assignments complete, final @Nullable Object freshInstance) {
             return new Statement() {
                 @Override
                 public void evaluate() throws Throwable {
-                    final Object[] values = complete.getMethodArguments();
+                    final @Nullable Object[] values = complete.getMethodArguments();
                     
                     if (!nullsOk()) {
                         Assume.assumeNotNull(values);

@@ -9,6 +9,7 @@ import java.util.Enumeration;
 import java.util.List;
 import java.util.Vector;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.junit.internal.MethodSorter;
 import org.junit.internal.Throwables;
 
@@ -46,7 +47,7 @@ public class TestSuite implements Test {
      * ...as the moon sets over the early morning Merlin, Oregon
      * mountains, our intrepid adventurers type...
      */
-    static public Test createTest(Class<?> theClass, String name) {
+    static public @Nullable Test createTest(Class<?> theClass, String name) {
         Constructor<?> constructor;
         try {
             constructor = getTestConstructor(theClass);
@@ -114,11 +115,11 @@ public class TestSuite implements Test {
      * Parts of this method were written at 2337 meters in the Hueffihuette,
      * Kanton Uri
      */
-    public TestSuite(final Class<?> theClass) {
+    public TestSuite(final @Nullable Class<?> theClass) {
         addTestsFromTestCase(theClass);
     }
 
-    private void addTestsFromTestCase(final Class<?> theClass) {
+    private void addTestsFromTestCase(final @Nullable Class<?> theClass) {
         fName = theClass.getName();
         try {
             getTestConstructor(theClass); // Avoid generating multiple error messages
@@ -194,7 +195,7 @@ public class TestSuite implements Test {
     /**
      * Adds a test to the suite.
      */
-    public void addTest(Test test) {
+    public void addTest(@Nullable Test test) {
         fTests.add(test);
     }
 

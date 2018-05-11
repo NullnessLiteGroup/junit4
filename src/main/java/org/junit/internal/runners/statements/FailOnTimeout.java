@@ -10,6 +10,7 @@ import java.util.concurrent.FutureTask;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.junit.internal.management.ManagementFactory;
 import org.junit.internal.management.ThreadMXBean;
 import org.junit.runners.model.MultipleFailureException;
@@ -136,7 +137,7 @@ public class FailOnTimeout extends Statement {
      * test failed, an exception indicating a timeout if the test timed out, or
      * {@code null} if the test passed.
      */
-    private Throwable getResult(FutureTask<Throwable> task, Thread thread) {
+    private @Nullable Throwable getResult(FutureTask<Throwable> task, Thread thread) {
         try {
             if (timeout > 0) {
                 return task.get(timeout, timeUnit);
@@ -197,7 +198,7 @@ public class FailOnTimeout extends Statement {
      * problem or if the thread cannot be determined.  The return value is never equal 
      * to {@code mainThread}.
      */
-    private Thread getStuckThread(Thread mainThread) {
+    private @Nullable Thread getStuckThread(Thread mainThread) {
         List<Thread> threadsInGroup = getThreadsInGroup(mainThread.getThreadGroup());
         if (threadsInGroup.isEmpty()) {
             return null;
@@ -230,7 +231,7 @@ public class FailOnTimeout extends Statement {
      * if this cannot be determined, e.g. because new threads are being created at an
      * extremely fast rate.
      */
-    private List<Thread> getThreadsInGroup(ThreadGroup group) {
+    private List<Thread> getThreadsInGroup(@Nullable ThreadGroup group) {
         final int activeThreadCount = group.activeCount(); // this is just an estimate
         int threadArraySize = Math.max(activeThreadCount * 2, 100);
         for (int loopCount = 0; loopCount < 5; loopCount++) {
@@ -268,7 +269,7 @@ public class FailOnTimeout extends Statement {
     private class CallableStatement implements Callable<Throwable> {
         private final CountDownLatch startLatch = new CountDownLatch(1);
 
-        public Throwable call() throws Exception {
+        public @Nullable Throwable call() throws Exception {
             try {
                 startLatch.countDown();
                 originalStatement.evaluate();

@@ -1,5 +1,6 @@
 package org.junit.rules;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.junit.Rule;
 import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.Statement;
@@ -28,5 +29,5 @@ public interface MethodRule {
      * @return a new statement, which may be the same as {@code base},
      *         a wrapper around {@code base}, or a completely new Statement.
      */
-    Statement apply(Statement base, FrameworkMethod method, Object target);
+    Statement apply(Statement base, FrameworkMethod method, @Nullable Object target);
 }

@@ -6,6 +6,7 @@ import java.util.Comparator;
 import java.util.IdentityHashMap;
 import java.util.List;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.junit.Rule;
 import org.junit.rules.MethodRule;
 import org.junit.rules.TestRule;
@@ -26,7 +27,7 @@ class RuleContainer {
     /**
      * Sets order value for the specified rule.
      */
-    public void setOrder(Object rule, int order) {
+    public void setOrder(@Nullable Object rule, int order) {
         orderValues.put(rule, order);
     }
 
@@ -68,7 +69,7 @@ class RuleContainer {
     /**
      * Applies all the rules ordered accordingly to the specified {@code statement}.
      */
-    public Statement apply(FrameworkMethod method, Description description, Object target,
+    public Statement apply(FrameworkMethod method, Description description, @Nullable Object target,
             Statement statement) {
         if (methodRules.isEmpty() && testRules.isEmpty()) {
             return statement;
@@ -104,7 +105,7 @@ class RuleContainer {
         final int type;
         final int order;
 
-        RuleEntry(Object rule, int type, Integer order) {
+        RuleEntry(Object rule, int type, @Nullable Integer order) {
             this.rule = rule;
             this.type = type;
             this.order = order != null ? order.intValue() : Rule.DEFAULT_ORDER;

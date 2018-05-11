@@ -10,6 +10,7 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.junit.internal.AssumptionViolatedException;
 import org.junit.runner.Description;
 import org.junit.runner.notification.Failure;
@@ -24,12 +25,12 @@ import org.junit.runners.model.TestTimedOutException;
  */
 @Deprecated
 public class MethodRoadie {
-    private final Object test;
+    private final @Nullable Object test;
     private final RunNotifier notifier;
     private final Description description;
     private TestMethod testMethod;
 
-    public MethodRoadie(Object test, TestMethod method, RunNotifier notifier, Description description) {
+    public MethodRoadie(@Nullable Object test, TestMethod method, RunNotifier notifier, Description description) {
         this.test = test;
         this.notifier = notifier;
         this.description = description;
@@ -60,7 +61,7 @@ public class MethodRoadie {
             public void run() {
                 ExecutorService service = Executors.newSingleThreadExecutor();
                 Callable<Object> callable = new Callable<Object>() {
-                    public Object call() throws Exception {
+                    public @Nullable Object call() throws Exception {
                         runTestMethod();
                         return null;
                     }
@@ -156,7 +157,7 @@ public class MethodRoadie {
         }
     }
 
-    protected void addFailure(Throwable e) {
+    protected void addFailure(@Nullable Throwable e) {
         notifier.fireTestFailure(new Failure(description, e));
     }
 }

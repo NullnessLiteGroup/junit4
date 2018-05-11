@@ -1,5 +1,6 @@
 package junit.framework;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.junit.internal.Throwables;
 
 
@@ -11,12 +12,12 @@ import org.junit.internal.Throwables;
  */
 public class TestFailure {
     protected Test fFailedTest;
-    protected Throwable fThrownException;
+    protected @Nullable Throwable fThrownException;
 
     /**
      * Constructs a TestFailure with the given test and exception.
      */
-    public TestFailure(Test failedTest, Throwable thrownException) {
+    public TestFailure(Test failedTest, @Nullable Throwable thrownException) {
         fFailedTest = failedTest;
         fThrownException = thrownException;
     }
@@ -31,7 +32,7 @@ public class TestFailure {
     /**
      * Gets the thrown exception.
      */
-    public Throwable thrownException() {
+    public @Nullable Throwable thrownException() {
         return fThrownException;
     }
 
@@ -54,7 +55,7 @@ public class TestFailure {
     /**
      * Returns a String containing the message from the thrown exception.
      */
-    public String exceptionMessage() {
+    public @Nullable String exceptionMessage() {
         return thrownException().getMessage();
     }
 

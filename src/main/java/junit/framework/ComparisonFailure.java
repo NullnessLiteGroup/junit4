@@ -1,5 +1,7 @@
 package junit.framework;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 /**
  * Thrown when an assert equals for Strings failed.
  *
@@ -9,8 +11,8 @@ public class ComparisonFailure extends AssertionFailedError {
     private static final int MAX_CONTEXT_LENGTH = 20;
     private static final long serialVersionUID = 1L;
 
-    private String fExpected;
-    private String fActual;
+    private @Nullable String fExpected;
+    private @Nullable String fActual;
 
     /**
      * Constructs a comparison failure.
@@ -19,7 +21,7 @@ public class ComparisonFailure extends AssertionFailedError {
      * @param expected the expected string value
      * @param actual the actual string value
      */
-    public ComparisonFailure(String message, String expected, String actual) {
+    public ComparisonFailure(@Nullable String message, @Nullable String expected, @Nullable String actual) {
         super(message);
         fExpected = expected;
         fActual = actual;
@@ -41,7 +43,7 @@ public class ComparisonFailure extends AssertionFailedError {
      *
      * @return the actual string value
      */
-    public String getActual() {
+    public @Nullable String getActual() {
         return fActual;
     }
 
@@ -50,7 +52,7 @@ public class ComparisonFailure extends AssertionFailedError {
      *
      * @return the expected string value
      */
-    public String getExpected() {
+    public @Nullable String getExpected() {
         return fExpected;
     }
 }

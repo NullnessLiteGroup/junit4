@@ -4,6 +4,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -31,7 +32,7 @@ public class TestMethod {
     }
 
     public long getTimeout() {
-        Test annotation = method.getAnnotation(Test.class);
+        @Nullable Test annotation = method.getAnnotation(Test.class);
         if (annotation == null) {
             return 0;
         }
@@ -39,7 +40,7 @@ public class TestMethod {
         return timeout;
     }
 
-    protected Class<? extends Throwable> getExpectedException() {
+    protected @Nullable Class<? extends Throwable> getExpectedException() {
         Test annotation = method.getAnnotation(Test.class);
         if (annotation == null || annotation.expected() == None.class) {
             return null;
@@ -48,7 +49,7 @@ public class TestMethod {
         }
     }
 
-    boolean isUnexpected(Throwable exception) {
+    boolean isUnexpected(@Nullable Throwable exception) {
         return !getExpectedException().isAssignableFrom(exception.getClass());
     }
 
@@ -64,7 +65,7 @@ public class TestMethod {
         return testClass.getAnnotatedMethods(After.class);
     }
 
-    public void invoke(Object test) throws IllegalArgumentException, IllegalAccessException, InvocationTargetException {
+    public void invoke(@Nullable Object test) throws IllegalArgumentException, IllegalAccessException, InvocationTargetException {
         method.invoke(test);
     }
 

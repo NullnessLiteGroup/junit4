@@ -5,6 +5,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 
 import junit.framework.Test;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 /**
  * Runner for use with JUnit 3.8.x-style AllTests classes
@@ -24,9 +25,9 @@ public class SuiteMethod extends JUnit38ClassRunner {
         super(testFromSuiteMethod(klass));
     }
 
-    public static Test testFromSuiteMethod(Class<?> klass) throws Throwable {
-        Method suiteMethod = null;
-        Test suite = null;
+    public static @Nullable Test testFromSuiteMethod(Class<?> klass) throws Throwable {
+        @Nullable Method suiteMethod = null;
+        @Nullable Test suite = null;
         try {
             suiteMethod = klass.getMethod("suite");
             if (!Modifier.isStatic(suiteMethod.getModifiers())) {
