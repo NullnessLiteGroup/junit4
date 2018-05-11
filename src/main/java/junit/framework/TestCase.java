@@ -1,5 +1,6 @@
 package junit.framework;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -78,7 +79,8 @@ public abstract class TestCase extends Assert implements Test {
     /**
      * the name of the test case
      */
-    private String fName;
+    // @Nullable fName from new TestCase()
+    private @Nullable String fName;
 
     /**
      * No-arg constructor to enable serialization. This method
