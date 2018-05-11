@@ -106,9 +106,9 @@
         <surefireVersion>2.19.1</surefireVersion>
         <hamcrestVersion>1.3</hamcrestVersion>
         <!-- These properties will be set by the Maven Dependency plugin -->
-        <annotatedJdk>${org.checkerframework:jdk8:jar}</annotatedJdk>
-        <checkerFrameworkVersion><!-- checker-framework-version -->2.5.0<!-- /checker-framework-version --></checkerFrameworkVersion>
-        <CHECKERFRAMEWORK>/Users/Anny/Desktop/cse403/temp/checker-framework</CHECKERFRAMEWORK>
+        <!--<annotatedJdk>${org.checkerframework:jdk8:jar}</annotatedJdk>-->
+        <checkerFrameworkVersion>2.5.1</checkerFrameworkVersion>
+        <!--<CHECKERFRAMEWORK>/Users/Anny/Desktop/cse403/temp/checker-framework</CHECKERFRAMEWORK>-->
         <project.build.sourceEncoding>ISO-8859-1</project.build.sourceEncoding>
         <!--<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>-->
         <arguments />
@@ -116,41 +116,43 @@
     </properties>
 
     <dependencies>
+        <!--Annotations from the Checker Framework: nullness, interning, locking, ...-->
+        <dependency>
+            <groupId>org.checkerframework</groupId>
+            <artifactId>checker-qual</artifactId>
+            <version>${checkerFrameworkVersion}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.checkerframework</groupId>
+            <artifactId>jdk8</artifactId>
+            <version>${checkerFrameworkVersion}</version>
+        </dependency>
+
         <!-- Annotations from the Checker Framework: nullness, interning, locking, ... -->
         <!--<dependency>-->
         <!--<groupId>org.checkerframework</groupId>-->
         <!--<artifactId>checker-qual</artifactId>-->
         <!--<version>${checkerFrameworkVersion}</version>-->
+        <!--<scope>system</scope>-->
+        <!--<systemPath>${CHECKERFRAMEWORK}/checker/dist/checker-qual.jar</systemPath>-->
         <!--</dependency>-->
+        <dependency>
+            <groupId>org.checkerframework</groupId>
+            <artifactId>checker</artifactId>
+            <version>${checkerFrameworkVersion}</version>
+            <scope>system</scope>
+            <!--<systemPath>${CHECKERFRAMEWORK}/checker/dist/checker.jar</systemPath>-->
+            <systemPath>${project.basedir}/lib/checker.jar</systemPath>
+        </dependency>
+        <!--&lt;!&ndash; The annotated JDK to use. &ndash;&gt;-->
         <!--<dependency>-->
         <!--<groupId>org.checkerframework</groupId>-->
         <!--<artifactId>jdk8</artifactId>-->
         <!--<version>${checkerFrameworkVersion}</version>-->
+        <!--<scope>system</scope>-->
+        <!--&lt;!&ndash;<systemPath>${CHECKERFRAMEWORK}/checker/dist/jdk8.jar</systemPath>&ndash;&gt;-->
+        <!--<systemPath>${project.basedir}/lib/jdk8.jar</systemPath>-->
         <!--</dependency>-->
-
-        <!-- Annotations from the Checker Framework: nullness, interning, locking, ... -->
-        <dependency>
-            <groupId>org.checkerframework</groupId>
-            <artifactId>checker-qual</artifactId>
-            <version>2.5.0</version>
-            <scope>system</scope>
-            <systemPath>${CHECKERFRAMEWORK}/checker/dist/checker-qual.jar</systemPath>
-        </dependency>
-        <dependency>
-            <groupId>org.checkerframework</groupId>
-            <artifactId>checker</artifactId>
-            <version>2.5.0</version>
-            <scope>system</scope>
-            <systemPath>${CHECKERFRAMEWORK}/checker/dist/checker.jar</systemPath>
-        </dependency>
-        <!-- The annotated JDK to use. -->
-        <dependency>
-            <groupId>org.checkerframework</groupId>
-            <artifactId>jdk8</artifactId>
-            <version>2.5.0</version>
-            <scope>system</scope>
-            <systemPath>${CHECKERFRAMEWORK}/checker/dist/jdk8.jar</systemPath>
-        </dependency>
 
         <dependency>
             <groupId>org.hamcrest</groupId>
@@ -288,27 +290,27 @@
                     <!--<debug>true</debug>-->
                     <!--<fork>true</fork>-->
                     <compilerArgs>
-                        <!--<arg>-Xlint:unchecked</arg>-->
+                        <arg>-Xlint:unchecked</arg>
                         location of the annotated JDK, which comes from a Maven dependency
-                        <arg>-Xbootclasspath/p:${annotatedJdk}</arg>
+                        <!--<arg>-Xbootclasspath/p:${annotatedJdk}</arg>-->
                         <!--treat Checker Framework errors as warnings-->
                         <!--<arg>-Awarns</arg>-->
                         <!--<arg>-Alint</arg>-->
                         <!--<arg>-Xmaxerrs=1000</arg>-->
-                        <arg>-ANullnessLite</arg>
+                        <!--<arg>-ANullnessLite</arg>-->
                     </compilerArgs>
-                    <!--<maxmem>128m</maxmem>-->
-                    <annotationProcessorPaths>
-                        <path>
-                            <groupId>org.checkerframework</groupId>
-                            <artifactId>checker</artifactId>
-                            <version>${checkerFrameworkVersion}</version>
-                        </path>
-                    </annotationProcessorPaths>
-                    <annotationProcessors>
-                        <!-- Add all the checkers you want to enable here -->
-                        <annotationProcessor>org.checkerframework.checker.nullness.NullnessChecker</annotationProcessor>
-                    </annotationProcessors>
+                    <maxmem>128m</maxmem>
+                    <!--<annotationProcessorPaths>-->
+                    <!--<path>-->
+                    <!--<groupId>org.checkerframework</groupId>-->
+                    <!--<artifactId>checker</artifactId>-->
+                    <!--<version>${checkerFrameworkVersion}</version>-->
+                    <!--</path>-->
+                    <!--</annotationProcessorPaths>-->
+                    <!--<annotationProcessors>-->
+                    <!--&lt;!&ndash; Add all the checkers you want to enable here &ndash;&gt;-->
+                    <!--<annotationProcessor>org.checkerframework.checker.nullness.NullnessChecker</annotationProcessor>-->
+                    <!--</annotationProcessors>-->
                 </configuration>
             </plugin>
             <plugin>
