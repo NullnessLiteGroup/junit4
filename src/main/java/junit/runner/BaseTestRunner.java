@@ -154,9 +154,6 @@ public abstract class BaseTestRunner implements TestListener {
      * Processes the command line arguments and
      * returns the name of the suite class to run or null
      */
-    // [return.type.incompatible] FALSE_POSITIVE
-    //  String returned is non-null according to the document above
-    // plus it's never called in this class
     protected String processArguments(String[] args) {
         String suiteName = null;
         for (int i = 0; i < args.length; i++) {
@@ -175,6 +172,9 @@ public abstract class BaseTestRunner implements TestListener {
                 suiteName = args[i];
             }
         }
+        // [return.type.incompatible] FALSE_POSITIVE
+        //  String returned is non-null according to the document above
+        // plus it's never called in this class
         return suiteName;
     }
 
@@ -225,6 +225,10 @@ public abstract class BaseTestRunner implements TestListener {
     }
 
     protected boolean useReloadingTestSuiteLoader() {
+        // [dereference.of.nullable] FALSE_POSITIVE
+        //  de-referencing getPreference("loading") cannot raise NPE
+        // getPreferences, called by getPreference, always returns
+        // Properties that has key "loading"
         return getPreference("loading").equals("true") && fLoading;
     }
 
@@ -303,6 +307,10 @@ public abstract class BaseTestRunner implements TestListener {
     }
 
     protected static boolean showStackRaw() {
+        // [dereference.of.nullable] FALSE_POSITIVE
+        //  de-referencing getPreference("filterstack") cannot raise NPE
+        // getPreferences, called by getPreference, always returns
+        // Properties that has key "filterstack"
         return !getPreference("filterstack").equals("true") || fgFilterStack == false;
     }
 

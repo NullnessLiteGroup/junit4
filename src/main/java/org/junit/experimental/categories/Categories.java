@@ -157,8 +157,9 @@ public class Categories extends Suite {
         }
 
         // @Nullable includes from new ExcludesAny(Set<Class<?>> categories)
+        // @Nullable excludes from new IncludesAny(Set<Class<?>> categories)
         protected CategoryFilter(boolean matchAnyIncludes, @Nullable Set<Class<?>> includes,
-                                 boolean matchAnyExcludes, Set<Class<?>> excludes) {
+                                 boolean matchAnyExcludes, @Nullable Set<Class<?>> excludes) {
             includedAny = matchAnyIncludes;
             excludedAny = matchAnyExcludes;
             included = copyAndRefine(includes);
@@ -167,8 +168,8 @@ public class Categories extends Suite {
 
         // @Nullable exclusions from Categories.include(boolean matchAny, Class<?>... categories)
         // @Nullable inclusions from Categories.exclude(boolean matchAny, Class<?>... categories)
-        private CategoryFilter(boolean matchAnyIncludes, @Nullable Class<?>[] inclusions,
-                               boolean matchAnyExcludes, @Nullable Class<?>[] exclusions) {
+        private CategoryFilter(boolean matchAnyIncludes, Class<?>@Nullable[] inclusions,
+                               boolean matchAnyExcludes, Class<?>@Nullable[] exclusions) {
             includedAny = matchAnyIncludes; 
             excludedAny = matchAnyExcludes;
             included = createSet(inclusions);
@@ -291,7 +292,8 @@ public class Categories extends Suite {
             return testClass == null ? null : Description.createSuiteDescription(testClass);
         }
 
-        private static Class<?>[] directCategories(Description description) {
+        // @Nullable description from categories(Description description) also indicated in implementation
+        private static Class<?>[] directCategories(@Nullable Description description) {
             if (description == null) {
                 return new Class<?>[0];
             }

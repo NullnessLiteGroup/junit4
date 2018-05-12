@@ -1,6 +1,6 @@
 package org.junit.runners.model;
 
-import org.checkerframework.checker.initialization.qual.UnderInitialization;
+import org.checkerframework.checker.initialization.qual.UnknownInitialization;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import java.lang.reflect.Modifier;
 import java.util.List;
@@ -49,7 +49,8 @@ public abstract class FrameworkMember<T extends FrameworkMember<T>> implements
 
     abstract boolean isBridgeMethod();
 
-    protected abstract int getModifiers();
+    // helper method from isPublic(@UnknownInitialization FrameworkMember<T> this)
+    protected abstract int getModifiers(@UnknownInitialization FrameworkMember<T> this);
 
     /**
      * Returns true if this member is static, false if not.
@@ -62,7 +63,7 @@ public abstract class FrameworkMember<T extends FrameworkMember<T>> implements
      * Returns true if this member is public, false if not.
      */
     // helper methods in subclasses' constructor FrameworkMethod & FrameworkField
-    public boolean isPublic(@UnderInitialization FrameworkMember<T> this) {
+    public boolean isPublic(@UnknownInitialization FrameworkMember<T> this) {
         return Modifier.isPublic(getModifiers());
     }
 

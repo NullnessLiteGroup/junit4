@@ -29,6 +29,8 @@ public abstract class TypeSafeMatcher<T> extends BaseMatcher<T> {
 
     private static Class<?> findExpectedType(Class<?> fromClass) {
         for (Class<?> c = fromClass; c != Object.class; c = c.getSuperclass()) {
+            // [argument.type.incompatible] FALSE_POSITIVE
+            //  c cannot ne null at this point, otherwise exit the loop
             for (Method method : MethodSorter.getDeclaredMethods(c)) {
                 if (isMatchesSafelyMethod(method)) {
                     return method.getParameterTypes()[0];

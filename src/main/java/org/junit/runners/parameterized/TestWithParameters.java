@@ -6,6 +6,7 @@ import static org.junit.internal.Checks.notNull;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.junit.runners.model.TestClass;
 
 /**
@@ -53,7 +54,8 @@ public class TestWithParameters {
     }
 
     @Override
-    public boolean equals(Object obj) {
+    // @Nullable obj overrides super requires
+    public boolean equals(@Nullable Object obj) {
         if (this == obj) {
             return true;
         }

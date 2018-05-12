@@ -1,5 +1,7 @@
 package org.junit.experimental.theories;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
@@ -104,7 +106,8 @@ public class ParameterSignature {
         return findDeepAnnotation(annotations2, annotationType, 3);
     }
 
-    private <T extends Annotation> T findDeepAnnotation(
+    // @Nullable T returned indicated by the implementation recursive method
+    private <T extends Annotation> @Nullable T findDeepAnnotation(
             Annotation[] annotations, Class<T> annotationType, int depth) {
         if (depth == 0) {
             return null;
@@ -123,7 +126,8 @@ public class ParameterSignature {
         return null;
     }
 
-    public <T extends Annotation> T getAnnotation(Class<T> annotationType) {
+    // @Nullable T returned if annotationType not exist
+    public <T extends Annotation> @Nullable T getAnnotation(Class<T> annotationType) {
         for (Annotation each : getAnnotations()) {
             if (annotationType.isInstance(each)) {
                 return annotationType.cast(each);
