@@ -20,6 +20,7 @@ import junit.framework.Test;
 import junit.framework.TestListener;
 import junit.framework.TestSuite;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.junit.internal.Throwables;
 
 /**
@@ -92,7 +93,8 @@ public abstract class BaseTestRunner implements TestListener {
      * Returns the Test corresponding to the given suite. This is
      * a template method, subclasses override runFailed(), clearStatus().
      */
-    public Test getTest(String suiteClassName) {
+    // @Nullable Test returned from getTest("")
+    public @Nullable Test getTest(String suiteClassName) {
         if (suiteClassName.length() <= 0) {
             clearStatus();
             return null;
@@ -152,6 +154,9 @@ public abstract class BaseTestRunner implements TestListener {
      * Processes the command line arguments and
      * returns the name of the suite class to run or null
      */
+    // [return.type.incompatible] FALSE_POSITIVE
+    //  String returned is non-null according to the document above
+    // plus it's never called in this class
     protected String processArguments(String[] args) {
         String suiteName = null;
         for (int i = 0; i < args.length; i++) {
@@ -246,7 +251,8 @@ public abstract class BaseTestRunner implements TestListener {
         }
     }
 
-    public static String getPreference(String key) {
+    // @Nullable String returned if key is not found in Property
+    public static @Nullable String getPreference(String key) {
         return getPreferences().getProperty(key);
     }
 

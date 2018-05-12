@@ -6,6 +6,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 import java.util.List;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.junit.internal.runners.model.ReflectiveCallable;
 
 /**
@@ -51,11 +52,14 @@ public class FrameworkMethod extends FrameworkMember<FrameworkMethod> {
      * parameters {@code params}. {@link InvocationTargetException}s thrown are
      * unwrapped, and their causes rethrown.
      */
-    public Object invokeExplosively(final Object target, final Object... params)
+    // @Nullable target from TestClass.collectAnnotatedFieldValues(@Nullable Object test,
+    //            Class<? extends Annotation> annotationClass, Class<T> valueClass,
+    //            MemberValueConsumer<T> consumer)
+    public Object invokeExplosively(final @Nullable Object target, final Object... params)
             throws Throwable {
         return new ReflectiveCallable() {
             @Override
-            protected Object runReflectiveCall() throws Throwable {
+            protected @Nullable Object runReflectiveCall() throws Throwable {
                 return method.invoke(target, params);
             }
         }.run();
@@ -163,7 +167,8 @@ public class FrameworkMethod extends FrameworkMember<FrameworkMethod> {
     }
 
     @Override
-    public boolean equals(Object obj) {
+    // @Nullable obj overrides super requires
+    public boolean equals(@Nullable Object obj) {
         if (!FrameworkMethod.class.isInstance(obj)) {
             return false;
         }
@@ -205,7 +210,8 @@ public class FrameworkMethod extends FrameworkMember<FrameworkMethod> {
      * Returns the annotation of type {@code annotationType} on this method, if
      * one exists.
      */
-    public <T extends Annotation> T getAnnotation(Class<T> annotationType) {
+    // @Nullable T returned according to the documentation
+    public <T extends Annotation> @Nullable T getAnnotation(Class<T> annotationType) {
         return method.getAnnotation(annotationType);
     }
 

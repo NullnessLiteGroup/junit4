@@ -24,7 +24,11 @@ import org.junit.runner.notification.RunListener;
  */
 public class Result implements Serializable {
     private static final long serialVersionUID = 1L;
+    @SuppressWarnings("nullness")
     private static final ObjectStreamField[] serialPersistentFields =
+            // [dereference.of.nullable] FALSE_POSITIVE
+            //  de-referencing lookup() cannot raise NPE in this case,
+            // since SerializedFrom.class implements Serializable so that lookup() will not return null
             ObjectStreamClass.lookup(SerializedForm.class).getFields();
     private final AtomicInteger count;
     private final AtomicInteger ignoreCount;

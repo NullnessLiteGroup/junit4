@@ -89,7 +89,8 @@ public abstract class RunnerBuilder {
      * this builder will throw an exception if it is requested for another
      * runner for {@code parent} before this call completes.
      */
-    public List<Runner> runners(Class<?> parent, Class<?>[] children)
+    // @Nullable parent from new Suite(RunnerBuilder builder, Class<?>[] classes)
+    public List<Runner> runners(@Nullable Class<?> parent, Class<?>[] children)
             throws InitializationError {
         addParent(parent);
 

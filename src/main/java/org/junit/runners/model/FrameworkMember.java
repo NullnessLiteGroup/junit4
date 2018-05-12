@@ -1,5 +1,6 @@
 package org.junit.runners.model;
 
+import org.checkerframework.checker.initialization.qual.UnderInitialization;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import java.lang.reflect.Modifier;
 import java.util.List;
@@ -60,7 +61,8 @@ public abstract class FrameworkMember<T extends FrameworkMember<T>> implements
     /**
      * Returns true if this member is public, false if not.
      */
-    public boolean isPublic() {
+    // helper methods in subclasses' constructor FrameworkMethod & FrameworkField
+    public boolean isPublic(@UnderInitialization FrameworkMember<T> this) {
         return Modifier.isPublic(getModifiers());
     }
 

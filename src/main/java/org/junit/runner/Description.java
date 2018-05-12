@@ -98,7 +98,8 @@ public class Description implements Serializable {
      * @param name the name of the test (a method name for test annotated with {@link org.junit.Test})
      * @return a <code>Description</code> named <code>name</code>
      */
-    public static Description createTestDescription(Class<?> clazz, String name) {
+    // @Nullable name from JUnit38ClassRunner.asDescription(Test test)
+    public static Description createTestDescription(Class<?> clazz, @Nullable String name) {
         return new Description(clazz, formatDisplayName(name, clazz.getName()));
     }
 
@@ -113,7 +114,8 @@ public class Description implements Serializable {
         return new Description(null, formatDisplayName(name, className), uniqueId);
     }
 
-    private static String formatDisplayName(String name, String className) {
+    // @Nullable name from Description.createTestDescription(Class<?> clazz, @Nullable String name, Annotation... annotations)
+    private static String formatDisplayName(@Nullable String name, String className) {
         return String.format("%s(%s)", name, className);
     }
 
@@ -274,7 +276,8 @@ public class Description implements Serializable {
      * @return the annotation of type annotationType that is attached to this description node,
      *         or null if none exists
      */
-    public <T extends Annotation> T getAnnotation(Class<T> annotationType) {
+    // @Nullable T returned by documentation above
+    public <T extends Annotation> @Nullable T getAnnotation(Class<T> annotationType) {
         for (Annotation each : fAnnotations) {
             if (each.annotationType().equals(annotationType)) {
                 return annotationType.cast(each);

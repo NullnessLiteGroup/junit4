@@ -165,8 +165,10 @@ public class Categories extends Suite {
             excluded = copyAndRefine(excludes);
         }
 
-        private CategoryFilter(boolean matchAnyIncludes, Class<?>[] inclusions,
-                               boolean matchAnyExcludes, Class<?>[] exclusions) {
+        // @Nullable exclusions from Categories.include(boolean matchAny, Class<?>... categories)
+        // @Nullable inclusions from Categories.exclude(boolean matchAny, Class<?>... categories)
+        private CategoryFilter(boolean matchAnyIncludes, @Nullable Class<?>[] inclusions,
+                               boolean matchAnyExcludes, @Nullable Class<?>[] exclusions) {
             includedAny = matchAnyIncludes; 
             excludedAny = matchAnyExcludes;
             included = createSet(inclusions);
@@ -283,7 +285,8 @@ public class Categories extends Suite {
             return categories;
         }
 
-        private static Description parentDescription(Description description) {
+        // @Nullable Description returned by implementation below
+        private static @Nullable Description parentDescription(Description description) {
             Class<?> testClass= description.getTestClass();
             return testClass == null ? null : Description.createSuiteDescription(testClass);
         }
@@ -297,7 +300,9 @@ public class Categories extends Suite {
             return annotation == null ? new Class<?>[0] : annotation.value();
         }
 
-        private static Set<Class<?>> copyAndRefine(Set<Class<?>> classes) {
+        // @Nullable classes from CategoryFilter(boolean matchAnyIncludes, @Nullable Set<Class<?>> includes,
+        //                                 boolean matchAnyExcludes, Set<Class<?>> excludes)
+        private static Set<Class<?>> copyAndRefine(@Nullable Set<Class<?>> classes) {
             Set<Class<?>> c= new LinkedHashSet<Class<?>>();
             if (classes != null) {
                 c.addAll(classes);
@@ -350,7 +355,8 @@ public class Categories extends Suite {
         return false;
     }
 
-    private static Set<Class<?>> createSet(Class<?>[] classes) {
+    // @Nullable classes from Categories.getIncludedCategory(Class<?> klass)
+    private static Set<Class<?>> createSet(Class<?>@Nullable[] classes) {
         // Not throwing a NPE if t is null is a bad idea, but it's the behavior from JUnit 4.12
         // for include(boolean, Class<?>...) and exclude(boolean, Class<?>...)
         if (classes == null || classes.length == 0) {

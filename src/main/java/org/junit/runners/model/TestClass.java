@@ -171,7 +171,8 @@ public class TestClass implements Annotatable {
                 || annotation.equals(BeforeClass.class);
     }
 
-    private static List<Class<?>> getSuperClasses(Class<?> testClass) {
+    // @Nullable testClass from new TestClass(null)
+    private static List<Class<?>> getSuperClasses(@Nullable Class<?> testClass) {
         List<Class<?>> results = new ArrayList<Class<?>>();
         Class<?> current = testClass;
         while (current != null) {
@@ -219,7 +220,8 @@ public class TestClass implements Annotatable {
         return clazz.getAnnotations();
     }
 
-    public <T extends Annotation> T getAnnotation(Class<T> annotationType) {
+    // @Nullable T returned from (new TestClass(null)).getAnnotation(...)
+    public <T extends Annotation> @Nullable T getAnnotation(Class<T> annotationType) {
         if (clazz == null) {
             return null;
         }
