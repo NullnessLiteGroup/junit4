@@ -24,7 +24,6 @@ import org.junit.runner.notification.RunListener;
  */
 public class Result implements Serializable {
     private static final long serialVersionUID = 1L;
-    @SuppressWarnings("nullness")
     private static final ObjectStreamField[] serialPersistentFields =
             // [dereference.of.nullable] FALSE_POSITIVE
             //  de-referencing lookup() cannot raise NPE in this case,
