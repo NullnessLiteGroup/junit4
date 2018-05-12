@@ -95,7 +95,8 @@ public class BlockJUnit4ClassRunnerWithParameters extends
     }
 
     @Override
-    protected String getName() {
+    // helper from testName
+    protected String getName(@UnknownInitialization BlockJUnit4ClassRunnerWithParameters this) {
         return name;
     }
 
@@ -205,11 +206,13 @@ public class BlockJUnit4ClassRunnerWithParameters extends
         return annotationsWithoutRunWith;
     }
 
-    private List<FrameworkField> getAnnotatedFieldsByParameter() {
+    // helper from validateFields
+    private List<FrameworkField> getAnnotatedFieldsByParameter(@UnknownInitialization BlockJUnit4ClassRunnerWithParameters this) {
         return getTestClass().getAnnotatedFields(Parameter.class);
     }
 
-    private InjectionType getInjectionType() {
+    // helper from validateConstructor
+    private InjectionType getInjectionType(@UnknownInitialization BlockJUnit4ClassRunnerWithParameters this) {
         if (fieldsAreAnnotated()) {
             return InjectionType.FIELD;
         } else {
@@ -217,7 +220,8 @@ public class BlockJUnit4ClassRunnerWithParameters extends
         }
     }
 
-    private boolean fieldsAreAnnotated() {
+    // helper from getInjectionType
+    private boolean fieldsAreAnnotated(@UnknownInitialization BlockJUnit4ClassRunnerWithParameters this) {
         return !getAnnotatedFieldsByParameter().isEmpty();
     }
 }

@@ -215,7 +215,8 @@ public class BlockJUnit4ClassRunner extends ParentRunner<FrameworkMethod> {
         }
     }
 
-    private boolean hasOneConstructor() {
+    // helper from validateOnlyOneConstructor
+    private boolean hasOneConstructor(@UnknownInitialization BlockJUnit4ClassRunner this) {
         return getTestClass().getJavaClass().getConstructors().length == 1;
     }
 

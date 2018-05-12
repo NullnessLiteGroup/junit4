@@ -87,7 +87,8 @@ public class Theories extends BlockJUnit4ClassRunner {
         validateDataPointMethods(errors);
     }
 
-    private void validateDataPointFields(List<Throwable> errors) {
+    // helper from collectInitializationErrors
+    private void validateDataPointFields(@UnknownInitialization Theories this, List<Throwable> errors) {
         Field[] fields = getTestClass().getJavaClass().getDeclaredFields();
 
         for (Field field : fields) {
@@ -103,7 +104,8 @@ public class Theories extends BlockJUnit4ClassRunner {
         }
     }
 
-    private void validateDataPointMethods(List<Throwable> errors) {
+    // helper from collectInitializationErrors
+    private void validateDataPointMethods(@UnknownInitialization Theories this, List<Throwable> errors) {
         Method[] methods = getTestClass().getJavaClass().getDeclaredMethods();
         
         for (Method method : methods) {
@@ -120,12 +122,14 @@ public class Theories extends BlockJUnit4ClassRunner {
     }
 
     @Override
-    protected void validateConstructor(List<Throwable> errors) {
+    // override super requires
+    protected void validateConstructor(@UnknownInitialization Theories this, List<Throwable> errors) {
         validateOnlyOneConstructor(errors);
     }
 
     @Override
-    protected void validateTestMethods(List<Throwable> errors) {
+    // override super requires
+    protected void validateTestMethods(@UnknownInitialization Theories this, List<Throwable> errors) {
         for (FrameworkMethod each : computeTestMethods()) {
             if (each.getAnnotation(Theory.class) != null) {
                 each.validatePublicVoid(false, errors);
@@ -143,7 +147,8 @@ public class Theories extends BlockJUnit4ClassRunner {
         }
     }
 
-    private void validateParameterSupplier(Class<? extends ParameterSupplier> supplierClass, List<Throwable> errors) {
+    // helper from validateTestMethods
+    private void validateParameterSupplier(@UnknownInitialization Theories this, Class<? extends ParameterSupplier> supplierClass, List<Throwable> errors) {
         Constructor<?>[] constructors = supplierClass.getConstructors();
         
         if (constructors.length != 1) {
@@ -159,7 +164,8 @@ public class Theories extends BlockJUnit4ClassRunner {
     }
 
     @Override
-    protected List<FrameworkMethod> computeTestMethods() {
+    // override super requires
+    protected List<FrameworkMethod> computeTestMethods(@UnknownInitialization Theories this) {
         List<FrameworkMethod> testMethods = new ArrayList<FrameworkMethod>(super.computeTestMethods());
         List<FrameworkMethod> theoryMethods = getTestClass().getAnnotatedMethods(Theory.class);
         testMethods.removeAll(theoryMethods);
