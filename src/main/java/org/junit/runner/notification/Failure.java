@@ -2,6 +2,7 @@ package org.junit.runner.notification;
 
 import java.io.Serializable;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.junit.internal.Throwables;
 import org.junit.runner.Description;
 
@@ -84,7 +85,8 @@ public class Failure implements Serializable {
      *
      * @return the message of the thrown exception
      */
-    public String getMessage() {
+    // @Nullable String returned from null detailed message of an exception (e.g. FileNotFoundException())
+    public @Nullable String getMessage() {
         return getException().getMessage();
     }
 }

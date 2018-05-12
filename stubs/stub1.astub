@@ -22,12 +22,13 @@ public final class Method {
 
 package java.lang;
 
-//public final class Class<T> {
-//    public <A extends java.lang.annotation.Annotation> @Nullable A getAnnotation(@Nullable Class<A> a1);
-//    public T cast(@Nullable Object obj);
-//	public Method getMethod(@Nullable String name, Class<?>... parameterTypes);
+public final class Class<T> {
+//	public <A extends java.lang.annotation.Annotation> @Nullable A getAnnotation(@Nullable Class<A> a1);
+//	public T cast(@Nullable Object obj);
+	// @Nullable name from JUnit38ClassRunner: getAnnotations(new TestCase() {})
+	public Method getMethod(@Nullable String name, Class<?>... parameterTypes);
 //	public native boolean isAssignableFrom(@Nullable Class<?> cls);
-//}
+}
 
 //public final class Long extends Number implements Comparable<Long> {
 //	public int compareTo(@Nullable Long anotherLong);

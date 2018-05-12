@@ -17,6 +17,8 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 import org.checkerframework.checker.initialization.qual.UnderInitialization;
+import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
+import org.checkerframework.checker.nullness.qual.EnsuresNonNullIf;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -107,6 +109,8 @@ public abstract class ParentRunner<T> extends Runner implements Filterable,
      */
     @Deprecated
     // helper method for the constructor of ParentRunner
+    // the returned value is assigned to testClass
+    @EnsuresNonNull("testClass")
     protected TestClass createTestClass(@UnderInitialization ParentRunner<T> this, Class<?> testClass) {
         return new TestClass(testClass);
     }
@@ -144,7 +148,8 @@ public abstract class ParentRunner<T> extends Runner implements Filterable,
      * {@code @BeforeClass} or {@code @AfterClass} that is not
      * {@code public static void} with no arguments.
      */
-    protected void collectInitializationErrors(List<Throwable> errors) {
+    // called from helper method validate(@UnderInitialization ParentRunner<T> this) for the constructor of ParentRunner
+    protected void collectInitializationErrors(@UnderInitialization ParentRunner<T> this, List<Throwable> errors) {
         validatePublicVoidNoArgMethods(BeforeClass.class, true, errors);
         validatePublicVoidNoArgMethods(AfterClass.class, true, errors);
         validateClassRules(errors);
@@ -475,6 +480,7 @@ public abstract class ParentRunner<T> extends Runner implements Filterable,
         return filteredChildren;
     }
 
+    @EnsuresNonNullIf(expression="each", result=true)
     private boolean shouldRun(Filter filter, T each) {
         return filter.shouldRun(describeChild(each));
     }

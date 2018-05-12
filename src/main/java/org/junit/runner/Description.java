@@ -84,7 +84,8 @@ public class Description implements Serializable {
      * @param annotations meta-data about the test, for downstream interpreters
      * @return a <code>Description</code> named <code>name</code>
      */
-    public static Description createTestDescription(Class<?> clazz, String name, Annotation... annotations) {
+    // @Nullable name from JUnit38ClassRunner: makeDescription(new TestCase(){})
+    public static Description createTestDescription(Class<?> clazz, @Nullable String name, Annotation... annotations) {
         return new Description(clazz, formatDisplayName(name, clazz.getName()), annotations);
     }
 
@@ -158,7 +159,8 @@ public class Description implements Serializable {
     private final String fDisplayName;
     private final Serializable fUniqueId;
     private final Annotation[] fAnnotations;
-    private volatile /* write-once */ Class<?> fTestClass;
+    // @Nullable fTestClass from Description.createSuiteDescription(String name, Serializable uniqueId, Annotation... annotations)
+    private volatile /* write-once */ @Nullable Class<?> fTestClass;
 
     // @Nullable clazz from Description.createSuiteDescription(String name, Annotation... annotations)
     private Description(@Nullable Class<?> clazz, String displayName, Annotation... annotations) {

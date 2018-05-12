@@ -137,12 +137,18 @@ public class TestSuite implements Test {
 
         Class<?> superClass = theClass;
         List<String> names = new ArrayList<String>();
+        // [argument.type.incompatible] FALSE_POSITIVE
+        //  superClass cannot be @Nullable Class<? extends @Initialized @Nullable Object> here
+        // since theClass assigned to it cannot be @Nullable here, otherwise NPE will be raised
+        // at the beginning of the method
         while (Test.class.isAssignableFrom(superClass)) {
             for (Method each : MethodSorter.getDeclaredMethods(superClass)) {
                 addTestMethod(each, names, theClass);
             }
             superClass = superClass.getSuperclass();
         }
+        // [dereference.of.nullable] FALSE_POSITIVE
+        //  fTests cannot be null here, it is already assigned some value up in the declaration
         if (fTests.size() == 0) {
             addTest(warning("No tests found in " + theClass.getName()));
         }
@@ -176,7 +182,7 @@ public class TestSuite implements Test {
         }
     }
 
-    // // helper method to for the constructor of TestSuite
+    // helper method to for the constructor of TestSuite
     private Test testCaseForClass(@UnknownInitialization TestSuite this, Class<?> each) {
         if (TestCase.class.isAssignableFrom(each)) {
             return new TestSuite(each.asSubclass(TestCase.class));
@@ -200,6 +206,8 @@ public class TestSuite implements Test {
      */
     // helper method to for the constructor of TestSuite
     public void addTest(@UnknownInitialization TestSuite this, Test test) {
+        // [dereference.of.nullable] FALSE_POSITIVE
+        //  fTests cannot be null here, it is already assigned some value up in the declaration
         fTests.add(test);
     }
 
