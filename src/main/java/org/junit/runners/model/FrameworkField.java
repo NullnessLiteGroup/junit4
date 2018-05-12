@@ -4,6 +4,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.List;
 
+import org.checkerframework.checker.initialization.qual.UnknownInitialization;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.junit.runners.BlockJUnit4ClassRunner;
 
@@ -58,7 +59,8 @@ public class FrameworkField extends FrameworkMember<FrameworkField> {
     }
 
     @Override
-    protected int getModifiers() {
+    // @UnknownInit override super requires
+    protected int getModifiers(@UnknownInitialization FrameworkField this) {
         return field.getModifiers();
     }
 

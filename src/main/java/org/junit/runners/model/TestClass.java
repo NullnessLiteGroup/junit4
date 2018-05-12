@@ -44,7 +44,8 @@ public class TestClass implements Annotatable {
      * an expensive process (we hope in future JDK's it will not be.) Therefore,
      * try to share instances of {@code TestClass} where possible.
      */
-    public TestClass(Class<?> clazz) {
+    // @Nullable clazz from ParentRunner.createTestClass(@UnderInitialization ParentRunner<T> this, @Nullable Class<?> testClass)
+    public TestClass(@Nullable Class<?> clazz) {
         this.clazz = clazz;
         if (clazz != null && clazz.getConstructors().length > 1) {
             throw new IllegalArgumentException(

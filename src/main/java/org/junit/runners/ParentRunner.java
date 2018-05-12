@@ -121,13 +121,15 @@ public abstract class ParentRunner<T> extends Runner implements Filterable,
     /**
      * Returns a list of objects that define the children of this Runner.
      */
-    protected abstract List<T> getChildren();
+    // helper method for getFilteredChildren(@UnknownInitialization ParentRunner<T> this)
+    protected abstract List<T> getChildren(@UnknownInitialization ParentRunner<T> this);
 
     /**
      * Returns a {@link Description} for {@code child}, which can be assumed to
      * be an element of the list returned by {@link ParentRunner#getChildren()}
      */
-    protected abstract Description describeChild(T child);
+    // helper method from shouldRun(@UnknownInitialization ParentRunner<T> this, Filter filter, T each)
+    protected abstract Description describeChild(@UnknownInitialization ParentRunner<T> this, T child);
 
     /**
      * Runs the test corresponding to {@code child}, which can be assumed to be

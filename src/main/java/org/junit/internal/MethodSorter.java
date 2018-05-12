@@ -64,11 +64,11 @@ public class MethodSorter {
     }
 
     // @Nullable FixMethodOrder from MethodSorter.getDeclaredMethods(Class<?> clazz)
-    private static Comparator<Method> getSorter(@Nullable FixMethodOrder fixMethodOrder) {
+    // @Nullable Comparator<Method> returned if @fixMethodOrder(value=RUNTIME) calls JVM(null)
+    private static @Nullable Comparator<Method> getSorter(@Nullable FixMethodOrder fixMethodOrder) {
         if (fixMethodOrder == null) {
             return DEFAULT;
         }
-
         return fixMethodOrder.value().getComparator();
     }
 }

@@ -297,7 +297,8 @@ public class Description implements Serializable {
      * @return If this describes a method invocation,
      *         the class of the test instance.
      */
-    public Class<?> getTestClass() {
+    // @Nullable Class<?> returned indicated by implementation below
+    public @Nullable Class<?> getTestClass() {
         if (fTestClass != null) {
             return fTestClass;
         }

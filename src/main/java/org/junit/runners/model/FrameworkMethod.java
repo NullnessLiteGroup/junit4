@@ -6,6 +6,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 import java.util.List;
 
+import org.checkerframework.checker.initialization.qual.UnknownInitialization;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.junit.internal.runners.model.ReflectiveCallable;
 
@@ -114,7 +115,8 @@ public class FrameworkMethod extends FrameworkMember<FrameworkMethod> {
     }
 
     @Override
-    protected int getModifiers() {
+    // @UnknownInit override super requires
+    protected int getModifiers(@UnknownInitialization FrameworkMethod this) {
         return method.getModifiers();
     }
 

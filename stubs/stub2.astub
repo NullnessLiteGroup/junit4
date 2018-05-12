@@ -9,9 +9,10 @@ package org.hamcrest;
 //    void describeMismatch(@Nullable Object item, Description mismatchDescription);
 //}
 
-//public interface Description {
-//    Description appendValue(@Nullable Object value);
-//}
+public interface Description {
+	// @Nullable value from AssumptionViolatedException: describeTo(Description description)
+    Description appendValue(@Nullable Object value);
+}
 
 //public class MatcherAssert {
 //	public static <T> void assertThat(@Nullable String reason, T actual, Matcher<? super T> matcher);
