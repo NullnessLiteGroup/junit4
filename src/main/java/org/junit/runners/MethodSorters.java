@@ -30,15 +30,15 @@ public enum MethodSorters {
      */
     DEFAULT(MethodSorter.DEFAULT);
 
-    // @Nullable comparator from MethodSorters(@Nullable Comparator<Method> comparator)
+    // Nullable comparator from MethodSorters(Comparator<Method> comparator)
     private final @Nullable Comparator<Method> comparator;
 
-    // @Nullable comparator from JVM(null)
+    // Nullable comparator from JVM(null)
     private MethodSorters(@Nullable Comparator<Method> comparator) {
         this.comparator = comparator;
     }
 
-    // @Nullable Comparator<Method> returned from JVM(null).getComparator()
+    // Nullable Comparator<Method> returned from JVM(null).getComparator()
     public @Nullable Comparator<Method> getComparator() {
         return comparator;
     }

@@ -15,7 +15,7 @@ public class RunAfters extends Statement {
 
     private final List<FrameworkMethod> afters;
 
-    // @Nullable target from ParentRunner: withAfterClasses(Statement statement)
+    // Nullable target from ParentRunner: withAfterClasses(Statement statement)
     public RunAfters(Statement next, List<FrameworkMethod> afters, @Nullable Object target) {
         this.next = next;
         this.afters = afters;

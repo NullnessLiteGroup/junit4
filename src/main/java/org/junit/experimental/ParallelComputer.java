@@ -30,7 +30,7 @@ public class ParallelComputer extends Computer {
         return new ParallelComputer(false, true);
     }
 
-    // @Nullable runner from getRunner(RunnerBuilder builder, Class<?> testClass)
+    // Nullable runner from getRunner(RunnerBuilder builder, Class<?> testClass)
     private static Runner parallelize(@Nullable Runner runner) {
         if (runner instanceof ParentRunner) {
             ((ParentRunner<?>) runner).setScheduler(new RunnerScheduler() {
@@ -61,7 +61,7 @@ public class ParallelComputer extends Computer {
     }
 
     @Override
-    // @Nullable Runner returned if use NullBuilder
+    // Nullable Runner returned if use NullBuilder
     protected @Nullable Runner getRunner(RunnerBuilder builder, Class<?> testClass)
             throws Throwable {
         Runner runner = super.getRunner(builder, testClass);

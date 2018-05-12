@@ -57,7 +57,7 @@ public class JUnit38ClassRunner extends Runner implements Filterable, Sortable {
             return test.getClass();
         }
 
-        // @Nullable String returned if test = new TestCase() {}
+        // Nullable String returned if test = new TestCase() {}
         private @Nullable String getName(Test test) {
             if (test instanceof TestCase) {
                 return ((TestCase) test).getName();

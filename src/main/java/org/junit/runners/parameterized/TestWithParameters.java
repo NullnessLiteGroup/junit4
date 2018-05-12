@@ -54,7 +54,7 @@ public class TestWithParameters {
     }
 
     @Override
-    // @Nullable obj overrides super requires
+    // Nullable obj overrides super requires
     public boolean equals(@Nullable Object obj) {
         if (this == obj) {
             return true;

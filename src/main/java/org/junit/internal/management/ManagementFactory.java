@@ -10,7 +10,7 @@ import java.lang.reflect.InvocationTargetException;
  */
 public class ManagementFactory {
   private static final class FactoryHolder {
-    // @Nullable MANAGEMENT_FACTORY_CLASS indicated getBeanObject(String methodName)
+    // Nullable MANAGEMENT_FACTORY_CLASS indicated getBeanObject(String methodName)
     private static final @Nullable Class<?> MANAGEMENT_FACTORY_CLASS;
 
     static {
@@ -23,7 +23,7 @@ public class ManagementFactory {
       MANAGEMENT_FACTORY_CLASS = managementFactoryClass;
     }
 
-    // @Nullable Object returned when MANAGEMENT_FACTORY_CLASS is null
+    // Nullable Object returned when MANAGEMENT_FACTORY_CLASS is null
     static @Nullable Object getBeanObject(String methodName) {
       if (MANAGEMENT_FACTORY_CLASS != null) {
         try {
@@ -48,7 +48,7 @@ public class ManagementFactory {
     private static final RuntimeMXBean RUNTIME_MX_BEAN =
         getBean(FactoryHolder.getBeanObject("getRuntimeMXBean"));
 
-    // @Nullable runtimeMxBean indicated from implementation
+    // Nullable runtimeMxBean indicated from implementation
     private static final RuntimeMXBean getBean(@Nullable Object runtimeMxBean) {
       return runtimeMxBean != null
           ? new ReflectiveRuntimeMXBean(runtimeMxBean) : new FakeRuntimeMXBean();

@@ -4,13 +4,15 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 
 package org.hamcrest;
 
-//public interface Matcher<T> {
-//    boolean matches(@Nullable Object item);
-//    void describeMismatch(@Nullable Object item, Description mismatchDescription);
-//}
+public interface Matcher<T> {
+	// Nullable item from ThrowableMessageMatcher: matchesSafely(T item)
+    boolean matches(@Nullable Object item);
+	// Nullable item from ThrowableMessageMatcher: describeMismatchSafely(T item, Description description)
+	void describeMismatch(@Nullable Object item, Description mismatchDescription);
+}
 
 public interface Description {
-	// @Nullable value from AssumptionViolatedException: describeTo(Description description)
+	// Nullable value from AssumptionViolatedException: describeTo(Description description)
     Description appendValue(@Nullable Object value);
 }
 

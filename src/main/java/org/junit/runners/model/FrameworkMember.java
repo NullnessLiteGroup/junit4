@@ -20,7 +20,7 @@ public abstract class FrameworkMember<T extends FrameworkMember<T>> implements
      * 
      * @return member that should be used, or {@code null} if no member should be used.
      */
-    // @Nullable T returned by documentation above
+    // Nullable T returned by documentation above
     final @Nullable T handlePossibleShadowedMember(List<T> members) {
         for (int i = members.size() - 1; i >=0; i--) {
             T otherMember = members.get(i);

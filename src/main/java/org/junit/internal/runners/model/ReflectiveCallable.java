@@ -17,6 +17,6 @@ public abstract class ReflectiveCallable {
         }
     }
 
-    // @Nullable Object returned from FrameworkMethod.invokeExplosively(final @Nullable Object target, final Object... params)
+    // Nullable Object returned from FrameworkMethod.invokeExplosively(final Object target, final Object... params)
     protected abstract @Nullable Object runReflectiveCall() throws Throwable;
 }

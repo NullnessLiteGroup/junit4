@@ -47,7 +47,7 @@ public abstract class RunnerBuilder {
      * @return a Runner
      * @throws Throwable if a runner cannot be constructed
      */
-    // @Nullable Runner override from SuiteMethodBuilder:runnerForClass
+    // Nullable Runner override from SuiteMethodBuilder:runnerForClass
     public abstract @Nullable Runner runnerForClass(Class<?> testClass) throws Throwable;
 
     /**
@@ -63,7 +63,7 @@ public abstract class RunnerBuilder {
      * @param testClass class to be run
      * @return a Runner
      */
-    // @Nullable Runner returned from RunnerBuilder:runnerForClass(Class<?> testClass)
+    // Nullable Runner returned from RunnerBuilder:runnerForClass(Class<?> testClass)
     public @Nullable Runner safeRunnerForClass(Class<?> testClass) {
         try {
             return runnerForClass(testClass);
@@ -72,7 +72,7 @@ public abstract class RunnerBuilder {
         }
     }
 
-    // @Nullable parent from runners(@Nullable Class<?> parent, Class<?>[] children)
+    // Nullable parent from runners(Class<?> parent, Class<?>[] children)
     Class<?> addParent(@Nullable Class<?> parent) throws InitializationError {
         if (!parents.add(parent)) {
             throw new InitializationError(String.format("class '%s' (possibly indirectly) contains itself as a SuiteClass", parent.getName()));
@@ -90,7 +90,7 @@ public abstract class RunnerBuilder {
      * this builder will throw an exception if it is requested for another
      * runner for {@code parent} before this call completes.
      */
-    // @Nullable parent from new Suite(RunnerBuilder builder, Class<?>[] classes)
+    // Nullable parent from new Suite(RunnerBuilder builder, Class<?>[] classes)
     public List<Runner> runners(@Nullable Class<?> parent, Class<?>[] children)
             throws InitializationError {
         addParent(parent);

@@ -43,7 +43,7 @@ public class FrameworkField extends FrameworkMember<FrameworkField> {
         return field.getAnnotations();
     }
 
-    // @Nullable T returned if annotationType does not exist
+    // Nullable T returned if annotationType does not exist
     public <T extends Annotation> @Nullable T getAnnotation(Class<T> annotationType) {
         return field.getAnnotation(annotationType);
     }
@@ -59,7 +59,7 @@ public class FrameworkField extends FrameworkMember<FrameworkField> {
     }
 
     @Override
-    // @UnknownInit override super requires
+    // UnknownInit override super requires
     protected int getModifiers(@UnknownInitialization FrameworkField this) {
         return field.getModifiers();
     }
@@ -88,10 +88,10 @@ public class FrameworkField extends FrameworkMember<FrameworkField> {
     /**
      * Attempts to retrieve the value of this field on {@code target}
      */
-    // @Nullable target from TestClass.collectAnnotatedFieldValues(@Nullable Object test,
+    // Nullable target from TestClass.collectAnnotatedFieldValues(Object test,
     //            Class<? extends Annotation> annotationClass, Class<T> valueClass,
     //            MemberValueConsumer<T> consumer)
-    // @Nullable Object returned if target not exist as key
+    // Nullable Object returned if target not exist as key
     public @Nullable Object get(@Nullable Object target) throws IllegalArgumentException, IllegalAccessException {
         return field.get(target);
     }

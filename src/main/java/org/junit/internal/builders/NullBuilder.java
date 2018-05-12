@@ -6,7 +6,7 @@ import org.junit.runners.model.RunnerBuilder;
 
 public class NullBuilder extends RunnerBuilder {
     @Override
-    // @Nullable Runner returned from return null
+    // Nullable Runner returned from return null
     public @Nullable Runner runnerForClass(Class<?> each) throws Throwable {
         return null;
     }

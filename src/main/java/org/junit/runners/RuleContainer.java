@@ -105,7 +105,7 @@ class RuleContainer {
         final int type;
         final int order;
 
-        // @Nullable order from ParentRunner.ClassRuleCollector: accept(FrameworkMember member, TestRule value)
+        // Nullable order from ParentRunner.ClassRuleCollector: accept(FrameworkMember member, TestRule value)
         RuleEntry(Object rule, int type, @Nullable Integer order) {
             this.rule = rule;
             this.type = type;

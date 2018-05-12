@@ -36,7 +36,7 @@ public class Sorter implements Comparator<Description> {
     /**
      * Sorts the test in <code>runner</code> using <code>comparator</code>
      */
-    // @Nullable object from ParentRunner: sort(Sorter sorter)
+    // Nullable object from ParentRunner: sort(Sorter sorter)
     public void apply(@Nullable Object object) {
         if (object instanceof Sortable) {
             Sortable sortable = (Sortable) object;

@@ -63,7 +63,7 @@ public class TemporaryFolder extends ExternalResource {
      * @param parentFolder folder where temporary resources will be created.
      * If {@code null} then system default temporary-file directory is used.
      */
-    // @Nullable parentFolder from new TemporaryFolder()
+    // Nullable parentFolder from new TemporaryFolder()
     public TemporaryFolder(@Nullable File parentFolder) {
         this.parentFolder = parentFolder;
         this.assureDeletion = false;

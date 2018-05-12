@@ -106,7 +106,7 @@ public class ParameterSignature {
         return findDeepAnnotation(annotations2, annotationType, 3);
     }
 
-    // @Nullable T returned indicated by the implementation recursive method
+    // Nullable T returned indicated by the implementation recursive method
     private <T extends Annotation> @Nullable T findDeepAnnotation(
             Annotation[] annotations, Class<T> annotationType, int depth) {
         if (depth == 0) {
@@ -126,7 +126,7 @@ public class ParameterSignature {
         return null;
     }
 
-    // @Nullable T returned if annotationType not exist
+    // Nullable T returned if annotationType not exist
     public <T extends Annotation> @Nullable T getAnnotation(Class<T> annotationType) {
         for (Annotation each : getAnnotations()) {
             if (annotationType.isInstance(each)) {

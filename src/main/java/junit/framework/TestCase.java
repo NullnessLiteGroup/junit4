@@ -79,7 +79,7 @@ public abstract class TestCase extends Assert implements Test {
     /**
      * the name of the test case
      */
-    // @Nullable fName from new TestCase()
+    // Nullable fName from new TestCase()
     private @Nullable String fName;
 
     /**
@@ -403,7 +403,7 @@ public abstract class TestCase extends Assert implements Test {
      * Asserts that an object isn't null. If it is
      * an AssertionFailedError is thrown with the given message.
      */
-    // @Nullable object from (new TestCase()).run() which calls TestCase:runTest()
+    // Nullable object from (new TestCase()).run() which calls TestCase:runTest()
     public static void assertNotNull(String message,@Nullable Object object) {
         Assert.assertNotNull(message, object);
     }
@@ -503,7 +503,7 @@ public abstract class TestCase extends Assert implements Test {
      *
      * @return the name of the TestCase
      */
-    // @Nullable fName returned from (new TestCase()).getName()
+    // Nullable fName returned from (new TestCase()).getName()
     public @Nullable String getName() {
         return fName;
     }

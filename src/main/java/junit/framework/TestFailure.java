@@ -55,7 +55,7 @@ public class TestFailure {
     /**
      * Returns a String containing the message from the thrown exception.
      */
-    // @Nullable String returned from null detailed message of an exception (e.g. FileNotFoundException())
+    // Nullable String returned from null detailed message of an exception (e.g. FileNotFoundException())
     public @Nullable String exceptionMessage() {
         return thrownException().getMessage();
     }

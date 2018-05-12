@@ -93,7 +93,7 @@ public abstract class BaseTestRunner implements TestListener {
      * Returns the Test corresponding to the given suite. This is
      * a template method, subclasses override runFailed(), clearStatus().
      */
-    // @Nullable Test returned from getTest("")
+    // Nullable Test returned from getTest("")
     public @Nullable Test getTest(String suiteClassName) {
         if (suiteClassName.length() <= 0) {
             clearStatus();
@@ -255,7 +255,7 @@ public abstract class BaseTestRunner implements TestListener {
         }
     }
 
-    // @Nullable String returned if key is not found in Property
+    // Nullable String returned if key is not found in Property
     public static @Nullable String getPreference(String key) {
         return getPreferences().getProperty(key);
     }

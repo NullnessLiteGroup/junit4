@@ -166,7 +166,7 @@ public class MaxCore {
         return results;
     }
 
-    // @Nullable parent from MaxCore: findLeaves(Request request)
+    // Nullable parent from MaxCore: findLeaves(Request request)
     private void findLeaves(@Nullable Description parent, Description description, List<Description> results) {
         if (description.getChildren().isEmpty()) {
             if (description.toString().equals("warning(junit.framework.TestSuite$1)")) {

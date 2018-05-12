@@ -85,7 +85,7 @@ public class Failure implements Serializable {
      *
      * @return the message of the thrown exception
      */
-    // @Nullable String returned from null detailed message of an exception (e.g. FileNotFoundException())
+    // Nullable String returned from null detailed message of an exception (e.g. FileNotFoundException())
     public @Nullable String getMessage() {
         return getException().getMessage();
     }

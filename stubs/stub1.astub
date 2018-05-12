@@ -6,7 +6,7 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 package java.lang.reflect;
 
 public final class Method {
-	// @Nullable obj by ClassRoadie: runAfters()
+	// Nullable obj by ClassRoadie: runAfters()
     public @Nullable Object invoke(@Nullable Object obj, Object ... args);
 }
 
@@ -25,7 +25,7 @@ package java.lang;
 public final class Class<T> {
 //	public <A extends java.lang.annotation.Annotation> @Nullable A getAnnotation(@Nullable Class<A> a1);
 //	public T cast(@Nullable Object obj);
-	// @Nullable name from JUnit38ClassRunner: getAnnotations(new TestCase() {})
+	// Nullable name from JUnit38ClassRunner: getAnnotations(new TestCase() {})
 	public Method getMethod(@Nullable String name, Class<?>... parameterTypes);
 //	public native boolean isAssignableFrom(@Nullable Class<?> cls);
 }

@@ -156,8 +156,8 @@ public class Categories extends Suite {
             excluded = nullableClassToSet(excludedCategory);
         }
 
-        // @Nullable includes from new ExcludesAny(Set<Class<?>> categories)
-        // @Nullable excludes from new IncludesAny(Set<Class<?>> categories)
+        // Nullable includes from new ExcludesAny(Set<Class<?>> categories)
+        // Nullable excludes from new IncludesAny(Set<Class<?>> categories)
         protected CategoryFilter(boolean matchAnyIncludes, @Nullable Set<Class<?>> includes,
                                  boolean matchAnyExcludes, @Nullable Set<Class<?>> excludes) {
             includedAny = matchAnyIncludes;
@@ -166,8 +166,8 @@ public class Categories extends Suite {
             excluded = copyAndRefine(excludes);
         }
 
-        // @Nullable exclusions from Categories.include(boolean matchAny, Class<?>... categories)
-        // @Nullable inclusions from Categories.exclude(boolean matchAny, Class<?>... categories)
+        // Nullable exclusions from Categories.include(boolean matchAny, Class<?>... categories)
+        // Nullable inclusions from Categories.exclude(boolean matchAny, Class<?>... categories)
         private CategoryFilter(boolean matchAnyIncludes, Class<?>@Nullable[] inclusions,
                                boolean matchAnyExcludes, Class<?>@Nullable[] exclusions) {
             includedAny = matchAnyIncludes; 
@@ -286,13 +286,13 @@ public class Categories extends Suite {
             return categories;
         }
 
-        // @Nullable Description returned by implementation below
+        // Nullable Description returned by implementation below
         private static @Nullable Description parentDescription(Description description) {
             Class<?> testClass= description.getTestClass();
             return testClass == null ? null : Description.createSuiteDescription(testClass);
         }
 
-        // @Nullable description from categories(Description description) also indicated in implementation
+        // Nullable description from categories(Description description) also indicated in implementation
         private static Class<?>[] directCategories(@Nullable Description description) {
             if (description == null) {
                 return new Class<?>[0];
@@ -302,7 +302,7 @@ public class Categories extends Suite {
             return annotation == null ? new Class<?>[0] : annotation.value();
         }
 
-        // @Nullable classes from CategoryFilter(boolean matchAnyIncludes, @Nullable Set<Class<?>> includes,
+        // Nullable classes from CategoryFilter(boolean matchAnyIncludes, Set<Class<?>> includes,
         //                                 boolean matchAnyExcludes, Set<Class<?>> excludes)
         private static Set<Class<?>> copyAndRefine(@Nullable Set<Class<?>> classes) {
             Set<Class<?>> c= new LinkedHashSet<Class<?>>();
@@ -357,7 +357,7 @@ public class Categories extends Suite {
         return false;
     }
 
-    // @Nullable classes from Categories.getIncludedCategory(Class<?> klass)
+    // Nullable classes from Categories.getIncludedCategory(Class<?> klass)
     private static Set<Class<?>> createSet(Class<?>@Nullable[] classes) {
         // Not throwing a NPE if t is null is a bad idea, but it's the behavior from JUnit 4.12
         // for include(boolean, Class<?>...) and exclude(boolean, Class<?>...)

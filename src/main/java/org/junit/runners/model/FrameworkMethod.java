@@ -53,7 +53,7 @@ public class FrameworkMethod extends FrameworkMember<FrameworkMethod> {
      * parameters {@code params}. {@link InvocationTargetException}s thrown are
      * unwrapped, and their causes rethrown.
      */
-    // @Nullable target from TestClass.collectAnnotatedFieldValues(@Nullable Object test,
+    // Nullable target from TestClass.collectAnnotatedFieldValues(Object test,
     //            Class<? extends Annotation> annotationClass, Class<T> valueClass,
     //            MemberValueConsumer<T> consumer)
     public Object invokeExplosively(final @Nullable Object target, final Object... params)
@@ -115,7 +115,7 @@ public class FrameworkMethod extends FrameworkMember<FrameworkMethod> {
     }
 
     @Override
-    // @UnknownInit override super requires
+    // UnknownInit override super requires
     protected int getModifiers(@UnknownInitialization FrameworkMethod this) {
         return method.getModifiers();
     }
@@ -169,7 +169,7 @@ public class FrameworkMethod extends FrameworkMember<FrameworkMethod> {
     }
 
     @Override
-    // @Nullable obj overrides super requires
+    // Nullable obj overrides super requires
     public boolean equals(@Nullable Object obj) {
         if (!FrameworkMethod.class.isInstance(obj)) {
             return false;
@@ -212,7 +212,7 @@ public class FrameworkMethod extends FrameworkMember<FrameworkMethod> {
      * Returns the annotation of type {@code annotationType} on this method, if
      * one exists.
      */
-    // @Nullable T returned according to the documentation
+    // Nullable T returned according to the documentation
     public <T extends Annotation> @Nullable T getAnnotation(Class<T> annotationType) {
         return method.getAnnotation(annotationType);
     }

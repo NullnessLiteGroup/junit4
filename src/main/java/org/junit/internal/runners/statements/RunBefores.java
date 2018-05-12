@@ -13,7 +13,7 @@ public class RunBefores extends Statement {
 
     private final List<FrameworkMethod> befores;
 
-    // @Nullable target from ParentRunner: withBeforeClasses(Statement statement)
+    // Nullable target from ParentRunner: withBeforeClasses(Statement statement)
     public RunBefores(Statement next, List<FrameworkMethod> befores, @Nullable Object target) {
         this.next = next;
         this.befores = befores;

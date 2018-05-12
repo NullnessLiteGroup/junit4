@@ -7,7 +7,7 @@ import org.junit.runners.model.RunnerBuilder;
 
 public class SuiteMethodBuilder extends RunnerBuilder {
     @Override
-    // @Nullable Runner (new SuiteMethodBuilder()).runnerForClass(class without "suite" method)
+    // Nullable Runner (new SuiteMethodBuilder()).runnerForClass(class without "suite" method)
     public @Nullable Runner runnerForClass(Class<?> each) throws Throwable {
         if (hasSuiteMethod(each)) {
             return new SuiteMethod(each);

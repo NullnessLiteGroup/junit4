@@ -116,7 +116,7 @@ final class SynchronizedRunListener extends RunListener {
     }
 
     @Override
-    // @Nullable other override super requires
+    // Nullable other override super requires
     public boolean equals(@Nullable Object other) {
         if (this == other) {
             return true;

@@ -18,6 +18,6 @@ public interface Annotatable {
     /**
      * Returns the annotation on the model element of the given type, or @code{null}
      */
-    // @Nullable T returned by documentation above
+    // Nullable T returned by documentation above
     <T extends Annotation> @Nullable T getAnnotation(Class<T> annotationType);
 }

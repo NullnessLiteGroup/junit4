@@ -28,7 +28,7 @@ public class Computer {
             Class<?>[] classes) throws InitializationError {
         return new Suite(new RunnerBuilder() {
             @Override
-            // @Nullable Runner returned if builder is NullBuilder
+            // Nullable Runner returned if builder is NullBuilder
             public @Nullable Runner runnerForClass(Class<?> testClass) throws Throwable {
                 return getRunner(builder, testClass);
             }
@@ -48,7 +48,7 @@ public class Computer {
     /**
      * Create a single-class runner for {@code testClass}, using {@code builder}
      */
-    // @Nullable Runner returned from new getSuite(new NullBuilder(),...)
+    // Nullable Runner returned from new getSuite(new NullBuilder(),...)
     protected @Nullable Runner getRunner(RunnerBuilder builder, Class<?> testClass) throws Throwable {
         return builder.runnerForClass(testClass);
     }

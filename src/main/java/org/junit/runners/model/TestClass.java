@@ -44,7 +44,7 @@ public class TestClass implements Annotatable {
      * an expensive process (we hope in future JDK's it will not be.) Therefore,
      * try to share instances of {@code TestClass} where possible.
      */
-    // @Nullable clazz from ParentRunner.createTestClass(@UnderInitialization ParentRunner<T> this, @Nullable Class<?> testClass)
+    // Nullable clazz from ParentRunner.createTestClass(ParentRunner<T> this, Class<?> testClass)
     public TestClass(@Nullable Class<?> clazz) {
         this.clazz = clazz;
         if (clazz != null && clazz.getConstructors().length > 1) {
@@ -172,7 +172,7 @@ public class TestClass implements Annotatable {
                 || annotation.equals(BeforeClass.class);
     }
 
-    // @Nullable testClass from new TestClass(null)
+    // Nullable testClass from new TestClass(null)
     private static List<Class<?>> getSuperClasses(@Nullable Class<?> testClass) {
         List<Class<?>> results = new ArrayList<Class<?>>();
         Class<?> current = testClass;
@@ -221,7 +221,7 @@ public class TestClass implements Annotatable {
         return clazz.getAnnotations();
     }
 
-    // @Nullable T returned from (new TestClass(null)).getAnnotation(...)
+    // Nullable T returned from (new TestClass(null)).getAnnotation(...)
     public <T extends Annotation> @Nullable T getAnnotation(Class<T> annotationType) {
         if (clazz == null) {
             return null;
@@ -247,7 +247,7 @@ public class TestClass implements Annotatable {
      *
      * @since 4.13
      */
-    // @Nullable test from ParentRunner: classRules()
+    // Nullable test from ParentRunner: classRules()
     public <T> void collectAnnotatedFieldValues(@Nullable Object test,
             Class<? extends Annotation> annotationClass, Class<T> valueClass,
             MemberValueConsumer<T> consumer) {
@@ -282,7 +282,7 @@ public class TestClass implements Annotatable {
      *
      * @since 4.13
      */
-    // @Nullable test from ParentRunner: classRules()
+    // Nullable test from ParentRunner: classRules()
     public <T> void collectAnnotatedMethodValues(@Nullable Object test,
             Class<? extends Annotation> annotationClass, Class<T> valueClass,
             MemberValueConsumer<T> consumer) {
@@ -321,7 +321,7 @@ public class TestClass implements Annotatable {
     }
 
     @Override
-    // @Nullable obj override super requires
+    // Nullable obj override super requires
     public boolean equals(@Nullable Object obj) {
         if (this == obj) {
             return true;
