@@ -7,6 +7,7 @@ import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.checkerframework.checker.initialization.qual.UnknownInitialization;
 import org.junit.Assert;
 import org.junit.Assume;
 import org.junit.experimental.theories.internal.Assignments;
@@ -79,7 +80,8 @@ public class Theories extends BlockJUnit4ClassRunner {
     }
 
     @Override
-    protected void collectInitializationErrors(List<Throwable> errors) {
+    // helper method override super requires
+    protected void collectInitializationErrors(@UnknownInitialization Theories this, List<Throwable> errors) {
         super.collectInitializationErrors(errors);
         validateDataPointFields(errors);
         validateDataPointMethods(errors);

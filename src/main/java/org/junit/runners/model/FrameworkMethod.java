@@ -56,7 +56,8 @@ public class FrameworkMethod extends FrameworkMember<FrameworkMethod> {
     // Nullable target from TestClass.collectAnnotatedFieldValues(Object test,
     //            Class<? extends Annotation> annotationClass, Class<T> valueClass,
     //            MemberValueConsumer<T> consumer)
-    public Object invokeExplosively(final @Nullable Object target, final Object... params)
+    // Nullable params from BlockJUnit4ClassRunnerWithParameters: invokeMethod(FrameworkMethod method)
+    public Object invokeExplosively(final @Nullable Object target, final Object@Nullable... params)
             throws Throwable {
         return new ReflectiveCallable() {
             @Override

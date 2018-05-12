@@ -13,6 +13,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+import org.checkerframework.checker.initialization.qual.UnderInitialization;
 import org.junit.internal.AssumptionViolatedException;
 import org.junit.runner.Description;
 import org.junit.runner.Runner;
@@ -292,7 +293,8 @@ public class Parameterized extends Suite {
         validateBeforeParamAndAfterParamMethods(runnersFactory.parameterCount);
     }
 
-    private void validateBeforeParamAndAfterParamMethods(Integer parameterCount)
+    // helper method for Parameterized
+    private void validateBeforeParamAndAfterParamMethods(@UnderInitialization Parameterized this, Integer parameterCount)
             throws InvalidTestClassError {
         List<Throwable> errors = new ArrayList<Throwable>();
         validatePublicStaticVoidMethods(Parameterized.BeforeParam.class, parameterCount, errors);

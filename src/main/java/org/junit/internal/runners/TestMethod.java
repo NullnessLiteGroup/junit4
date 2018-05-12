@@ -4,6 +4,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -39,7 +40,8 @@ public class TestMethod {
         return timeout;
     }
 
-    protected Class<? extends Throwable> getExpectedException() {
+    // Nullable Class<? extends Throwable> returned indicated below
+    protected @Nullable Class<? extends Throwable> getExpectedException() {
         Test annotation = method.getAnnotation(Test.class);
         if (annotation == null || annotation.expected() == None.class) {
             return null;

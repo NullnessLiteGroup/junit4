@@ -30,7 +30,8 @@ public abstract class ComparisonCriteria {
         arrayEquals(message, expecteds, actuals, true);
     }
 
-    private void arrayEquals(String message, Object expecteds, Object actuals, boolean outer)
+    // Nullable message from arrayEquals(String message, Object expecteds, Object actuals)
+    private void arrayEquals(@Nullable String message, Object expecteds, Object actuals, boolean outer)
             throws ArrayComparisonFailure {
         if (expecteds == actuals
             || Arrays.deepEquals(new Object[] {expecteds}, new Object[] {actuals})) {
@@ -119,6 +120,10 @@ public abstract class ComparisonCriteria {
 
     private String componentTypeName(Class<?> arrayClass) {
         Class<?> componentType = arrayClass.getComponentType();
+        // [dereference.of.nullable] FALSE_POSITIVE
+        // see document of getComponentType,
+        // the only caller getToStringableArrayElement(Object array, int length, int index)
+        // ensures arrayClass is an class of array so that getComponentType will not return null
         if (componentType.isArray()) {
             return componentTypeName(componentType) + "[]";
         } else {

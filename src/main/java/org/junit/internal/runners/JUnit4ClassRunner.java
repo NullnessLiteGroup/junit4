@@ -8,6 +8,7 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 
+import org.checkerframework.checker.initialization.qual.UnderInitialization;
 import org.junit.runner.Description;
 import org.junit.runner.Runner;
 import org.junit.runner.manipulation.Filter;
@@ -35,11 +36,13 @@ public class JUnit4ClassRunner extends Runner implements Filterable, Sortable {
         validate();
     }
 
-    protected List<Method> getTestMethods() {
+    // helper method for the constructor
+    protected List<Method> getTestMethods(@UnderInitialization JUnit4ClassRunner this) {
         return testClass.getTestMethods();
     }
 
-    protected void validate() throws InitializationError {
+    // helper method for the constructor
+    protected void validate(@UnderInitialization JUnit4ClassRunner this) throws InitializationError {
         MethodValidator methodValidator = new MethodValidator(testClass);
         methodValidator.validateMethodsForDefaultRunner();
         methodValidator.assertValid();

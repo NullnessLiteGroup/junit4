@@ -867,7 +867,8 @@ public class Assert {
         fail(format(message, expected, actual));
     }
 
-    static String format(String message, Object expected, Object actual) {
+    // Nullable message from failNotEquals(String message, Object expected, Object actual)
+    static String format(@Nullable String message, Object expected, Object actual) {
         String formatted = "";
         if (message != null && !"".equals(message)) {
             formatted = message + " ";

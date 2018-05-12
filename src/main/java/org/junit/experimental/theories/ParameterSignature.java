@@ -65,7 +65,8 @@ public class ParameterSignature {
         this.annotations = annotations;
     }
 
-    public boolean canAcceptValue(Object candidate) {
+    // Nullable candidate from addIterableValues(ParameterSignature sig, String name, List<PotentialAssignment> list, Iterable<?> iterable)
+    public boolean canAcceptValue(@Nullable Object candidate) {
         return (candidate == null) ? !type.isPrimitive() : canAcceptType(candidate.getClass());
     }
 

@@ -7,6 +7,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.junit.Assume;
 import org.junit.experimental.theories.DataPoint;
 import org.junit.experimental.theories.DataPoints;
@@ -150,7 +151,8 @@ public class AllMembersSupplier extends ParameterSupplier {
         }
     }
 
-    private Object getStaticFieldValue(final Field field) {
+    // Nullable Object returned if the static field value is null
+    private @Nullable Object getStaticFieldValue(final Field field) {
         try {
             return field.get(null);
         } catch (IllegalArgumentException e) {

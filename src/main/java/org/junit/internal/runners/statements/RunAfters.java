@@ -11,7 +11,8 @@ import org.junit.runners.model.Statement;
 public class RunAfters extends Statement {
     private final Statement next;
 
-    private final Object target;
+    // Nullable target from the constructor
+    private final @Nullable Object target;
 
     private final List<FrameworkMethod> afters;
 

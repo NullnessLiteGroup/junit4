@@ -9,6 +9,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.TimeUnit;
 
+import org.checkerframework.checker.initialization.qual.UnknownInitialization;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -114,7 +116,8 @@ public class BlockJUnit4ClassRunner extends ParentRunner<FrameworkMethod> {
     }
 
     @Override
-    protected Description describeChild(FrameworkMethod method) {
+    // helper method override super requires
+    protected Description describeChild(@UnknownInitialization BlockJUnit4ClassRunner this, FrameworkMethod method) {
         Description description = methodDescriptions.get(method);
 
         if (description == null) {
@@ -127,7 +130,8 @@ public class BlockJUnit4ClassRunner extends ParentRunner<FrameworkMethod> {
     }
 
     @Override
-    protected List<FrameworkMethod> getChildren() {
+    // helper method override super requires
+    protected List<FrameworkMethod> getChildren(@UnknownInitialization BlockJUnit4ClassRunner this) {
         return computeTestMethods();
     }
 
@@ -145,7 +149,8 @@ public class BlockJUnit4ClassRunner extends ParentRunner<FrameworkMethod> {
     }
 
     @Override
-    protected void collectInitializationErrors(List<Throwable> errors) {
+    // helper method override super requires
+    protected void collectInitializationErrors(@UnknownInitialization BlockJUnit4ClassRunner this, List<Throwable> errors) {
         super.collectInitializationErrors(errors);
 
         validatePublicConstructor(errors);
@@ -437,7 +442,8 @@ public class BlockJUnit4ClassRunner extends ParentRunner<FrameworkMethod> {
         return collector.result;
     }
 
-    private Class<? extends Throwable> getExpectedException(Test annotation) {
+    // Nullable Class<? extends Throwable> returned indicated below
+    private @Nullable Class<? extends Throwable> getExpectedException(Test annotation) {
         if (annotation == null || annotation.expected() == None.class) {
             return null;
         } else {
