@@ -2,6 +2,7 @@ package org.junit.runner.manipulation;
 
 import java.util.Comparator;
 
+import org.jetbrains.annotations.NotNull;
 import org.junit.runner.Description;
 
 /**
@@ -37,7 +38,7 @@ public class Sorter implements Comparator<Description> {
      */
     public void apply(Object object) {
         if (object instanceof Sortable) {
-            Sortable sortable = (Sortable) object;
+            @NotNull Sortable sortable = (Sortable) object;
             sortable.sort(this);
         }
     }

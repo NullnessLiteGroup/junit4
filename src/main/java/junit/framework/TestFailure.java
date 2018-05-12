@@ -1,5 +1,6 @@
 package junit.framework;
 
+import org.jetbrains.annotations.NotNull;
 import org.junit.internal.Throwables;
 
 
@@ -38,6 +39,7 @@ public class TestFailure {
     /**
      * Returns a short description of the failure.
      */
+    @NotNull
     @Override
     public String toString() {
         return fFailedTest + ": " + fThrownException.getMessage();

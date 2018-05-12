@@ -4,6 +4,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -39,6 +41,7 @@ public class TestMethod {
         return timeout;
     }
 
+    @Nullable
     protected Class<? extends Throwable> getExpectedException() {
         Test annotation = method.getAnnotation(Test.class);
         if (annotation == null || annotation.expected() == None.class) {
@@ -48,7 +51,7 @@ public class TestMethod {
         }
     }
 
-    boolean isUnexpected(Throwable exception) {
+    boolean isUnexpected(@NotNull Throwable exception) {
         return !getExpectedException().isAssignableFrom(exception.getClass());
     }
 
@@ -56,10 +59,12 @@ public class TestMethod {
         return getExpectedException() != null;
     }
 
+    @NotNull
     List<Method> getBefores() {
         return testClass.getAnnotatedMethods(Before.class);
     }
 
+    @NotNull
     List<Method> getAfters() {
         return testClass.getAnnotatedMethods(After.class);
     }

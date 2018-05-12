@@ -6,6 +6,8 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 import java.util.List;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.junit.internal.runners.model.ReflectiveCallable;
 
 /**
@@ -17,12 +19,13 @@ import org.junit.internal.runners.model.ReflectiveCallable;
  * @since 4.5
  */
 public class FrameworkMethod extends FrameworkMember<FrameworkMethod> {
+    @Nullable
     private final Method method;
 
     /**
      * Returns a new {@code FrameworkMethod} for {@code method}
      */
-    public FrameworkMethod(Method method) {
+    public FrameworkMethod(@Nullable Method method) {
         if (method == null) {
             throw new NullPointerException(
                     "FrameworkMethod cannot be created without an underlying method.");
@@ -42,6 +45,7 @@ public class FrameworkMethod extends FrameworkMember<FrameworkMethod> {
     /**
      * Returns the underlying Java method
      */
+    @Nullable
     public Method getMethod() {
         return method;
     }
@@ -79,7 +83,7 @@ public class FrameworkMethod extends FrameworkMember<FrameworkMethod> {
      * <li>is not static (given {@code isStatic is true}).
      * </ul>
      */
-    public void validatePublicVoidNoArg(boolean isStatic, List<Throwable> errors) {
+    public void validatePublicVoidNoArg(boolean isStatic, @NotNull List<Throwable> errors) {
         validatePublicVoid(isStatic, errors);
         if (method.getParameterTypes().length != 0) {
             errors.add(new Exception("Method " + method.getName() + " should have no parameters"));
@@ -96,9 +100,9 @@ public class FrameworkMethod extends FrameworkMember<FrameworkMethod> {
      * <li>is not static (given {@code isStatic is true}).
      * </ul>
      */
-    public void validatePublicVoid(boolean isStatic, List<Throwable> errors) {
+    public void validatePublicVoid(boolean isStatic, @NotNull List<Throwable> errors) {
         if (isStatic() != isStatic) {
-            String state = isStatic ? "should" : "should not";
+            @NotNull String state = isStatic ? "should" : "should not";
             errors.add(new Exception("Method " + method.getName() + "() " + state + " be static"));
         }
         if (!isPublic()) {
@@ -142,7 +146,7 @@ public class FrameworkMethod extends FrameworkMember<FrameworkMethod> {
     }
 
     @Override
-    public boolean isShadowedBy(FrameworkMethod other) {
+    public boolean isShadowedBy(@NotNull FrameworkMethod other) {
         if (!other.getName().equals(getName())) {
             return false;
         }
@@ -163,7 +167,7 @@ public class FrameworkMethod extends FrameworkMember<FrameworkMethod> {
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(@NotNull Object obj) {
         if (!FrameworkMethod.class.isInstance(obj)) {
             return false;
         }
@@ -205,7 +209,7 @@ public class FrameworkMethod extends FrameworkMember<FrameworkMethod> {
      * Returns the annotation of type {@code annotationType} on this method, if
      * one exists.
      */
-    public <T extends Annotation> T getAnnotation(Class<T> annotationType) {
+    public <T extends Annotation> T getAnnotation(@NotNull Class<T> annotationType) {
         return method.getAnnotation(annotationType);
     }
 

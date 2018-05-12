@@ -3,6 +3,8 @@ package org.junit.internal.builders;
 import java.util.Arrays;
 import java.util.List;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.junit.runner.Runner;
 import org.junit.runners.model.RunnerBuilder;
 
@@ -24,16 +26,17 @@ public class AllDefaultPossibilitiesBuilder extends RunnerBuilder {
         this.canUseSuiteMethod = canUseSuiteMethod;
     }
 
+    @Nullable
     @Override
     public Runner runnerForClass(Class<?> testClass) throws Throwable {
-        List<RunnerBuilder> builders = Arrays.asList(
+        @NotNull List<RunnerBuilder> builders = Arrays.asList(
                 ignoredBuilder(),
                 annotatedBuilder(),
                 suiteMethodBuilder(),
                 junit3Builder(),
                 junit4Builder());
 
-        for (RunnerBuilder each : builders) {
+        for (@NotNull RunnerBuilder each : builders) {
             Runner runner = each.safeRunnerForClass(testClass);
             if (runner != null) {
                 return runner;
@@ -42,18 +45,22 @@ public class AllDefaultPossibilitiesBuilder extends RunnerBuilder {
         return null;
     }
 
+    @NotNull
     protected JUnit4Builder junit4Builder() {
         return new JUnit4Builder();
     }
 
+    @NotNull
     protected JUnit3Builder junit3Builder() {
         return new JUnit3Builder();
     }
 
+    @NotNull
     protected AnnotatedBuilder annotatedBuilder() {
         return new AnnotatedBuilder(this);
     }
 
+    @NotNull
     protected IgnoredBuilder ignoredBuilder() {
         return new IgnoredBuilder();
     }

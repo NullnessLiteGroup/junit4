@@ -1,5 +1,7 @@
 package org.junit.runners.model;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.lang.reflect.Modifier;
 import java.util.List;
 
@@ -39,6 +41,7 @@ public abstract class FrameworkMember<T extends FrameworkMember<T>> implements
         return self();
     }
 
+    @NotNull
     @SuppressWarnings("unchecked")
     private T self() {
         return (T) this;

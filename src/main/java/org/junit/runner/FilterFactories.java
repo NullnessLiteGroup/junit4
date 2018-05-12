@@ -1,5 +1,6 @@
 package org.junit.runner;
 
+import org.jetbrains.annotations.NotNull;
 import org.junit.internal.Classes;
 import org.junit.runner.FilterFactory.FilterNotCreatedException;
 import org.junit.runner.manipulation.Filter;
@@ -40,7 +41,7 @@ class FilterFactories {
      */
     public static Filter createFilter(String filterFactoryFqcn, FilterFactoryParams params)
             throws FilterFactory.FilterNotCreatedException {
-        FilterFactory filterFactory = createFilterFactory(filterFactoryFqcn);
+        @NotNull FilterFactory filterFactory = createFilterFactory(filterFactoryFqcn);
 
         return filterFactory.createFilter(params);
     }
@@ -52,9 +53,9 @@ class FilterFactories {
      * @param params             The arguments to the {@link FilterFactory}
      *
      */
-    public static Filter createFilter(Class<? extends FilterFactory> filterFactoryClass, FilterFactoryParams params)
+    public static Filter createFilter(@NotNull Class<? extends FilterFactory> filterFactoryClass, FilterFactoryParams params)
             throws FilterFactory.FilterNotCreatedException {
-        FilterFactory filterFactory = createFilterFactory(filterFactoryClass);
+        @NotNull FilterFactory filterFactory = createFilterFactory(filterFactoryClass);
 
         return filterFactory.createFilter(params);
     }
@@ -71,7 +72,7 @@ class FilterFactories {
         return createFilterFactory(filterFactoryClass);
     }
 
-    static FilterFactory createFilterFactory(Class<? extends FilterFactory> filterFactoryClass)
+    static FilterFactory createFilterFactory(@NotNull Class<? extends FilterFactory> filterFactoryClass)
             throws FilterNotCreatedException {
         try {
             return filterFactoryClass.getConstructor().newInstance();

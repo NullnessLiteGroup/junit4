@@ -7,6 +7,8 @@ import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.junit.Assert;
 import org.junit.Assume;
 import org.junit.experimental.theories.internal.Assignments;
@@ -79,16 +81,16 @@ public class Theories extends BlockJUnit4ClassRunner {
     }
 
     @Override
-    protected void collectInitializationErrors(List<Throwable> errors) {
+    protected void collectInitializationErrors(@NotNull List<Throwable> errors) {
         super.collectInitializationErrors(errors);
         validateDataPointFields(errors);
         validateDataPointMethods(errors);
     }
 
-    private void validateDataPointFields(List<Throwable> errors) {
+    private void validateDataPointFields(@NotNull List<Throwable> errors) {
         Field[] fields = getTestClass().getJavaClass().getDeclaredFields();
 
-        for (Field field : fields) {
+        for (@NotNull Field field : fields) {
             if (field.getAnnotation(DataPoint.class) == null && field.getAnnotation(DataPoints.class) == null) {
                 continue;
             }
@@ -101,10 +103,10 @@ public class Theories extends BlockJUnit4ClassRunner {
         }
     }
 
-    private void validateDataPointMethods(List<Throwable> errors) {
+    private void validateDataPointMethods(@NotNull List<Throwable> errors) {
         Method[] methods = getTestClass().getJavaClass().getDeclaredMethods();
         
-        for (Method method : methods) {
+        for (@NotNull Method method : methods) {
             if (method.getAnnotation(DataPoint.class) == null && method.getAnnotation(DataPoints.class) == null) {
                 continue;
             }
@@ -118,13 +120,13 @@ public class Theories extends BlockJUnit4ClassRunner {
     }
 
     @Override
-    protected void validateConstructor(List<Throwable> errors) {
+    protected void validateConstructor(@NotNull List<Throwable> errors) {
         validateOnlyOneConstructor(errors);
     }
 
     @Override
-    protected void validateTestMethods(List<Throwable> errors) {
-        for (FrameworkMethod each : computeTestMethods()) {
+    protected void validateTestMethods(@NotNull List<Throwable> errors) {
+        for (@NotNull FrameworkMethod each : computeTestMethods()) {
             if (each.getAnnotation(Theory.class) != null) {
                 each.validatePublicVoid(false, errors);
                 each.validateNoTypeParametersOnArgs(errors);
@@ -132,7 +134,7 @@ public class Theories extends BlockJUnit4ClassRunner {
                 each.validatePublicVoidNoArg(false, errors);
             }
             
-            for (ParameterSignature signature : ParameterSignature.signatures(each.getMethod())) {
+            for (@NotNull ParameterSignature signature : ParameterSignature.signatures(each.getMethod())) {
                 ParametersSuppliedBy annotation = signature.findDeepAnnotation(ParametersSuppliedBy.class);
                 if (annotation != null) {
                     validateParameterSupplier(annotation.value(), errors);
@@ -141,7 +143,7 @@ public class Theories extends BlockJUnit4ClassRunner {
         }
     }
 
-    private void validateParameterSupplier(Class<? extends ParameterSupplier> supplierClass, List<Throwable> errors) {
+    private void validateParameterSupplier(Class<? extends ParameterSupplier> supplierClass, @NotNull List<Throwable> errors) {
         Constructor<?>[] constructors = supplierClass.getConstructors();
         
         if (constructors.length != 1) {
@@ -156,10 +158,11 @@ public class Theories extends BlockJUnit4ClassRunner {
         }
     }
 
+    @NotNull
     @Override
     protected List<FrameworkMethod> computeTestMethods() {
-        List<FrameworkMethod> testMethods = new ArrayList<FrameworkMethod>(super.computeTestMethods());
-        List<FrameworkMethod> theoryMethods = getTestClass().getAnnotatedMethods(Theory.class);
+        @NotNull List<FrameworkMethod> testMethods = new ArrayList<FrameworkMethod>(super.computeTestMethods());
+        @NotNull List<FrameworkMethod> theoryMethods = getTestClass().getAnnotatedMethods(Theory.class);
         testMethods.removeAll(theoryMethods);
         testMethods.addAll(theoryMethods);
         return testMethods;
@@ -176,6 +179,7 @@ public class Theories extends BlockJUnit4ClassRunner {
         private final FrameworkMethod testMethod;
         private final TestClass testClass;
 
+        @NotNull
         private List<AssumptionViolatedException> fInvalidParameters = new ArrayList<AssumptionViolatedException>();
 
         public TheoryAnchor(FrameworkMethod testMethod, TestClass testClass) {
@@ -201,7 +205,7 @@ public class Theories extends BlockJUnit4ClassRunner {
             }
         }
 
-        protected void runWithAssignment(Assignments parameterAssignment)
+        protected void runWithAssignment(@NotNull Assignments parameterAssignment)
                 throws Throwable {
             if (!parameterAssignment.isComplete()) {
                 runWithIncompleteAssignment(parameterAssignment);
@@ -210,7 +214,7 @@ public class Theories extends BlockJUnit4ClassRunner {
             }
         }
 
-        protected void runWithIncompleteAssignment(Assignments incomplete)
+        protected void runWithIncompleteAssignment(@NotNull Assignments incomplete)
                 throws Throwable {
             for (PotentialAssignment source : incomplete
                     .potentialsForNextUnassigned()) {
@@ -218,7 +222,7 @@ public class Theories extends BlockJUnit4ClassRunner {
             }
         }
 
-        protected void runWithCompleteAssignment(final Assignments complete)
+        protected void runWithCompleteAssignment(@NotNull final Assignments complete)
                 throws Throwable {
             new BlockJUnit4ClassRunner(getTestClass()) {
                 @Override
@@ -227,9 +231,10 @@ public class Theories extends BlockJUnit4ClassRunner {
                     // do nothing
                 }
 
+                @NotNull
                 @Override
-                public Statement methodBlock(FrameworkMethod method) {
-                    final Statement statement = super.methodBlock(method);
+                public Statement methodBlock(@NotNull FrameworkMethod method) {
+                    @Nullable final Statement statement = super.methodBlock(method);
                     return new Statement() {
                         @Override
                         public void evaluate() throws Throwable {
@@ -247,14 +252,16 @@ public class Theories extends BlockJUnit4ClassRunner {
                     };
                 }
 
+                @NotNull
                 @Override
-                protected Statement methodInvoker(FrameworkMethod method, Object test) {
+                protected Statement methodInvoker(@NotNull FrameworkMethod method, Object test) {
                     return methodCompletesWithParameters(method, complete, test);
                 }
 
+                @NotNull
                 @Override
                 public Object createTest() throws Exception {
-                    Object[] params = complete.getConstructorArguments();
+                    @NotNull Object[] params = complete.getConstructorArguments();
                     
                     if (!nullsOk()) {
                         Assume.assumeNotNull(params);
@@ -266,11 +273,11 @@ public class Theories extends BlockJUnit4ClassRunner {
         }
 
         private Statement methodCompletesWithParameters(
-                final FrameworkMethod method, final Assignments complete, final Object freshInstance) {
+                @NotNull final FrameworkMethod method, @NotNull final Assignments complete, final Object freshInstance) {
             return new Statement() {
                 @Override
                 public void evaluate() throws Throwable {
-                    final Object[] values = complete.getMethodArguments();
+                    @NotNull final Object[] values = complete.getMethodArguments();
                     
                     if (!nullsOk()) {
                         Assume.assumeNotNull(values);
@@ -285,7 +292,7 @@ public class Theories extends BlockJUnit4ClassRunner {
             fInvalidParameters.add(e);
         }
 
-        protected void reportParameterizedError(Throwable e, Object... params)
+        protected void reportParameterizedError(Throwable e, @NotNull Object... params)
                 throws Throwable {
             if (params.length == 0) {
                 throw e;

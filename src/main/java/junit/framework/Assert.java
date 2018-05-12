@@ -1,5 +1,8 @@
 package junit.framework;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 /**
  * A set of assert methods.  Messages are only displayed when an assert fails.
  *
@@ -50,7 +53,7 @@ public class Assert {
     /**
      * Fails a test with the given message.
      */
-    static public void fail(String message) {
+    static public void fail(@Nullable String message) {
         if (message == null) {
             throw new AssertionFailedError();
         }
@@ -68,7 +71,7 @@ public class Assert {
      * Asserts that two objects are equal. If they are not
      * an AssertionFailedError is thrown with the given message.
      */
-    static public void assertEquals(String message, Object expected, Object actual) {
+    static public void assertEquals(String message, @Nullable Object expected, @Nullable Object actual) {
         if (expected == null && actual == null) {
             return;
         }
@@ -89,14 +92,14 @@ public class Assert {
     /**
      * Asserts that two Strings are equal.
      */
-    static public void assertEquals(String message, String expected, String actual) {
+    static public void assertEquals(@Nullable String message, @Nullable String expected, @Nullable String actual) {
         if (expected == null && actual == null) {
             return;
         }
         if (expected != null && expected.equals(actual)) {
             return;
         }
-        String cleanMessage = message == null ? "" : message;
+        @NotNull String cleanMessage = message == null ? "" : message;
         throw new ComparisonFailure(cleanMessage, expected, actual);
     }
 
@@ -252,7 +255,7 @@ public class Assert {
      * Asserts that an object isn't null. If it is
      * an AssertionFailedError is thrown with the given message.
      */
-    static public void assertNotNull(String message, Object object) {
+    static public void assertNotNull(String message, @Nullable Object object) {
         assertTrue(message, object != null);
     }
 
@@ -263,7 +266,7 @@ public class Assert {
      *
      * @param object Object to check or <code>null</code>
      */
-    static public void assertNull(Object object) {
+    static public void assertNull(@Nullable Object object) {
         if (object != null) {
             assertNull("Expected: <null> but was: " + object.toString(), object);
         }
@@ -273,7 +276,7 @@ public class Assert {
      * Asserts that an object is null.  If it is not
      * an AssertionFailedError is thrown with the given message.
      */
-    static public void assertNull(String message, Object object) {
+    static public void assertNull(String message, @Nullable Object object) {
         assertTrue(message, object == null);
     }
 
@@ -315,13 +318,13 @@ public class Assert {
         assertNotSame(null, expected, actual);
     }
 
-    static public void failSame(String message) {
-        String formatted = (message != null) ? message + " " : "";
+    static public void failSame(@Nullable String message) {
+        @NotNull String formatted = (message != null) ? message + " " : "";
         fail(formatted + "expected not same");
     }
 
-    static public void failNotSame(String message, Object expected, Object actual) {
-        String formatted = (message != null) ? message + " " : "";
+    static public void failNotSame(@Nullable String message, Object expected, Object actual) {
+        @NotNull String formatted = (message != null) ? message + " " : "";
         fail(formatted + "expected same:<" + expected + "> was not:<" + actual + ">");
     }
 
@@ -329,8 +332,8 @@ public class Assert {
         fail(format(message, expected, actual));
     }
 
-    public static String format(String message, Object expected, Object actual) {
-        String formatted = "";
+    public static String format(@Nullable String message, Object expected, Object actual) {
+        @NotNull String formatted = "";
         if (message != null && message.length() > 0) {
             formatted = message + " ";
         }

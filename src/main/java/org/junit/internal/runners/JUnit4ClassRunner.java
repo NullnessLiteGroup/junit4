@@ -8,6 +8,7 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 
+import org.jetbrains.annotations.NotNull;
 import org.junit.runner.Description;
 import org.junit.runner.Runner;
 import org.junit.runner.manipulation.Filter;
@@ -26,6 +27,7 @@ import org.junit.runners.BlockJUnit4ClassRunner;
  */
 @Deprecated
 public class JUnit4ClassRunner extends Runner implements Filterable, Sortable {
+    @NotNull
     private final List<Method> testMethods;
     private TestClass testClass;
 
@@ -35,18 +37,19 @@ public class JUnit4ClassRunner extends Runner implements Filterable, Sortable {
         validate();
     }
 
+    @NotNull
     protected List<Method> getTestMethods() {
         return testClass.getTestMethods();
     }
 
     protected void validate() throws InitializationError {
-        MethodValidator methodValidator = new MethodValidator(testClass);
+        @NotNull MethodValidator methodValidator = new MethodValidator(testClass);
         methodValidator.validateMethodsForDefaultRunner();
         methodValidator.assertValid();
     }
 
     @Override
-    public void run(final RunNotifier notifier) {
+    public void run(@NotNull final RunNotifier notifier) {
         new ClassRoadie(notifier, testClass, getDescription(), new Runnable() {
             public void run() {
                 runMethods(notifier);
@@ -54,17 +57,18 @@ public class JUnit4ClassRunner extends Runner implements Filterable, Sortable {
         }).runProtected();
     }
 
-    protected void runMethods(final RunNotifier notifier) {
-        for (Method method : testMethods) {
+    protected void runMethods(@NotNull final RunNotifier notifier) {
+        for (@NotNull Method method : testMethods) {
             invokeTestMethod(method, notifier);
         }
     }
 
+    @NotNull
     @Override
     public Description getDescription() {
-        Description spec = Description.createSuiteDescription(getName(), classAnnotations());
-        List<Method> testMethods = this.testMethods;
-        for (Method method : testMethods) {
+        @NotNull Description spec = Description.createSuiteDescription(getName(), classAnnotations());
+        @NotNull List<Method> testMethods = this.testMethods;
+        for (@NotNull Method method : testMethods) {
             spec.addChild(methodDescription(method));
         }
         return spec;
@@ -78,12 +82,13 @@ public class JUnit4ClassRunner extends Runner implements Filterable, Sortable {
         return getTestClass().getName();
     }
 
+    @NotNull
     protected Object createTest() throws Exception {
         return getTestClass().getConstructor().newInstance();
     }
 
-    protected void invokeTestMethod(Method method, RunNotifier notifier) {
-        Description description = methodDescription(method);
+    protected void invokeTestMethod(@NotNull Method method, @NotNull RunNotifier notifier) {
+        @NotNull Description description = methodDescription(method);
         Object test;
         try {
             test = createTest();
@@ -94,7 +99,7 @@ public class JUnit4ClassRunner extends Runner implements Filterable, Sortable {
             testAborted(notifier, description, e);
             return;
         }
-        TestMethod testMethod = wrapMethod(method);
+        @NotNull TestMethod testMethod = wrapMethod(method);
         new MethodRoadie(test, testMethod, notifier, description).run();
     }
 
@@ -105,24 +110,26 @@ public class JUnit4ClassRunner extends Runner implements Filterable, Sortable {
         notifier.fireTestFinished(description);
     }
 
+    @NotNull
     protected TestMethod wrapMethod(Method method) {
         return new TestMethod(method, testClass);
     }
 
-    protected String testName(Method method) {
+    protected String testName(@NotNull Method method) {
         return method.getName();
     }
 
-    protected Description methodDescription(Method method) {
+    @NotNull
+    protected Description methodDescription(@NotNull Method method) {
         return Description.createTestDescription(getTestClass().getJavaClass(), testName(method), testAnnotations(method));
     }
 
-    protected Annotation[] testAnnotations(Method method) {
+    protected Annotation[] testAnnotations(@NotNull Method method) {
         return method.getAnnotations();
     }
 
-    public void filter(Filter filter) throws NoTestsRemainException {
-        for (Iterator<Method> iter = testMethods.iterator(); iter.hasNext(); ) {
+    public void filter(@NotNull Filter filter) throws NoTestsRemainException {
+        for (@NotNull Iterator<Method> iter = testMethods.iterator(); iter.hasNext(); ) {
             Method method = iter.next();
             if (!filter.shouldRun(methodDescription(method))) {
                 iter.remove();
@@ -133,9 +140,9 @@ public class JUnit4ClassRunner extends Runner implements Filterable, Sortable {
         }
     }
 
-    public void sort(final Sorter sorter) {
+    public void sort(@NotNull final Sorter sorter) {
         Collections.sort(testMethods, new Comparator<Method>() {
-            public int compare(Method o1, Method o2) {
+            public int compare(@NotNull Method o1, @NotNull Method o2) {
                 return sorter.compare(methodDescription(o1), methodDescription(o2));
             }
         });

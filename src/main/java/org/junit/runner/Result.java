@@ -13,6 +13,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
+import org.jetbrains.annotations.NotNull;
 import org.junit.runner.notification.Failure;
 import org.junit.runner.notification.RunListener;
 
@@ -28,8 +29,11 @@ public class Result implements Serializable {
             ObjectStreamClass.lookup(SerializedForm.class).getFields();
     private final AtomicInteger count;
     private final AtomicInteger ignoreCount;
+    @NotNull
     private final CopyOnWriteArrayList<Failure> failures;
+    @NotNull
     private final AtomicLong runTime;
+    @NotNull
     private final AtomicLong startTime;
 
     /** Only set during deserialization process. */
@@ -93,12 +97,12 @@ public class Result implements Serializable {
         return getFailureCount() == 0;
     }
 
-    private void writeObject(ObjectOutputStream s) throws IOException {
-        SerializedForm serializedForm = new SerializedForm(this);
+    private void writeObject(@NotNull ObjectOutputStream s) throws IOException {
+        @NotNull SerializedForm serializedForm = new SerializedForm(this);
         serializedForm.serialize(s);
     }
 
-    private void readObject(ObjectInputStream s)
+    private void readObject(@NotNull ObjectInputStream s)
             throws ClassNotFoundException, IOException {
         serializedForm = SerializedForm.deserialize(s);
     }
@@ -144,6 +148,7 @@ public class Result implements Serializable {
     /**
      * Internal use only.
      */
+    @NotNull
     public RunListener createListener() {
         return new Listener();
     }
@@ -156,6 +161,7 @@ public class Result implements Serializable {
         private static final long serialVersionUID = 1L;
         private final AtomicInteger fCount;
         private final AtomicInteger fIgnoreCount;
+        @NotNull
         private final List<Failure> fFailures;
         private final long fRunTime;
         private final long fStartTime;
@@ -177,7 +183,7 @@ public class Result implements Serializable {
             fStartTime = fields.get("fStartTime", 0L);
         }
 
-        public void serialize(ObjectOutputStream s) throws IOException {
+        public void serialize(@NotNull ObjectOutputStream s) throws IOException {
             ObjectOutputStream.PutField fields = s.putFields();
             fields.put("fCount", fCount);
             fields.put("fIgnoreCount", fIgnoreCount);

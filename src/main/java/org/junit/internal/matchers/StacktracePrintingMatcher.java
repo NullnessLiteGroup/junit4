@@ -4,6 +4,7 @@ import org.hamcrest.Description;
 import org.hamcrest.Factory;
 import org.hamcrest.Matcher;
 
+import org.jetbrains.annotations.NotNull;
 import org.junit.internal.Throwables;
 
 /**
@@ -33,13 +34,13 @@ public class StacktracePrintingMatcher<T extends Throwable> extends
     }
 
     @Override
-    protected void describeMismatchSafely(T item, Description description) {
+    protected void describeMismatchSafely(@NotNull T item, Description description) {
         throwableMatcher.describeMismatch(item, description);
         description.appendText("\nStacktrace was: ");
         description.appendText(readStacktrace(item));
     }
 
-    private String readStacktrace(Throwable throwable) {
+    private String readStacktrace(@NotNull Throwable throwable) {
         return Throwables.getStacktrace(throwable);
     }
 

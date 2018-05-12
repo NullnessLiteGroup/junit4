@@ -7,6 +7,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.jetbrains.annotations.NotNull;
 import org.junit.experimental.theories.ParameterSignature;
 import org.junit.experimental.theories.ParameterSupplier;
 import org.junit.experimental.theories.ParametersSuppliedBy;
@@ -36,8 +37,8 @@ public class Assignments {
      * Returns a new assignment list for {@code testMethod}, with no params
      * assigned.
      */
-    public static Assignments allUnassigned(Method testMethod,
-            TestClass testClass) {
+    public static Assignments allUnassigned(@NotNull Method testMethod,
+                                            TestClass testClass) {
         List<ParameterSignature> signatures;
         signatures = ParameterSignature.signatures(testClass
                 .getOnlyConstructor());
@@ -54,17 +55,19 @@ public class Assignments {
         return unassigned.get(0);
     }
 
+    @NotNull
     public Assignments assignNext(PotentialAssignment source) {
-        List<PotentialAssignment> potentialAssignments = new ArrayList<PotentialAssignment>(assigned);
+        @NotNull List<PotentialAssignment> potentialAssignments = new ArrayList<PotentialAssignment>(assigned);
         potentialAssignments.add(source);
 
         return new Assignments(potentialAssignments, unassigned.subList(1,
                 unassigned.size()), clazz);
     }
 
-    public Object[] getActualValues(int start, int stop) 
+    @NotNull
+    public Object[] getActualValues(int start, int stop)
             throws CouldNotGenerateValueException {
-        Object[] values = new Object[stop - start];
+        @NotNull Object[] values = new Object[stop - start];
         for (int i = start; i < stop; i++) {
             values[i - start] = assigned.get(i).getValue();
         }
@@ -111,7 +114,7 @@ public class Assignments {
             Class<? extends ParameterSupplier> cls) throws Exception {
         Constructor<?>[] supplierConstructors = cls.getConstructors();
 
-        for (Constructor<?> constructor : supplierConstructors) {
+        for (@NotNull Constructor<?> constructor : supplierConstructors) {
             Class<?>[] parameterTypes = constructor.getParameterTypes();
             if (parameterTypes.length == 1
                     && parameterTypes[0].equals(TestClass.class)) {
@@ -122,15 +125,18 @@ public class Assignments {
         return cls.newInstance();
     }
 
+    @NotNull
     public Object[] getConstructorArguments()
             throws CouldNotGenerateValueException {
         return getActualValues(0, getConstructorParameterCount());
     }
 
+    @NotNull
     public Object[] getMethodArguments() throws CouldNotGenerateValueException {
         return getActualValues(getConstructorParameterCount(), assigned.size());
     }
 
+    @NotNull
     public Object[] getAllArguments() throws CouldNotGenerateValueException {
         return getActualValues(0, assigned.size());
     }
@@ -142,9 +148,10 @@ public class Assignments {
         return constructorParameterCount;
     }
 
+    @NotNull
     public Object[] getArgumentStrings(boolean nullsOk)
             throws CouldNotGenerateValueException {
-        Object[] values = new Object[assigned.size()];
+        @NotNull Object[] values = new Object[assigned.size()];
         for (int i = 0; i < values.length; i++) {
             values[i] = assigned.get(i).getDescription();
         }

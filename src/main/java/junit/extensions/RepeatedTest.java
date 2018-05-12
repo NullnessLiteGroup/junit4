@@ -2,6 +2,7 @@ package junit.extensions;
 
 import junit.framework.Test;
 import junit.framework.TestResult;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * A Decorator that runs a test repeatedly.
@@ -23,7 +24,7 @@ public class RepeatedTest extends TestDecorator {
     }
 
     @Override
-    public void run(TestResult result) {
+    public void run(@NotNull TestResult result) {
         for (int i = 0; i < fTimesRepeat; i++) {
             if (result.shouldStop()) {
                 break;
@@ -32,6 +33,7 @@ public class RepeatedTest extends TestDecorator {
         }
     }
 
+    @NotNull
     @Override
     public String toString() {
         return super.toString() + "(repeated)";

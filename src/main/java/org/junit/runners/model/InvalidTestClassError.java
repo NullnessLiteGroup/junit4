@@ -1,5 +1,7 @@
 package org.junit.runners.model;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.List;
 
 /**
@@ -12,18 +14,19 @@ import java.util.List;
 public class InvalidTestClassError extends InitializationError {
     private static final long serialVersionUID = 1L;
 
+    @NotNull
     private final String message;
 
-    public InvalidTestClassError(Class<?> offendingTestClass, List<Throwable> validationErrors) {
+    public InvalidTestClassError(@NotNull Class<?> offendingTestClass, @NotNull List<Throwable> validationErrors) {
         super(validationErrors);
         this.message = createMessage(offendingTestClass, validationErrors);
     }
 
     private static String createMessage(Class<?> testClass, List<Throwable> validationErrors) {
-        StringBuilder sb = new StringBuilder();
+        @NotNull StringBuilder sb = new StringBuilder();
         sb.append(String.format("Invalid test class '%s':", testClass.getName()));
         int i = 1;
-        for (Throwable error : validationErrors) {
+        for (@NotNull Throwable error : validationErrors) {
             sb.append("\n  " + (i++) + ". " + error.getMessage());
         }
         return sb.toString();
@@ -32,6 +35,7 @@ public class InvalidTestClassError extends InitializationError {
     /**
      * @return a message with a list of all of the validation errors
      */
+    @NotNull
     @Override
     public String getMessage() {
         return message;

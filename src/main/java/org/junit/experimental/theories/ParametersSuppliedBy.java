@@ -1,5 +1,7 @@
 package org.junit.experimental.theories;
 
+import org.jetbrains.annotations.NotNull;
+
 import static java.lang.annotation.ElementType.ANNOTATION_TYPE;
 import static java.lang.annotation.ElementType.PARAMETER;
 
@@ -43,6 +45,6 @@ import java.lang.annotation.Target;
 @Target({ ANNOTATION_TYPE, PARAMETER })
 public @interface ParametersSuppliedBy {
 
-    Class<? extends ParameterSupplier> value();
+    @NotNull Class<? extends ParameterSupplier> value();
 
 }

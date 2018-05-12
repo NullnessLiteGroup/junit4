@@ -8,6 +8,8 @@ import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.junit.runner.Description;
 import org.junit.runner.manipulation.Filter;
 import org.junit.runner.manipulation.NoTestsRemainException;
@@ -88,7 +90,7 @@ public class Categories extends Suite {
          * Determines the tests to run that are annotated with categories specified in
          * the value of this annotation or their subtypes unless excluded with {@link ExcludeCategory}.
          */
-        Class<?>[] value() default {};
+        @NotNull Class<?>[] value() default {};
 
         /**
          * If <tt>true</tt>, runs tests annotated with <em>any</em> of the categories in
@@ -103,7 +105,7 @@ public class Categories extends Suite {
          * Determines the tests which do not run if they are annotated with categories specified in the
          * value of this annotation or their subtypes regardless of being included in {@link IncludeCategory#value()}.
          */
-        Class<?>[] value() default {};
+        @NotNull Class<?>[] value() default {};
 
         /**
          * If <tt>true</tt>, the tests annotated with <em>any</em> of the categories in {@link ExcludeCategory#value()}
@@ -113,7 +115,9 @@ public class Categories extends Suite {
     }
 
     public static class CategoryFilter extends Filter {
+        @NotNull
         private final Set<Class<?>> included;
+        @NotNull
         private final Set<Class<?>> excluded;
         private final boolean includedAny;
         private final boolean excludedAny;
@@ -192,8 +196,9 @@ public class Categories extends Suite {
          * </ul>
          * @see Class#toString() name of category
          */
+        @NotNull
         @Override public String toString() {
-            StringBuilder description= new StringBuilder("categories ")
+            @NotNull StringBuilder description= new StringBuilder("categories ")
                 .append(included.isEmpty() ? "[all]" : included);
             if (!excluded.isEmpty()) {
                 description.append(" - ").append(excluded);
@@ -202,12 +207,12 @@ public class Categories extends Suite {
         }
 
         @Override
-        public boolean shouldRun(Description description) {
+        public boolean shouldRun(@NotNull Description description) {
             if (hasCorrectCategoryAnnotation(description)) {
                 return true;
             }
 
-            for (Description each : description.getChildren()) {
+            for (@NotNull Description each : description.getChildren()) {
                 if (shouldRun(each)) {
                     return true;
                 }
@@ -216,8 +221,8 @@ public class Categories extends Suite {
             return false;
         }
 
-        private boolean hasCorrectCategoryAnnotation(Description description) {
-            final Set<Class<?>> childCategories= categories(description);
+        private boolean hasCorrectCategoryAnnotation(@NotNull Description description) {
+            @NotNull final Set<Class<?>> childCategories= categories(description);
 
             // If a child has no categories, immediately return.
             if (childCategories.isEmpty()) {
@@ -252,8 +257,8 @@ public class Categories extends Suite {
          * @return <tt>true</tt> if at least one (any) parent category match a child, otherwise <tt>false</tt>.
          * If empty <tt>parentCategories</tt>, returns <tt>false</tt>.
          */
-        private boolean matchesAnyParentCategories(Set<Class<?>> childCategories, Set<Class<?>> parentCategories) {
-            for (Class<?> parentCategory : parentCategories) {
+        private boolean matchesAnyParentCategories(@NotNull Set<Class<?>> childCategories, Set<Class<?>> parentCategories) {
+            for (@NotNull Class<?> parentCategory : parentCategories) {
                 if (hasAssignableTo(childCategories, parentCategory)) {
                     return true;
                 }
@@ -265,8 +270,8 @@ public class Categories extends Suite {
          * @return <tt>false</tt> if at least one parent category does not match children, otherwise <tt>true</tt>.
          * If empty <tt>parentCategories</tt>, returns <tt>true</tt>.
          */
-        private boolean matchesAllParentCategories(Set<Class<?>> childCategories, Set<Class<?>> parentCategories) {
-            for (Class<?> parentCategory : parentCategories) {
+        private boolean matchesAllParentCategories(@NotNull Set<Class<?>> childCategories, Set<Class<?>> parentCategories) {
+            for (@NotNull Class<?> parentCategory : parentCategories) {
                 if (!hasAssignableTo(childCategories, parentCategory)) {
                     return false;
                 }
@@ -274,29 +279,32 @@ public class Categories extends Suite {
             return true;
         }
 
-        private static Set<Class<?>> categories(Description description) {
-            Set<Class<?>> categories= new HashSet<Class<?>>();
+        @NotNull
+        private static Set<Class<?>> categories(@NotNull Description description) {
+            @NotNull Set<Class<?>> categories= new HashSet<Class<?>>();
             Collections.addAll(categories, directCategories(description));
             Collections.addAll(categories, directCategories(parentDescription(description)));
             return categories;
         }
 
         private static Description parentDescription(Description description) {
-            Class<?> testClass= description.getTestClass();
+            @Nullable Class<?> testClass= description.getTestClass();
             return testClass == null ? null : Description.createSuiteDescription(testClass);
         }
 
-        private static Class<?>[] directCategories(Description description) {
+        @NotNull
+        private static Class<?>[] directCategories(@Nullable Description description) {
             if (description == null) {
                 return new Class<?>[0];
             }
 
-            Category annotation= description.getAnnotation(Category.class);
+            @Nullable Category annotation= description.getAnnotation(Category.class);
             return annotation == null ? new Class<?>[0] : annotation.value();
         }
 
-        private static Set<Class<?>> copyAndRefine(Set<Class<?>> classes) {
-            Set<Class<?>> c= new LinkedHashSet<Class<?>>();
+        @NotNull
+        private static Set<Class<?>> copyAndRefine(@Nullable Set<Class<?>> classes) {
+            @NotNull Set<Class<?>> c= new LinkedHashSet<Class<?>>();
             if (classes != null) {
                 c.addAll(classes);
             }
@@ -305,11 +313,11 @@ public class Categories extends Suite {
         }
     }
 
-    public Categories(Class<?> klass, RunnerBuilder builder) throws InitializationError {
+    public Categories(@NotNull Class<?> klass, @NotNull RunnerBuilder builder) throws InitializationError {
         super(klass, builder);
         try {
-            Set<Class<?>> included= getIncludedCategory(klass);
-            Set<Class<?>> excluded= getExcludedCategory(klass);
+            @NotNull Set<Class<?>> included= getIncludedCategory(klass);
+            @NotNull Set<Class<?>> excluded= getExcludedCategory(klass);
             boolean isAnyIncluded= isAnyIncluded(klass);
             boolean isAnyExcluded= isAnyExcluded(klass);
 
@@ -319,6 +327,7 @@ public class Categories extends Suite {
         }
     }
 
+    @NotNull
     private static Set<Class<?>> getIncludedCategory(Class<?> klass) {
         IncludeCategory annotation= klass.getAnnotation(IncludeCategory.class);
         return createSet(annotation == null ? null : annotation.value());
@@ -329,6 +338,7 @@ public class Categories extends Suite {
         return annotation == null || annotation.matchAny();
     }
 
+    @NotNull
     private static Set<Class<?>> getExcludedCategory(Class<?> klass) {
         ExcludeCategory annotation= klass.getAnnotation(ExcludeCategory.class);
         return createSet(annotation == null ? null : annotation.value());
@@ -339,8 +349,8 @@ public class Categories extends Suite {
         return annotation == null || annotation.matchAny();
     }
 
-    private static boolean hasAssignableTo(Set<Class<?>> assigns, Class<?> to) {
-        for (final Class<?> from : assigns) {
+    private static boolean hasAssignableTo(Set<Class<?>> assigns, @NotNull Class<?> to) {
+        for (@NotNull final Class<?> from : assigns) {
             if (to.isAssignableFrom(from)) {
                 return true;
             }
@@ -348,13 +358,14 @@ public class Categories extends Suite {
         return false;
     }
 
-    private static Set<Class<?>> createSet(Class<?>[] classes) {
+    @NotNull
+    private static Set<Class<?>> createSet(@Nullable Class<?>[] classes) {
         // Not throwing a NPE if t is null is a bad idea, but it's the behavior from JUnit 4.12
         // for include(boolean, Class<?>...) and exclude(boolean, Class<?>...)
         if (classes == null || classes.length == 0) {
             return Collections.emptySet();
         }
-        for (Class<?> category : classes) {
+        for (@Nullable Class<?> category : classes) {
             if (category == null) {
                 throw new NullPointerException("has null category");
             }
@@ -365,7 +376,8 @@ public class Categories extends Suite {
             : new LinkedHashSet<Class<?>>(Arrays.asList(classes));
     }
 
-    private static Set<Class<?>> nullableClassToSet(Class<?> nullableClass) {
+    @NotNull
+    private static Set<Class<?>> nullableClassToSet(@Nullable Class<?> nullableClass) {
         // Not throwing a NPE if t is null is a bad idea, but it's the behavior from JUnit 4.11
         // for CategoryFilter(Class<?> includedCategory, Class<?> excludedCategory)
         return nullableClass == null

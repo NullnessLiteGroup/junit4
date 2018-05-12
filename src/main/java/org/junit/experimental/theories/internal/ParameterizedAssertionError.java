@@ -1,5 +1,7 @@
 package org.junit.experimental.theories.internal;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
@@ -28,8 +30,8 @@ public class ParameterizedAssertionError extends AssertionError {
     }
 
     public static String join(String delimiter, Collection<Object> values) {
-        StringBuilder sb = new StringBuilder();
-        Iterator<Object> iter = values.iterator();
+        @NotNull StringBuilder sb = new StringBuilder();
+        @NotNull Iterator<Object> iter = values.iterator();
         while (iter.hasNext()) {
             Object next = iter.next();
             sb.append(stringValueOf(next));

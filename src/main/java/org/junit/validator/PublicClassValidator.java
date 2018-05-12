@@ -5,6 +5,7 @@ import static java.util.Collections.singletonList;
 
 import java.util.List;
 
+import org.jetbrains.annotations.NotNull;
 import org.junit.runners.model.TestClass;
 
 /**
@@ -22,7 +23,8 @@ public class PublicClassValidator implements TestClassValidator {
      * @return an empty list if the class is public or a list with a single
      *         exception otherwise.
      */
-    public List<Exception> validateTestClass(TestClass testClass) {
+    @NotNull
+    public List<Exception> validateTestClass(@NotNull TestClass testClass) {
         if (testClass.isPublic()) {
             return NO_VALIDATION_ERRORS;
         } else {

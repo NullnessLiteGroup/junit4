@@ -5,6 +5,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.junit.runner.Description;
 import org.junit.runner.notification.Failure;
 import org.junit.runner.notification.RunListener;
@@ -14,11 +16,13 @@ public class JUnit4TestAdapterCache extends HashMap<Description, Test> {
     private static final long serialVersionUID = 1L;
     private static final JUnit4TestAdapterCache fInstance = new JUnit4TestAdapterCache();
 
+    @NotNull
     public static JUnit4TestAdapterCache getDefault() {
         return fInstance;
     }
 
-    public Test asTest(Description description) {
+    @Nullable
+    public Test asTest(@NotNull Description description) {
         if (description.isSuite()) {
             return createTest(description);
         } else {
@@ -29,45 +33,48 @@ public class JUnit4TestAdapterCache extends HashMap<Description, Test> {
         }
     }
 
-    Test createTest(Description description) {
+    @Nullable
+    Test createTest(@NotNull Description description) {
         if (description.isTest()) {
             return new JUnit4TestCaseFacade(description);
         } else {
-            TestSuite suite = new TestSuite(description.getDisplayName());
-            for (Description child : description.getChildren()) {
+            @Nullable TestSuite suite = new TestSuite(description.getDisplayName());
+            for (@NotNull Description child : description.getChildren()) {
                 suite.addTest(asTest(child));
             }
             return suite;
         }
     }
 
-    public RunNotifier getNotifier(final TestResult result, final JUnit4TestAdapter adapter) {
-        RunNotifier notifier = new RunNotifier();
+    @NotNull
+    public RunNotifier getNotifier(@NotNull final TestResult result, final JUnit4TestAdapter adapter) {
+        @NotNull RunNotifier notifier = new RunNotifier();
         notifier.addListener(new RunListener() {
             @Override
-            public void testFailure(Failure failure) throws Exception {
+            public void testFailure(@NotNull Failure failure) throws Exception {
                 result.addError(asTest(failure.getDescription()), failure.getException());
             }
 
             @Override
-            public void testFinished(Description description) throws Exception {
+            public void testFinished(@NotNull Description description) throws Exception {
                 result.endTest(asTest(description));
             }
 
             @Override
-            public void testStarted(Description description) throws Exception {
+            public void testStarted(@NotNull Description description) throws Exception {
                 result.startTest(asTest(description));
             }
         });
         return notifier;
     }
 
-    public List<Test> asTestList(Description description) {
+    @NotNull
+    public List<Test> asTestList(@NotNull Description description) {
         if (description.isTest()) {
             return Arrays.asList(asTest(description));
         } else {
-            List<Test> returnThis = new ArrayList<Test>();
-            for (Description child : description.getChildren()) {
+            @NotNull List<Test> returnThis = new ArrayList<Test>();
+            for (@NotNull Description child : description.getChildren()) {
                 returnThis.add(asTest(child));
             }
             return returnThis;

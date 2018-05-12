@@ -1,5 +1,7 @@
 package org.junit.runner;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Inherited;
 import java.lang.annotation.Retention;
@@ -32,5 +34,5 @@ public @interface RunWith {
     /**
      * @return a Runner class (must have a constructor that takes a single Class to run)
      */
-    Class<? extends Runner> value();
+    @NotNull Class<? extends Runner> value();
 }

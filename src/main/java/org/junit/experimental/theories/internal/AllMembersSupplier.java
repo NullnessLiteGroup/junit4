@@ -7,6 +7,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
+import org.jetbrains.annotations.NotNull;
 import org.junit.Assume;
 import org.junit.experimental.theories.DataPoint;
 import org.junit.experimental.theories.DataPoints;
@@ -61,9 +62,10 @@ public class AllMembersSupplier extends ParameterSupplier {
         clazz = type;
     }
 
+    @NotNull
     @Override
-    public List<PotentialAssignment> getValueSources(ParameterSignature sig) throws Throwable {
-        List<PotentialAssignment> list = new ArrayList<PotentialAssignment>();
+    public List<PotentialAssignment> getValueSources(@NotNull ParameterSignature sig) throws Throwable {
+        @NotNull List<PotentialAssignment> list = new ArrayList<PotentialAssignment>();
 
         addSinglePointFields(sig, list);
         addMultiPointFields(sig, list);
@@ -73,8 +75,8 @@ public class AllMembersSupplier extends ParameterSupplier {
         return list;
     }
 
-    private void addMultiPointMethods(ParameterSignature sig, List<PotentialAssignment> list) throws Throwable {
-        for (FrameworkMethod dataPointsMethod : getDataPointsMethods(sig)) {
+    private void addMultiPointMethods(@NotNull ParameterSignature sig, @NotNull List<PotentialAssignment> list) throws Throwable {
+        for (@NotNull FrameworkMethod dataPointsMethod : getDataPointsMethods(sig)) {
             Class<?> returnType = dataPointsMethod.getReturnType();
             
             if ((returnType.isArray() && sig.canPotentiallyAcceptType(returnType.getComponentType())) ||
@@ -94,23 +96,23 @@ public class AllMembersSupplier extends ParameterSupplier {
         }
     }
 
-    private void addSinglePointMethods(ParameterSignature sig, List<PotentialAssignment> list) {
-        for (FrameworkMethod dataPointMethod : getSingleDataPointMethods(sig)) {
+    private void addSinglePointMethods(@NotNull ParameterSignature sig, @NotNull List<PotentialAssignment> list) {
+        for (@NotNull FrameworkMethod dataPointMethod : getSingleDataPointMethods(sig)) {
             if (sig.canAcceptType(dataPointMethod.getType())) {
                 list.add(new MethodParameterValue(dataPointMethod));
             }
         }
     }
     
-    private void addMultiPointFields(ParameterSignature sig, List<PotentialAssignment> list) {
-        for (final Field field : getDataPointsFields(sig)) {
+    private void addMultiPointFields(@NotNull ParameterSignature sig, @NotNull List<PotentialAssignment> list) {
+        for (@NotNull final Field field : getDataPointsFields(sig)) {
             Class<?> type = field.getType();
             addDataPointsValues(type, sig, field.getName(), list, getStaticFieldValue(field));
         }
     }
 
-    private void addSinglePointFields(ParameterSignature sig, List<PotentialAssignment> list) {
-        for (final Field field : getSingleDataPointFields(sig)) {
+    private void addSinglePointFields(@NotNull ParameterSignature sig, @NotNull List<PotentialAssignment> list) {
+        for (@NotNull final Field field : getSingleDataPointFields(sig)) {
             Object value = getStaticFieldValue(field);
             
             if (sig.canAcceptValue(value)) {
@@ -119,8 +121,8 @@ public class AllMembersSupplier extends ParameterSupplier {
         }
     }
     
-    private void addDataPointsValues(Class<?> type, ParameterSignature sig, String name, 
-            List<PotentialAssignment> list, Object value) {
+    private void addDataPointsValues(Class<?> type, @NotNull ParameterSignature sig, String name,
+                                     @NotNull List<PotentialAssignment> list, Object value) {
         if (type.isArray()) {
             addArrayValues(sig, name, list, value);
         }
@@ -129,7 +131,7 @@ public class AllMembersSupplier extends ParameterSupplier {
         }
     }
 
-    private void addArrayValues(ParameterSignature sig, String name, List<PotentialAssignment> list, Object array) {
+    private void addArrayValues(@NotNull ParameterSignature sig, String name, @NotNull List<PotentialAssignment> list, Object array) {
         for (int i = 0; i < Array.getLength(array); i++) {
             Object value = Array.get(array, i);
             if (sig.canAcceptValue(value)) {
@@ -138,8 +140,8 @@ public class AllMembersSupplier extends ParameterSupplier {
         }
     }
     
-    private void addIterableValues(ParameterSignature sig, String name, List<PotentialAssignment> list, Iterable<?> iterable) {
-        Iterator<?> iterator = iterable.iterator();
+    private void addIterableValues(@NotNull ParameterSignature sig, String name, @NotNull List<PotentialAssignment> list, Iterable<?> iterable) {
+        @NotNull Iterator<?> iterator = iterable.iterator();
         int i = 0;
         while (iterator.hasNext()) {
             Object value = iterator.next();
@@ -162,8 +164,8 @@ public class AllMembersSupplier extends ParameterSupplier {
         }
     }
     
-    private static boolean isAssignableToAnyOf(Class<?>[] typeArray, Object target) {
-        for (Class<?> type : typeArray) {
+    private static boolean isAssignableToAnyOf(Class<?>[] typeArray, @NotNull Object target) {
+        for (@NotNull Class<?> type : typeArray) {
             if (type.isAssignableFrom(target.getClass())) {
                 return true;
             }
@@ -176,10 +178,10 @@ public class AllMembersSupplier extends ParameterSupplier {
     }
     
     protected Collection<Field> getSingleDataPointFields(ParameterSignature sig) {
-        List<FrameworkField> fields = clazz.getAnnotatedFields(DataPoint.class);
-        Collection<Field> validFields = new ArrayList<Field>();
+        @NotNull List<FrameworkField> fields = clazz.getAnnotatedFields(DataPoint.class);
+        @NotNull Collection<Field> validFields = new ArrayList<Field>();
 
-        for (FrameworkField frameworkField : fields) {
+        for (@NotNull FrameworkField frameworkField : fields) {
             validFields.add(frameworkField.getField());
         }
 
@@ -187,10 +189,10 @@ public class AllMembersSupplier extends ParameterSupplier {
     }
     
     protected Collection<Field> getDataPointsFields(ParameterSignature sig) {
-        List<FrameworkField> fields = clazz.getAnnotatedFields(DataPoints.class);
-        Collection<Field> validFields = new ArrayList<Field>();
+        @NotNull List<FrameworkField> fields = clazz.getAnnotatedFields(DataPoints.class);
+        @NotNull Collection<Field> validFields = new ArrayList<Field>();
 
-        for (FrameworkField frameworkField : fields) {
+        for (@NotNull FrameworkField frameworkField : fields) {
             validFields.add(frameworkField.getField());
         }
 

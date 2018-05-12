@@ -2,6 +2,7 @@ package org.junit.experimental.results;
 
 import java.util.List;
 
+import org.jetbrains.annotations.NotNull;
 import org.junit.runner.Result;
 import org.junit.runner.notification.Failure;
 import org.junit.runner.notification.RunListener;
@@ -13,9 +14,10 @@ class FailureList {
         this.failures = failures;
     }
 
+    @NotNull
     public Result result() {
-        Result result = new Result();
-        RunListener listener = result.createListener();
+        @NotNull Result result = new Result();
+        @NotNull RunListener listener = result.createListener();
         for (Failure failure : failures) {
             try {
                 listener.testFailure(failure);

@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.junit.function.ThrowingRunnable;
 import org.junit.internal.AssumptionViolatedException;
 import org.hamcrest.Matcher;
@@ -35,6 +37,7 @@ import org.junit.runners.model.MultipleFailureException;
  * @since 4.7
  */
 public class ErrorCollector extends Verifier {
+    @NotNull
     private List<Throwable> errors = new ArrayList<Throwable>();
 
     @Override
@@ -45,12 +48,12 @@ public class ErrorCollector extends Verifier {
     /**
      * Adds a Throwable to the table.  Execution continues, but the test will fail at the end.
      */
-    public void addError(Throwable error) {
+    public void addError(@Nullable Throwable error) {
         if (error == null) {
             throw new NullPointerException("Error cannot be null");
         }
         if (error instanceof AssumptionViolatedException) {
-            AssertionError e = new AssertionError(error.getMessage());
+            @NotNull AssertionError e = new AssertionError(error.getMessage());
             e.initCause(error);
             errors.add(e);
         } else {
@@ -91,11 +94,12 @@ public class ErrorCollector extends Verifier {
      * Execution continues, but the test will fail at the end if
      * {@code callable} threw an exception.
      */
-    public <T> T checkSucceeds(Callable<T> callable) {
+    @Nullable
+    public <T> T checkSucceeds(@NotNull Callable<T> callable) {
         try {
             return callable.call();
         } catch (AssumptionViolatedException e) {
-            AssertionError error = new AssertionError("Callable threw AssumptionViolatedException");
+            @NotNull AssertionError error = new AssertionError("Callable threw AssumptionViolatedException");
             error.initCause(e);
             addError(error);
             return null;

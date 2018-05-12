@@ -1,5 +1,7 @@
 package org.junit.runners.model;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.lang.reflect.GenericArrayType;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
@@ -15,13 +17,13 @@ class NoGenericTypeParametersValidator {
         this.method = method;
     }
 
-    void validate(List<Throwable> errors) {
+    void validate(@NotNull List<Throwable> errors) {
         for (Type each : method.getGenericParameterTypes()) {
             validateNoTypeParameterOnType(each, errors);
         }
     }
 
-    private void validateNoTypeParameterOnType(Type type, List<Throwable> errors) {
+    private void validateNoTypeParameterOnType(Type type, @NotNull List<Throwable> errors) {
         if (type instanceof TypeVariable<?>) {
             errors.add(new Exception("Method " + method.getName()
                     + "() contains unresolved type variable " + type));
@@ -35,14 +37,14 @@ class NoGenericTypeParametersValidator {
     }
 
     private void validateNoTypeParameterOnParameterizedType(ParameterizedType parameterized,
-            List<Throwable> errors) {
+                                                            @NotNull List<Throwable> errors) {
         for (Type each : parameterized.getActualTypeArguments()) {
             validateNoTypeParameterOnType(each, errors);
         }
     }
 
     private void validateNoTypeParameterOnWildcardType(WildcardType wildcard,
-            List<Throwable> errors) {
+                                                       @NotNull List<Throwable> errors) {
         for (Type each : wildcard.getUpperBounds()) {
             validateNoTypeParameterOnType(each, errors);
         }
@@ -52,7 +54,7 @@ class NoGenericTypeParametersValidator {
     }
 
     private void validateNoTypeParameterOnGenericArrayType(
-            GenericArrayType arrayType, List<Throwable> errors) {
+            GenericArrayType arrayType, @NotNull List<Throwable> errors) {
         validateNoTypeParameterOnType(arrayType.getGenericComponentType(), errors);
     }
 }

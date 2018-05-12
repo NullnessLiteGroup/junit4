@@ -1,5 +1,7 @@
 package org.junit.internal.management;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Collections;
 import java.util.List;
 
@@ -13,6 +15,7 @@ class FakeRuntimeMXBean implements RuntimeMXBean {
    *
    * <p>Always returns an empty list.
    */
+  @NotNull
   public List<String> getInputArguments() {
     return Collections.emptyList();
   }

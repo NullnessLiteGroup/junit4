@@ -1,5 +1,7 @@
 package org.junit.validator;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -20,13 +22,13 @@ public class AnnotationValidatorFactory {
      *
      * @since 4.12
      */
-    public AnnotationValidator createAnnotationValidator(ValidateWith validateWithAnnotation) {
+    public AnnotationValidator createAnnotationValidator(@NotNull ValidateWith validateWithAnnotation) {
         AnnotationValidator validator = VALIDATORS_FOR_ANNOTATION_TYPES.get(validateWithAnnotation);
         if (validator != null) {
             return validator;
         }
 
-        Class<? extends AnnotationValidator> clazz = validateWithAnnotation.value();
+        @NotNull Class<? extends AnnotationValidator> clazz = validateWithAnnotation.value();
         try {
             AnnotationValidator annotationValidator = clazz.newInstance();
             VALIDATORS_FOR_ANNOTATION_TYPES.putIfAbsent(validateWithAnnotation, annotationValidator);

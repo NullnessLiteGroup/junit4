@@ -2,6 +2,7 @@ package org.junit.rules;
 
 import java.util.List;
 
+import org.jetbrains.annotations.NotNull;
 import org.junit.internal.management.ManagementFactory;
 import org.junit.internal.management.RuntimeMXBean;
 import org.junit.runner.Description;
@@ -65,7 +66,7 @@ public class DisableOnDebug implements TestRule {
      * @param inputArguments
      *            arguments provided to the Java runtime
      */
-    DisableOnDebug(TestRule rule, List<String> inputArguments) {
+    DisableOnDebug(TestRule rule, @NotNull List<String> inputArguments) {
         this.rule = rule;
         debugging = isDebugging(inputArguments);
     }
@@ -102,7 +103,7 @@ public class DisableOnDebug implements TestRule {
      *         otherwise.
      */
     private static boolean isDebugging(List<String> arguments) {
-        for (final String argument : arguments) {
+        for (@NotNull final String argument : arguments) {
             if ("-Xdebug".equals(argument)) {
                 return true;
             } else if (argument.startsWith("-agentlib:jdwp")) {

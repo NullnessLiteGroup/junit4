@@ -10,6 +10,8 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.junit.internal.AssumptionViolatedException;
 import org.junit.runner.Description;
 import org.junit.runner.notification.Failure;
@@ -58,14 +60,14 @@ public class MethodRoadie {
         runBeforesThenTestThenAfters(new Runnable() {
 
             public void run() {
-                ExecutorService service = Executors.newSingleThreadExecutor();
-                Callable<Object> callable = new Callable<Object>() {
+                @NotNull ExecutorService service = Executors.newSingleThreadExecutor();
+                @NotNull Callable<Object> callable = new Callable<Object>() {
                     public Object call() throws Exception {
                         runTestMethod();
                         return null;
                     }
                 };
-                Future<Object> result = service.submit(callable);
+                @NotNull Future<Object> result = service.submit(callable);
                 service.shutdown();
                 try {
                     boolean terminated = service.awaitTermination(timeout,
@@ -91,7 +93,7 @@ public class MethodRoadie {
         });
     }
 
-    public void runBeforesThenTestThenAfters(Runnable test) {
+    public void runBeforesThenTestThenAfters(@NotNull Runnable test) {
         try {
             runBefores();
             test.run();
@@ -116,7 +118,7 @@ public class MethodRoadie {
             } else if (!testMethod.expectsException()) {
                 addFailure(actual);
             } else if (testMethod.isUnexpected(actual)) {
-                String message = "Unexpected exception, expected<" + testMethod.getExpectedException().getName() + "> but was<"
+                @NotNull String message = "Unexpected exception, expected<" + testMethod.getExpectedException().getName() + "> but was<"
                         + actual.getClass().getName() + ">";
                 addFailure(new Exception(message, actual));
             }
@@ -128,8 +130,8 @@ public class MethodRoadie {
     private void runBefores() throws FailedBefore {
         try {
             try {
-                List<Method> befores = testMethod.getBefores();
-                for (Method before : befores) {
+                @NotNull List<Method> befores = testMethod.getBefores();
+                for (@NotNull Method before : befores) {
                     before.invoke(test);
                 }
             } catch (InvocationTargetException e) {
@@ -144,8 +146,8 @@ public class MethodRoadie {
     }
 
     private void runAfters() {
-        List<Method> afters = testMethod.getAfters();
-        for (Method after : afters) {
+        @NotNull List<Method> afters = testMethod.getAfters();
+        for (@NotNull Method after : afters) {
             try {
                 after.invoke(test);
             } catch (InvocationTargetException e) {

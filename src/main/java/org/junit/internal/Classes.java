@@ -1,5 +1,7 @@
 package org.junit.internal;
 
+import org.jetbrains.annotations.NotNull;
+
 import static java.lang.Thread.currentThread;
 
 /**
@@ -37,7 +39,7 @@ public class Classes {
      * @throws ClassNotFoundException
      * @since 4.13
      */
-    public static Class<?> getClass(String className, Class<?> callingClass) throws ClassNotFoundException {
+    public static Class<?> getClass(String className, @NotNull Class<?> callingClass) throws ClassNotFoundException {
         ClassLoader classLoader = currentThread().getContextClassLoader();
         return Class.forName(className, true, classLoader == null ? callingClass.getClassLoader() : classLoader);
     }

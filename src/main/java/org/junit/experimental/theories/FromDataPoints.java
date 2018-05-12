@@ -5,6 +5,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import org.jetbrains.annotations.NotNull;
 import org.junit.experimental.theories.internal.SpecificDataPointsSupplier;
 
 /**
@@ -50,5 +51,5 @@ import org.junit.experimental.theories.internal.SpecificDataPointsSupplier;
 @Target(ElementType.PARAMETER)
 @ParametersSuppliedBy(SpecificDataPointsSupplier.class)
 public @interface FromDataPoints {
-    String value();
+    @NotNull String value();
 }

@@ -5,6 +5,8 @@ import static org.junit.Assert.fail;
 import java.io.File;
 import java.io.IOException;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.junit.Rule;
 
 /**
@@ -42,6 +44,7 @@ import org.junit.Rule;
 public class TemporaryFolder extends ExternalResource {
     private final File parentFolder;
     private final boolean assureDeletion;
+    @Nullable
     private File folder;
 
     private static final int TEMP_DIR_ATTEMPTS = 10000;
@@ -103,6 +106,7 @@ public class TemporaryFolder extends ExternalResource {
          *
          * @return this
          */
+        @NotNull
         public Builder parentFolder(File parentFolder) {
             this.parentFolder = parentFolder;
             return this;
@@ -115,6 +119,7 @@ public class TemporaryFolder extends ExternalResource {
          *
          * @return this
          */
+        @NotNull
         public Builder assureDeletion() {
             this.assureDeletion = true;
             return this;
@@ -150,8 +155,9 @@ public class TemporaryFolder extends ExternalResource {
     /**
      * Returns a new fresh file with the given name under the temporary folder.
      */
-    public File newFile(String fileName) throws IOException {
-        File file = new File(getRoot(), fileName);
+    @NotNull
+    public File newFile(@NotNull String fileName) throws IOException {
+        @NotNull File file = new File(getRoot(), fileName);
         if (!file.createNewFile()) {
             throw new IOException(
                     "a file with the name \'" + fileName + "\' already exists in the test folder");
@@ -162,6 +168,7 @@ public class TemporaryFolder extends ExternalResource {
     /**
      * Returns a new fresh file with a random name under the temporary folder.
      */
+    @NotNull
     public File newFile() throws IOException {
         return File.createTempFile(TMP_PREFIX, null, getRoot());
     }
@@ -170,6 +177,7 @@ public class TemporaryFolder extends ExternalResource {
      * Returns a new fresh folder with the given path under the temporary
      * folder.
      */
+    @Nullable
     public File newFolder(String path) throws IOException {
         return newFolder(new String[]{path});
     }
@@ -181,7 +189,8 @@ public class TemporaryFolder extends ExternalResource {
      * and a directory named {@code "child"} will be created under the newly-created
      * {@code "parent"} directory.
      */
-    public File newFolder(String... paths) throws IOException {
+    @Nullable
+    public File newFolder(@NotNull String... paths) throws IOException {
         if (paths.length == 0) {
             throw new IllegalArgumentException("must pass at least one path");
         }
@@ -190,15 +199,15 @@ public class TemporaryFolder extends ExternalResource {
          * Before checking if the paths are absolute paths, check if create() was ever called,
          * and if it wasn't, throw IllegalStateException.
          */
-        File root = getRoot();
-        for (String path : paths) {
+        @Nullable File root = getRoot();
+        for (@NotNull String path : paths) {
             if (new File(path).isAbsolute()) {
                 throw new IOException("folder path \'" + path + "\' is not a relative path");
             }
         }
 
-        File relativePath = null;
-        File file = root;
+        @Nullable File relativePath = null;
+        @Nullable File file = root;
         boolean lastMkdirsCallSuccessful = true;
         for (int i = 0; i < paths.length; i++) {
             relativePath = new File(relativePath, paths[i]);
@@ -220,19 +229,21 @@ public class TemporaryFolder extends ExternalResource {
     /**
      * Returns a new fresh folder with a random name under the temporary folder.
      */
+    @Nullable
     public File newFolder() throws IOException {
         return createTemporaryFolderIn(getRoot());
     }
 
-    private File createTemporaryFolderIn(File parentFolder) throws IOException {
-        File createdFolder = null;
+    @Nullable
+    private File createTemporaryFolderIn(@NotNull File parentFolder) throws IOException {
+        @Nullable File createdFolder = null;
         for (int i = 0; i < TEMP_DIR_ATTEMPTS; ++i) {
             // Use createTempFile to get a suitable folder name.
-            String suffix = ".tmp";
-            File tmpFile = File.createTempFile(TMP_PREFIX, suffix, parentFolder);
+            @NotNull String suffix = ".tmp";
+            @NotNull File tmpFile = File.createTempFile(TMP_PREFIX, suffix, parentFolder);
             String tmpName = tmpFile.toString();
             // Discard .tmp suffix of tmpName.
-            String folderName = tmpName.substring(0, tmpName.length() - suffix.length());
+            @NotNull String folderName = tmpName.substring(0, tmpName.length() - suffix.length());
             createdFolder = new File(folderName);
             if (createdFolder.mkdir()) {
                 tmpFile.delete();
@@ -248,6 +259,7 @@ public class TemporaryFolder extends ExternalResource {
     /**
      * @return the location of this temporary folder.
      */
+    @Nullable
     public File getRoot() {
         if (folder == null) {
             throw new IllegalStateException(
@@ -292,9 +304,9 @@ public class TemporaryFolder extends ExternalResource {
         if (file.delete()) {
             return true;
         }
-        File[] files = file.listFiles();
+        @Nullable File[] files = file.listFiles();
         if (files != null) {
-            for (File each : files) {
+            for (@NotNull File each : files) {
                 if (!recursiveDelete(each)) {
                     return false;
                 }

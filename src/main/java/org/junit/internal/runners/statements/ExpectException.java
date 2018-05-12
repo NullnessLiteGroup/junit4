@@ -1,5 +1,6 @@
 package org.junit.internal.runners.statements;
 
+import org.jetbrains.annotations.NotNull;
 import org.junit.internal.AssumptionViolatedException;
 import org.junit.runners.model.Statement;
 
@@ -24,7 +25,7 @@ public class ExpectException extends Statement {
             }
         } catch (Throwable e) {
             if (!expected.isAssignableFrom(e.getClass())) {
-                String message = "Unexpected exception, expected<"
+                @NotNull String message = "Unexpected exception, expected<"
                         + expected.getName() + "> but was<"
                         + e.getClass().getName() + ">";
                 throw new Exception(message, e);

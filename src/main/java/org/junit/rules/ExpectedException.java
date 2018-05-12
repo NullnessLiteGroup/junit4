@@ -9,6 +9,7 @@ import static org.junit.internal.matchers.ThrowableCauseMatcher.hasCause;
 import static org.junit.internal.matchers.ThrowableMessageMatcher.hasMessage;
 import org.hamcrest.Matcher;
 import org.hamcrest.StringDescription;
+import org.jetbrains.annotations.NotNull;
 import org.junit.AssumptionViolatedException;
 import org.junit.runners.model.Statement;
 
@@ -126,6 +127,7 @@ public class ExpectedException implements TestRule {
      * @deprecated AssertionErrors are handled by default since JUnit 4.12. Just
      *             like in JUnit &lt;= 4.10.
      */
+    @NotNull
     @Deprecated
     public ExpectedException handleAssertionErrors() {
         return this;
@@ -136,6 +138,7 @@ public class ExpectedException implements TestRule {
      * @deprecated AssumptionViolatedExceptions are handled by default since
      *             JUnit 4.12. Just like in JUnit &lt;= 4.10.
      */
+    @NotNull
     @Deprecated
     public ExpectedException handleAssumptionViolatedExceptions() {
         return this;
@@ -151,13 +154,15 @@ public class ExpectedException implements TestRule {
      * @param message exception detail message
      * @return the rule itself
      */
+    @NotNull
     public ExpectedException reportMissingExceptionWithMessage(String message) {
         missingExceptionMessage = message;
         return this;
     }
 
+    @NotNull
     public Statement apply(Statement base,
-            org.junit.runner.Description description) {
+                           org.junit.runner.Description description) {
         return new ExpectedExceptionStatement(base);
     }
 

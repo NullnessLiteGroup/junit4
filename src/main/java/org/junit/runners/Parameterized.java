@@ -13,6 +13,8 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.junit.internal.AssumptionViolatedException;
 import org.junit.runner.Description;
 import org.junit.runner.Runner;
@@ -213,7 +215,7 @@ public class Parameterized extends Suite {
          *         placeholder.
          * @see MessageFormat
          */
-        String name() default "{index}";
+        @NotNull String name() default "{index}";
     }
 
     /**
@@ -251,7 +253,7 @@ public class Parameterized extends Suite {
          * @return a {@link ParametersRunnerFactory} class (must have a default
          *         constructor)
          */
-        Class<? extends ParametersRunnerFactory> value() default BlockJUnit4ClassRunnerWithParametersFactory.class;
+        @NotNull Class<? extends ParametersRunnerFactory> value() default BlockJUnit4ClassRunnerWithParametersFactory.class;
     }
 
     /**
@@ -294,7 +296,7 @@ public class Parameterized extends Suite {
 
     private void validateBeforeParamAndAfterParamMethods(Integer parameterCount)
             throws InvalidTestClassError {
-        List<Throwable> errors = new ArrayList<Throwable>();
+        @NotNull List<Throwable> errors = new ArrayList<Throwable>();
         validatePublicStaticVoidMethods(Parameterized.BeforeParam.class, parameterCount, errors);
         validatePublicStaticVoidMethods(Parameterized.AfterParam.class, parameterCount, errors);
         if (!errors.isEmpty()) {
@@ -303,10 +305,10 @@ public class Parameterized extends Suite {
     }
 
     private void validatePublicStaticVoidMethods(
-            Class<? extends Annotation> annotation, Integer parameterCount,
-            List<Throwable> errors) {
-        List<FrameworkMethod> methods = getTestClass().getAnnotatedMethods(annotation);
-        for (FrameworkMethod fm : methods) {
+            Class<? extends Annotation> annotation, @Nullable Integer parameterCount,
+            @NotNull List<Throwable> errors) {
+        @NotNull List<FrameworkMethod> methods = getTestClass().getAnnotatedMethods(annotation);
+        for (@NotNull FrameworkMethod fm : methods) {
             fm.validatePublicVoid(true, errors);
             if (parameterCount != null) {
                 int methodParameterCount = fm.getMethod().getParameterTypes().length;
@@ -319,6 +321,7 @@ public class Parameterized extends Suite {
     }
 
     private static class AssumptionViolationRunner extends Runner {
+        @NotNull
         private final Description description;
         private final AssumptionViolatedException exception;
 
@@ -330,13 +333,14 @@ public class Parameterized extends Suite {
             this.exception = exception;
         }
 
+        @NotNull
         @Override
         public Description getDescription() {
             return description;
         }
 
         @Override
-        public void run(RunNotifier notifier) {
+        public void run(@NotNull RunNotifier notifier) {
             notifier.fireTestAssumptionFailed(new Failure(description, exception));
         }
     }
@@ -344,17 +348,20 @@ public class Parameterized extends Suite {
     private static class RunnersFactory {
         private static final ParametersRunnerFactory DEFAULT_FACTORY = new BlockJUnit4ClassRunnerWithParametersFactory();
 
+        @NotNull
         private final TestClass testClass;
+        @NotNull
         private final FrameworkMethod parametersMethod;
         private final List<Object> allParameters;
         private final int parameterCount;
+        @Nullable
         private final Runner runnerOverride;
 
         private RunnersFactory(Class<?> klass) throws Throwable {
             testClass = new TestClass(klass);
             parametersMethod = getParametersMethod(testClass);
             List<Object> allParametersResult;
-            AssumptionViolationRunner assumptionViolationRunner = null;
+            @Nullable AssumptionViolationRunner assumptionViolationRunner = null;
             try {
                 allParametersResult = allParameters(testClass, parametersMethod);
             } catch (AssumptionViolatedException e) {
@@ -368,6 +375,7 @@ public class Parameterized extends Suite {
                     allParameters.isEmpty() ? 0 : normalizeParameters(allParameters.get(0)).length;
         }
 
+        @NotNull
         private List<Runner> createRunners() throws Exception {
             if (runnerOverride != null) {
                 return Collections.singletonList(runnerOverride);
@@ -380,38 +388,40 @@ public class Parameterized extends Suite {
 
         private ParametersRunnerFactory getParametersRunnerFactory()
                 throws InstantiationException, IllegalAccessException {
-            UseParametersRunnerFactory annotation = testClass
+            @Nullable UseParametersRunnerFactory annotation = testClass
                     .getAnnotation(UseParametersRunnerFactory.class);
             if (annotation == null) {
                 return DEFAULT_FACTORY;
             } else {
-                Class<? extends ParametersRunnerFactory> factoryClass = annotation
+                @NotNull Class<? extends ParametersRunnerFactory> factoryClass = annotation
                         .value();
                 return factoryClass.newInstance();
             }
         }
 
         private TestWithParameters createTestWithNotNormalizedParameters(
-                String pattern, int index, Object parametersOrSingleParameter) {
-            Object[] parameters = normalizeParameters(parametersOrSingleParameter);
+                @NotNull String pattern, int index, Object parametersOrSingleParameter) {
+            @NotNull Object[] parameters = normalizeParameters(parametersOrSingleParameter);
             return createTestWithParameters(testClass, pattern, index, parameters);
         }
 
+        @NotNull
         private static Object[] normalizeParameters(Object parametersOrSingleParameter) {
             return (parametersOrSingleParameter instanceof Object[]) ? (Object[]) parametersOrSingleParameter
                     : new Object[] { parametersOrSingleParameter };
         }
 
+        @NotNull
         @SuppressWarnings("unchecked")
         private static List<Object> allParameters(
-                TestClass testClass, FrameworkMethod parametersMethod) throws Throwable {
+                @NotNull TestClass testClass, FrameworkMethod parametersMethod) throws Throwable {
             Object parameters = parametersMethod.invokeExplosively(null);
             if (parameters instanceof List) {
                 return (List<Object>) parameters;
             } else if (parameters instanceof Collection) {
                 return new ArrayList<Object>((Collection<Object>) parameters);
             } else if (parameters instanceof Iterable) {
-                List<Object> result = new ArrayList<Object>();
+                @NotNull List<Object> result = new ArrayList<Object>();
                 for (Object entry : ((Iterable<Object>) parameters)) {
                     result.add(entry);
                 }
@@ -423,10 +433,11 @@ public class Parameterized extends Suite {
             }
         }
 
+        @NotNull
         private static FrameworkMethod getParametersMethod(TestClass testClass) throws Exception {
-            List<FrameworkMethod> methods = testClass
+            @NotNull List<FrameworkMethod> methods = testClass
                     .getAnnotatedMethods(Parameters.class);
-            for (FrameworkMethod each : methods) {
+            for (@NotNull FrameworkMethod each : methods) {
                 if (each.isStatic() && each.isPublic()) {
                     return each;
                 }
@@ -436,13 +447,14 @@ public class Parameterized extends Suite {
                     + testClass.getName());
         }
 
+        @NotNull
         private List<Runner> createRunnersForParameters(
-                Iterable<Object> allParameters, String namePattern,
-                ParametersRunnerFactory runnerFactory) throws Exception {
+                @NotNull Iterable<Object> allParameters, @NotNull String namePattern,
+                @NotNull ParametersRunnerFactory runnerFactory) throws Exception {
             try {
-                List<TestWithParameters> tests = createTestsForParameters(
+                @NotNull List<TestWithParameters> tests = createTestsForParameters(
                         allParameters, namePattern);
-                List<Runner> runners = new ArrayList<Runner>();
+                @NotNull List<Runner> runners = new ArrayList<Runner>();
                 for (TestWithParameters test : tests) {
                     runners.add(runnerFactory
                             .createRunnerForTestWithParameters(test));
@@ -453,11 +465,12 @@ public class Parameterized extends Suite {
             }
         }
 
+        @NotNull
         private List<TestWithParameters> createTestsForParameters(
-                Iterable<Object> allParameters, String namePattern)
+                Iterable<Object> allParameters, @NotNull String namePattern)
                 throws Exception {
             int i = 0;
-            List<TestWithParameters> children = new ArrayList<TestWithParameters>();
+            @NotNull List<TestWithParameters> children = new ArrayList<TestWithParameters>();
             for (Object parametersOfSingleTest : allParameters) {
                 children.add(createTestWithNotNormalizedParameters(namePattern,
                         i++, parametersOfSingleTest));
@@ -469,7 +482,7 @@ public class Parameterized extends Suite {
                 TestClass testClass, FrameworkMethod parametersMethod) throws Exception {
             String className = testClass.getName();
             String methodName = parametersMethod.getName();
-            String message = MessageFormat.format(
+            @NotNull String message = MessageFormat.format(
                     "{0}.{1}() must return an Iterable of arrays.", className,
                     methodName);
             return new Exception(message);
@@ -480,7 +493,7 @@ public class Parameterized extends Suite {
                 Object[] parameters) {
             String finalPattern = pattern.replaceAll("\\{index\\}",
                     Integer.toString(index));
-            String name = MessageFormat.format(finalPattern, parameters);
+            @NotNull String name = MessageFormat.format(finalPattern, parameters);
             return new TestWithParameters("[" + name + "]", testClass,
                     Arrays.asList(parameters));
         }

@@ -4,6 +4,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
 
+import org.jetbrains.annotations.NotNull;
 import org.junit.internal.AssumptionViolatedException;
 import org.junit.runner.Description;
 import org.junit.runner.notification.Failure;
@@ -51,8 +52,8 @@ public class ClassRoadie {
     private void runBefores() throws FailedBefore {
         try {
             try {
-                List<Method> befores = testClass.getBefores();
-                for (Method before : befores) {
+                @NotNull List<Method> befores = testClass.getBefores();
+                for (@NotNull Method before : befores) {
                     before.invoke(null);
                 }
             } catch (InvocationTargetException e) {
@@ -67,8 +68,8 @@ public class ClassRoadie {
     }
 
     private void runAfters() {
-        List<Method> afters = testClass.getAfters();
-        for (Method after : afters) {
+        @NotNull List<Method> afters = testClass.getAfters();
+        for (@NotNull Method after : afters) {
             try {
                 after.invoke(null);
             } catch (InvocationTargetException e) {
