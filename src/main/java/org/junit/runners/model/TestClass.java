@@ -34,7 +34,8 @@ public class TestClass implements Annotatable {
     private static final FieldComparator FIELD_COMPARATOR = new FieldComparator();
     private static final MethodComparator METHOD_COMPARATOR = new MethodComparator();
 
-    private final Class<?> clazz;
+    // Nullable clazz from the constructor
+    private final @Nullable Class<?> clazz;
     private final Map<Class<? extends Annotation>, List<FrameworkMethod>> methodsForAnnotations;
     private final Map<Class<? extends Annotation>, List<FrameworkField>> fieldsForAnnotations;
 

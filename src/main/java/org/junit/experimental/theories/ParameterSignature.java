@@ -102,7 +102,8 @@ public class ParameterSignature {
         return getAnnotation(type) != null;
     }
 
-    public <T extends Annotation> T findDeepAnnotation(Class<T> annotationType) {
+    // Nullable T returned from findDeepAnnotation is possible
+    public <T extends Annotation> @Nullable T findDeepAnnotation(Class<T> annotationType) {
         Annotation[] annotations2 = annotations;
         return findDeepAnnotation(annotations2, annotationType, 3);
     }

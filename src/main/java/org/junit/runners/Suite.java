@@ -8,6 +8,7 @@ import java.lang.annotation.Target;
 import java.util.Collections;
 import java.util.List;
 
+import org.checkerframework.checker.initialization.qual.UnknownInitialization;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.junit.internal.builders.AllDefaultPossibilitiesBuilder;
 import org.junit.runner.Description;
@@ -118,12 +119,14 @@ public class Suite extends ParentRunner<Runner> {
     }
 
     @Override
-    protected List<Runner> getChildren() {
+    // helper method override super requires
+    protected List<Runner> getChildren(@UnknownInitialization Suite this) {
         return runners;
     }
 
     @Override
-    protected Description describeChild(Runner child) {
+    // helper method override super requires
+    protected Description describeChild(@UnknownInitialization Suite this, Runner child) {
         return child.getDescription();
     }
 

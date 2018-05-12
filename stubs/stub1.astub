@@ -7,7 +7,8 @@ package java.lang.reflect;
 
 public final class Method {
 	// Nullable obj by ClassRoadie: runAfters()
-    public @Nullable Object invoke(@Nullable Object obj, Object ... args);
+	// Nullable args from invokeExplosively(final Object target, final Object... params)
+    public @Nullable Object invoke(@Nullable Object obj, Object @Nullable ... args);
 }
 
 //public final class Array {
@@ -37,10 +38,11 @@ public final class Class<T> {
 
 package java.util;
 
-//public interface Set<E> extends Collection<E> {
-//    boolean add(@Nullable E e);
+public interface Set<E> extends Collection<E> {
+	// Nullable e from addParent(Class<?> parent)
+    boolean add(@Nullable E e);
 //    boolean remove(@Nullable Object o);
-//}
+}
 
 //public interface List<E>  {
 //    boolean add(@Nullable E e);

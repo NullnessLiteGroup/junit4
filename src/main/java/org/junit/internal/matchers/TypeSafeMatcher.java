@@ -2,6 +2,7 @@ package org.junit.internal.matchers;
 
 import java.lang.reflect.Method;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.hamcrest.BaseMatcher;
 import org.junit.internal.MethodSorter;
 
@@ -57,7 +58,8 @@ public abstract class TypeSafeMatcher<T> extends BaseMatcher<T> {
      * Instead, extend the {@link BaseMatcher}.
      */
     @SuppressWarnings({"unchecked"})
-    public final boolean matches(Object item) {
+    // Nullable item override super requires
+    public final boolean matches(@Nullable Object item) {
         return item != null
                 && expectedType.isInstance(item)
                 && matchesSafely((T) item);

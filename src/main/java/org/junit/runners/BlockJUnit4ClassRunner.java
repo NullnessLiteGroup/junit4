@@ -144,7 +144,8 @@ public class BlockJUnit4ClassRunner extends ParentRunner<FrameworkMethod> {
      * methods annotated with {@code @Test} on this class and superclasses that
      * are not overridden.
      */
-    protected List<FrameworkMethod> computeTestMethods() {
+    // helper method from getChildren(BlockJUnit4ClassRunner this)
+    protected List<FrameworkMethod> computeTestMethods(@UnknownInitialization BlockJUnit4ClassRunner this) {
         return getTestClass().getAnnotatedMethods(Test.class);
     }
 
@@ -161,13 +162,15 @@ public class BlockJUnit4ClassRunner extends ParentRunner<FrameworkMethod> {
         validateMethods(errors);
     }
 
-    private void validatePublicConstructor(List<Throwable> errors) {
+    // helper method from collectInitializationErrors(BlockJUnit4ClassRunner this, List<Throwable> errors)
+    private void validatePublicConstructor(@UnknownInitialization BlockJUnit4ClassRunner this, List<Throwable> errors) {
         if (getTestClass().getJavaClass() != null) {
             errors.addAll(PUBLIC_CLASS_VALIDATOR.validateTestClass(getTestClass()));
         }
     }
 
-    protected void validateNoNonStaticInnerClass(List<Throwable> errors) {
+    // helper method from collectInitializationErrors(BlockJUnit4ClassRunner this, List<Throwable> errors)
+    protected void validateNoNonStaticInnerClass(@UnknownInitialization BlockJUnit4ClassRunner this, List<Throwable> errors) {
         if (getTestClass().isANonStaticInnerClass()) {
             String gripe = "The inner class " + getTestClass().getName()
                     + " is not static.";
@@ -180,7 +183,8 @@ public class BlockJUnit4ClassRunner extends ParentRunner<FrameworkMethod> {
      * or if the constructor takes parameters. Override if a subclass requires
      * different validation rules.
      */
-    protected void validateConstructor(List<Throwable> errors) {
+    // helper method from collectInitializationErrors(BlockJUnit4ClassRunner this, List<Throwable> errors)
+    protected void validateConstructor(@UnknownInitialization BlockJUnit4ClassRunner this, List<Throwable> errors) {
         validateOnlyOneConstructor(errors);
         validateZeroArgConstructor(errors);
     }
@@ -189,7 +193,8 @@ public class BlockJUnit4ClassRunner extends ParentRunner<FrameworkMethod> {
      * Adds to {@code errors} if the test class has more than one constructor
      * (do not override)
      */
-    protected void validateOnlyOneConstructor(List<Throwable> errors) {
+    // helper method from validateConstructor(BlockJUnit4ClassRunner this, List<Throwable> errors)
+    protected void validateOnlyOneConstructor(@UnknownInitialization BlockJUnit4ClassRunner this, List<Throwable> errors) {
         if (!hasOneConstructor()) {
             String gripe = "Test class should have exactly one public constructor";
             errors.add(new Exception(gripe));
@@ -200,7 +205,8 @@ public class BlockJUnit4ClassRunner extends ParentRunner<FrameworkMethod> {
      * Adds to {@code errors} if the test class's single constructor takes
      * parameters (do not override)
      */
-    protected void validateZeroArgConstructor(List<Throwable> errors) {
+    // helper method from validateConstructor(BlockJUnit4ClassRunner this, List<Throwable> errors)
+    protected void validateZeroArgConstructor(@UnknownInitialization BlockJUnit4ClassRunner this, List<Throwable> errors) {
         if (!getTestClass().isANonStaticInnerClass()
                 && hasOneConstructor()
                 && (getTestClass().getOnlyConstructor().getParameterTypes().length != 0)) {
@@ -220,7 +226,8 @@ public class BlockJUnit4ClassRunner extends ParentRunner<FrameworkMethod> {
      * @deprecated
      */
     @Deprecated
-    protected void validateInstanceMethods(List<Throwable> errors) {
+    // helper method from collectInitializationErrors(BlockJUnit4ClassRunner this, List<Throwable> errors)
+    protected void validateInstanceMethods(@UnknownInitialization BlockJUnit4ClassRunner this, List<Throwable> errors) {
         validatePublicVoidNoArgMethods(After.class, false, errors);
         validatePublicVoidNoArgMethods(Before.class, false, errors);
         validateTestMethods(errors);
@@ -230,11 +237,13 @@ public class BlockJUnit4ClassRunner extends ParentRunner<FrameworkMethod> {
         }
     }
 
-    protected void validateFields(List<Throwable> errors) {
+    // helper method from collectInitializationErrors(BlockJUnit4ClassRunner this, List<Throwable> errors)
+    protected void validateFields(@UnknownInitialization BlockJUnit4ClassRunner this, List<Throwable> errors) {
         RULE_VALIDATOR.validate(getTestClass(), errors);
     }
 
-    private void validateMethods(List<Throwable> errors) {
+    // helper method from collectInitializationErrors(BlockJUnit4ClassRunner this, List<Throwable> errors)
+    private void validateMethods(@UnknownInitialization BlockJUnit4ClassRunner this, List<Throwable> errors) {
         RULE_METHOD_VALIDATOR.validate(getTestClass(), errors);
     }
 
@@ -242,7 +251,8 @@ public class BlockJUnit4ClassRunner extends ParentRunner<FrameworkMethod> {
      * Adds to {@code errors} for each method annotated with {@code @Test}that
      * is not a public, void instance method with no arguments.
      */
-    protected void validateTestMethods(List<Throwable> errors) {
+    // helper method from validateInstanceMethods(BlockJUnit4ClassRunner this, List<Throwable> errors)
+    protected void validateTestMethods(@UnknownInitialization BlockJUnit4ClassRunner this, List<Throwable> errors) {
         validatePublicVoidNoArgMethods(Test.class, false, errors);
     }
 
@@ -269,7 +279,8 @@ public class BlockJUnit4ClassRunner extends ParentRunner<FrameworkMethod> {
      * Returns the name that describes {@code method} for {@link Description}s.
      * Default implementation is the method's name
      */
-    protected String testName(FrameworkMethod method) {
+    // helper method from describeChild(BlockJUnit4ClassRunner this, FrameworkMethod method)
+    protected String testName(@UnknownInitialization BlockJUnit4ClassRunner this, FrameworkMethod method) {
         return method.getName();
     }
 

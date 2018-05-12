@@ -305,6 +305,7 @@ public class Parameterized extends Suite {
     }
 
     private void validatePublicStaticVoidMethods(
+            @UnderInitialization Parameterized this,
             Class<? extends Annotation> annotation, Integer parameterCount,
             List<Throwable> errors) {
         List<FrameworkMethod> methods = getTestClass().getAnnotatedMethods(annotation);

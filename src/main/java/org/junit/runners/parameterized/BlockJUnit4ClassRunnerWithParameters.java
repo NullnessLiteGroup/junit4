@@ -4,6 +4,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.List;
 
+import org.checkerframework.checker.initialization.qual.UnknownInitialization;
 import org.junit.internal.runners.statements.RunAfters;
 import org.junit.internal.runners.statements.RunBefores;
 import org.junit.runner.RunWith;
@@ -99,12 +100,14 @@ public class BlockJUnit4ClassRunnerWithParameters extends
     }
 
     @Override
-    protected String testName(FrameworkMethod method) {
+    // helper method override super requires
+    protected String testName(@UnknownInitialization BlockJUnit4ClassRunnerWithParameters this, FrameworkMethod method) {
         return method.getName() + getName();
     }
 
     @Override
-    protected void validateConstructor(List<Throwable> errors) {
+    // override requires
+    protected void validateConstructor(@UnknownInitialization BlockJUnit4ClassRunnerWithParameters this, List<Throwable> errors) {
         validateOnlyOneConstructor(errors);
         if (getInjectionType() != InjectionType.CONSTRUCTOR) {
             validateZeroArgConstructor(errors);
@@ -112,7 +115,8 @@ public class BlockJUnit4ClassRunnerWithParameters extends
     }
 
     @Override
-    protected void validateFields(List<Throwable> errors) {
+    // override requires
+    protected void validateFields(@UnknownInitialization BlockJUnit4ClassRunnerWithParameters this, List<Throwable> errors) {
         super.validateFields(errors);
         if (getInjectionType() == InjectionType.FIELD) {
             List<FrameworkField> annotatedFieldsByParameter = getAnnotatedFieldsByParameter();

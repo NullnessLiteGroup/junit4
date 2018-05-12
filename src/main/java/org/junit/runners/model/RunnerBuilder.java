@@ -73,8 +73,12 @@ public abstract class RunnerBuilder {
     }
 
     // Nullable parent from runners(Class<?> parent, Class<?>[] children)
-    Class<?> addParent(@Nullable Class<?> parent) throws InitializationError {
+    // Nullable Class<?> if parent is null and called only once
+    @Nullable Class<?> addParent(@Nullable Class<?> parent) throws InitializationError {
         if (!parents.add(parent)) {
+            // [dereference.of.nullable] TRUE_POSITIVE
+            // parents is HashSet and parents.add(parent) permits null
+            // if parent=null is called twice, then parent.getName() throws NPE
             throw new InitializationError(String.format("class '%s' (possibly indirectly) contains itself as a SuiteClass", parent.getName()));
         }
         return parent;

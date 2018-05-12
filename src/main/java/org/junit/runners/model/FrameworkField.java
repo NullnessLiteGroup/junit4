@@ -61,6 +61,9 @@ public class FrameworkField extends FrameworkMember<FrameworkField> {
     @Override
     // UnknownInit override super requires
     protected int getModifiers(@UnknownInitialization FrameworkField this) {
+        // [dereference.of.nullable] FALSE_POSITIVE
+        // de-referencing field is safe
+        // field is a final field initialized non-null in the constructor
         return field.getModifiers();
     }
 
