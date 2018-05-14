@@ -132,6 +132,11 @@ public abstract class BaseTestRunner implements TestListener {
                 return test;
             }
         } catch (InvocationTargetException e) {
+            // [throwing.nullable] FALSE_POSITIVE
+            //  de-referencing e is safe here
+            // nowhere else in the project called InvocationTargetException(),
+            // and the only public constructor of InvocationTargetException
+            // ensures target non-null
             runFailed("Failed to invoke suite():" + e.getTargetException().toString());
             return null;
         } catch (IllegalAccessException e) {

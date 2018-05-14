@@ -119,9 +119,10 @@ public class AllMembersSupplier extends ParameterSupplier {
             }
         }
     }
-    
+
+    // Nullable value from addMultiPointFields(ParameterSignature sig, List<PotentialAssignment> list)
     private void addDataPointsValues(Class<?> type, ParameterSignature sig, String name, 
-            List<PotentialAssignment> list, Object value) {
+            List<PotentialAssignment> list, @Nullable Object value) {
         if (type.isArray()) {
             addArrayValues(sig, name, list, value);
         }

@@ -68,6 +68,11 @@ public class TestSuite implements Test {
         } catch (InstantiationException e) {
             return (warning("Cannot instantiate test case: " + name + " (" + Throwables.getStacktrace(e) + ")"));
         } catch (InvocationTargetException e) {
+            // [argument.type.incompatible] FALSE_POSITIVE
+            //   e.getTargetException() is non-null
+            // nowhere else in the project called InvocationTargetException(),
+            // and the only public constructor of InvocationTargetException
+            // ensures target non-null
             return (warning("Exception in constructor: " + name + " (" + Throwables.getStacktrace(e.getTargetException()) + ")"));
         } catch (IllegalAccessException e) {
             return (warning("Cannot access test case: " + name + " (" + Throwables.getStacktrace(e) + ")"));

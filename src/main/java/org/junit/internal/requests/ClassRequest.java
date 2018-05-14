@@ -3,6 +3,7 @@ package org.junit.internal.requests;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.junit.internal.builders.AllDefaultPossibilitiesBuilder;
 import org.junit.internal.builders.SuiteMethodBuilder;
 import org.junit.runner.Request;
@@ -19,7 +20,8 @@ public class ClassRequest extends Request {
      */
     private final Class<?> fTestClass;
     private final boolean canUseSuiteMethod;
-    private volatile Runner runner;
+    // Nullable runner from getRunner()
+    private volatile @Nullable Runner runner;
 
     public ClassRequest(Class<?> testClass, boolean canUseSuiteMethod) {
         this.fTestClass = testClass;
@@ -61,7 +63,8 @@ public class ClassRequest extends Request {
     private class CustomSuiteMethodBuilder extends SuiteMethodBuilder {
 
         @Override
-        public Runner runnerForClass(Class<?> testClass) throws Throwable {
+        // Nullable Runner indicated in implementation
+        public @Nullable Runner runnerForClass(Class<?> testClass) throws Throwable {
             if (testClass == fTestClass && !canUseSuiteMethod) {
                 return null;
             }

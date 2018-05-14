@@ -118,6 +118,10 @@ public class FrameworkMethod extends FrameworkMember<FrameworkMethod> {
     @Override
     // UnknownInit override super requires
     protected int getModifiers(@UnknownInitialization FrameworkMethod this) {
+        // [dereference.of.nullable] FALSE_POSITIVE
+        //  de-referencing method is safe here
+        // method is a final field that initialized in the constructor
+        // FrameworkMethod(Method method) to be non-null
         return method.getModifiers();
     }
 

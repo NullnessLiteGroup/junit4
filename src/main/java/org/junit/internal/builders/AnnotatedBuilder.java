@@ -92,7 +92,8 @@ public class AnnotatedBuilder extends RunnerBuilder {
         return null;
     }
 
-    private Class<?> getEnclosingClassForNonStaticMemberClass(Class<?> currentTestClass) {
+    // Nullable Class<?> returned indicated by the implementation below
+    private @Nullable Class<?> getEnclosingClassForNonStaticMemberClass(Class<?> currentTestClass) {
         if (currentTestClass.isMemberClass() && !Modifier.isStatic(currentTestClass.getModifiers())) {
             return currentTestClass.getEnclosingClass();
         } else {

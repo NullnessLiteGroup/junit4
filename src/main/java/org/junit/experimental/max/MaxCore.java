@@ -143,7 +143,8 @@ public class MaxCore {
         return Request.method(type, methodName).getRunner();
     }
 
-    private Class<?> getMalformedTestClass(Description each) {
+    // Nullable Class<?> returned if throw ClassNotFoundException
+    private @Nullable Class<?> getMalformedTestClass(Description each) {
         try {
             return Class.forName(each.toString().replace(MALFORMED_JUNIT_3_TEST_CLASS_PREFIX, ""));
         } catch (ClassNotFoundException e) {

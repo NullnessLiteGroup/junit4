@@ -41,7 +41,8 @@ import org.junit.Rule;
  * @since 4.7
  */
 public class TemporaryFolder extends ExternalResource {
-    private final File parentFolder;
+    // Nullable parentFolder from constructor
+    private final @Nullable File parentFolder;
     private final boolean assureDeletion;
     private File folder;
 
@@ -214,6 +215,11 @@ public class TemporaryFolder extends ExternalResource {
         }
         if (!lastMkdirsCallSuccessful) {
             throw new IOException(
+                    // [dereference.of.nullable] FALSE_POSITIVE
+                    //  de-referencing relativePath is safe in this case
+                    // this relativePath is from the execution of the loop above
+                    // because paths.length is ensure to be positive from the code above
+                    // thus, relativePath at this point must be some nonnull object
                     "a folder with the path \'" + relativePath.getPath() + "\' already exists");
         }
         return file;
@@ -242,6 +248,15 @@ public class TemporaryFolder extends ExternalResource {
             }
             tmpFile.delete();
         }
+        // [dereference.of.nullable] TRUE_POSITIVE
+        //  de-referencing parentFolder can cause NPE
+        // Although documented not to use,
+        // users can call create() on an instance of this class with null parentFolder
+        //
+        // [dereference.of.nullable] FALSE_POSITIVE
+        //  de-referencing createdFolder cannot cause NPE
+        // this createdFolder can only come from the loop above, which
+        // is initialized at every iteration
         throw new IOException("Unable to create temporary directory in: "
             + parentFolder.toString() + ". Tried " + TEMP_DIR_ATTEMPTS + " times. "
             + "Last attempted to create: " + createdFolder.toString());

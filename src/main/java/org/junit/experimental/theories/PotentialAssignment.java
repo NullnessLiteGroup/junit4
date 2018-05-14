@@ -1,5 +1,7 @@
 package org.junit.experimental.theories;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 import static java.lang.String.format;
 
 public abstract class PotentialAssignment {
@@ -14,10 +16,12 @@ public abstract class PotentialAssignment {
         }
     }
 
-    public static PotentialAssignment forValue(final String name, final Object value) {
+    // Nullable valud from addSinglePointFields(ParameterSignature sig, List<PotentialAssignment> list)
+    public static PotentialAssignment forValue(final String name, final @Nullable Object value) {
         return new PotentialAssignment() {
             @Override
-            public Object getValue() {
+            // Nullable Object returned if value is null
+            public @Nullable Object getValue() {
                 return value;
             }
 
@@ -46,7 +50,8 @@ public abstract class PotentialAssignment {
         };
     }
 
-    public abstract Object getValue() throws CouldNotGenerateValueException;
+    // Nullable Object returned from subclass
+    public abstract @Nullable Object getValue() throws CouldNotGenerateValueException;
 
     public abstract String getDescription() throws CouldNotGenerateValueException;
 }

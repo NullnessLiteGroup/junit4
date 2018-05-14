@@ -137,7 +137,8 @@ public class FailOnTimeout extends Statement {
      * test failed, an exception indicating a timeout if the test timed out, or
      * {@code null} if the test passed.
      */
-    private Throwable getResult(FutureTask<Throwable> task, Thread thread) {
+    // Nullable Throwable returned by documentation above
+    private @Nullable Throwable getResult(FutureTask<Throwable> task, Thread thread) {
         try {
             if (timeout > 0) {
                 return task.get(timeout, timeUnit);
@@ -232,7 +233,10 @@ public class FailOnTimeout extends Statement {
      * if this cannot be determined, e.g. because new threads are being created at an
      * extremely fast rate.
      */
-    private List<Thread> getThreadsInGroup(ThreadGroup group) {
+    private List<Thread> getThreadsInGroup(@Nullable ThreadGroup group) {
+        // [dereference.of.nullable] TRUE_POSITIVE
+        // dereference of possibly-null reference group
+        // group could be nullable which may raise NPE
         final int activeThreadCount = group.activeCount(); // this is just an estimate
         int threadArraySize = Math.max(activeThreadCount * 2, 100);
         for (int loopCount = 0; loopCount < 5; loopCount++) {
@@ -270,7 +274,8 @@ public class FailOnTimeout extends Statement {
     private class CallableStatement implements Callable<Throwable> {
         private final CountDownLatch startLatch = new CountDownLatch(1);
 
-        public Throwable call() throws Exception {
+        // Nullable Throwable from implementation below
+        public @Nullable Throwable call() throws Exception {
             try {
                 startLatch.countDown();
                 originalStatement.evaluate();

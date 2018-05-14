@@ -14,6 +14,7 @@ import java.util.Collections;
 import java.util.List;
 
 import org.checkerframework.checker.initialization.qual.UnderInitialization;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.junit.internal.AssumptionViolatedException;
 import org.junit.runner.Description;
 import org.junit.runner.Runner;
@@ -351,7 +352,8 @@ public class Parameterized extends Suite {
         private final FrameworkMethod parametersMethod;
         private final List<Object> allParameters;
         private final int parameterCount;
-        private final Runner runnerOverride;
+        // Nullable runnerOverride indicated from createRunners()
+        private final @Nullable Runner runnerOverride;
 
         private RunnersFactory(Class<?> klass) throws Throwable {
             testClass = new TestClass(klass);
@@ -376,6 +378,8 @@ public class Parameterized extends Suite {
                 return Collections.singletonList(runnerOverride);
             }
             Parameters parameters = parametersMethod.getAnnotation(Parameters.class);
+            // [dereference.of.nullable] TRUE_POSITIVE
+            // dereference of possibly-null reference parameters
             return Collections.unmodifiableList(createRunnersForParameters(
                     allParameters, parameters.name(),
                     getParametersRunnerFactory()));

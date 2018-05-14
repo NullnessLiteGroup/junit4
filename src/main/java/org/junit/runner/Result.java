@@ -13,6 +13,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.junit.runner.notification.Failure;
 import org.junit.runner.notification.RunListener;
 
@@ -29,8 +30,9 @@ public class Result implements Serializable {
             //  de-referencing lookup() cannot raise NPE in this case,
             // since SerializedFrom.class implements Serializable so that lookup() will not return null
             ObjectStreamClass.lookup(SerializedForm.class).getFields();
-    private final AtomicInteger count;
-    private final AtomicInteger ignoreCount;
+    // Nullable fields below from Result(SerializedForm serializedForm)
+    private final @Nullable AtomicInteger count;
+    private final @Nullable AtomicInteger ignoreCount;
     private final CopyOnWriteArrayList<Failure> failures;
     private final AtomicLong runTime;
     private final AtomicLong startTime;
@@ -157,9 +159,10 @@ public class Result implements Serializable {
      */
     private static class SerializedForm implements Serializable {
         private static final long serialVersionUID = 1L;
-        private final AtomicInteger fCount;
-        private final AtomicInteger fIgnoreCount;
-        private final List<Failure> fFailures;
+        // Nullable fields below from SerializedForm deserialize(ObjectInputStream s)
+        private final @Nullable AtomicInteger fCount;
+        private final @Nullable AtomicInteger fIgnoreCount;
+        private final @Nullable List<Failure> fFailures;
         private final long fRunTime;
         private final long fStartTime;
 

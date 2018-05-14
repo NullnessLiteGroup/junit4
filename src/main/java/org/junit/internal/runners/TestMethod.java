@@ -50,7 +50,12 @@ public class TestMethod {
         }
     }
 
-    boolean isUnexpected(Throwable exception) {
+    // Nullable exception from MethodRoadie.runTestMethod()
+    boolean isUnexpected(@Nullable Throwable exception) {
+        // [dereference.of.nullable] TRUE_POSITIVE
+        // dereference of possibly-null reference getExpectedException()
+        // [dereference.of.nullable] TRUE_POSITIVE
+        // dereference of possibly-null reference exception
         return !getExpectedException().isAssignableFrom(exception.getClass());
     }
 

@@ -99,7 +99,11 @@ public class Description implements Serializable {
      * @return a <code>Description</code> named <code>name</code>
      */
     // Nullable name from JUnit38ClassRunner.asDescription(Test test)
-    public static Description createTestDescription(Class<?> clazz, @Nullable String name) {
+    // Nullable clazz for its public static method
+    public static Description createTestDescription(@Nullable Class<?> clazz, @Nullable String name) {
+        // [dereference.of.nullable] TRUE_POSITIVE
+        //  class.getName() can raise NPE
+        // since the method is public static that users can pass null as clazz
         return new Description(clazz, formatDisplayName(name, clazz.getName()));
     }
 
@@ -326,12 +330,14 @@ public class Description implements Serializable {
      * @return If this describes a method invocation,
      *         the name of the method (or null if not)
      */
-    public String getMethodName() {
+    // Nullable String returned from the document above
+    public @Nullable String getMethodName() {
         return methodAndClassNamePatternGroupOrDefault(1, null);
     }
 
     // Nullable defaultString Description:getMethodName()
-    private String methodAndClassNamePatternGroupOrDefault(int group,
+    // Nullable String returned from document of getMethodName()
+    private @Nullable String methodAndClassNamePatternGroupOrDefault(int group,
             @Nullable String defaultString) {
         Matcher matcher = METHOD_AND_CLASS_NAME_PATTERN.matcher(toString());
         return matcher.matches() ? matcher.group(group) : defaultString;

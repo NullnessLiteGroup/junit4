@@ -1,5 +1,6 @@
 package org.junit.internal.management;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.junit.internal.Classes;
 
 import java.lang.reflect.InvocationTargetException;
@@ -13,8 +14,9 @@ final class ReflectiveThreadMXBean implements ThreadMXBean {
 
 
   private static final class Holder {
-    static final Method getThreadCpuTimeMethod;
-    static final Method isThreadCpuTimeSupportedMethod;
+    // Nullable fields from implementation below
+    static final @Nullable Method getThreadCpuTimeMethod;
+    static final @Nullable Method isThreadCpuTimeSupportedMethod;
 
     private static final String FAILURE_MESSAGE = "Unable to access ThreadMXBean";
 
@@ -49,6 +51,9 @@ final class ReflectiveThreadMXBean implements ThreadMXBean {
     if (Holder.getThreadCpuTimeMethod != null) {
       Exception error = null;
       try {
+        // [unboxing.of.nullable] TRUE_POSITIVE
+        // unboxing a possibly-null reference (Long)Holder.getThreadCpuTimeMethod.invoke(threadMxBean, id)
+        // invoke() may return null
         return (Long) Holder.getThreadCpuTimeMethod.invoke(threadMxBean, id);
       } catch (ClassCastException e) {
         error = e;
@@ -74,6 +79,9 @@ final class ReflectiveThreadMXBean implements ThreadMXBean {
   public boolean isThreadCpuTimeSupported() {
     if (Holder.isThreadCpuTimeSupportedMethod != null) {
       try {
+        // [unboxing.of.nullable] TRUE_POSITIVE
+        // unboxing a possibly-null reference (Boolean)Holder.isThreadCpuTimeSupportedMethod.invoke(threadMxBean)
+        // invoke() may return null
         return (Boolean) Holder.isThreadCpuTimeSupportedMethod.invoke(threadMxBean);
       } catch (ClassCastException e) {
         // fallthrough

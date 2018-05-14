@@ -1,5 +1,7 @@
 package org.junit.internal;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -42,10 +44,10 @@ public final class Throwables {
      * @return does not return anything
      * @since 4.12
      */
-    // [return.type.incompatible] FALSE_POSITIVE
-    //   As documented, we never return, why the method isn't void?
     public static Exception rethrowAsException(Throwable e) throws Exception {
         Throwables.<Exception>rethrow(e);
+        // [return.type.incompatible] FALSE_POSITIVE
+        //   As documented, we never return
         return null; // we never get here
     }
 
@@ -109,7 +111,8 @@ public final class Throwables {
 
     private static final Method getSuppressed = initGetSuppressed();
 
-    private static Method initGetSuppressed() {
+    // Nullable Method returned from implementation below
+    private static @Nullable Method initGetSuppressed() {
         try {
             return Throwable.class.getMethod("getSuppressed");
         } catch (Throwable e) {
@@ -123,6 +126,10 @@ public final class Throwables {
         }
         try {
             Throwable[] suppressed = (Throwable[]) getSuppressed.invoke(exception);
+            // [dereference.of.nullable] FALSE_POSITIVE
+            //   suppressed.length is safe in this case
+            // getSuppressed.invoke(exception) is guaranteed to return an array
+            // otherwise, it throws exception, which is caught below
             return suppressed.length != 0;
         } catch (Throwable e) {
             return false;

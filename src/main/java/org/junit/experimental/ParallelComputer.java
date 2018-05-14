@@ -31,7 +31,8 @@ public class ParallelComputer extends Computer {
     }
 
     // Nullable runner from getRunner(RunnerBuilder builder, Class<?> testClass)
-    private static Runner parallelize(@Nullable Runner runner) {
+    // Nullable runner if runner passed in is null
+    private static @Nullable Runner parallelize(@Nullable Runner runner) {
         if (runner instanceof ParentRunner) {
             ((ParentRunner<?>) runner).setScheduler(new RunnerScheduler() {
                 private final ExecutorService fService = Executors.newCachedThreadPool();

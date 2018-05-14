@@ -84,7 +84,8 @@ public abstract class RunnerBuilder {
         return parent;
     }
 
-    void removeParent(Class<?> klass) {
+    // Nullable klass from runners(Class<?> parent, Class<?>[] children)
+    void removeParent(@Nullable Class<?> klass) {
         parents.remove(klass);
     }
 

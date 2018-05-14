@@ -2,6 +2,7 @@
 // The method being invoked permits null.
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.initialization.qual.UnknownInitialization;
 
 package java.lang.reflect;
 
@@ -25,7 +26,8 @@ package java.lang;
 
 public final class Class<T> {
 //	public <A extends java.lang.annotation.Annotation> @Nullable A getAnnotation(@Nullable Class<A> a1);
-//	public T cast(@Nullable Object obj);
+	// UnknownInit from ParameterSignature.findDeepAnnotation
+	public T cast(@UnknownInitialization Object obj);
 	// Nullable name from JUnit38ClassRunner: getAnnotations(new TestCase() {})
 	public Method getMethod(@Nullable String name, Class<?>... parameterTypes);
 //	public native boolean isAssignableFrom(@Nullable Class<?> cls);
@@ -77,9 +79,10 @@ package java.io;
 
 package java.util.concurrent;
 
-//public class CopyOnWriteArrayList<E> {
-//    public CopyOnWriteArrayList(@Nullable Collection<? extends E> c);
-//}
+public class CopyOnWriteArrayList<E> {
+    // Nullable from Result(SerializedForm serializedForm)
+	public CopyOnWriteArrayList(@Nullable Collection<? extends E> c);
+}
 
 //public interface Callable<V> {
 //	@Nullable V call() throws Exception;

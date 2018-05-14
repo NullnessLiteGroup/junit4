@@ -187,7 +187,8 @@ public class TestClass implements Annotatable {
     /**
      * Returns the underlying Java class.
      */
-    public Class<?> getJavaClass() {
+    // Nullable clazz from constructor
+    public @Nullable Class<?> getJavaClass() {
         return clazz;
     }
 
@@ -207,6 +208,9 @@ public class TestClass implements Annotatable {
      */
 
     public Constructor<?> getOnlyConstructor() {
+        // [method.invocation.invalid] TRUE_POSITIVE
+        // clazz can be null if users passed the null in the constructor
+        // and this method is public
         Constructor<?>[] constructors = clazz.getConstructors();
         Assert.assertEquals(1, constructors.length);
         return constructors[0];
@@ -309,10 +313,16 @@ public class TestClass implements Annotatable {
     }
 
     public boolean isPublic() {
+        // [method.invocation.invalid] TRUE_POSITIVE
+        // clazz can be null if users passed the null in the constructor
+        // and this method is public
         return Modifier.isPublic(clazz.getModifiers());
     }
 
     public boolean isANonStaticInnerClass() {
+        // [method.invocation.invalid] TRUE_POSITIVE
+        // clazz can be null if users passed the null in the constructor
+        // and this method is public
         return clazz.isMemberClass() && !isStatic(clazz.getModifiers());
     }
 

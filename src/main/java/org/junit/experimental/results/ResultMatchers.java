@@ -55,6 +55,8 @@ public class ResultMatchers {
         return new BaseMatcher<Object>() {
             // Nullable item  override super requires
             public boolean matches(@Nullable Object item) {
+                // [dereference.of.nullable] TRUE_POSITIVE
+                // dereference of possibly-null reference item
                 return item.toString().contains(string) && failureCountIs(1).matches(item);
             }
 

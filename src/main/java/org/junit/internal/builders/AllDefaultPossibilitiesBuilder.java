@@ -3,6 +3,7 @@ package org.junit.internal.builders;
 import java.util.Arrays;
 import java.util.List;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.junit.runner.Runner;
 import org.junit.runners.model.RunnerBuilder;
 
@@ -25,7 +26,8 @@ public class AllDefaultPossibilitiesBuilder extends RunnerBuilder {
     }
 
     @Override
-    public Runner runnerForClass(Class<?> testClass) throws Throwable {
+    // Nullable Runner returned if testClass is null, and builder fails validate
+    public @Nullable Runner runnerForClass(Class<?> testClass) throws Throwable {
         List<RunnerBuilder> builders = Arrays.asList(
                 ignoredBuilder(),
                 annotatedBuilder(),

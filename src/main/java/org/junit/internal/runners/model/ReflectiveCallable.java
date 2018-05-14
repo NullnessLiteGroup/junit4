@@ -9,10 +9,14 @@ import java.lang.reflect.InvocationTargetException;
  * wrapping it in an InvocationTargetException.
  */
 public abstract class ReflectiveCallable {
-    public Object run() throws Throwable {
+    // Nullable Object returned from runReflectiveCall()
+    public @Nullable Object run() throws Throwable {
         try {
             return runReflectiveCall();
         } catch (InvocationTargetException e) {
+            // [throwing.nullable] TRUE_POSITIVE
+            // the getTargetException has same behavior as getCause,
+            // which is documented that can return null
             throw e.getTargetException();
         }
     }

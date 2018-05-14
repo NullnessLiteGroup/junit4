@@ -10,6 +10,7 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.junit.internal.AssumptionViolatedException;
 import org.junit.runner.Description;
 import org.junit.runner.notification.Failure;
@@ -60,7 +61,8 @@ public class MethodRoadie {
             public void run() {
                 ExecutorService service = Executors.newSingleThreadExecutor();
                 Callable<Object> callable = new Callable<Object>() {
-                    public Object call() throws Exception {
+                    // Nullable Object returned when after test methods run
+                    public @Nullable Object call() throws Exception {
                         runTestMethod();
                         return null;
                     }
@@ -107,6 +109,9 @@ public class MethodRoadie {
         try {
             testMethod.invoke(test);
             if (testMethod.expectsException()) {
+                // [dereference.of.nullable] FALSE_POSITIVE
+                // testMethod.getExpectedException() could not be null
+                // because expectsException() ensures it
                 addFailure(new AssertionError("Expected exception: " + testMethod.getExpectedException().getName()));
             }
         } catch (InvocationTargetException e) {
@@ -116,6 +121,11 @@ public class MethodRoadie {
             } else if (!testMethod.expectsException()) {
                 addFailure(actual);
             } else if (testMethod.isUnexpected(actual)) {
+                // 1) [dereference.of.nullable] FALSE_POSITIVE
+                // testMethod.getExpectedException() could not be null
+                // because last if statement checks !expectsException() which ensures it
+                // 2) [dereference.of.nullable] TRUE_POSITIVE
+                // dereference of possibly-null reference actual
                 String message = "Unexpected exception, expected<" + testMethod.getExpectedException().getName() + "> but was<"
                         + actual.getClass().getName() + ">";
                 addFailure(new Exception(message, actual));
@@ -133,6 +143,9 @@ public class MethodRoadie {
                     before.invoke(test);
                 }
             } catch (InvocationTargetException e) {
+                // [throwing.nullable] TRUE_POSITIVE
+                //  getTargetException() can be null if
+                // InvocationTargetException is initialized to have null target
                 throw e.getTargetException();
             }
         } catch (AssumptionViolatedException e) {
@@ -156,7 +169,8 @@ public class MethodRoadie {
         }
     }
 
-    protected void addFailure(Throwable e) {
+    // Nullable e from MethodRoadie.runTestMethod()
+    protected void addFailure(@Nullable Throwable e) {
         notifier.fireTestFailure(new Failure(description, e));
     }
 }

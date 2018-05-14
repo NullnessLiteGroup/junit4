@@ -4,6 +4,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 import org.checkerframework.checker.initialization.qual.UnderInitialization;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.junit.runner.Description;
 import org.junit.runner.Runner;
 import org.junit.runner.notification.Failure;
@@ -18,7 +19,8 @@ public class ErrorReportingRunner extends Runner {
 
     private final String classNames;
 
-    public ErrorReportingRunner(Class<?> testClass, Throwable cause) {
+    // Nullable testClass from MaxCore.constructLeafRequest(List<Description> leaves)
+    public ErrorReportingRunner(@Nullable Class<?> testClass, Throwable cause) {
         this(cause, testClass);
     }
     
@@ -65,7 +67,8 @@ public class ErrorReportingRunner extends Runner {
 
     @SuppressWarnings("deprecation")
     // helper method for the constructor of ErrorReportingRunner
-    private List<Throwable> getCauses(@UnderInitialization ErrorReportingRunner this, Throwable cause) {
+    // Nullable cause from itself, recursive call
+    private List<Throwable> getCauses(@UnderInitialization ErrorReportingRunner this, @Nullable Throwable cause) {
         if (cause instanceof InvocationTargetException) {
             return getCauses(cause.getCause());
         }
