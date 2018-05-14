@@ -25,6 +25,9 @@ public class InvalidTestClassError extends InitializationError {
     // Nullable testClass from the constructor
     private static String createMessage(@Nullable Class<?> testClass, List<Throwable> validationErrors) {
         StringBuilder sb = new StringBuilder();
+        // [dereference.of.nullable] TRUE_POSITIVE
+        // dereference of possibly-null reference testClass
+        // testClass could be passed in as null which may raise NPE
         sb.append(String.format("Invalid test class '%s':", testClass.getName()));
         int i = 1;
         for (Throwable error : validationErrors) {

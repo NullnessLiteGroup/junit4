@@ -77,7 +77,8 @@ public class JUnit38ClassRunner extends Runner implements Filterable, Sortable {
         this(new TestSuite(klass.asSubclass(TestCase.class)));
     }
 
-    public JUnit38ClassRunner(Test test) {
+    // Nullable test from SuiteMethod(Class<?> klass)
+    public JUnit38ClassRunner(@Nullable Test test) {
         super();
         setTest(test);
     }

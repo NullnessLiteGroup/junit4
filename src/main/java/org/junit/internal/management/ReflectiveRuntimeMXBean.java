@@ -42,7 +42,8 @@ final class ReflectiveRuntimeMXBean implements RuntimeMXBean {
    * {@inheritDoc}
    */
   @SuppressWarnings("unchecked")
-  public List<String> getInputArguments() {
+  // Nullable List<String> returned if invoke returned null
+  public @Nullable List<String> getInputArguments() {
     if (Holder.getInputArgumentsMethod != null) {
       try {
         return (List<String>) Holder.getInputArgumentsMethod.invoke(runtimeMxBean);

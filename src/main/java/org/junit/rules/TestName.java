@@ -37,7 +37,8 @@ public class TestName extends TestWatcher {
     /**
      * @return the name of the currently-running test method
      */
-    public String getMethodName() {
+    // Nullable String returned from starting(Description d)
+    public @Nullable String getMethodName() {
         return name;
     }
 }

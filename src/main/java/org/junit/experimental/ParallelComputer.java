@@ -31,7 +31,7 @@ public class ParallelComputer extends Computer {
     }
 
     // Nullable runner from getRunner(RunnerBuilder builder, Class<?> testClass)
-    // Nullable runner if runner passed in is null
+    // Nullable runner returned if runner passed in is null
     private static @Nullable Runner parallelize(@Nullable Runner runner) {
         if (runner instanceof ParentRunner) {
             ((ParentRunner<?>) runner).setScheduler(new RunnerScheduler() {
@@ -55,7 +55,8 @@ public class ParallelComputer extends Computer {
     }
 
     @Override
-    public Runner getSuite(RunnerBuilder builder, java.lang.Class<?>[] classes)
+    // Nullable Runner returned by super.getSuite(builder, classes) and parallelize(suite)
+    public @Nullable Runner getSuite(RunnerBuilder builder, java.lang.Class<?>[] classes)
             throws InitializationError {
         Runner suite = super.getSuite(builder, classes);
         return this.classes ? parallelize(suite) : suite;

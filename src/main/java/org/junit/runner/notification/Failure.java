@@ -32,7 +32,8 @@ public class Failure implements Serializable {
      * @param description a {@link org.junit.runner.Description} of the test that failed
      * @param thrownException the exception that was thrown while running the test
      */
-    public Failure(Description description, Throwable thrownException) {
+    // Nullable thrownException from MethodRoadie.addFailure(Throwable e)
+    public Failure(Description description, @Nullable Throwable thrownException) {
         this.fThrownException = thrownException;
         this.fDescription = description;
     }

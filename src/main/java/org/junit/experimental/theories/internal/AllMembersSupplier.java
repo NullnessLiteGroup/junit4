@@ -131,7 +131,9 @@ public class AllMembersSupplier extends ParameterSupplier {
         }
     }
 
-    private void addArrayValues(ParameterSignature sig, String name, List<PotentialAssignment> list, Object array) {
+    // Nullable array from addDataPointsValues(Class<?> type, ParameterSignature sig, String name,
+    //            List<PotentialAssignment> list, Object value)
+    private void addArrayValues(ParameterSignature sig, String name, List<PotentialAssignment> list, @Nullable Object array) {
         for (int i = 0; i < Array.getLength(array); i++) {
             Object value = Array.get(array, i);
             if (sig.canAcceptValue(value)) {
@@ -139,8 +141,12 @@ public class AllMembersSupplier extends ParameterSupplier {
             }
         }
     }
-    
-    private void addIterableValues(ParameterSignature sig, String name, List<PotentialAssignment> list, Iterable<?> iterable) {
+
+    // Nullable array from addDataPointsValues(Class<?> type, ParameterSignature sig, String name,
+    //            List<PotentialAssignment> list, Object value)
+    private void addIterableValues(ParameterSignature sig, String name, List<PotentialAssignment> list, @Nullable Iterable<?> iterable) {
+        // [dereference.of.nullable] TRUE_POSITIVE
+        // dereference of possibly-null reference iterable
         Iterator<?> iterator = iterable.iterator();
         int i = 0;
         while (iterator.hasNext()) {

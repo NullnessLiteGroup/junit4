@@ -60,6 +60,12 @@ public class Result implements Serializable {
      * @return the number of tests run
      */
     public int getRunCount() {
+        // [dereference.of.nullable] FALSE_POSITIVE
+        //  count.get() cannot raise NPE
+        // count can only be null if the private constructor is called,
+        // and the private constructor is only called from another private method,
+        // readResolve,which is called nowhere in this project.
+        // Besides, count is final.
         return count.get();
     }
 
@@ -88,6 +94,12 @@ public class Result implements Serializable {
      * @return the number of tests ignored during the run
      */
     public int getIgnoreCount() {
+        // [dereference.of.nullable] FALSE_POSITIVE
+        //  ignoreCount.get() cannot raise NPE
+        // ignoreCount can only be null if the private constructor is called,
+        // and the private constructor is only called from another private method,
+        // readResolve,which is called nowhere in this project.
+        // Besides, ignoreCount is final.
         return ignoreCount.get();
     }
 
@@ -127,6 +139,12 @@ public class Result implements Serializable {
 
         @Override
         public void testFinished(Description description) throws Exception {
+            // [dereference.of.nullable] FALSE_POSITIVE
+            //  count.getAndIncrement() cannot raise NPE
+            // count can only be null if the private constructor is called,
+            // and the private constructor is only called from another private method,
+            // readResolve,which is called nowhere in this project.
+            // Besides, count is final.
             count.getAndIncrement();
         }
 
@@ -137,6 +155,12 @@ public class Result implements Serializable {
 
         @Override
         public void testIgnored(Description description) throws Exception {
+            // [dereference.of.nullable] FALSE_POSITIVE
+            //  ignoreCount.getAndIncrement() cannot raise NPE
+            // ignoreCount can only be null if the private constructor is called,
+            // and the private constructor is only called from another private method,
+            // readResolve,which is called nowhere in this project.
+            // Besides, ignoreCount is final.
             ignoreCount.getAndIncrement();
         }
 

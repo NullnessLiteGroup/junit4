@@ -9,6 +9,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.checkerframework.checker.initialization.qual.UnderInitialization;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.junit.runner.Description;
 import org.junit.runner.Runner;
 import org.junit.runner.manipulation.Filter;
@@ -38,11 +39,17 @@ public class JUnit4ClassRunner extends Runner implements Filterable, Sortable {
 
     // helper method for the constructor
     protected List<Method> getTestMethods(@UnderInitialization JUnit4ClassRunner this) {
+        // [dereference.of.nullable] FALSE_POSITIVE
+        //  testClass is only assigned in constructor
+        // and it's initialized as non-null
         return testClass.getTestMethods();
     }
 
     // helper method for the constructor
     protected void validate(@UnderInitialization JUnit4ClassRunner this) throws InitializationError {
+        // [argument.type.incompatible] FALSE_POSITIVE
+        //  testClass is only assigned in constructor
+        // and it's initialized as non-null
         MethodValidator methodValidator = new MethodValidator(testClass);
         methodValidator.validateMethodsForDefaultRunner();
         methodValidator.assertValid();
@@ -101,8 +108,9 @@ public class JUnit4ClassRunner extends Runner implements Filterable, Sortable {
         new MethodRoadie(test, testMethod, notifier, description).run();
     }
 
+    // Nullable e from invokeTestMethod(Method method, RunNotifier notifier)
     private void testAborted(RunNotifier notifier, Description description,
-            Throwable e) {
+            @Nullable Throwable e) {
         notifier.fireTestStarted(description);
         notifier.fireTestFailure(new Failure(description, e));
         notifier.fireTestFinished(description);

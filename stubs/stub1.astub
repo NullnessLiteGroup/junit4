@@ -84,6 +84,7 @@ public class CopyOnWriteArrayList<E> {
 	public CopyOnWriteArrayList(@Nullable Collection<? extends E> c);
 }
 
-//public interface Callable<V> {
-//	@Nullable V call() throws Exception;
-//}
+public interface Callable<V> {
+	// override condition required from subclass
+	@Nullable V call() throws Exception;
+}

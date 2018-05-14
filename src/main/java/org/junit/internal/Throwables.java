@@ -44,6 +44,7 @@ public final class Throwables {
      * @return does not return anything
      * @since 4.12
      */
+    @SuppressWarnings("nullness")
     public static Exception rethrowAsException(Throwable e) throws Exception {
         Throwables.<Exception>rethrow(e);
         // [return.type.incompatible] FALSE_POSITIVE
@@ -109,7 +110,8 @@ public final class Throwables {
         return Collections.emptyList();
     }
 
-    private static final Method getSuppressed = initGetSuppressed();
+    // Nullable field from initGetSuppressed()
+    private static final @Nullable Method getSuppressed = initGetSuppressed();
 
     // Nullable Method returned from implementation below
     private static @Nullable Method initGetSuppressed() {

@@ -349,7 +349,8 @@ public class BlockJUnit4ClassRunner extends ParentRunner<FrameworkMethod> {
     /**
      * Returns a {@link Statement} that invokes {@code method} on {@code test}
      */
-    protected Statement methodInvoker(FrameworkMethod method, Object test) {
+    // Nullable test from methodBlock(final FrameworkMethod method)
+    protected Statement methodInvoker(FrameworkMethod method, @Nullable Object test) {
         return new InvokeMethod(method, test);
     }
 
@@ -359,8 +360,9 @@ public class BlockJUnit4ClassRunner extends ParentRunner<FrameworkMethod> {
      * throws an exception of the correct type, and throw an exception
      * otherwise.
      */
+    // Nullable test from methodBlock(final FrameworkMethod method)
     protected Statement possiblyExpectingExceptions(FrameworkMethod method,
-            Object test, Statement next) {
+            @Nullable Object test, Statement next) {
         Test annotation = method.getAnnotation(Test.class);
         Class<? extends Throwable> expectedExceptionClass = getExpectedException(annotation);
         return expectedExceptionClass != null ? new ExpectException(next, expectedExceptionClass) : next;
@@ -458,7 +460,8 @@ public class BlockJUnit4ClassRunner extends ParentRunner<FrameworkMethod> {
     }
 
     // Nullable Class<? extends Throwable> returned indicated below
-    private @Nullable Class<? extends Throwable> getExpectedException(Test annotation) {
+    // Nullable annotation from possiblyExpectingExceptions(FrameworkMethod method, Object test, Statement next)
+    private @Nullable Class<? extends Throwable> getExpectedException(@Nullable Test annotation) {
         if (annotation == null || annotation.expected() == None.class) {
             return null;
         } else {
@@ -466,15 +469,16 @@ public class BlockJUnit4ClassRunner extends ParentRunner<FrameworkMethod> {
         }
     }
 
-    private long getTimeout(Test annotation) {
+    // Nullable annotation from withPotentialTimeout(FrameworkMethod method, Object test, Statement next)
+    private long getTimeout(@Nullable Test annotation) {
         if (annotation == null) {
             return 0;
         }
         return annotation.timeout();
     }
 
-    private static final ThreadLocal<RuleContainer> CURRENT_RULE_CONTAINER =
-            new ThreadLocal<RuleContainer>();
+    private static final ThreadLocal<@Nullable RuleContainer> CURRENT_RULE_CONTAINER =
+            new ThreadLocal<@Nullable RuleContainer>();
 
     private static class RuleCollector<T> implements MemberValueConsumer<T> {
         final List<T> result = new ArrayList<T>();

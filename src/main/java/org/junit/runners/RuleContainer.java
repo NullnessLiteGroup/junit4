@@ -27,7 +27,8 @@ class RuleContainer {
     /**
      * Sets order value for the specified rule.
      */
-    public void setOrder(Object rule, int order) {
+    // Nullable rule from BlockJUnit4ClassRunner.accept(FrameworkMember member, T value)
+    public void setOrder(@Nullable Object rule, int order) {
         orderValues.put(rule, order);
     }
 

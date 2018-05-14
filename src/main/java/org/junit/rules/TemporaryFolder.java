@@ -232,7 +232,8 @@ public class TemporaryFolder extends ExternalResource {
         return createTemporaryFolderIn(getRoot());
     }
 
-    private File createTemporaryFolderIn(File parentFolder) throws IOException {
+    // Nullable parentFolder from create()
+    private File createTemporaryFolderIn(@Nullable File parentFolder) throws IOException {
         File createdFolder = null;
         for (int i = 0; i < TEMP_DIR_ATTEMPTS; ++i) {
             // Use createTempFile to get a suitable folder name.
