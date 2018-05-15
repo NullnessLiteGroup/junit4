@@ -65,6 +65,7 @@ public class TestClass implements Annotatable {
         this.fieldsForAnnotations = makeDeeplyUnmodifiable(fieldsForAnnotations);
     }
 
+
     protected void scanAnnotatedMembers(@NotNull Map<Class<? extends Annotation>, List<FrameworkMethod>> methodsForAnnotations, @NotNull Map<Class<? extends Annotation>, List<FrameworkField>> fieldsForAnnotations) {
         for (@NotNull Class<?> eachClass : getSuperClasses(clazz)) {
             for (Method eachMethod : MethodSorter.getDeclaredMethods(eachClass)) {
@@ -214,6 +215,10 @@ public class TestClass implements Annotatable {
 
     public Constructor<?> getOnlyConstructor() {
         Constructor<?>[] constructors = clazz.getConstructors();
+        /*
+          This is a true positive. "clazz" might be null (we know it from both its annotation (line 38) and
+          its initialization (line 51~52)), and thus class.getConstructors() might raise NullPointerException.
+         */
         Assert.assertEquals(1, constructors.length);
         return constructors[0];
     }
@@ -316,10 +321,18 @@ public class TestClass implements Annotatable {
 
     public boolean isPublic() {
         return Modifier.isPublic(clazz.getModifiers());
+        /*
+          This is a true positive. "clazz" might be null (we know it from both its annotation (line 38) and
+          its initialization (line 51~52)), and thus class.getConstructors() might raise NullPointerException.
+         */
     }
 
     public boolean isANonStaticInnerClass() {
         return clazz.isMemberClass() && !isStatic(clazz.getModifiers());
+        /*
+          This is a true positive. "clazz" might be null (we know it from both its annotation (line 38) and
+          its initialization (line 51~52)), and thus class.getConstructors() might raise NullPointerException.
+         */
     }
 
     @Override

@@ -301,6 +301,19 @@ public class Parameterized extends Suite {
         validatePublicStaticVoidMethods(Parameterized.AfterParam.class, parameterCount, errors);
         if (!errors.isEmpty()) {
             throw new InvalidTestClassError(getTestClass().getJavaClass(), errors);
+            /*
+              This is a true positive. By looking at the implementation of getJavaClass(), we know that
+              its return type is @Nullable (and we've checked through TestClass.java where getJavaClass() is
+              implemented in order to ensure that getJavaClass() might return null).
+              And this contradicts the implementation of InvalidTestClassError()
+              (see src/main/java/org/junit/runners/model/InvalidTestClassError.java)
+              which annotates its first parameter @NotNull.
+
+              However, we cannot change that annotation to @Nullable in order to eliminate the above error,
+              because if we change it to @Nullable, createMessage() (line 22 of InvalidTestClassError.java)
+              will then call testClass.getName() (line 27 of InvalidTestClassError.java),
+              which will cause a NullPointerException.
+             */
         }
     }
 
@@ -312,6 +325,16 @@ public class Parameterized extends Suite {
             fm.validatePublicVoid(true, errors);
             if (parameterCount != null) {
                 int methodParameterCount = fm.getMethod().getParameterTypes().length;
+                /*
+                  This is a false positive.
+                  By looking at src/main/java/org/junit/runners/model/FrameworkMethod.java (where getMethod() is implemented),
+                  we get to know that although the return type of fm.getMethod() is annotated @Nullable,
+                  actually it will never return null
+                  (because the constructor of FrameworkMethod checks for nullity of its parameter
+                  and will throw an exception if the parameter is actually null; otherwise, it initializes its field "method"
+                  using the parameter).
+                  Since fm.getMethod() won't return null, this error is a false positive.
+                 */
                 if (methodParameterCount != 0 && methodParameterCount != parameterCount) {
                     errors.add(new Exception("Method " + fm.getName()
                             + "() should have 0 or " + parameterCount + " parameter(s)"));
