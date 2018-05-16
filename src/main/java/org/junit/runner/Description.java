@@ -85,7 +85,11 @@ public class Description implements Serializable {
      * @return a <code>Description</code> named <code>name</code>
      */
     // Nullable name from JUnit38ClassRunner: makeDescription(new TestCase(){})
-    public static Description createTestDescription(Class<?> clazz, @Nullable String name, Annotation... annotations) {
+    // Nullable clazz from BlockJUnit4ClassRunner.describeChild(BlockJUnit4ClassRunner this, FrameworkMethod method)
+    public static Description createTestDescription(@Nullable Class<?> clazz, @Nullable String name, Annotation... annotations) {
+        // [dereference.of.nullable] TRUE_POSITIVE
+        //  dereference clazz is unsafe here
+        // because it's a public method which cannot prevent users from passing null
         return new Description(clazz, formatDisplayName(name, clazz.getName()), annotations);
     }
 
@@ -323,6 +327,14 @@ public class Description implements Serializable {
      *         the name of the class of the test instance
      */
     public String getClassName() {
+        // [return.type.incompatible] FALSE_POSITIVE
+        //  fTestClass.getName() ensures non-null name returned
+        //  methodAndClassNamePatternGroupOrDefault(2, toString())
+        // ensures returns toString() at worst;
+        //  toString() eventually return fDisplayName which cannot be initialized as null
+        // from any of the private constructor;
+        // plus, the project never initialize a description with null fDisplayName,
+        // otherwise the Nullness Checker will issue the related warnings
         return fTestClass != null ? fTestClass.getName() : methodAndClassNamePatternGroupOrDefault(2, toString());
     }
 

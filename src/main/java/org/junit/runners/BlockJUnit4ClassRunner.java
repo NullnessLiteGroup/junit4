@@ -375,8 +375,9 @@ public class BlockJUnit4ClassRunner extends ParentRunner<FrameworkMethod> {
      * @deprecated
      */
     @Deprecated
+    // Nullable test from methodBlock(final FrameworkMethod method)
     protected Statement withPotentialTimeout(FrameworkMethod method,
-            Object test, Statement next) {
+            @Nullable Object test, Statement next) {
         long timeout = getTimeout(method.getAnnotation(Test.class));
         if (timeout <= 0) {
             return next;
@@ -391,7 +392,8 @@ public class BlockJUnit4ClassRunner extends ParentRunner<FrameworkMethod> {
      * methods on this class and superclasses before running {@code next}; if
      * any throws an Exception, stop execution and pass the exception on.
      */
-    protected Statement withBefores(FrameworkMethod method, Object target,
+    // Nullable test from methodBlock(final FrameworkMethod method)
+    protected Statement withBefores(FrameworkMethod method, @Nullable Object target,
             Statement statement) {
         List<FrameworkMethod> befores = getTestClass().getAnnotatedMethods(
                 Before.class);
@@ -406,7 +408,8 @@ public class BlockJUnit4ClassRunner extends ParentRunner<FrameworkMethod> {
      * are combined, if necessary, with exceptions from After methods into a
      * {@link MultipleFailureException}.
      */
-    protected Statement withAfters(FrameworkMethod method, Object target,
+    // Nullable test from methodBlock(final FrameworkMethod method)
+    protected Statement withAfters(FrameworkMethod method, @Nullable Object target,
             Statement statement) {
         List<FrameworkMethod> afters = getTestClass().getAnnotatedMethods(
                 After.class);
@@ -414,7 +417,8 @@ public class BlockJUnit4ClassRunner extends ParentRunner<FrameworkMethod> {
                 target);
     }
 
-    private Statement withRules(FrameworkMethod method, Object target, Statement statement) {
+    // Nullable test from methodBlock(final FrameworkMethod method)
+    private Statement withRules(FrameworkMethod method, @Nullable Object target, Statement statement) {
         RuleContainer ruleContainer = new RuleContainer();
         CURRENT_RULE_CONTAINER.set(ruleContainer);
         try {
@@ -452,7 +456,8 @@ public class BlockJUnit4ClassRunner extends ParentRunner<FrameworkMethod> {
      * @return a list of TestRules that should be applied when executing this
      *         test
      */
-    protected List<TestRule> getTestRules(Object target) {
+    // Nullable target from withRules(FrameworkMethod method, Object target, Statement statement)
+    protected List<TestRule> getTestRules(@Nullable Object target) {
         RuleCollector<TestRule> collector = new RuleCollector<TestRule>();
         getTestClass().collectAnnotatedMethodValues(target, Rule.class, TestRule.class, collector);
         getTestClass().collectAnnotatedFieldValues(target, Rule.class, TestRule.class, collector);

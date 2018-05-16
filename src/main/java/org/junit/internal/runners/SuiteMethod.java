@@ -37,11 +37,9 @@ public class SuiteMethod extends JUnit38ClassRunner {
             }
             suite = (Test) suiteMethod.invoke(null); // static method
         } catch (InvocationTargetException e) {
-            // [throwing.nullable] FALSE_POSITIVE
-            //  de-referencing e is safe here
-            // nowhere else in the project called InvocationTargetException(),
-            // and the only public constructor of InvocationTargetException
-            // ensures target non-null
+            // [throwing.nullable] TRUE_POSITIVE
+            // the public constructor InvocationTargetException(target)
+            // doesn't prevent null target, which is returned by e.getCause()
             throw e.getCause();
         }
         return suite;

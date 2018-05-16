@@ -124,8 +124,10 @@ public class MethodRoadie {
                 // 1) [dereference.of.nullable] FALSE_POSITIVE
                 // testMethod.getExpectedException() could not be null
                 // because last if statement checks !expectsException() which ensures it
-                // 2) [dereference.of.nullable] TRUE_POSITIVE
-                // dereference of possibly-null reference actual
+                //
+                // 2) [dereference.of.nullable] FALSE_POSITIVE
+                // it is possible for actual to be null but NPE is raised
+                // in testMethod.isUnexpected(actual)
                 String message = "Unexpected exception, expected<" + testMethod.getExpectedException().getName() + "> but was<"
                         + actual.getClass().getName() + ">";
                 addFailure(new Exception(message, actual));

@@ -57,7 +57,8 @@ public class FrameworkMethod extends FrameworkMember<FrameworkMethod> {
     //            Class<? extends Annotation> annotationClass, Class<T> valueClass,
     //            MemberValueConsumer<T> consumer)
     // Nullable params from BlockJUnit4ClassRunnerWithParameters: invokeMethod(FrameworkMethod method)
-    public Object invokeExplosively(final @Nullable Object target, final Object@Nullable... params)
+    // Nullable Object returned from ReflectiveCallable.run()
+    public @Nullable Object invokeExplosively(final @Nullable Object target, final Object@Nullable... params)
             throws Throwable {
         return new ReflectiveCallable() {
             @Override

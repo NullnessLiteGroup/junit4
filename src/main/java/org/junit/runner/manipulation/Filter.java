@@ -1,5 +1,6 @@
 package org.junit.runner.manipulation;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.junit.runner.Description;
 import org.junit.runner.Request;
 
@@ -89,7 +90,8 @@ public abstract class Filter {
      * @param child the runner to be filtered by the receiver
      * @throws NoTestsRemainException if the receiver removes all tests
      */
-    public void apply(Object child) throws NoTestsRemainException {
+    // Nullable child from Filter.getRunner()
+    public void apply(@Nullable Object child) throws NoTestsRemainException {
         if (!(child instanceof Filterable)) {
             return;
         }

@@ -24,7 +24,8 @@ public class Failure implements Serializable {
      * See https://github.com/junit-team/junit4/issues/976
      */
     private final Description fDescription;
-    private final Throwable fThrownException;
+    // Nullable fThrownException from Failure(Description description, Throwable thrownException)
+    private final @Nullable Throwable fThrownException;
 
     /**
      * Constructs a <code>Failure</code> with the given description and exception.
@@ -56,12 +57,17 @@ public class Failure implements Serializable {
      * @return the exception thrown
      */
 
-    public Throwable getException() {
+    // Nullable Throwable returned from nullable field fThrownException
+    public @Nullable Throwable getException() {
         return fThrownException;
     }
 
     @Override
     public String toString() {
+        // [dereference.of.nullable] TRUE_POSITIVE
+        //  dereference fThrownException is unsafe here
+        // if fThrownException is initialized to be null
+        // from the public constructor
         return getTestHeader() + ": " + fThrownException.getMessage();
     }
 

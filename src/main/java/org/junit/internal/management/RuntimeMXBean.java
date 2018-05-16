@@ -1,5 +1,7 @@
 package org.junit.internal.management;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 import java.util.List;
 
 /**
@@ -10,5 +12,6 @@ public interface RuntimeMXBean {
   /**
    * @see java.lang.management.RuntimeMXBean#getInputArguments()
    */
-  List<String> getInputArguments();
+  // Nullable List<String> override required from ReflectiveRuntimeMXBean
+  @Nullable List<String> getInputArguments();
 }

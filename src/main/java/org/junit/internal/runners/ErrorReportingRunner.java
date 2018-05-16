@@ -34,6 +34,9 @@ public class ErrorReportingRunner extends Runner {
                 throw new NullPointerException("Test class cannot be null");
             }
         }
+        // [argument.type.incompatible] FALSE_POSITIVE
+        //  testClasses cannot be null here
+        // otherwise the control flow above captured it
         classNames = getClassNames(testClasses);
         causes = getCauses(cause);
     }
@@ -69,7 +72,8 @@ public class ErrorReportingRunner extends Runner {
     @SuppressWarnings("deprecation")
     // helper method for the constructor of ErrorReportingRunner
     // Nullable cause from itself, recursive call
-    private List<Throwable> getCauses(@UnderInitialization ErrorReportingRunner this, @Nullable Throwable cause) {
+    // Nullable List<Throwable> from singletonList(cause)
+    private List<@Nullable Throwable> getCauses(@UnderInitialization ErrorReportingRunner this, @Nullable Throwable cause) {
         if (cause instanceof InvocationTargetException) {
             return getCauses(cause.getCause());
         }

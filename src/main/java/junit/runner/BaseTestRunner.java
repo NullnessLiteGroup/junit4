@@ -132,11 +132,10 @@ public abstract class BaseTestRunner implements TestListener {
                 return test;
             }
         } catch (InvocationTargetException e) {
-            // [throwing.nullable] FALSE_POSITIVE
-            //  de-referencing e is safe here
-            // nowhere else in the project called InvocationTargetException(),
-            // and the only public constructor of InvocationTargetException
-            // ensures target non-null
+            // [dereference.of.nullable] TRUE_POSITIVE
+            //   dereference of e.getTargetException() is unsafe
+            // the public constructor InvocationTargetException(target)
+            // doesn't prevent null target, which is returned from e.getTargetException()
             runFailed("Failed to invoke suite():" + e.getTargetException().toString());
             return null;
         } catch (IllegalAccessException e) {
@@ -159,7 +158,8 @@ public abstract class BaseTestRunner implements TestListener {
      * Processes the command line arguments and
      * returns the name of the suite class to run or null
      */
-    protected String processArguments(String[] args) {
+    // Nullable String returned by documentation above
+    protected @Nullable String processArguments(String[] args) {
         String suiteName = null;
         for (int i = 0; i < args.length; i++) {
             if (args[i].equals("-noloading")) {
@@ -177,9 +177,6 @@ public abstract class BaseTestRunner implements TestListener {
                 suiteName = args[i];
             }
         }
-        // [return.type.incompatible] FALSE_POSITIVE
-        //  String returned is non-null according to the document above
-        // plus it's never called in this class
         return suiteName;
     }
 

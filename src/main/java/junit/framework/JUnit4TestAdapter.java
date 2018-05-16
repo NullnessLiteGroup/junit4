@@ -2,6 +2,7 @@ package junit.framework;
 
 import java.util.List;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.junit.Ignore;
 import org.junit.runner.Describable;
 import org.junit.runner.Description;
@@ -26,7 +27,8 @@ import org.junit.runner.manipulation.Sorter;
 public class JUnit4TestAdapter implements Test, Filterable, Sortable, Describable {
     private final Class<?> fNewTestClass;
 
-    private final Runner fRunner;
+    // Nullable fRunner from the constructor
+    private final @Nullable Runner fRunner;
 
     private final JUnit4TestAdapterCache fCache;
 

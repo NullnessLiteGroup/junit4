@@ -346,7 +346,7 @@ public abstract class ParentRunner<T> extends Runner implements Filterable,
     /**
      * Returns a {@link TestClass} object wrapping the class to be executed.
      */
-    // from applyValidators(@UnknownInitialization ParentRunner<T> this, List<Throwable> errors)
+    // from applyValidators(ParentRunner<T> this, List<Throwable> errors)
     public final TestClass getTestClass(@UnknownInitialization ParentRunner<T> this) {
         // [return.type.incompatible] FALSE_POSITIVE
         //  both ParentRunner constructors ensure testClass is not null

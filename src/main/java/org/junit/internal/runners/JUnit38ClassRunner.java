@@ -71,7 +71,8 @@ public class JUnit38ClassRunner extends Runner implements Filterable, Sortable {
         }
     }
 
-    private volatile Test test;
+    // Nullable test from setTest(JUnit38ClassRunner this, Test test)
+    private volatile @Nullable Test test;
 
     public JUnit38ClassRunner(Class<?> klass) {
         this(new TestSuite(klass.asSubclass(TestCase.class)));
@@ -175,7 +176,8 @@ public class JUnit38ClassRunner extends Runner implements Filterable, Sortable {
     }
 
     // helper method for constructor of JUnit38ClassRunner
-    private void setTest(@UnknownInitialization JUnit38ClassRunner this, Test test) {
+    // Nullable test from JUnit38ClassRunner(Test test)
+    private void setTest(@UnknownInitialization JUnit38ClassRunner this, @Nullable Test test) {
         this.test = test;
     }
 

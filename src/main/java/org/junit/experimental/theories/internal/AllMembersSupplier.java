@@ -30,7 +30,8 @@ public class AllMembersSupplier extends ParameterSupplier {
         }
 
         @Override
-        public Object getValue() throws CouldNotGenerateValueException {
+        // Nullable Object returned from invokeExplosively
+        public @Nullable Object getValue() throws CouldNotGenerateValueException {
             try {
                 return method.invokeExplosively(null);
             } catch (IllegalArgumentException e) {

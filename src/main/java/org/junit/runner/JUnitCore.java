@@ -1,6 +1,7 @@
 package org.junit.runner;
 
 import junit.runner.Version;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.junit.internal.JUnitSystem;
 import org.junit.internal.RealSystem;
 import org.junit.internal.TextListener;
@@ -128,7 +129,8 @@ public class JUnitCore {
     /**
      * Do not use. Testing purposes only.
      */
-    public Result run(Runner runner) {
+    // Nullable runner from MaxCore.run(Request request, JUnitCore core)
+    public Result run(@Nullable Runner runner) {
         Result result = new Result();
         RunListener listener = result.createListener();
         notifier.addFirstListener(listener);

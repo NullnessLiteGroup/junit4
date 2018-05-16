@@ -12,10 +12,14 @@ public final class Method {
     public @Nullable Object invoke(@Nullable Object obj, Object @Nullable ... args);
 }
 
-//public final class Array {
-//	public static native int getLength(@Nullable Object array);
-//	public static native Object get(@Nullable Object array, int index);
-//}
+public final class Array {
+	// Nullable array from AllMembersSupplier: MethodParameterValue:
+	// addArrayValues(ParameterSignature sig, String name, List<PotentialAssignment> list, Object array)
+	public static native int getLength(@Nullable Object array);
+	// Nullable array from AllMembersSupplier: MethodParameterValue:
+	// addArrayValues(ParameterSignature sig, String name, List<PotentialAssignment> list, Object array)
+	public static native Object get(@Nullable Object array, int index);
+}
 
 //public final class Constructor<T> {
 //	public @NonNull T newInstance(@Nullable Object ... initargs);
@@ -27,7 +31,10 @@ package java.lang;
 public final class Class<T> {
 //	public <A extends java.lang.annotation.Annotation> @Nullable A getAnnotation(@Nullable Class<A> a1);
 	// UnknownInit from ParameterSignature.findDeepAnnotation
-	public T cast(@UnknownInitialization Object obj);
+	// Nullable obj from collectAnnotatedMethodValues(Object test,
+    //        Class<? extends Annotation> annotationClass, Class<T> valueClass,
+    //        MemberValueConsumer<T> consumer)
+	public T cast(@UnknownInitialization @Nullable Object obj);
 	// Nullable name from JUnit38ClassRunner: getAnnotations(new TestCase() {})
 	public Method getMethod(@Nullable String name, Class<?>... parameterTypes);
 //	public native boolean isAssignableFrom(@Nullable Class<?> cls);
@@ -54,9 +61,10 @@ public interface Set<E> extends Collection<E> {
 //	public ArrayList(@Nullable Collection<? extends E> c);
 //}
 
-//public class IdentityHashMap<K,V> {
-//	public V put(@Nullable K key, V value);
-//}
+public class IdentityHashMap<K,V> {
+	// Nullable key from RuleContainer.setOrder(Object rule, int order)
+	public V put(@Nullable K key, V value);
+}
 
 //public class Vector<E> {
 //	public synchronized boolean add(@Nullable E e);

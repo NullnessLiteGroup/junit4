@@ -67,10 +67,18 @@ public class BlockJUnit4ClassRunnerWithParameters extends
                             + ", available parameters: " + parameters.length
                             + ".");
         }
+        // [dereference.of.nullable] TRUE_POSITIVE
+        //  getJavaClass() can be null here
+        // testClass can be initialized with null clazz, and passed in to this
+        // class constructor
         Object testClassInstance = getTestClass().getJavaClass().newInstance();
         for (FrameworkField each : annotatedFieldsByParameter) {
             Field field = each.getField();
             Parameter annotation = field.getAnnotation(Parameter.class);
+            // [dereference.of.nullable] FALSE_POSITIVE
+            //  dereference of annotation is safe here because
+            // annotations cannot be null if we entered this for loop,
+            // which means annotatedFieldsByParameter.size() > 0
             int index = annotation.value();
             try {
                 field.set(testClassInstance, parameters[index]);
@@ -127,6 +135,10 @@ public class BlockJUnit4ClassRunnerWithParameters extends
             List<FrameworkField> annotatedFieldsByParameter = getAnnotatedFieldsByParameter();
             int[] usedIndices = new int[annotatedFieldsByParameter.size()];
             for (FrameworkField each : annotatedFieldsByParameter) {
+                // [dereference.of.nullable] FALSE_POSITIVE
+                //  dereference of annotation is safe here because
+                // annotations cannot be null if we entered this for loop,
+                // which means annotatedFieldsByParameter.size() > 0
                 int index = each.getField().getAnnotation(Parameter.class)
                         .value();
                 if (index < 0 || index > annotatedFieldsByParameter.size() - 1) {

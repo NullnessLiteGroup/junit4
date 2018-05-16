@@ -11,6 +11,7 @@ import java.util.Vector;
 
 import org.checkerframework.checker.initialization.qual.UnderInitialization;
 import org.checkerframework.checker.initialization.qual.UnknownInitialization;;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.junit.internal.MethodSorter;
 import org.junit.internal.Throwables;
 
@@ -68,11 +69,10 @@ public class TestSuite implements Test {
         } catch (InstantiationException e) {
             return (warning("Cannot instantiate test case: " + name + " (" + Throwables.getStacktrace(e) + ")"));
         } catch (InvocationTargetException e) {
-            // [argument.type.incompatible] FALSE_POSITIVE
-            //   e.getTargetException() is non-null
-            // nowhere else in the project called InvocationTargetException(),
-            // and the only public constructor of InvocationTargetException
-            // ensures target non-null
+            // [argument.type.incompatible] TRUE_POSITIVE
+            //   e.getTargetException() is nullable
+            // since its public constructor InvocationTargetException(target)
+            // doesn't prevent target to be null
             return (warning("Exception in constructor: " + name + " (" + Throwables.getStacktrace(e.getTargetException()) + ")"));
         } catch (IllegalAccessException e) {
             return (warning("Cannot access test case: " + name + " (" + Throwables.getStacktrace(e) + ")"));
@@ -121,12 +121,14 @@ public class TestSuite implements Test {
      * Parts of this method were written at 2337 meters in the Hueffihuette,
      * Kanton Uri
      */
-    public TestSuite(final Class<?> theClass) {
+    // Nullable theClass from MaxCore.getMalformedTestClass(Description each)
+    public TestSuite(final @Nullable Class<?> theClass) {
         addTestsFromTestCase(theClass);
     }
 
     // helper method to for the constructor of TestSuite
-    private void addTestsFromTestCase(@UnderInitialization TestSuite this, final Class<?> theClass) {
+    // Nullable theClass from TestSuite(final Class<?> theClass)
+    private void addTestsFromTestCase(@UnderInitialization TestSuite this, final @Nullable Class<?> theClass) {
         fName = theClass.getName();
         try {
             getTestConstructor(theClass); // Avoid generating multiple error messages

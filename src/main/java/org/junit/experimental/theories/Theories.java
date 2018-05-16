@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.checkerframework.checker.initialization.qual.UnknownInitialization;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.junit.Assert;
 import org.junit.Assume;
 import org.junit.experimental.theories.internal.Assignments;
@@ -89,6 +90,9 @@ public class Theories extends BlockJUnit4ClassRunner {
 
     // helper from collectInitializationErrors
     private void validateDataPointFields(@UnknownInitialization Theories this, List<Throwable> errors) {
+        // [dereference.of.nullable] TRUE_POSITIVE
+        //   dereference of possibly-null reference getTestClass().getJavaClass()
+        // if clazz of the testClass is null
         Field[] fields = getTestClass().getJavaClass().getDeclaredFields();
 
         for (Field field : fields) {
@@ -106,6 +110,9 @@ public class Theories extends BlockJUnit4ClassRunner {
 
     // helper from collectInitializationErrors
     private void validateDataPointMethods(@UnknownInitialization Theories this, List<Throwable> errors) {
+        // [dereference.of.nullable] TRUE_POSITIVE
+        //   dereference of possibly-null reference getTestClass().getJavaClass()
+        // if clazz of the testClass is null
         Method[] methods = getTestClass().getJavaClass().getDeclaredMethods();
         
         for (Method method : methods) {
@@ -256,7 +263,8 @@ public class Theories extends BlockJUnit4ClassRunner {
                 }
 
                 @Override
-                protected Statement methodInvoker(FrameworkMethod method, Object test) {
+                // Nullable test override super required
+                protected Statement methodInvoker(FrameworkMethod method, @Nullable Object test) {
                     return methodCompletesWithParameters(method, complete, test);
                 }
 
@@ -273,8 +281,9 @@ public class Theories extends BlockJUnit4ClassRunner {
             }.methodBlock(testMethod).evaluate();
         }
 
+        // Nullable freshInstance from methodInvoker(FrameworkMethod method, Object test)
         private Statement methodCompletesWithParameters(
-                final FrameworkMethod method, final Assignments complete, final Object freshInstance) {
+                final FrameworkMethod method, final Assignments complete, final @Nullable Object freshInstance) {
             return new Statement() {
                 @Override
                 public void evaluate() throws Throwable {

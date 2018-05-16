@@ -185,11 +185,10 @@ public abstract class TestCase extends Assert implements Test {
             runMethod.invoke(this);
         } catch (InvocationTargetException e) {
             e.fillInStackTrace();
-            // [throwing.nullable] FALSE_POSITIVE
-            //  de-referencing e is safe here
-            // nowhere else in the project called InvocationTargetException(),
-            // and the only public constructor of InvocationTargetException
-            // ensures target non-null
+            // [throwing.nullable] TRUE_POSITIVE
+            //   e.getTargetException() is nullable
+            // since its public constructor InvocationTargetException(target)
+            // doesn't prevent target to be null
             throw e.getTargetException();
         } catch (IllegalAccessException e) {
             e.fillInStackTrace();
