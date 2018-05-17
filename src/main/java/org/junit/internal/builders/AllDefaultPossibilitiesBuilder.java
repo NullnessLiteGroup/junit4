@@ -26,7 +26,8 @@ public class AllDefaultPossibilitiesBuilder extends RunnerBuilder {
     }
 
     @Override
-    // Nullable Runner returned if testClass is null, and builder fails validate
+    // Nullable Runner from the following builders if they all return
+    // null Runner (e.g. runnerFromClass(Object.class))
     public @Nullable Runner runnerForClass(Class<?> testClass) throws Throwable {
         List<RunnerBuilder> builders = Arrays.asList(
                 ignoredBuilder(),

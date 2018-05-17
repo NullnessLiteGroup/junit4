@@ -330,11 +330,9 @@ public class Description implements Serializable {
         // [return.type.incompatible] FALSE_POSITIVE
         //  fTestClass.getName() ensures non-null name returned
         //  methodAndClassNamePatternGroupOrDefault(2, toString())
-        // ensures returns toString() at worst;
-        //  toString() eventually return fDisplayName which cannot be initialized as null
-        // from any of the private constructor;
-        // plus, the project never initialize a description with null fDisplayName,
-        // otherwise the Nullness Checker will issue the related warnings
+        // ensures returns toString() at worst case; But toString()
+        // eventually return fDisplayName, which cannot be initialized
+        // as null from any of the private constructors of Description;
         return fTestClass != null ? fTestClass.getName() : methodAndClassNamePatternGroupOrDefault(2, toString());
     }
 

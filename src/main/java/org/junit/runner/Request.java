@@ -108,7 +108,9 @@ public abstract class Request {
     public static Request runner(final @Nullable Runner runner) {
         return new Request() {
             @Override
-            public Runner getRunner() {
+            // Nullable Runner returned because it's public method
+            // and we can call runner(null)
+            public @Nullable Runner getRunner() {
                 return runner;
             }
         };

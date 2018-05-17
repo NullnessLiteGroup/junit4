@@ -62,7 +62,8 @@ public final class Throwables {
      *
      * @since 4.13
      */
-    public static String getStacktrace(Throwable exception) {
+    // Nullable exception from Failure.getTrace()
+    public static String getStacktrace(@Nullable Throwable exception) {
         StringWriter stringWriter = new StringWriter();
         PrintWriter writer = new PrintWriter(stringWriter);
         exception.printStackTrace(writer);
@@ -75,7 +76,8 @@ public final class Throwables {
      *
      * @return a trimmed stack trace, or the original trace if trimming wasn't possible
      */
-    public static String getTrimmedStackTrace(Throwable exception) {
+    // Nullable exception from Failure.getTrimmedTrace()
+    public static String getTrimmedStackTrace(@Nullable Throwable exception) {
         List<String> trimmedStackTraceLines = getTrimmedStackTraceLines(exception);
         if (trimmedStackTraceLines.isEmpty()) {
             return getFullStackTrace(exception);

@@ -350,7 +350,7 @@ public abstract class ParentRunner<T> extends Runner implements Filterable,
     public final TestClass getTestClass(@UnknownInitialization ParentRunner<T> this) {
         // [return.type.incompatible] FALSE_POSITIVE
         //  both ParentRunner constructors ensure testClass is not null
-        // and testClass is only assigned in constructors
+        // and testClass is a final field only assigned in constructors
         return testClass;
     }
 

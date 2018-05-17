@@ -65,9 +65,10 @@ public class Failure implements Serializable {
     @Override
     public String toString() {
         // [dereference.of.nullable] TRUE_POSITIVE
-        //  dereference fThrownException is unsafe here
-        // if fThrownException is initialized to be null
-        // from the public constructor
+        //  dereference of fThrownException is unsafe here
+        // because it's possible for fThrownException to be
+        // initialized to be null from the public constructor
+        // of Failure
         return getTestHeader() + ": " + fThrownException.getMessage();
     }
 
@@ -94,6 +95,12 @@ public class Failure implements Serializable {
      */
     // Nullable String returned from null detailed message of an exception (e.g. FileNotFoundException())
     public @Nullable String getMessage() {
+        // [dereference.of.nullable] TRUE_POSITIVE
+        //  dereference of getException(), which returns
+        // fThrownException is unsafe here;
+        // because it's possible for fThrownException to be
+        // initialized to be null from the public constructor
+        // of Failure
         return getException().getMessage();
     }
 }

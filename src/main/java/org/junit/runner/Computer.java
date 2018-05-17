@@ -24,7 +24,8 @@ public class Computer {
      * Create a suite for {@code classes}, building Runners with {@code builder}.
      * Throws an InitializationError if Runner construction fails
      */
-    // Nullable Runner returned required override rule
+    // Nullable Runner returned required for its public method from Computer,
+    // and NullBuilder can be passed as builder
     public @Nullable Runner getSuite(final RunnerBuilder builder,
             Class<?>[] classes) throws InitializationError {
         return new Suite(new RunnerBuilder() {
