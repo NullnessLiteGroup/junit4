@@ -26,9 +26,14 @@ public class AllDefaultPossibilitiesBuilder extends RunnerBuilder {
     }
 
     @Override
-    // Nullable Runner from the following builders if they all return
-    // null Runner (e.g. runnerFromClass(Object.class))
-    public @Nullable Runner runnerForClass(Class<?> testClass) throws Throwable {
+    // [return.type.incompatible] FALSE_POSITIVE
+    // this method never returns a null Runner,
+    // because at least JUnit4Builder will never
+    // return null;
+    // even if it has Initialization error, the
+    // safeRunnerForClass will ensure a runner
+    // returned for that throwable.
+    public Runner runnerForClass(Class<?> testClass) throws Throwable {
         List<RunnerBuilder> builders = Arrays.asList(
                 ignoredBuilder(),
                 annotatedBuilder(),

@@ -129,6 +129,10 @@ public class TestSuite implements Test {
     // helper method to for the constructor of TestSuite
     // Nullable theClass from TestSuite(final Class<?> theClass)
     private void addTestsFromTestCase(@UnderInitialization TestSuite this, final @Nullable Class<?> theClass) {
+        // [dereference.of.nullable] TRUE_POSITIVE
+        // This method is called by public constructor
+        // TestSuite(final Class<?> theClass) where users
+        // can pass null as theClass
         fName = theClass.getName();
         try {
             getTestConstructor(theClass); // Avoid generating multiple error messages
@@ -145,9 +149,9 @@ public class TestSuite implements Test {
         Class<?> superClass = theClass;
         List<String> names = new ArrayList<String>();
         // [argument.type.incompatible] FALSE_POSITIVE
-        //  superClass cannot be @Nullable Class<? extends @Initialized @Nullable Object> here
-        // since theClass assigned to it cannot be @Nullable here, otherwise NPE will be raised
-        // at the beginning of the method
+        //  superClass cannot be nullable Class<? extends Object> here
+        // because superClass = theClass, and theClass cannot be null
+        // here, otherwise NPE will be raised at the beginning of the method
         while (Test.class.isAssignableFrom(superClass)) {
             for (Method each : MethodSorter.getDeclaredMethods(superClass)) {
                 addTestMethod(each, names, theClass);
@@ -155,7 +159,9 @@ public class TestSuite implements Test {
             superClass = superClass.getSuperclass();
         }
         // [dereference.of.nullable] FALSE_POSITIVE
-        //  fTests cannot be null here, it is already assigned some value up in the declaration
+        //  fTests cannot be null here, it is already assigned some value
+        // up in the declaration; As a private field, it is never reassigned
+        // to be null in this class
         if (fTests.size() == 0) {
             addTest(warning("No tests found in " + theClass.getName()));
         }
@@ -214,7 +220,9 @@ public class TestSuite implements Test {
     // helper method to for the constructor of TestSuite
     public void addTest(@UnknownInitialization TestSuite this, Test test) {
         // [dereference.of.nullable] FALSE_POSITIVE
-        //  fTests cannot be null here, it is already assigned some value up in the declaration
+        //  fTests cannot be null here, it is already assigned some value
+        // up in the declaration; As a private field, it is never reassigned
+        // to be null in this class
         fTests.add(test);
     }
 

@@ -124,16 +124,19 @@ public class Assignments {
         return cls.newInstance();
     }
 
-    public Object[] getConstructorArguments()
+    // Nullable Object[] from getActualValues(int start, int stop)
+    public @Nullable Object[] getConstructorArguments()
             throws CouldNotGenerateValueException {
         return getActualValues(0, getConstructorParameterCount());
     }
 
-    public Object[] getMethodArguments() throws CouldNotGenerateValueException {
+    // Nullable Object[] from getActualValues(int start, int stop)
+    public @Nullable Object[] getMethodArguments() throws CouldNotGenerateValueException {
         return getActualValues(getConstructorParameterCount(), assigned.size());
     }
 
-    public Object[] getAllArguments() throws CouldNotGenerateValueException {
+    // Nullable Object[] from getActualValues(int start, int stop)
+    public @Nullable Object[] getAllArguments() throws CouldNotGenerateValueException {
         return getActualValues(0, assigned.size());
     }
 

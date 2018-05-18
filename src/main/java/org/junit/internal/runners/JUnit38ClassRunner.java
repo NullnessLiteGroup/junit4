@@ -88,6 +88,10 @@ public class JUnit38ClassRunner extends Runner implements Filterable, Sortable {
     public void run(RunNotifier notifier) {
         TestResult result = new TestResult();
         result.addListener(createAdaptingListener(notifier));
+        // [dereference.of.nullable] TRUE_POSITIVE
+        //   dereference of getTest() is unsafe here
+        // because getTest() returns test which can be initialized
+        // to be null
         getTest().run(result);
     }
 
@@ -100,7 +104,8 @@ public class JUnit38ClassRunner extends Runner implements Filterable, Sortable {
         return makeDescription(getTest());
     }
 
-    private static Description makeDescription(Test test) {
+    // Nullable test from JUnit38ClassRunner.getDescription()
+    private static Description makeDescription(@Nullable Test test) {
         if (test instanceof TestCase) {
             TestCase tc = (TestCase) test;
             return Description.createTestDescription(tc.getClass(), tc.getName(),
@@ -123,6 +128,11 @@ public class JUnit38ClassRunner extends Runner implements Filterable, Sortable {
             return makeDescription(decorator.getTest());
         } else {
             // This is the best we can do in this case
+            // [dereference.of.nullable] TRUE_POSITIVE
+            //   dereference of test is unsafe here
+            // because the parameter test can be null if we call
+            // JUnit38ClassRunner.getDescription() when the field
+            // test is initialized to be null
             return Description.createSuiteDescription(test.getClass());
         }
     }
@@ -150,9 +160,21 @@ public class JUnit38ClassRunner extends Runner implements Filterable, Sortable {
     public void filter(Filter filter) throws NoTestsRemainException {
         if (getTest() instanceof Filterable) {
             Filterable adapter = (Filterable) getTest();
+            // [dereference.of.nullable] FALSE_POSITIVE
+            //   dereference of adapter is safe here
+            // because (getTest() instanceof Filterable) ensures
+            // adapter is non-null; but we cannot reduce this
+            // error by adding annotations Deterministic or Pure
+            // because setTest() can influence getTest()'s behavior
             adapter.filter(filter);
         } else if (getTest() instanceof TestSuite) {
             TestSuite suite = (TestSuite) getTest();
+            // [dereference.of.nullable] FALSE_POSITIVE
+            //   dereference of suite is safe here
+            // because (getTest() instanceof TestSuite) ensures
+            // suite is non-null; but we cannot reduce this
+            // error by adding annotations Deterministic or Pure
+            // because setTest() can influence getTest()'s behavior
             TestSuite filtered = new TestSuite(suite.getName());
             int n = suite.testCount();
             for (int i = 0; i < n; i++) {
@@ -171,6 +193,12 @@ public class JUnit38ClassRunner extends Runner implements Filterable, Sortable {
     public void sort(Sorter sorter) {
         if (getTest() instanceof Sortable) {
             Sortable adapter = (Sortable) getTest();
+            // [dereference.of.nullable] FALSE_POSITIVE
+            //   dereference of adapter is safe here
+            // because (getTest() instanceof Sortable) ensures
+            // adapter is non-null; but we cannot reduce this
+            // error by adding annotations Deterministic or Pure
+            // because setTest() can influence getTest()'s behavior
             adapter.sort(sorter);
         }
     }
@@ -181,7 +209,8 @@ public class JUnit38ClassRunner extends Runner implements Filterable, Sortable {
         this.test = test;
     }
 
-    private Test getTest() {
+    // Nullable Test returned because test can be initialized to be null
+    private @Nullable Test getTest() {
         return test;
     }
 }

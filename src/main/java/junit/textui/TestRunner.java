@@ -116,7 +116,7 @@ public class TestRunner extends BaseTestRunner {
         result.addListener(fPrinter);
         long startTime = System.currentTimeMillis();
         // [dereference.of.nullable] TRUE_POSITIVE
-        //  de-referencing suite is not safe here
+        //   de-referencing suite is not safe here
         // the code cannot prevent malformed call from
         // a instance calling doRun(null,...)
         suite.run(result);

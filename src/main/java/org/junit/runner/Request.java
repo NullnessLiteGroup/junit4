@@ -104,7 +104,8 @@ public abstract class Request {
      * @param runner the runner to return
      * @return a <code>Request</code> that will run the given runner when invoked
      */
-    // Nullable runner from Request.classes(Computer computer, Class<?>... classes)
+    // Nullable runner because it is a public static method, where
+    // users we can call runner(null)
     public static Request runner(final @Nullable Runner runner) {
         return new Request() {
             @Override
@@ -121,7 +122,7 @@ public abstract class Request {
      *
      * @return corresponding {@link Runner} for this Request
      */
-    // Nullable getRunner override required from ClassRequest
+    // Nullable Runner returned override required from Request.runner(final Runner runner)
     public abstract @Nullable Runner getRunner();
 
     /**

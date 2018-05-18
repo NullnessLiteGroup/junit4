@@ -33,9 +33,7 @@ public class ClassRequest extends Request {
     }
 
     @Override
-    // Nullable Runner from implementation below
-    //          CustomAllDefaultPossibilitiesBuilder().safeRunnerForClass(fTestClass)
-    public @Nullable Runner getRunner() {
+    public Runner getRunner() {
         if (runner == null) {
             runnerLock.lock();
             try {
