@@ -41,7 +41,14 @@ public class SuiteMethod extends JUnit38ClassRunner {
             throw e.getCause();
         }
         // [return.type.incompatible] FALSE_POSITIVE
-        // suite is ensured non-null here.
+        // suite cannot be null here
+        // SuiteMethod is an internal class not exposed to users in JUnit4 API
+        // its two callers: 1) AllTests is documented not used programmatically
+        // although it is exposed to users
+        // 2) SuiteMethodBuilder.runnerForClass ensures the klass here has a public
+        // static suite method with no parameter.
+        // And we checked all tests files and noticed that all public static suite()
+        // methods return non-null Test
         return suite;
     }
 }

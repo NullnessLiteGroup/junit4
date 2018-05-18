@@ -16,9 +16,11 @@ public class TestedOnSupplier extends ParameterSupplier {
     public List<PotentialAssignment> getValueSources(ParameterSignature sig) {
         List<PotentialAssignment> list = new ArrayList<PotentialAssignment>();
         TestedOn testedOn = sig.getAnnotation(TestedOn.class);
-        // [dereference.of.nullable] TRUE_POSITIVE
-        // dereference of possibly-null reference testedOn
-        // case sig doesn't have TestedOn annotation
+        // [dereference.of.nullable] FALSE_POSITIVE
+        // Only TestedOn.class is annotated with
+        // @ParametersSuppliedBy(TestedOnSupplier.class)
+        // Thus, if TestedOnSupplier is instantiated then sig
+        // must contain TestedOn annotation.
         int[] ints = testedOn.ints();
         for (final int i : ints) {
             list.add(PotentialAssignment.forValue("ints", i));

@@ -133,7 +133,7 @@ public abstract class BaseTestRunner implements TestListener {
             }
         } catch (InvocationTargetException e) {
             // [dereference.of.nullable] TRUE_POSITIVE
-            //   dereference of e.getTargetException() is unsafe
+            // dereference of e.getTargetException() is unsafe
             // the public constructor InvocationTargetException(target)
             // doesn't prevent null target, which is returned from e.getTargetException()
             runFailed("Failed to invoke suite():" + e.getTargetException().toString());

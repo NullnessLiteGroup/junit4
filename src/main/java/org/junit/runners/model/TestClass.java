@@ -46,6 +46,7 @@ public class TestClass implements Annotatable {
      * try to share instances of {@code TestClass} where possible.
      */
     // Nullable clazz from ParentRunner.createTestClass(ParentRunner<T> this, Class<?> testClass)
+    // and TestClass is exposed to users in JUnit4 API
     public TestClass(@Nullable Class<?> clazz) {
         this.clazz = clazz;
         if (clazz != null && clazz.getConstructors().length > 1) {
@@ -173,7 +174,7 @@ public class TestClass implements Annotatable {
                 || annotation.equals(BeforeClass.class);
     }
 
-    // Nullable testClass from new TestClass(null)
+    // Nullable testClass from scanAnnotatedMembers which passed the possible null clazz
     private static List<Class<?>> getSuperClasses(@Nullable Class<?> testClass) {
         List<Class<?>> results = new ArrayList<Class<?>>();
         Class<?> current = testClass;

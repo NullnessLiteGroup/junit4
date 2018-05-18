@@ -136,8 +136,9 @@ public class JUnitCore {
         notifier.addFirstListener(listener);
         try {
             // [dereference.of.nullable] TRUE_POSITIVE
-            //    dereference of runner is unsafe here
-            // because the parameter runner can be null
+            // dereference of runner is unsafe here
+            // because the JUnit4 API doesn't disallow users
+            // to call run(Request.runner(null))
             notifier.fireTestRunStarted(runner.getDescription());
             runner.run(notifier);
             notifier.fireTestRunFinished(result);

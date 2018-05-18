@@ -1,6 +1,5 @@
 package junit.framework;
 
-import org.checkerframework.checker.nullness.qual.Nullable;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -79,14 +78,18 @@ public abstract class TestCase extends Assert implements Test {
     /**
      * the name of the test case
      */
-    // Nullable fName from new TestCase()
-    private @Nullable String fName;
+    private String fName;
 
     /**
      * No-arg constructor to enable serialization. This method
      * is not intended to be used by mere mortals without calling setName().
      */
     public TestCase() {
+        // [assignment.type.incompatible] FALSE_POSITIVE
+        // TestCase is not exposed to users in JUnit4 API,
+        // and developers never called this constructor
+        // from this project and the other constructor
+        // is always called with a non-null name
         fName = null;
     }
 
@@ -167,9 +170,6 @@ public abstract class TestCase extends Assert implements Test {
             // methods. getDeclaredMethods returns all
             // methods of this class but excludes the
             // inherited ones.
-
-            // [argument.type.incompatible] FALSE_POSITIVE
-            // fName is @NonNull here because assertNotNull above catches the fName being null
             runMethod = getClass().getMethod(fName, (Class[]) null);
         } catch (NoSuchMethodException e) {
             fail("Method \"" + fName + "\" not found");
@@ -407,8 +407,7 @@ public abstract class TestCase extends Assert implements Test {
      * Asserts that an object isn't null. If it is
      * an AssertionFailedError is thrown with the given message.
      */
-    // Nullable object from (new TestCase()).run() which calls TestCase:runTest()
-    public static void assertNotNull(String message,@Nullable Object object) {
+    public static void assertNotNull(String message, Object object) {
         Assert.assertNotNull(message, object);
     }
 
@@ -507,8 +506,7 @@ public abstract class TestCase extends Assert implements Test {
      *
      * @return the name of the TestCase
      */
-    // Nullable fName returned from (new TestCase()).getName()
-    public @Nullable String getName() {
+    public String getName() {
         return fName;
     }
 

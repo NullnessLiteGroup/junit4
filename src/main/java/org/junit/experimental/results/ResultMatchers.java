@@ -53,11 +53,11 @@ public class ResultMatchers {
      */
     public static Matcher<Object> hasSingleFailureContaining(final String string) {
         return new BaseMatcher<Object>() {
-            // Nullable item  override super requires
+            // Nullable item override super requires
             public boolean matches(@Nullable Object item) {
                 // [dereference.of.nullable] TRUE_POSITIVE
-                //    dereference of item is unsafe here
-                // because the public method cannot prevent
+                // dereference of item is unsafe here
+                // because JUnit4 API doesn't prevent
                 // users from passing null item to this method
                 return item.toString().contains(string) && failureCountIs(1).matches(item);
             }

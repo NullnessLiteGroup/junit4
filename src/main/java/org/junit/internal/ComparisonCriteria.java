@@ -121,9 +121,9 @@ public abstract class ComparisonCriteria {
     private String componentTypeName(Class<?> arrayClass) {
         Class<?> componentType = arrayClass.getComponentType();
         // [dereference.of.nullable] FALSE_POSITIVE
-        // see document of getComponentType,
-        // the only caller getToStringableArrayElement(Object array, int length, int index)
-        // ensures arrayClass is an class of array so that getComponentType will not return null
+        // see document of getComponentType; because the only caller to this method
+        // getToStringableArrayElement(Object array, int length, int index) ensures
+        // arrayClass is an class of array so that getComponentType will not return null
         if (componentType.isArray()) {
             return componentTypeName(componentType) + "[]";
         } else {

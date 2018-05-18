@@ -41,7 +41,7 @@ public class AllDefaultPossibilitiesBuilder extends RunnerBuilder {
             }
         }
         // [return.type.incompatible] FALSE_POSITIVE
-        //   we never reach this line,
+        // we never reach this line,
         // because at least JUnit4Builder().safeRunnerForClass(testClass)
         // will never return null runner;
         // even if it has Initialization error, the

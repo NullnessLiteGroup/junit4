@@ -349,7 +349,7 @@ public abstract class ParentRunner<T> extends Runner implements Filterable,
     // from applyValidators(ParentRunner<T> this, List<Throwable> errors)
     public final TestClass getTestClass(@UnknownInitialization ParentRunner<T> this) {
         // [return.type.incompatible] FALSE_POSITIVE
-        //   both ParentRunner constructors ensure testClass is not null
+        // both ParentRunner constructors ensure testClass non-null
         // and testClass is a final field only assigned in constructors
         return testClass;
     }
@@ -477,7 +477,7 @@ public abstract class ParentRunner<T> extends Runner implements Filterable,
         collectInitializationErrors(errors);
         if (!errors.isEmpty()) {
             // [dereference.of.nullable] FALSE_POSITIVE
-            //  de-referencing testClass cannot raise NPEs here
+            // de-referencing testClass cannot raise NPEs here
             // since testClass is initialized non-null before validate()
             // is called in the constructor
             throw new InvalidTestClassError(testClass.getJavaClass(), errors);
