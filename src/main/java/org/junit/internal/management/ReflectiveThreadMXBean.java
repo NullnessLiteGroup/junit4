@@ -14,9 +14,8 @@ final class ReflectiveThreadMXBean implements ThreadMXBean {
 
 
   private static final class Holder {
-    // Nullable fields from implementation below
-    static final @Nullable Method getThreadCpuTimeMethod;
-    static final @Nullable Method isThreadCpuTimeSupportedMethod;
+    static final Method getThreadCpuTimeMethod;
+    static final Method isThreadCpuTimeSupportedMethod;
 
     private static final String FAILURE_MESSAGE = "Unable to access ThreadMXBean";
 
@@ -51,9 +50,9 @@ final class ReflectiveThreadMXBean implements ThreadMXBean {
     if (Holder.getThreadCpuTimeMethod != null) {
       Exception error = null;
       try {
-        // [unboxing.of.nullable] TRUE_POSITIVE
-        // unboxing a possibly-null reference (Long)Holder.getThreadCpuTimeMethod.invoke(threadMxBean, id)
-        // invoke() may return null
+        // [unboxing.of.nullable] FALSE_POSITIVE
+        // getThreadCpuTimeMethod = java.lang.management.ThreadMXBean: getThreadCpuTime
+        // which always returns a non-null primitive type long
         return (Long) Holder.getThreadCpuTimeMethod.invoke(threadMxBean, id);
       } catch (ClassCastException e) {
         error = e;
@@ -79,9 +78,9 @@ final class ReflectiveThreadMXBean implements ThreadMXBean {
   public boolean isThreadCpuTimeSupported() {
     if (Holder.isThreadCpuTimeSupportedMethod != null) {
       try {
-        // [unboxing.of.nullable] TRUE_POSITIVE
-        // unboxing a possibly-null reference (Boolean)Holder.isThreadCpuTimeSupportedMethod.invoke(threadMxBean)
-        // invoke() may return null
+        // [unboxing.of.nullable] FALSE_POSITIVE
+        // isThreadCpuTimeSupportedMethod = java.lang.management.ThreadMXBean: isThreadCpuTimeSupported
+        // which always returns a non-null primitive type boolean
         return (Boolean) Holder.isThreadCpuTimeSupportedMethod.invoke(threadMxBean);
       } catch (ClassCastException e) {
         // fallthrough

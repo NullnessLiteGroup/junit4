@@ -44,6 +44,10 @@ public class ClassRequest extends Request {
                 runnerLock.unlock();
             }
         }
+        // [return.type.incompatible] FALSE_POSITIVE
+        // runner cannot be null here
+        // because it is prevented by new CustomAllDefaultPossibilitiesBuilder(),
+        // which will never return null runner from safeRunnerForClass(fTestClass);
         return runner;
     }
 

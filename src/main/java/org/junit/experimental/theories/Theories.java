@@ -111,7 +111,7 @@ public class Theories extends BlockJUnit4ClassRunner {
     // helper from collectInitializationErrors
     private void validateDataPointMethods(@UnknownInitialization Theories this, List<Throwable> errors) {
         // [dereference.of.nullable] TRUE_POSITIVE
-        //   dereference of possibly-null reference getTestClass().getJavaClass()
+        // dereference of possibly-null reference getTestClass().getJavaClass()
         // if clazz of the testClass is null
         Method[] methods = getTestClass().getJavaClass().getDeclaredMethods();
         

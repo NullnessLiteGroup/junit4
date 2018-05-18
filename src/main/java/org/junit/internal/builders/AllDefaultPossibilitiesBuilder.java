@@ -26,13 +26,6 @@ public class AllDefaultPossibilitiesBuilder extends RunnerBuilder {
     }
 
     @Override
-    // [return.type.incompatible] FALSE_POSITIVE
-    // this method never returns a null Runner,
-    // because at least JUnit4Builder will never
-    // return null;
-    // even if it has Initialization error, the
-    // safeRunnerForClass will ensure a runner
-    // returned for that throwable.
     public Runner runnerForClass(Class<?> testClass) throws Throwable {
         List<RunnerBuilder> builders = Arrays.asList(
                 ignoredBuilder(),
@@ -47,6 +40,13 @@ public class AllDefaultPossibilitiesBuilder extends RunnerBuilder {
                 return runner;
             }
         }
+        // [return.type.incompatible] FALSE_POSITIVE
+        //   we never reach this line,
+        // because at least JUnit4Builder().safeRunnerForClass(testClass)
+        // will never return null runner;
+        // even if it has Initialization error, the
+        // safeRunnerForClass will ensure a runner
+        // returned for that throwable.
         return null;
     }
 

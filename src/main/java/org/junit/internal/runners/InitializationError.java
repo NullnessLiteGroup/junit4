@@ -1,5 +1,7 @@
 package org.junit.internal.runners;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 import java.util.Arrays;
 import java.util.List;
 

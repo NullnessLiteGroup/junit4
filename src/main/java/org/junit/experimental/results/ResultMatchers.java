@@ -56,7 +56,9 @@ public class ResultMatchers {
             // Nullable item  override super requires
             public boolean matches(@Nullable Object item) {
                 // [dereference.of.nullable] TRUE_POSITIVE
-                // dereference of possibly-null reference item
+                //    dereference of item is unsafe here
+                // because the public method cannot prevent
+                // users from passing null item to this method
                 return item.toString().contains(string) && failureCountIs(1).matches(item);
             }
 

@@ -138,8 +138,21 @@ public class MaxCore {
         }
         String methodName = each.getMethodName();
         if (methodName == null) {
+            // [return.type.incompatible] FALSE_POSITIVE
+            //   Request.aClass(type).getRunner() cannot be null here
+            // because it eventually called ClassRequest(type).getRunner(),
+            // which uses CustomAllDefaultPossibilitiesBuilder to avoid null runner;
+            // CustomAllDefaultPossibilitiesBuilder extends from
+            // AllDefaultPossibilitiesBuilder, which never returns a null Runner;
             return Request.aClass(type).getRunner();
         }
+        // [return.type.incompatible] FALSE_POSITIVE
+        //   Request.method(type, methodName).getRunner() cannot be null here
+        // because it eventually called ClassRequest(type).getRunner() from
+        // FilterRequest().getRunner(),
+        // and uses CustomAllDefaultPossibilitiesBuilder to avoid null runner;
+        // CustomAllDefaultPossibilitiesBuilder extends from
+        // AllDefaultPossibilitiesBuilder, which never returns a null Runner;
         return Request.method(type, methodName).getRunner();
     }
 
@@ -163,6 +176,10 @@ public class MaxCore {
 
     private List<Description> findLeaves(Request request) {
         List<Description> results = new ArrayList<Description>();
+        // [dereference.of.nullable] TRUE_POSITIVE
+        //    dereference of request.getRunner() is unsafe here
+        // because users can call sortRequest(Request.runner(null))
+        // to raise the NPEs here
         findLeaves(null, request.getRunner().getDescription(), results);
         return results;
     }

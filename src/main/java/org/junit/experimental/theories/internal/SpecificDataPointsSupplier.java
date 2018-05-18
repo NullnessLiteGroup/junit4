@@ -25,7 +25,7 @@ public class SpecificDataPointsSupplier extends AllMembersSupplier {
         // [dereference.of.nullable] FALSE_POSITIVE
         //  dereference of getAnnotation(FromDataPoints.class) is safe here
         // since annotation DataPoints will only be considered effective,
-        // checked in getSingleDataPointFields(sig),
+        // checked in getDataPointsFields(sig),
         // if it is paired with annotation FromDataPoints
         String requestedName = sig.getAnnotation(FromDataPoints.class).value();
 
