@@ -27,7 +27,7 @@ public class Result implements Serializable {
     private static final long serialVersionUID = 1L;
     private static final ObjectStreamField[] serialPersistentFields =
             // [dereference.of.nullable] FALSE_POSITIVE
-            //  de-referencing lookup() cannot raise NPE in this case,
+            // de-referencing lookup() cannot raise NPE in this case,
             // since SerializedFrom.class implements Serializable so
             // that lookup() will not return null
             ObjectStreamClass.lookup(SerializedForm.class).getFields();
@@ -65,7 +65,7 @@ public class Result implements Serializable {
         //  count.get() cannot raise NPE
         // count can only be null if the private constructor of Result is called,
         // and it is only called from another private method,
-        // readResolve,called from nowhere in this project.
+        // readResolve, called from nowhere in this project.
         // Besides, count is a final field.
         return count.get();
     }
@@ -99,7 +99,7 @@ public class Result implements Serializable {
         //  ignoreCount.get() cannot raise NPE
         // count can only be null if the private constructor of
         // Result is called, and it is only called from another
-        // private method, readResolve,called from nowhere
+        // private method, readResolve, called from nowhere
         // in this project. Besides, ignoreCount is a final field.
         return ignoreCount.get();
     }
@@ -144,7 +144,7 @@ public class Result implements Serializable {
             //  count.get() cannot raise NPE
             // count can only be null if the private constructor of Result is called,
             // and it is only called from another private method,
-            // readResolve,called from nowhere in this project.
+            // readResolve, called from nowhere in this project.
             // Besides, count is a final field.
             count.getAndIncrement();
         }
@@ -160,7 +160,7 @@ public class Result implements Serializable {
             //  ignoreCount.get() cannot raise NPE
             // count can only be null if the private constructor of
             // Result is called, and it is only called from another
-            // private method, readResolve,called from nowhere
+            // private method, readResolve, called from nowhere
             // in this project. Besides, ignoreCount is a final field.
             ignoreCount.getAndIncrement();
         }

@@ -24,13 +24,12 @@ public class Computer {
      * Create a suite for {@code classes}, building Runners with {@code builder}.
      * Throws an InitializationError if Runner construction fails
      */
-    // Nullable Runner returned required for its public method from Computer,
-    // and NullBuilder can be passed as builder
-    public @Nullable Runner getSuite(final RunnerBuilder builder,
+    public Runner getSuite(final RunnerBuilder builder,
             Class<?>[] classes) throws InitializationError {
         return new Suite(new RunnerBuilder() {
             @Override
-            // Nullable Runner returned if builder is NullBuilder
+            // Nullable Runner returned required for its public method from Computer,
+            // and JUnit4 API does not prevent parameters like NullBuilder
             public @Nullable Runner runnerForClass(Class<?> testClass) throws Throwable {
                 return getRunner(builder, testClass);
             }
@@ -50,7 +49,7 @@ public class Computer {
     /**
      * Create a single-class runner for {@code testClass}, using {@code builder}
      */
-    // Nullable Runner returned from new getSuite(new NullBuilder(),...)
+    // Nullable Runner returned from getSuite(final RunnerBuilder builder, Class<?>[] classes)
     protected @Nullable Runner getRunner(RunnerBuilder builder, Class<?> testClass) throws Throwable {
         return builder.runnerForClass(testClass);
     }

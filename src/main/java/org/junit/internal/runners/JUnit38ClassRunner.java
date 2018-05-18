@@ -89,7 +89,7 @@ public class JUnit38ClassRunner extends Runner implements Filterable, Sortable {
         TestResult result = new TestResult();
         result.addListener(createAdaptingListener(notifier));
         // [dereference.of.nullable] TRUE_POSITIVE
-        //   dereference of getTest() is unsafe here
+        // dereference of getTest() is unsafe here
         // because getTest() returns test which can be initialized
         // to be null
         getTest().run(result);

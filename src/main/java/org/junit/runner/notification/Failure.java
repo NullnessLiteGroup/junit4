@@ -65,9 +65,9 @@ public class Failure implements Serializable {
     @Override
     public String toString() {
         // [dereference.of.nullable] TRUE_POSITIVE
-        //  dereference of fThrownException is unsafe here
-        // because it's possible for fThrownException to be
-        // initialized to be null from the public constructor
+        // dereference of fThrownException is unsafe here
+        // because it is not banned for users to initialize
+        // fThrownException to be null from the public constructor
         // of Failure
         return getTestHeader() + ": " + fThrownException.getMessage();
     }
@@ -98,8 +98,8 @@ public class Failure implements Serializable {
         // [dereference.of.nullable] TRUE_POSITIVE
         //  dereference of getException(), which returns
         // fThrownException is unsafe here;
-        // because it's possible for fThrownException to be
-        // initialized to be null from the public constructor
+        // because it is not banned for users to initialize
+        // fThrownException to be null from the public constructor
         // of Failure
         return getException().getMessage();
     }

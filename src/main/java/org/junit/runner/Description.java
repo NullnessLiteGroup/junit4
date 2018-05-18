@@ -88,8 +88,8 @@ public class Description implements Serializable {
     // Nullable clazz from BlockJUnit4ClassRunner.describeChild(BlockJUnit4ClassRunner this, FrameworkMethod method)
     public static Description createTestDescription(@Nullable Class<?> clazz, @Nullable String name, Annotation... annotations) {
         // [dereference.of.nullable] TRUE_POSITIVE
-        //  dereference clazz is unsafe here
-        // because it's a public method which cannot prevent users from passing null
+        // clazz.getName() can raise NPEs
+        // the interface is exposed to users can pas but cannot prevent null clazz
         return new Description(clazz, formatDisplayName(name, clazz.getName()), annotations);
     }
 
@@ -106,8 +106,8 @@ public class Description implements Serializable {
     // Nullable clazz for its public static method
     public static Description createTestDescription(@Nullable Class<?> clazz, @Nullable String name) {
         // [dereference.of.nullable] TRUE_POSITIVE
-        //  class.getName() can raise NPE
-        // since the method is public static that users can pass null as clazz
+        // clazz.getName() can raise NPEs
+        // the interface is exposed to users can pas but cannot prevent null clazz
         return new Description(clazz, formatDisplayName(name, clazz.getName()));
     }
 
@@ -328,9 +328,9 @@ public class Description implements Serializable {
      */
     public String getClassName() {
         // [return.type.incompatible] FALSE_POSITIVE
-        //  fTestClass.getName() ensures non-null name returned
-        //  methodAndClassNamePatternGroupOrDefault(2, toString())
-        // ensures returns toString() at worst case; But toString()
+        // fTestClass.getName() ensures non-null name returned
+        // methodAndClassNamePatternGroupOrDefault(2, toString())
+        // ensures returns toString() at worst case; And toString()
         // eventually return fDisplayName, which cannot be initialized
         // as null from any of the private constructors of Description;
         return fTestClass != null ? fTestClass.getName() : methodAndClassNamePatternGroupOrDefault(2, toString());

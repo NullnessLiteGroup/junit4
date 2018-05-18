@@ -63,7 +63,7 @@ public class ParallelComputer extends Computer {
     }
 
     @Override
-    // Nullable Runner returned if use NullBuilder
+    // Nullable Runner returned from getSuite(RunnerBuilder builder, Class<?>[] classes)
     protected @Nullable Runner getRunner(RunnerBuilder builder, Class<?> testClass)
             throws Throwable {
         Runner runner = super.getRunner(builder, testClass);

@@ -25,9 +25,7 @@ public class SuiteMethod extends JUnit38ClassRunner {
         super(testFromSuiteMethod(klass));
     }
 
-    // Nullable Test returned from suiteMethod.invoke(null)
-    //      it is possible for a customized suite method return nothing
-    public static @Nullable Test testFromSuiteMethod(Class<?> klass) throws Throwable {
+    public static Test testFromSuiteMethod(Class<?> klass) throws Throwable {
         Method suiteMethod = null;
         Test suite = null;
         try {
@@ -42,6 +40,8 @@ public class SuiteMethod extends JUnit38ClassRunner {
             // doesn't prevent null target, which is returned by e.getCause()
             throw e.getCause();
         }
+        // [return.type.incompatible] FALSE_POSITIVE
+        // suite is ensured non-null here.
         return suite;
     }
 }
