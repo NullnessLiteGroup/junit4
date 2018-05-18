@@ -66,7 +66,7 @@ public class Failure implements Serializable {
     public String toString() {
         // [dereference.of.nullable] TRUE_POSITIVE
         // dereference of fThrownException is unsafe here
-        // because it is not banned for users to initialize
+        // because JUnit4 API does not banned for users to initialize
         // fThrownException to be null from the public constructor
         // of Failure
         return getTestHeader() + ": " + fThrownException.getMessage();
@@ -98,7 +98,7 @@ public class Failure implements Serializable {
         // [dereference.of.nullable] TRUE_POSITIVE
         //  dereference of getException(), which returns
         // fThrownException is unsafe here;
-        // because it is not banned for users to initialize
+        // because JUnit4 API is not banned for users to initialize
         // fThrownException to be null from the public constructor
         // of Failure
         return getException().getMessage();

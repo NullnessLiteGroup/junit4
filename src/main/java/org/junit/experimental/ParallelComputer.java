@@ -56,9 +56,14 @@ public class ParallelComputer extends Computer {
 
     @Override
     // Nullable Runner returned by super.getSuite(builder, classes) and parallelize(suite)
-    public @Nullable Runner getSuite(RunnerBuilder builder, java.lang.Class<?>[] classes)
+    public Runner getSuite(RunnerBuilder builder, java.lang.Class<?>[] classes)
             throws InitializationError {
         Runner suite = super.getSuite(builder, classes);
+        // [return.type.incompatible] FALSE_POSITIVE
+        // 1) suite is a non-null Runner returned by super.getSuite(builder, classes);
+        // 2) also, parallelize(suite) will return non-null Runner, because Suite
+        // is subclass of ParentRunner and parallelize(suite)
+        // just set a scheduler to it (no null reassignment)
         return this.classes ? parallelize(suite) : suite;
     }
 
