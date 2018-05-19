@@ -33,7 +33,15 @@ final class ReflectiveThreadMXBean implements ThreadMXBean {
       } catch (SecurityException e) {
         // do nothing, the methods will be null on failure
       }
+      // [assignment.type.incompatible] FALSE_POSITIVE
+      // getThreadCpuTimeMethod cannot be null because
+      // java.lang.management.ThreadMXBean exists and has
+      // the method getThreadCpuTime(long id)
       getThreadCpuTimeMethod = threadCpuTime;
+      // [assignment.type.incompatible] FALSE_POSITIVE
+      // getThreadCpuTimeMethod cannot be null because
+      // java.lang.management.ThreadMXBean exists and has
+      // the method isThreadCpuTimeSupported()
       isThreadCpuTimeSupportedMethod = threadCpuTimeSupported;
     }
   }

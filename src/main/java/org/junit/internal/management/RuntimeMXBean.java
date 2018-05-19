@@ -12,6 +12,5 @@ public interface RuntimeMXBean {
   /**
    * @see java.lang.management.RuntimeMXBean#getInputArguments()
    */
-  // Nullable List<String> override required from ReflectiveRuntimeMXBean
-  @Nullable List<String> getInputArguments();
+  List<String> getInputArguments();
 }

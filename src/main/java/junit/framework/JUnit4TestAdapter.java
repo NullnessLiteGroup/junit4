@@ -28,7 +28,7 @@ public class JUnit4TestAdapter implements Test, Filterable, Sortable, Describabl
     private final Class<?> fNewTestClass;
 
     // Nullable fRunner from the constructor
-    private final @Nullable Runner fRunner;
+    private final Runner fRunner;
 
     private final JUnit4TestAdapterCache fCache;
 
@@ -39,6 +39,10 @@ public class JUnit4TestAdapter implements Test, Filterable, Sortable, Describabl
     public JUnit4TestAdapter(final Class<?> newTestClass, JUnit4TestAdapterCache cache) {
         fCache = cache;
         fNewTestClass = newTestClass;
+        // [assignment.type.incompatible] FALSE_POSITIVE
+        // fRunner cannot be null here, because the underlying
+        //  implementation of Request.classWithoutSuiteMethod(newTestClass)
+        // is ClassRequest, which returns non-null runner for getRunner()
         fRunner = Request.classWithoutSuiteMethod(newTestClass).getRunner();
     }
 

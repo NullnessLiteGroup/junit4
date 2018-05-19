@@ -40,8 +40,8 @@ public class JUnit4ClassRunner extends Runner implements Filterable, Sortable {
     // helper method for the constructor
     protected List<Method> getTestMethods(@UnderInitialization JUnit4ClassRunner this) {
         // [dereference.of.nullable] FALSE_POSITIVE
-        //  testClass is only assigned in constructor
-        // and it's initialized as non-null
+        // testClass is only assigned in constructor
+        // and it is guaranteed to be non-null
         return testClass.getTestMethods();
     }
 
@@ -49,7 +49,7 @@ public class JUnit4ClassRunner extends Runner implements Filterable, Sortable {
     protected void validate(@UnderInitialization JUnit4ClassRunner this) throws InitializationError {
         // [argument.type.incompatible] FALSE_POSITIVE
         //  testClass is only assigned in constructor
-        // and it's initialized as non-null
+        // and it is guaranteed to be non-null
         MethodValidator methodValidator = new MethodValidator(testClass);
         methodValidator.validateMethodsForDefaultRunner();
         methodValidator.assertValid();

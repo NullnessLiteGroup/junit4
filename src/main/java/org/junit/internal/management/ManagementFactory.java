@@ -10,8 +10,7 @@ import java.lang.reflect.InvocationTargetException;
  */
 public class ManagementFactory {
   private static final class FactoryHolder {
-    // Nullable MANAGEMENT_FACTORY_CLASS indicated getBeanObject(String methodName)
-    private static final @Nullable Class<?> MANAGEMENT_FACTORY_CLASS;
+    private static final Class<?> MANAGEMENT_FACTORY_CLASS;
 
     static {
       Class<?> managementFactoryClass = null;
@@ -20,13 +19,24 @@ public class ManagementFactory {
       } catch (ClassNotFoundException e) {
         // do nothing, managementFactoryClass will be none on failure
       }
+      // [assignment.type.incompatible] FALSE_POSITIVE
+      // java.lang.management.ManagementFactory class exist
+      // so it can never be null
       MANAGEMENT_FACTORY_CLASS = managementFactoryClass;
     }
 
-    // Nullable Object returned when MANAGEMENT_FACTORY_CLASS is null
-    static @Nullable Object getBeanObject(String methodName) {
+    // Nullable Object returned when invoke returns null
+    static Object getBeanObject(String methodName) {
       if (MANAGEMENT_FACTORY_CLASS != null) {
         try {
+          // [return.type.incompatible] FALSE_POSITIVE
+          // this class is not exposed in JUnit4 to clients;
+          // the calls from this project is not malformed;
+          // MANAGEMENT_FACTORY_CLASS always exists, and has methods
+          // getThreadMXBean() and getRuntimeMXBean() for calls from this project
+          // and both of them return the non-null object
+          // @see ava.lang.management.ManagementFactory#getThreadMXBean()
+          // @see ava.lang.management.ManagementFactory#getRuntimeMXBean()
           return MANAGEMENT_FACTORY_CLASS.getMethod(methodName).invoke(null);
         } catch (IllegalAccessException e) {
           // fallthrough

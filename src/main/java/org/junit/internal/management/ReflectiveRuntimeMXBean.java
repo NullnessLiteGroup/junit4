@@ -1,6 +1,5 @@
 package org.junit.internal.management;
 
-import org.checkerframework.checker.nullness.qual.Nullable;
 import org.junit.internal.Classes;
 
 import java.lang.reflect.InvocationTargetException;
@@ -16,7 +15,7 @@ final class ReflectiveRuntimeMXBean implements RuntimeMXBean {
 
   private static final class Holder {
     // Nullable field if no getInputArguments method
-    private static final @Nullable Method getInputArgumentsMethod;
+    private static final Method getInputArgumentsMethod;
     static {
       Method inputArguments = null;
       try {
@@ -29,6 +28,10 @@ final class ReflectiveRuntimeMXBean implements RuntimeMXBean {
       } catch (SecurityException e) {
         // do nothing, input arguments will be null on failure
       }
+      // [assignment.type.incompatible] FALSE_POSITIVE
+      // java.lang.management.RuntimeMXBean class exist and
+      // has getInputArguments method
+      // so getInputArgumentsMethod cannot be null
       getInputArgumentsMethod = inputArguments;
     }
   }
@@ -42,10 +45,13 @@ final class ReflectiveRuntimeMXBean implements RuntimeMXBean {
    * {@inheritDoc}
    */
   @SuppressWarnings("unchecked")
-  // Nullable List<String> returned if invoke returned null
-  public @Nullable List<String> getInputArguments() {
+  public List<String> getInputArguments() {
     if (Holder.getInputArgumentsMethod != null) {
       try {
+        // [return.type.incompatible] FALSE_POSITIVE
+        // getInputArgumentsMethod always exists and
+        // return a non-null list by its documentation
+        // @see java.lang.management.RuntimeMXBean#getInputArguments()
         return (List<String>) Holder.getInputArgumentsMethod.invoke(runtimeMxBean);
       } catch (ClassCastException e) { // no multi-catch with source level 6
         // fallthrough

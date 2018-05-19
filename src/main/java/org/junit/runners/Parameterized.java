@@ -378,8 +378,10 @@ public class Parameterized extends Suite {
                 return Collections.singletonList(runnerOverride);
             }
             Parameters parameters = parametersMethod.getAnnotation(Parameters.class);
-            // [dereference.of.nullable] TRUE_POSITIVE
-            // dereference of possibly-null reference parameters
+            // [dereference.of.nullable] FALSE_POSITIVE
+            // parameters cannot be null here because parametersMethod
+            // is initialized to be a FrameworkMethod with annotation
+            // Parameters
             return Collections.unmodifiableList(createRunnersForParameters(
                     allParameters, parameters.name(),
                     getParametersRunnerFactory()));

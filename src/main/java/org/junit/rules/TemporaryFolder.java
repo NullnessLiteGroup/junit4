@@ -250,12 +250,12 @@ public class TemporaryFolder extends ExternalResource {
             tmpFile.delete();
         }
         // [dereference.of.nullable] FALSE_POSITIVE
-        // de-referencing parentFolder cannot cause NPEs
-        // because NPEs only happen when create() is called when parentFolder = null
-        // but it's documented not to use create()
+        // dereference of parentFolder cannot cause NPEs
+        // because NPEs only happen when create() is called when
+        // parentFolder = null, but it is documented not to use create()
         //
         // [dereference.of.nullable] FALSE_POSITIVE
-        //  de-referencing createdFolder cannot cause NPE
+        // dereference createdFolder cannot cause NPE
         // this createdFolder can only come from the loop above, which
         // is initialized at every iteration
         throw new IOException("Unable to create temporary directory in: "

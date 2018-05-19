@@ -67,18 +67,20 @@ public class BlockJUnit4ClassRunnerWithParameters extends
                             + ", available parameters: " + parameters.length
                             + ".");
         }
-        // [dereference.of.nullable] TRUE_POSITIVE
-        //  getJavaClass() can be null here
-        // testClass can be initialized with null clazz, and passed in to this
-        // class constructor
+        // [dereference.of.nullable] FALSE_POSITIVE
+        // createTestUsingFieldInjection is a private method only called by
+        // createTest() on existing BlockJUnit4ClassRunnerWithParameters instance,
+        // whose getTestClass().getJavaClass() must be non-null,
+        // otherwise, the it already throws an initialization error at the beginning
         Object testClassInstance = getTestClass().getJavaClass().newInstance();
         for (FrameworkField each : annotatedFieldsByParameter) {
             Field field = each.getField();
             Parameter annotation = field.getAnnotation(Parameter.class);
             // [dereference.of.nullable] FALSE_POSITIVE
-            //  dereference of annotation is safe here because
+            // dereference of annotation is safe here because
             // annotations cannot be null if we entered this for loop,
-            // which means annotatedFieldsByParameter.size() > 0
+            // then list returned by getAnnotatedFieldsByParameter()
+            // must contains fields annotated with Parameter
             int index = annotation.value();
             try {
                 field.set(testClassInstance, parameters[index]);
@@ -136,9 +138,10 @@ public class BlockJUnit4ClassRunnerWithParameters extends
             int[] usedIndices = new int[annotatedFieldsByParameter.size()];
             for (FrameworkField each : annotatedFieldsByParameter) {
                 // [dereference.of.nullable] FALSE_POSITIVE
-                //  dereference of annotation is safe here because
+                // dereference of annotation is safe here because
                 // annotations cannot be null if we entered this for loop,
-                // which means annotatedFieldsByParameter.size() > 0
+                // then list returned by getAnnotatedFieldsByParameter()
+                // must contains fields annotated with Parameter
                 int index = each.getField().getAnnotation(Parameter.class)
                         .value();
                 if (index < 0 || index > annotatedFieldsByParameter.size() - 1) {

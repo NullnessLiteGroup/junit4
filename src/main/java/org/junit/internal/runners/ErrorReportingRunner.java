@@ -72,8 +72,7 @@ public class ErrorReportingRunner extends Runner {
     @SuppressWarnings("deprecation")
     // helper method for the constructor of ErrorReportingRunner
     // Nullable cause from itself, recursive call
-    // Nullable List<Throwable> from singletonList(cause)
-    private List<@Nullable Throwable> getCauses(@UnderInitialization ErrorReportingRunner this, @Nullable Throwable cause) {
+    private List<Throwable> getCauses(@UnderInitialization ErrorReportingRunner this, @Nullable Throwable cause) {
         if (cause instanceof InvocationTargetException) {
             return getCauses(cause.getCause());
         }
@@ -87,6 +86,10 @@ public class ErrorReportingRunner extends Runner {
             return ((org.junit.internal.runners.InitializationError) cause)
                     .getCauses();
         }
+        // [return.type.incompatible] SPECIAL_CASE? or cause cannot be null??
+        // List<Nullable Throwable> is incompatible with List<Throwable>
+        // by the Checker Framework, see section 24.1.2 in the manual of
+        // the Checker Framework (https://checkerframework.org/manual/#generics)
         return singletonList(cause);
     }
 

@@ -219,7 +219,7 @@ public class BlockJUnit4ClassRunner extends ParentRunner<FrameworkMethod> {
     private boolean hasOneConstructor(@UnknownInitialization BlockJUnit4ClassRunner this) {
         // [dereference.of.nullable] TRUE_POSITIVE
         // dereference of possibly-null reference getTestClass().getJavaClass()
-        // if clazz of the testClass is null
+        // JUnit4 API doesn't prevent users from running (new BlockJUnit4ClassRunner(null))
         return getTestClass().getJavaClass().getConstructors().length == 1;
     }
 
@@ -442,7 +442,8 @@ public class BlockJUnit4ClassRunner extends ParentRunner<FrameworkMethod> {
      * @return a list of MethodRules that should be applied when executing this
      *         test
      */
-    protected List<MethodRule> rules(Object target) {
+    // Nullable target from BlockJUnit4ClassRunner: withRules
+    protected List<MethodRule> rules(@Nullable Object target) {
         RuleCollector<MethodRule> collector = new RuleCollector<MethodRule>();
         getTestClass().collectAnnotatedMethodValues(target, Rule.class, MethodRule.class,
                 collector);

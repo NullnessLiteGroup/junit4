@@ -91,8 +91,8 @@ public class Theories extends BlockJUnit4ClassRunner {
     // helper from collectInitializationErrors
     private void validateDataPointFields(@UnknownInitialization Theories this, List<Throwable> errors) {
         // [dereference.of.nullable] TRUE_POSITIVE
-        //   dereference of possibly-null reference getTestClass().getJavaClass()
-        // if clazz of the testClass is null
+        // dereference of possibly-null reference getTestClass().getJavaClass()
+        // JUnit4 API doesn't prevent users from running new Theories(null)
         Field[] fields = getTestClass().getJavaClass().getDeclaredFields();
 
         for (Field field : fields) {
@@ -112,7 +112,7 @@ public class Theories extends BlockJUnit4ClassRunner {
     private void validateDataPointMethods(@UnknownInitialization Theories this, List<Throwable> errors) {
         // [dereference.of.nullable] TRUE_POSITIVE
         // dereference of possibly-null reference getTestClass().getJavaClass()
-        // if clazz of the testClass is null
+        // JUnit4 API doesn't prevent users from running new Theories(null)
         Method[] methods = getTestClass().getJavaClass().getDeclaredMethods();
         
         for (Method method : methods) {
@@ -238,6 +238,9 @@ public class Theories extends BlockJUnit4ClassRunner {
             new BlockJUnit4ClassRunner(getTestClass()) {
                 @Override
                 protected void collectInitializationErrors(
+                        // [override.receiver.invalid] SPECIAL_CASE
+                        // haven't found a way to refer anonymous type
+                        // for initialization checker
                         List<Throwable> errors) {
                     // do nothing
                 }
@@ -270,7 +273,8 @@ public class Theories extends BlockJUnit4ClassRunner {
 
                 @Override
                 public Object createTest() throws Exception {
-                    Object[] params = complete.getConstructorArguments();
+                    // Nullable params from Assignments.getConstructorArguments()
+                    Object@Nullable[] params = complete.getConstructorArguments();
                     
                     if (!nullsOk()) {
                         Assume.assumeNotNull(params);
@@ -287,7 +291,8 @@ public class Theories extends BlockJUnit4ClassRunner {
             return new Statement() {
                 @Override
                 public void evaluate() throws Throwable {
-                    final Object[] values = complete.getMethodArguments();
+                    // Nullable values from Assignments.getMethodArguments()
+                    final Object@Nullable[] values = complete.getMethodArguments();
                     
                     if (!nullsOk()) {
                         Assume.assumeNotNull(values);
