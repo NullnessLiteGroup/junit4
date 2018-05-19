@@ -50,6 +50,15 @@ public class ManagementFactory {
           // fallthrough
         }
       }
+      // [return.type.incompatible] FALSE_POSITIVE
+      // this class is not exposed in JUnit4 to clients;
+      // the calls from this project is not malformed;
+      // MANAGEMENT_FACTORY_CLASS always exists, and has methods
+      // getThreadMXBean() and getRuntimeMXBean() for calls from this project
+      // and both of them return the non-null object
+      // so we never reach this line
+      // @see ava.lang.management.ManagementFactory#getThreadMXBean()
+      // @see ava.lang.management.ManagementFactory#getRuntimeMXBean()
       return null;
     }
   }

@@ -31,7 +31,7 @@ public abstract class TypeSafeMatcher<T> extends BaseMatcher<T> {
     private static Class<?> findExpectedType(Class<?> fromClass) {
         for (Class<?> c = fromClass; c != Object.class; c = c.getSuperclass()) {
             // [argument.type.incompatible] FALSE_POSITIVE
-            //    c cannot be null here
+            // c cannot be null here
             // findExpectedType(Class<?> fromClass) is only called from
             // the constructor TypeSafeMatcher() passes getClass()
             // override from Object.class, which cannot return null.

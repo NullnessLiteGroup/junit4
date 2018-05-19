@@ -274,7 +274,7 @@ public class Theories extends BlockJUnit4ClassRunner {
                 @Override
                 public Object createTest() throws Exception {
                     // Nullable params from Assignments.getConstructorArguments()
-                    Object@Nullable[] params = complete.getConstructorArguments();
+                    @Nullable Object[] params = complete.getConstructorArguments();
                     
                     if (!nullsOk()) {
                         Assume.assumeNotNull(params);
@@ -292,7 +292,7 @@ public class Theories extends BlockJUnit4ClassRunner {
                 @Override
                 public void evaluate() throws Throwable {
                     // Nullable values from Assignments.getMethodArguments()
-                    final Object@Nullable[] values = complete.getMethodArguments();
+                    final @Nullable Object[] values = complete.getMethodArguments();
                     
                     if (!nullsOk()) {
                         Assume.assumeNotNull(values);
