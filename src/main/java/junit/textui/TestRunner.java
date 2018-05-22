@@ -88,7 +88,8 @@ public class TestRunner extends BaseTestRunner {
     }
 
     @Override
-    public void testFailed(int status, Test test, Throwable e) {
+    // Nullable e override from BaseTestRunner
+    public void testFailed(int status, Test test, @Nullable Throwable e) {
     }
 
     @Override

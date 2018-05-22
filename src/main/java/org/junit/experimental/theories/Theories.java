@@ -90,9 +90,11 @@ public class Theories extends BlockJUnit4ClassRunner {
 
     // helper from collectInitializationErrors
     private void validateDataPointFields(@UnknownInitialization Theories this, List<Throwable> errors) {
-        // [dereference.of.nullable] TRUE_POSITIVE
-        // dereference of possibly-null reference getTestClass().getJavaClass()
-        // JUnit4 API doesn't prevent users from running new Theories(null)
+        // [dereference.of.nullable] FALSE_POSITIVE
+        // dereference of getTestClass().getJavaClass() is safe here
+        // although JUnit4 API allows users to call new Theories(null),
+        // the NPEs raised here is shadowed by validateNoNonStaticInnerClass(errors)
+        // from super.collectInitializationErrors(errors);
         Field[] fields = getTestClass().getJavaClass().getDeclaredFields();
 
         for (Field field : fields) {
@@ -110,9 +112,11 @@ public class Theories extends BlockJUnit4ClassRunner {
 
     // helper from collectInitializationErrors
     private void validateDataPointMethods(@UnknownInitialization Theories this, List<Throwable> errors) {
-        // [dereference.of.nullable] TRUE_POSITIVE
-        // dereference of possibly-null reference getTestClass().getJavaClass()
-        // JUnit4 API doesn't prevent users from running new Theories(null)
+        // [dereference.of.nullable] FALSE_POSITIVE
+        // dereference of getTestClass().getJavaClass() is safe here
+        // although JUnit4 API allows users to call new Theories(null),
+        // the NPEs raised here is shadowed by validateNoNonStaticInnerClass(errors)
+        // from super.collectInitializationErrors(errors);
         Method[] methods = getTestClass().getJavaClass().getDeclaredMethods();
         
         for (Method method : methods) {
