@@ -6,11 +6,10 @@ import org.junit.runners.model.Statement;
 
 public class InvokeMethod extends Statement {
     private final FrameworkMethod testMethod;
-    // Nullable target from the constructor
-    private final @Nullable Object target;
+    private final Object target;
 
     // Nullable target from BlockJUnit4ClassRunner.methodInvoker(FrameworkMethod method, Object test)
-    public InvokeMethod(FrameworkMethod testMethod, @Nullable Object target) {
+    public InvokeMethod(FrameworkMethod testMethod, Object target) {
         this.testMethod = testMethod;
         this.target = target;
     }

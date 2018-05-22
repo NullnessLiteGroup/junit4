@@ -85,9 +85,15 @@ public final class Throwables {
     public static String getTrimmedStackTrace(@Nullable Throwable exception) {
         List<String> trimmedStackTraceLines = getTrimmedStackTraceLines(exception);
         if (trimmedStackTraceLines.isEmpty()) {
+            // [argument.type.incompatible] FALSE_POSITIVE
+            // exception cannot be null here,
+            // otherwise NPEs will raise in getTrimmedStackTraceLines(exception)
             return getFullStackTrace(exception);
         }
 
+        // [argument.type.incompatible] FALSE_POSITIVE
+        // exception cannot be null here,
+        // otherwise NPEs will raise in getTrimmedStackTraceLines(exception)
         StringBuilder result = new StringBuilder(exception.toString());
         appendStackTraceLines(trimmedStackTraceLines, result);
         appendStackTraceLines(getCauseStackTraceLines(exception), result);
@@ -99,7 +105,7 @@ public final class Throwables {
         // [dereference.of.nullable] TRUE_POSITIVE
         // dereference exception can be unsafe here
         // although the method is not exposed in JUnit4 API,
-        // users can throw
+        // users can throw new Failure
         List<StackTraceElement> stackTraceElements = Arrays.asList(exception.getStackTrace());
         int linesToInclude = stackTraceElements.size();
 

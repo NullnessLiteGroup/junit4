@@ -79,9 +79,10 @@ public abstract class RunnerBuilder {
             // [dereference.of.nullable] TRUE_POSITIVE
             // dereference of parent is unsafe here
             // parents is HashSet and parents.add(parent) permits null
-            // but if runners(parent = null, Class<?>[] children) is called twice,
+            // but if runners(null, ...) is called twice,
             // then we enter this if branch where parent.getName() throws NPEs
-            // And the JUnit4 API doesn't disallow users to do so.
+            // And the JUnit4 API doesn't prevent users from calling
+            // runners(null, ...).
             throw new InitializationError(String.format("class '%s' (possibly indirectly) contains itself as a SuiteClass", parent.getName()));
         }
         return parent;

@@ -201,6 +201,12 @@ public class FailOnTimeout extends Statement {
      */
     // Nullable Thread indicated in documentation above
     private @Nullable Thread getStuckThread(Thread mainThread) {
+        // [argument.type.incompatible] FALSE_POSITIVE
+        // mainThread.getThreadGroup() cannot be null because mainThread
+        // is created from evaluate() according to the document above,
+        // and evaluate() initialize the ThreadGroup to be non-null,
+        // and ThreadGroup is never reassigned from the Thread class.
+        // Plus, FailOnTimeout is not exposed in JUnit4 API.
         List<Thread> threadsInGroup = getThreadsInGroup(mainThread.getThreadGroup());
         if (threadsInGroup.isEmpty()) {
             return null;

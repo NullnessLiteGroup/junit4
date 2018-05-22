@@ -148,6 +148,8 @@ public class AllMembersSupplier extends ParameterSupplier {
     private void addIterableValues(ParameterSignature sig, String name, List<PotentialAssignment> list, @Nullable Iterable<?> iterable) {
         // [dereference.of.nullable] TRUE_POSITIVE
         // dereference of possibly-null reference iterable
+        // the caller method only ensures the type is Iterable.class
+        // but did not ensure that value is non-null
         Iterator<?> iterator = iterable.iterator();
         int i = 0;
         while (iterator.hasNext()) {

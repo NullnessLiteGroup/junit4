@@ -117,8 +117,9 @@ public class TestRunner extends BaseTestRunner {
         long startTime = System.currentTimeMillis();
         // [dereference.of.nullable] TRUE_POSITIVE
         // de-referencing suite is not safe here
-        // the code cannot prevent malformed call from
-        // a instance calling doRun(null,...)
+        // because users can run JUnit4 from the command line
+        // and can passed a malformed test class where the suite
+        // method doesn't exist
         suite.run(result);
         long endTime = System.currentTimeMillis();
         long runTime = endTime - startTime;

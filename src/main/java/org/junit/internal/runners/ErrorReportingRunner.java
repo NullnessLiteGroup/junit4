@@ -35,7 +35,7 @@ public class ErrorReportingRunner extends Runner {
             }
         }
         // [argument.type.incompatible] FALSE_POSITIVE
-        //  testClasses cannot be null here
+        // testClasses cannot be null here
         // otherwise the control flow above captured it
         classNames = getClassNames(testClasses);
         causes = getCauses(cause);
@@ -86,7 +86,7 @@ public class ErrorReportingRunner extends Runner {
             return ((org.junit.internal.runners.InitializationError) cause)
                     .getCauses();
         }
-        // [return.type.incompatible] SPECIAL_CASE? or cause cannot be null??
+        // [return.type.incompatible] SPECIAL_CASE
         // List<Nullable Throwable> is incompatible with List<Throwable>
         // by the Checker Framework, see section 24.1.2 in the manual of
         // the Checker Framework (https://checkerframework.org/manual/#generics)

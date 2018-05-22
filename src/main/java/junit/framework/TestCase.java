@@ -186,7 +186,7 @@ public abstract class TestCase extends Assert implements Test {
         } catch (InvocationTargetException e) {
             e.fillInStackTrace();
             // [throwing.nullable] TRUE_POSITIVE
-            //   e.getTargetException() is nullable
+            // e.getTargetException() is nullable
             // since its public constructor InvocationTargetException(target)
             // doesn't prevent target to be null
             throw e.getTargetException();

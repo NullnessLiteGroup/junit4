@@ -129,7 +129,7 @@ public class JUnitCore {
     /**
      * Do not use. Testing purposes only.
      */
-    // Nullable runner from MaxCore.run(Request request, JUnitCore core)
+    // Nullable runner from run(Request request) exposed in JUnit4 API
     public Result run(@Nullable Runner runner) {
         Result result = new Result();
         RunListener listener = result.createListener();
@@ -138,7 +138,7 @@ public class JUnitCore {
             // [dereference.of.nullable] TRUE_POSITIVE
             // dereference of runner is unsafe here
             // because the JUnit4 API doesn't disallow users
-            // to call run(Request.runner(null))
+            // to call JUnitCore: run(Request.runner(null))
             notifier.fireTestRunStarted(runner.getDescription());
             runner.run(notifier);
             notifier.fireTestRunFinished(result);

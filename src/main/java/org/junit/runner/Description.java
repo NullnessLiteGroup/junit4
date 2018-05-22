@@ -89,7 +89,7 @@ public class Description implements Serializable {
     public static Description createTestDescription(@Nullable Class<?> clazz, @Nullable String name, Annotation... annotations) {
         // [dereference.of.nullable] TRUE_POSITIVE
         // clazz.getName() can raise NPEs
-        // the interface is exposed to users can pas but cannot prevent null clazz
+        // the JUnit4 API doesn't disallow users to call createTestDescription(null, ...)
         return new Description(clazz, formatDisplayName(name, clazz.getName()), annotations);
     }
 
@@ -107,7 +107,7 @@ public class Description implements Serializable {
     public static Description createTestDescription(@Nullable Class<?> clazz, @Nullable String name) {
         // [dereference.of.nullable] TRUE_POSITIVE
         // clazz.getName() can raise NPEs
-        // the interface is exposed to users can pas but cannot prevent null clazz
+        // the JUnit4 API doesn't disallow users to call createTestDescription(null, ...)
         return new Description(clazz, formatDisplayName(name, clazz.getName()));
     }
 

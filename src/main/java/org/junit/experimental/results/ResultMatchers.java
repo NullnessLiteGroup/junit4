@@ -58,7 +58,8 @@ public class ResultMatchers {
                 // [dereference.of.nullable] TRUE_POSITIVE
                 // dereference of item is unsafe here
                 // because JUnit4 API doesn't prevent
-                // users from passing null item to this method
+                // users from calling hasSingleFailureContaining
+                // and call the returned Matcher by matches(null)
                 return item.toString().contains(string) && failureCountIs(1).matches(item);
             }
 

@@ -146,7 +146,7 @@ public class MethodRoadie {
                 }
             } catch (InvocationTargetException e) {
                 // [throwing.nullable] TRUE_POSITIVE
-                //  getTargetException() can be null if
+                // getTargetException() can be null if
                 // InvocationTargetException is initialized to have null target
                 throw e.getTargetException();
             }

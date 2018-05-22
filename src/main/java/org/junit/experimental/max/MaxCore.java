@@ -157,10 +157,15 @@ public class MaxCore {
     }
 
     // Nullable Class<?> returned if throw ClassNotFoundException
-    private @Nullable Class<?> getMalformedTestClass(Description each) {
+    private Class<?> getMalformedTestClass(Description each) {
         try {
             return Class.forName(each.toString().replace(MALFORMED_JUNIT_3_TEST_CLASS_PREFIX, ""));
         } catch (ClassNotFoundException e) {
+            // [return.type.incompatible] FALSE_POSITIVE
+            // cheating methods for JUnit4 test purpose only
+            // because its caller buildRunner(Description each) only calls
+            // this method when each is ensured to have MALFORMED_JUNIT_3_TEST_CLASS_PREFIX
+            // which is not exposed to users
             return null;
         }
     }
@@ -178,8 +183,9 @@ public class MaxCore {
         List<Description> results = new ArrayList<Description>();
         // [dereference.of.nullable] TRUE_POSITIVE
         // dereference of request.getRunner() is unsafe here
-        // because users can call sortRequest(Request.runner(null))
-        // to raise the NPEs here
+        // because JUnit4 API doesn't prevent users from calling
+        // storedLocally() to create a new MaxCore and
+        // sortRequest(Request.runner(null)) to raise the NPEs here
         findLeaves(null, request.getRunner().getDescription(), results);
         return results;
     }

@@ -239,7 +239,7 @@ public class Theories extends BlockJUnit4ClassRunner {
                 @Override
                 protected void collectInitializationErrors(
                         // [override.receiver.invalid] SPECIAL_CASE
-                        // haven't found a way to refer anonymous type
+                        // we haven't found a way to refer anonymous type
                         // for initialization checker
                         List<Throwable> errors) {
                     // do nothing
@@ -279,7 +279,10 @@ public class Theories extends BlockJUnit4ClassRunner {
                     if (!nullsOk()) {
                         Assume.assumeNotNull(params);
                     }
-                    
+
+                    // [argument.type.incompatible] FALSE_POSITIVE
+                    // params cannot be null array or array with null objects here
+                    // because Assume.assumeNotNull(params) will catch it
                     return getTestClass().getOnlyConstructor().newInstance(params);
                 }
             }.methodBlock(testMethod).evaluate();
@@ -297,7 +300,10 @@ public class Theories extends BlockJUnit4ClassRunner {
                     if (!nullsOk()) {
                         Assume.assumeNotNull(values);
                     }
-                    
+
+                    // [argument.type.incompatible] FALSE_POSITIVE
+                    // values cannot be null array or array with null objects here
+                    // because Assume.assumeNotNull(values) will catch it
                     method.invokeExplosively(freshInstance, values);
                 }
             };

@@ -69,7 +69,7 @@ public class Failure implements Serializable {
         // dereference of fThrownException is unsafe here
         // because JUnit4 API does not banned for users to initialize
         // fThrownException to be null from the public constructor
-        // of Failure
+        // of Failure and call toString()
         return getTestHeader() + ": " + fThrownException.getMessage();
     }
 
@@ -101,7 +101,7 @@ public class Failure implements Serializable {
         // fThrownException is unsafe here;
         // because JUnit4 API is not banned for users to initialize
         // fThrownException to be null from the public constructor
-        // of Failure
+        // of Failure and call getMessage()
         return getException().getMessage();
     }
 }

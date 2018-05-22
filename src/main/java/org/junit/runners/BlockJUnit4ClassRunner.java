@@ -333,6 +333,10 @@ public class BlockJUnit4ClassRunner extends ParentRunner<FrameworkMethod> {
             return new Fail(e);
         }
 
+        // [argument.type.incompatible] FALSE_POSITIVE
+        // test cannot be null here, because runReflectiveCall() above,
+        // called by run(), always returns createTest(method),
+        // which returns a non-null createTest()
         Statement statement = methodInvoker(method, test);
         statement = possiblyExpectingExceptions(method, test, statement);
         statement = withPotentialTimeout(method, test, statement);
@@ -349,8 +353,7 @@ public class BlockJUnit4ClassRunner extends ParentRunner<FrameworkMethod> {
     /**
      * Returns a {@link Statement} that invokes {@code method} on {@code test}
      */
-    // Nullable test from methodBlock(final FrameworkMethod method)
-    protected Statement methodInvoker(FrameworkMethod method, @Nullable Object test) {
+    protected Statement methodInvoker(FrameworkMethod method, Object test) {
         return new InvokeMethod(method, test);
     }
 
@@ -360,9 +363,8 @@ public class BlockJUnit4ClassRunner extends ParentRunner<FrameworkMethod> {
      * throws an exception of the correct type, and throw an exception
      * otherwise.
      */
-    // Nullable test from methodBlock(final FrameworkMethod method)
     protected Statement possiblyExpectingExceptions(FrameworkMethod method,
-            @Nullable Object test, Statement next) {
+            Object test, Statement next) {
         Test annotation = method.getAnnotation(Test.class);
         Class<? extends Throwable> expectedExceptionClass = getExpectedException(annotation);
         return expectedExceptionClass != null ? new ExpectException(next, expectedExceptionClass) : next;
@@ -377,7 +379,7 @@ public class BlockJUnit4ClassRunner extends ParentRunner<FrameworkMethod> {
     @Deprecated
     // Nullable test from methodBlock(final FrameworkMethod method)
     protected Statement withPotentialTimeout(FrameworkMethod method,
-            @Nullable Object test, Statement next) {
+            Object test, Statement next) {
         long timeout = getTimeout(method.getAnnotation(Test.class));
         if (timeout <= 0) {
             return next;
@@ -392,8 +394,7 @@ public class BlockJUnit4ClassRunner extends ParentRunner<FrameworkMethod> {
      * methods on this class and superclasses before running {@code next}; if
      * any throws an Exception, stop execution and pass the exception on.
      */
-    // Nullable test from methodBlock(final FrameworkMethod method)
-    protected Statement withBefores(FrameworkMethod method, @Nullable Object target,
+    protected Statement withBefores(FrameworkMethod method, Object target,
             Statement statement) {
         List<FrameworkMethod> befores = getTestClass().getAnnotatedMethods(
                 Before.class);
@@ -408,8 +409,7 @@ public class BlockJUnit4ClassRunner extends ParentRunner<FrameworkMethod> {
      * are combined, if necessary, with exceptions from After methods into a
      * {@link MultipleFailureException}.
      */
-    // Nullable test from methodBlock(final FrameworkMethod method)
-    protected Statement withAfters(FrameworkMethod method, @Nullable Object target,
+    protected Statement withAfters(FrameworkMethod method, Object target,
             Statement statement) {
         List<FrameworkMethod> afters = getTestClass().getAnnotatedMethods(
                 After.class);
@@ -417,8 +417,7 @@ public class BlockJUnit4ClassRunner extends ParentRunner<FrameworkMethod> {
                 target);
     }
 
-    // Nullable test from methodBlock(final FrameworkMethod method)
-    private Statement withRules(FrameworkMethod method, @Nullable Object target, Statement statement) {
+    private Statement withRules(FrameworkMethod method, Object target, Statement statement) {
         RuleContainer ruleContainer = new RuleContainer();
         CURRENT_RULE_CONTAINER.set(ruleContainer);
         try {

@@ -122,7 +122,7 @@ public class Suite extends ParentRunner<Runner> {
     // helper method override super requires
     protected List<Runner> getChildren(@UnknownInitialization Suite this) {
         // [return.type.incompatible] FALSE_POSITIVE
-        //  runners is a final field and always initialized in all constructors
+        // runners is a final field and always initialized in all constructors
         // by calling Suite(Class<?> klass, List<Runner> runners)
         return runners;
     }

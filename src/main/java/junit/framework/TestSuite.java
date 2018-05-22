@@ -121,8 +121,8 @@ public class TestSuite implements Test {
      * Parts of this method were written at 2337 meters in the Hueffihuette,
      * Kanton Uri
      */
-    // Nullable theClass from MaxCore.getMalformedTestClass(Description each)
-    public TestSuite(final @Nullable Class<?> theClass) {
+    // Nullable theClass from MaxCore.buildRunner(Description each)
+    public TestSuite(final Class<?> theClass) {
         addTestsFromTestCase(theClass);
     }
 
@@ -149,7 +149,7 @@ public class TestSuite implements Test {
         Class<?> superClass = theClass;
         List<String> names = new ArrayList<String>();
         // [argument.type.incompatible] FALSE_POSITIVE
-        //  superClass cannot be nullable Class<? extends Object> here
+        // superClass cannot be nullable Class<? extends Object> here
         // because superClass = theClass, and theClass cannot be null
         // here, otherwise NPE will be raised at the beginning of the method
         while (Test.class.isAssignableFrom(superClass)) {

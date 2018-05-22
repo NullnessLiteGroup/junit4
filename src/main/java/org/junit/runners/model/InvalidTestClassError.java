@@ -27,7 +27,9 @@ public class InvalidTestClassError extends InitializationError {
         StringBuilder sb = new StringBuilder();
         // [dereference.of.nullable] TRUE_POSITIVE
         // dereference of possibly-null reference testClass
-        // testClass could be passed in as null which may raise NPE
+        // JUnit4 doesn't prevent users from calling
+        // new BlockJUnit4ClassRunner(null) which raise NPEs
+        // during validate()
         sb.append(String.format("Invalid test class '%s':", testClass.getName()));
         int i = 1;
         for (Throwable error : validationErrors) {

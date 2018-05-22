@@ -8,6 +8,7 @@ import junit.framework.TestListener;
 import junit.framework.TestResult;
 import junit.framework.TestSuite;
 import org.checkerframework.checker.initialization.qual.UnknownInitialization;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.junit.runner.Describable;
 import org.junit.runner.Description;
 import org.junit.runner.Runner;
@@ -39,7 +40,8 @@ public class JUnit38ClassRunner extends Runner implements Filterable, Sortable {
         }
 
         // Implement junit.framework.TestListener
-        public void addError(Test test, Throwable e) {
+        // Nullable e from override super
+        public void addError(Test test, @Nullable Throwable e) {
             Failure failure = new Failure(asDescription(test), e);
             notifier.fireTestFailure(failure);
         }
