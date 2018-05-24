@@ -70,8 +70,25 @@ public class BlockJUnit4ClassRunnerWithParameters extends
                             + ".");
         }
         Object testClassInstance = getTestClass().getJavaClass().newInstance();
+        /*
+           This is a true positive because getJavaClass() might return null.
+           By looking at the implementation of getJavaClass()
+           (src/main/java/org/junit/runners/model/TestClass.java), we know that "clazz"
+           may be null because it can be initialized as null in the constructor.
+         */
+
         for (@NotNull FrameworkField each : annotatedFieldsByParameter) {
             @Nullable Field field = each.getField();
+            /*
+              This is a false positive. By looking at the implementation of
+              getField() (src/main/java/org/junit/runners/model/FrameworkField.java),
+              we get to know that it returns the field called "field" which might be null.
+              However, the constructor of FrameworkField checks its parameter: if the passing
+              parameter is null, it throws an exception; otherwise, it assigns the parameter
+              to the field "field". This means without an exception, each.getField() won't
+              return null (i.e. field (line 81) is not null). And therefore, calling field.getAnnotation()
+              (line 92) won't cause a NullPointerException.
+             */
             Parameter annotation = field.getAnnotation(Parameter.class);
             int index = annotation.value();
             try {
@@ -124,6 +141,16 @@ public class BlockJUnit4ClassRunnerWithParameters extends
             for (@NotNull FrameworkField each : annotatedFieldsByParameter) {
                 int index = each.getField().getAnnotation(Parameter.class)
                         .value();
+                /*
+                  This is a false positive. By looking at the implementation of
+                  getField() (src/main/java/org/junit/runners/model/FrameworkField.java),
+                  we get to know that it returns the field called "field" which might be null.
+                  However, the constructor of FrameworkField checks its parameter: if the passing
+                  parameter is null, it throws an exception; otherwise, it assigns the parameter
+                  to the field "field". This means without an exception, each.getField() won't
+                  return null. Therefore, calling each.getField().getAnnotation()
+                  (line 142) won't cause a NullPointerException.
+                 */
                 if (index < 0 || index > annotatedFieldsByParameter.size() - 1) {
                     errors.add(new Exception("Invalid @Parameter value: "
                             + index + ". @Parameter fields counted: "
@@ -170,6 +197,16 @@ public class BlockJUnit4ClassRunnerWithParameters extends
         @Override
         protected void invokeMethod(@NotNull FrameworkMethod method) throws Throwable {
             int paramCount = method.getMethod().getParameterTypes().length;
+            /*
+              This is a false positive. By looking at the implementation of
+              getMethod() (src/main/java/org/junit/runners/model/FrameworkMethod.java),
+              we get to know that it returns the field called "method" which might be null.
+              However, the constructor of FrameworkMethod checks its parameter: if the passing
+              parameter is null, it throws an exception; otherwise, it assigns the parameter
+              to the field "method". This means without an exception, method.getMethod() won't
+              return null. Therefore, calling method.getMethod().getParameterTypes()
+              (line 199) won't cause a NullPointerException.
+             */
             method.invokeExplosively(null, paramCount == 0 ? (Object[]) null : parameters);
         }
     }
@@ -189,6 +226,16 @@ public class BlockJUnit4ClassRunnerWithParameters extends
         @Override
         protected void invokeMethod(@NotNull FrameworkMethod method) throws Throwable {
             int paramCount = method.getMethod().getParameterTypes().length;
+            /*
+              This is a false positive. By looking at the implementation of
+              getMethod() (src/main/java/org/junit/runners/model/FrameworkMethod.java),
+              we get to know that it returns the field called "method" which might be null.
+              However, the constructor of FrameworkMethod checks its parameter: if the passing
+              parameter is null, it throws an exception; otherwise, it assigns the parameter
+              to the field "method". This means without an exception, method.getMethod() won't
+              return null. Therefore, calling method.getMethod().getParameterTypes()
+              (line 199) won't cause a NullPointerException.
+             */
             method.invokeExplosively(null, paramCount == 0 ? (Object[]) null : parameters);
         }
     }
