@@ -14,11 +14,7 @@ import org.junit.runners.model.Statement;
 
 /**
  * The {@code ExpectedException} rule allows you to verify that your code
- * throws a specific exception. Note that, starting with Java 8,
- * {@link org.junit.Assert#assertThrows(java.lang.Class, org.junit.function.ThrowingRunnable)
- * Assert.assertThrows}
- * is often a better choice since it allows you to express exactly where you
- * expect the exception to be thrown.
+ * throws a specific exception.
  *
  * <h3>Usage</h3>
  *
@@ -68,6 +64,13 @@ import org.junit.runners.model.Statement;
  *     throw new NullPointerException(&quot;What happened?&quot;);
  * }</pre>
  *
+ * <p>It is recommended to set the {@link org.junit.Rule#order() order} of the
+ * {@code ExpectedException} to {@code Integer.MAX_VALUE} if it is used together
+ * with another rule that handles exceptions, e.g. {@link ErrorCollector}.
+ * Otherwise failing tests may be successful.
+ * <pre> &#064;Rule(order = Integer.MAX_VALUE)
+ * public ExpectedException thrown = ExpectedException.none();</pre>
+ *
  * <h3>AssumptionViolatedExceptions</h3>
  * <p>JUnit uses {@link AssumptionViolatedException}s for indicating that a test
  * provides no useful information. (See {@link org.junit.Assume} for more
@@ -103,6 +106,10 @@ import org.junit.runners.model.Statement;
  * exception. E.g. "Test doesn't throw %s." will fail with the error message
  * "Test doesn't throw an instance of foo.".
  *
+ * @deprecated Since 4.13
+ * {@link org.junit.Assert#assertThrows(Class, org.junit.function.ThrowingRunnable)
+ * Assert.assertThrows} can be used to verify that your code throws a specific
+ * exception.
  * @since 4.7
  */
 public class ExpectedException implements TestRule {
