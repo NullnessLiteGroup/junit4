@@ -62,6 +62,8 @@ public class TestFailure {
      */
     // Nullable String returned from null detailed message of an exception (e.g. FileNotFoundException())
     public @Nullable String exceptionMessage() {
+        // [dereference.of.nullable] TRUE_POSITIVE
+        // if thrownException is initialized to be null
         return thrownException().getMessage();
     }
 
