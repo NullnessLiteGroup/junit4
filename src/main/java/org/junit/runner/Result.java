@@ -42,6 +42,11 @@ public class Result implements Serializable {
     private SerializedForm serializedForm;
 
     public Result() {
+        // [initialization.fields.uninitialized] FALSE_POSITIVE
+        //  serializedForm is uninitialized with purpose, see
+        // comments on declaration of serializedForm;
+        // also note that the private field, serializedForm is
+        // never directly de-referenced in this class;
         count = new AtomicInteger();
         ignoreCount = new AtomicInteger();
         failures = new CopyOnWriteArrayList<Failure>();
@@ -50,6 +55,11 @@ public class Result implements Serializable {
     }
 
     private Result(SerializedForm serializedForm) {
+        // [initialization.fields.uninitialized] FALSE_POSITIVE
+        //  serializedForm is uninitialized with purpose, see
+        // comments on declaration of serializedForm;
+        // also note that the private field, serializedForm is
+        // never directly de-referenced in this class;
         count = serializedForm.fCount;
         ignoreCount = serializedForm.fIgnoreCount;
         failures = new CopyOnWriteArrayList<Failure>(serializedForm.fFailures);
