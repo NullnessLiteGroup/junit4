@@ -121,18 +121,12 @@ public class TestSuite implements Test {
      * Parts of this method were written at 2337 meters in the Hueffihuette,
      * Kanton Uri
      */
-    // Nullable theClass from MaxCore.buildRunner(Description each)
     public TestSuite(final Class<?> theClass) {
         addTestsFromTestCase(theClass);
     }
 
     // helper method to for the constructor of TestSuite
-    // Nullable theClass from TestSuite(final Class<?> theClass)
-    private void addTestsFromTestCase(@UnderInitialization TestSuite this, final @Nullable Class<?> theClass) {
-        // [dereference.of.nullable] TRUE_POSITIVE
-        // This method is called by public constructor
-        // TestSuite(final Class<?> theClass) where users
-        // can pass null as theClass
+    private void addTestsFromTestCase(@UnderInitialization TestSuite this, final Class<?> theClass) {
         fName = theClass.getName();
         try {
             getTestConstructor(theClass); // Avoid generating multiple error messages
