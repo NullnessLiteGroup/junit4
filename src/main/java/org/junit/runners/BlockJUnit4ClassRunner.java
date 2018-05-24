@@ -102,7 +102,7 @@ public class BlockJUnit4ClassRunner extends ParentRunner<FrameworkMethod> {
                 public void evaluate() throws Throwable {
                     methodBlock(method).evaluate();
                     /* This is a true positive. By looking at the implementation of methodBlock(),
-                       we get to know that it may return null. Specifically, withRules() (line 335)
+                       we get to know that it may return null. Specifically, withRules() (line 348)
                        may return null.
                      */
                 }
@@ -335,6 +335,7 @@ public class BlockJUnit4ClassRunner extends ParentRunner<FrameworkMethod> {
 
         @Nullable Statement statement = methodInvoker(method, test);
         /*
+          This is a false positive.
           By checking the implementation of methodInvoker()
           (src/main/java/org/junit/experimental/theories/Theories.java),
           we get to know that it always returns a NotNull object.
