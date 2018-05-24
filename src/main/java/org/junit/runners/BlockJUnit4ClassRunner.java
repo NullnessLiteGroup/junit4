@@ -101,6 +101,10 @@ public class BlockJUnit4ClassRunner extends ParentRunner<FrameworkMethod> {
                 @Override
                 public void evaluate() throws Throwable {
                     methodBlock(method).evaluate();
+                    /* This is a true positive. By looking at the implementation of methodBlock(),
+                       we get to know that it may return null. Specifically, withRules() (line 335)
+                       may return null.
+                     */
                 }
             };
             runLeaf(statement, description, notifier);
@@ -121,6 +125,12 @@ public class BlockJUnit4ClassRunner extends ParentRunner<FrameworkMethod> {
         Description description = methodDescriptions.get(method);
 
         if (description == null) {
+            /*
+               This is a true positive. Although getTestClass() will never return null,
+               getJavaClass() might. By looking at the implementation of getJavaClass()
+               (src/main/java/org/junit/runners/model/TestClass.java), we know that "clazz"
+               may be null because it can be initialized as null in the constructor.
+             */
             description = Description.createTestDescription(getTestClass().getJavaClass(),
                     testName(method), method.getAnnotations());
             methodDescriptions.putIfAbsent(method, description);
@@ -208,6 +218,12 @@ public class BlockJUnit4ClassRunner extends ParentRunner<FrameworkMethod> {
     }
 
     private boolean hasOneConstructor() {
+        /*
+          This is a true positive because getJavaClass() might return null.
+          By looking at the implementation of getJavaClass()
+          (src/main/java/org/junit/runners/model/TestClass.java), we know that "clazz"
+          may be null because it can be initialized as null in the constructor.
+         */
         return getTestClass().getJavaClass().getConstructors().length == 1;
     }
 
@@ -318,6 +334,12 @@ public class BlockJUnit4ClassRunner extends ParentRunner<FrameworkMethod> {
         }
 
         @Nullable Statement statement = methodInvoker(method, test);
+        /*
+          By checking the implementation of methodInvoker()
+          (src/main/java/org/junit/experimental/theories/Theories.java),
+          we get to know that it always returns a NotNull object.
+          So, statement can never be null.
+         */
         statement = possiblyExpectingExceptions(method, test, statement);
         statement = withPotentialTimeout(method, test, statement);
         statement = withBefores(method, test, statement);

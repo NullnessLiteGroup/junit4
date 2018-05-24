@@ -62,7 +62,7 @@ public class FrameworkMethod extends FrameworkMember<FrameworkMethod> {
             protected Object runReflectiveCall() throws Throwable {
                 return method.invoke(target, params);
                 /*
-                  All the errors shown in this class are false positives. The private field "method"
+                  All errors shown in this class are false positives. The private field "method"
                   is defined but not initialized (line 23) and thus it can only be annotated as "@Nullable".
                   But since it is @Nullable, all function calls on method will obviously raise NullPointerException.
                   And unfortunately, (since all the errors are in the same "pattern",) we cannot add any annotations

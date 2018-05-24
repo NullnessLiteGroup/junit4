@@ -21,6 +21,11 @@ abstract class CategoryFilterFactory implements FilterFactory {
      */
     public Filter createFilter(@NotNull FilterFactoryParams params) throws FilterNotCreatedException {
         try {
+            /* This is a true positive because params.getArgs() might return null
+               because params's args might be initialized as null in the constructor.
+               This "violates the contract" that parseCategories() requires a NotNull
+               parameter.
+             */
             return createFilter(parseCategories(params.getArgs()));
         } catch (ClassNotFoundException e) {
             throw new FilterNotCreatedException(e);

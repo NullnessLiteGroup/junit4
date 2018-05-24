@@ -268,6 +268,9 @@ public class Assert {
      */
     static public void assertNull(@Nullable Object object) {
         if (object != null) {
+            /*
+              Ignore this error. It is not related to NullPointerException.
+             */
             assertNull("Expected: <null> but was: " + object.toString(), object);
         }
     }
