@@ -9,6 +9,7 @@ import junit.framework.TestResult;
 import junit.framework.TestSuite;
 import junit.runner.BaseTestRunner;
 import junit.runner.Version;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * A command line based tool to run tests.
@@ -58,7 +59,7 @@ public class TestRunner extends BaseTestRunner {
     /**
      * Runs a suite extracted from a TestCase subclass.
      */
-    static public void run(Class<? extends TestCase> testClass) {
+    static public void run(@NotNull Class<? extends TestCase> testClass) {
         run(new TestSuite(testClass));
     }
 
@@ -72,7 +73,8 @@ public class TestRunner extends BaseTestRunner {
      * }
      * </pre>
      */
-    static public TestResult run(Test test) {
+    @NotNull
+    static public TestResult run(@NotNull Test test) {
         TestRunner runner = new TestRunner();
         return runner.doRun(test);
     }
@@ -81,7 +83,7 @@ public class TestRunner extends BaseTestRunner {
      * Runs a single test and waits until the user
      * types RETURN.
      */
-    static public void runAndWait(Test suite) {
+    static public void runAndWait(@NotNull Test suite) {
         TestRunner aTestRunner = new TestRunner();
         aTestRunner.doRun(suite, true);
     }
@@ -101,15 +103,18 @@ public class TestRunner extends BaseTestRunner {
     /**
      * Creates the TestResult to be used for the test run.
      */
+    @NotNull
     protected TestResult createTestResult() {
         return new TestResult();
     }
 
-    public TestResult doRun(Test test) {
+    @NotNull
+    public TestResult doRun(@NotNull Test test) {
         return doRun(test, false);
     }
 
-    public TestResult doRun(Test suite, boolean wait) {
+    @NotNull
+    public TestResult doRun(@NotNull Test suite, boolean wait) {
         TestResult result = createTestResult();
         result.addListener(fPrinter);
         long startTime = System.currentTimeMillis();
@@ -131,7 +136,7 @@ public class TestRunner extends BaseTestRunner {
         }
     }
 
-    public static void main(String[] args) {
+    public static void main(@NotNull String[] args) {
         TestRunner aTestRunner = new TestRunner();
         try {
             TestResult r = aTestRunner.start(args);
@@ -149,7 +154,8 @@ public class TestRunner extends BaseTestRunner {
      * Starts a test run. Analyzes the command line arguments and runs the given
      * test suite.
      */
-    public TestResult start(String[] args) throws Exception {
+    @NotNull
+    public TestResult start(@NotNull String[] args) throws Exception {
         String testCase = "";
         String method = "";
         boolean wait = false;
@@ -186,6 +192,7 @@ public class TestRunner extends BaseTestRunner {
         }
     }
 
+    @NotNull
     protected TestResult runSingleMethod(String testCase, String method, boolean wait) throws Exception {
         Class<? extends TestCase> testClass = loadSuiteClass(testCase).asSubclass(TestCase.class);
         Test test = TestSuite.createTest(testClass, method);

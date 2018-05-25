@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.List;
 
+import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
 import org.junit.runner.Description;
 import org.junit.runner.JUnitCore;
@@ -53,12 +54,12 @@ public class BlockJUnit4ClassRunnerTest {
         JUnitCore junit = new JUnitCore();
         junit.addListener(new RunListener() {
             @Override
-            public void testStarted(Description description) throws Exception {
+            public void testStarted(@NotNull Description description) throws Exception {
                 log += " testStarted(" + description.getMethodName() + ")";
             }
 
             @Override
-            public void testFinished(Description description) throws Exception {
+            public void testFinished(@NotNull Description description) throws Exception {
                 log += " testFinished(" + description.getMethodName() + ")";
             }
         });

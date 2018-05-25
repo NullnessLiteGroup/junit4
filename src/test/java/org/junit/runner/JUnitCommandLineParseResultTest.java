@@ -7,6 +7,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 import java.util.List;
 
+import org.jetbrains.annotations.NotNull;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.experimental.categories.IncludeCategories;
@@ -14,6 +15,7 @@ import org.junit.rules.ExpectedException;
 import org.junit.runner.manipulation.Filter;
 
 public class JUnitCommandLineParseResultTest {
+    @NotNull
     @Rule
     public ExpectedException expectedException = ExpectedException.none();
 
@@ -130,6 +132,7 @@ public class JUnitCommandLineParseResultTest {
     }
 
     public static class FilterFactoryStub implements FilterFactory {
+        @NotNull
         public Filter createFilter(FilterFactoryParams params) throws FilterNotCreatedException {
             throw new FilterNotCreatedException(new Exception("stub"));
         }

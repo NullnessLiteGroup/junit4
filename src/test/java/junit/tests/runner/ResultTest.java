@@ -10,6 +10,7 @@ import java.util.List;
 
 import junit.framework.TestCase;
 import junit.tests.framework.Success;
+import org.jetbrains.annotations.NotNull;
 import org.junit.runner.JUnitCore;
 import org.junit.runner.Result;
 import org.junit.runner.notification.Failure;
@@ -29,7 +30,7 @@ public class ResultTest extends TestCase {
         assertResultSerializable(result);
     }
 
-    private void assertResultSerializable(Result result) throws IOException, ClassNotFoundException {
+    private void assertResultSerializable(@NotNull Result result) throws IOException, ClassNotFoundException {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         ObjectOutputStream objectOutputStream = new ObjectOutputStream(byteArrayOutputStream);
         objectOutputStream.writeObject(result);
@@ -87,7 +88,7 @@ public class ResultTest extends TestCase {
         }
     }
 
-    private void assertSerializedCorrectly(Result result, Result fromStream) {
+    private void assertSerializedCorrectly(Result result, @NotNull Result fromStream) {
         assertNotNull(fromStream);
 
         // Exceptions don't implement equals() so we need to compare field by field

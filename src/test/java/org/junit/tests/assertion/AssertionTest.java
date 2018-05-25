@@ -17,6 +17,7 @@ import static org.junit.Assert.fail;
 import java.io.IOException;
 import java.math.BigDecimal;
 
+import org.jetbrains.annotations.Nullable;
 import org.junit.Assert;
 import org.junit.ComparisonFailure;
 import org.junit.Test;
@@ -748,6 +749,7 @@ public class AssertionTest {
     }
 
     private static class NullToString {
+        @Nullable
         @Override
         public String toString() {
             return null;

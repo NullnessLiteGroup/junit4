@@ -6,6 +6,7 @@ import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.jetbrains.annotations.NotNull;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -45,6 +46,7 @@ public class MethodValidator {
         validateTestMethods(AfterClass.class, true);
     }
 
+    @NotNull
     public List<Throwable> validateMethodsForDefaultRunner() {
         validateNoArgConstructor();
         validateStaticMethods();
@@ -66,8 +68,8 @@ public class MethodValidator {
         }
     }
 
-    private void validateTestMethods(Class<? extends Annotation> annotation,
-            boolean isStatic) {
+    private void validateTestMethods(@NotNull Class<? extends Annotation> annotation,
+                                     boolean isStatic) {
         List<Method> methods = testClass.getAnnotatedMethods(annotation);
 
         for (Method each : methods) {

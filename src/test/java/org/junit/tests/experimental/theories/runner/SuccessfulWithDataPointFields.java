@@ -9,6 +9,7 @@ import static org.junit.Assume.assumeTrue;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.jetbrains.annotations.NotNull;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -34,6 +35,7 @@ public class SuccessfulWithDataPointFields {
 
     @RunWith(Theories.class)
     public static class BeforeAndAfterOnSameInstance {
+        @NotNull
         @DataPoint
         public static String A = "A";
 
@@ -52,12 +54,15 @@ public class SuccessfulWithDataPointFields {
 
     @RunWith(Theories.class)
     public static class NewObjectEachTime {
+        @NotNull
         @DataPoint
         public static String A = "A";
 
+        @NotNull
         @DataPoint
         public static String B = "B";
 
+        @NotNull
         private List<String> list = new ArrayList<String>();
 
         @Theory
@@ -144,9 +149,11 @@ public class SuccessfulWithDataPointFields {
     public static class BeforeAndAfterEachTime {
         public static int befores = 0;
 
+        @NotNull
         @DataPoint
         public static String A = "A";
 
+        @NotNull
         @DataPoint
         public static String B = "B";
 
@@ -174,6 +181,7 @@ public class SuccessfulWithDataPointFields {
     public static class OneTestTwoAnnotations {
         public static int tests = 0;
 
+        @NotNull
         @DataPoint
         public static String A = "A";
 

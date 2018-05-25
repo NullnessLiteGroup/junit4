@@ -7,6 +7,7 @@ import static org.junit.Assert.assertThat;
 
 import java.util.Arrays;
 
+import org.jetbrains.annotations.NotNull;
 import org.junit.experimental.results.PrintableResult;
 import org.junit.experimental.theories.DataPoint;
 import org.junit.experimental.theories.Theories;
@@ -19,11 +20,12 @@ import org.junit.runner.notification.Failure;
 public class PrintableResultTest {
     @Theory(nullsAccepted = false)
     public void backTraceHasGoodToString(String descriptionName,
-            final String stackTraceClassName) {
+                                         @NotNull final String stackTraceClassName) {
         Failure failure = new Failure(Description
                 .createSuiteDescription(descriptionName), new Throwable() {
             private static final long serialVersionUID = 1L;
 
+            @NotNull
             @Override
             public StackTraceElement[] getStackTrace() {
                 return new StackTraceElement[]{new StackTraceElement(
@@ -35,6 +37,7 @@ public class PrintableResultTest {
                 containsString(descriptionName), containsString(stackTraceClassName)));
     }
 
+    @NotNull
     @DataPoint
     public static String SHELL_POINT = "Shell Point";
 

@@ -7,6 +7,8 @@ import static org.junit.Assert.assertThat;
 import static org.junit.experimental.results.PrintableResult.testResult;
 import static org.junit.experimental.results.ResultMatchers.isSuccessful;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.junit.Test;
 import org.junit.experimental.results.ResultMatchers;
 import org.junit.experimental.theories.DataPoint;
@@ -36,9 +38,11 @@ public class WithExtendedParameterSources {
     @RunWith(Theories.class)
     public static class ShouldFilterOutNullSingleDataPoints {
 
+        @NotNull
         @DataPoint
         public static String A = "a";
         
+        @Nullable
         @DataPoint
         public static String NULL = null;
 
@@ -55,6 +59,7 @@ public class WithExtendedParameterSources {
 
     @RunWith(Theories.class)
     public static class ShouldFilterOutNullElementsFromDataPointArrays {
+        @Nullable
         @DataPoints
         public static String[] SOME_NULLS = { "non-null", null };
 
@@ -71,6 +76,7 @@ public class WithExtendedParameterSources {
     
     @RunWith(Theories.class)
     public static class ShouldRejectTheoriesWithOnlyDisallowedNullData {
+        @Nullable
         @DataPoints
         public static String value = null;
 
@@ -88,6 +94,7 @@ public class WithExtendedParameterSources {
     public static class DataPointArrays {
         public static String log = "";
 
+        @NotNull
         @DataPoints
         public static String[] STRINGS = new String[]{"A", "B"};
 
@@ -162,6 +169,7 @@ public class WithExtendedParameterSources {
     public static class DataPointArrayToBeUsedForWholeParameter {
         public static String log = "";
 
+        @NotNull
         @DataPoint
         public static String[] STRINGS = new String[]{"A", "B"};
 

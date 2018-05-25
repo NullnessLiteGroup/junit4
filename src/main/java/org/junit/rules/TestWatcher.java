@@ -3,6 +3,7 @@ package org.junit.rules;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.jetbrains.annotations.NotNull;
 import org.junit.AssumptionViolatedException;
 import org.junit.Rule;
 import org.junit.runner.Description;
@@ -50,7 +51,8 @@ import org.junit.runners.model.Statement;
  * @since 4.9
  */
 public abstract class TestWatcher implements TestRule {
-    public Statement apply(final Statement base, final Description description) {
+    @NotNull
+    public Statement apply(@NotNull final Statement base, final Description description) {
         return new Statement() {
             @Override
             public void evaluate() throws Throwable {
@@ -76,7 +78,7 @@ public abstract class TestWatcher implements TestRule {
     }
 
     private void succeededQuietly(Description description,
-            List<Throwable> errors) {
+                                  @NotNull List<Throwable> errors) {
         try {
             succeeded(description);
         } catch (Throwable e) {
@@ -85,7 +87,7 @@ public abstract class TestWatcher implements TestRule {
     }
 
     private void failedQuietly(Throwable e, Description description,
-            List<Throwable> errors) {
+                               @NotNull List<Throwable> errors) {
         try {
             failed(e, description);
         } catch (Throwable e1) {
@@ -95,7 +97,7 @@ public abstract class TestWatcher implements TestRule {
 
     private void skippedQuietly(
             org.junit.internal.AssumptionViolatedException e, Description description,
-            List<Throwable> errors) {
+            @NotNull List<Throwable> errors) {
         try {
             if (e instanceof AssumptionViolatedException) {
                 skipped((AssumptionViolatedException) e, description);
@@ -108,7 +110,7 @@ public abstract class TestWatcher implements TestRule {
     }
 
     private void startingQuietly(Description description,
-            List<Throwable> errors) {
+                                 @NotNull List<Throwable> errors) {
         try {
             starting(description);
         } catch (Throwable e) {
@@ -117,7 +119,7 @@ public abstract class TestWatcher implements TestRule {
     }
 
     private void finishedQuietly(Description description,
-            List<Throwable> errors) {
+                                 @NotNull List<Throwable> errors) {
         try {
             finished(description);
         } catch (Throwable e) {

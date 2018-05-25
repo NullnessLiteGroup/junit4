@@ -4,6 +4,7 @@ import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 import junit.runner.BaseTestRunner;
+import org.jetbrains.annotations.Nullable;
 
 public class BaseTestRunnerTest extends TestCase {
     public static class MockRunner extends BaseTestRunner {
@@ -28,6 +29,7 @@ public class BaseTestRunnerTest extends TestCase {
     }
 
     public static class NonStatic {
+        @Nullable
         public Test suite() {
             return null;
         }

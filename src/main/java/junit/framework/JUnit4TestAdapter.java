@@ -2,6 +2,8 @@ package junit.framework;
 
 import java.util.List;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.junit.Ignore;
 import org.junit.runner.Describable;
 import org.junit.runner.Description;
@@ -26,6 +28,7 @@ import org.junit.runner.manipulation.Sorter;
 public class JUnit4TestAdapter implements Test, Filterable, Sortable, Describable {
     private final Class<?> fNewTestClass;
 
+    @Nullable
     private final Runner fRunner;
 
     private final JUnit4TestAdapterCache fCache;
@@ -44,11 +47,12 @@ public class JUnit4TestAdapter implements Test, Filterable, Sortable, Describabl
         return fRunner.testCount();
     }
 
-    public void run(TestResult result) {
+    public void run(@NotNull TestResult result) {
         fRunner.run(fCache.getNotifier(result, this));
     }
 
     // reflective interface for Eclipse
+    @NotNull
     public List<Test> getTests() {
         return fCache.asTestList(getDescription());
     }
@@ -58,12 +62,14 @@ public class JUnit4TestAdapter implements Test, Filterable, Sortable, Describabl
         return fNewTestClass;
     }
 
+    @NotNull
     public Description getDescription() {
         Description description = fRunner.getDescription();
         return removeIgnored(description);
     }
 
-    private Description removeIgnored(Description description) {
+    @NotNull
+    private Description removeIgnored(@NotNull Description description) {
         if (isIgnored(description)) {
             return Description.EMPTY;
         }
@@ -86,11 +92,11 @@ public class JUnit4TestAdapter implements Test, Filterable, Sortable, Describabl
         return fNewTestClass.getName();
     }
 
-    public void filter(Filter filter) throws NoTestsRemainException {
+    public void filter(@NotNull Filter filter) throws NoTestsRemainException {
         filter.apply(fRunner);
     }
 
-    public void sort(Sorter sorter) {
+    public void sort(@NotNull Sorter sorter) {
         sorter.apply(fRunner);
     }
 }

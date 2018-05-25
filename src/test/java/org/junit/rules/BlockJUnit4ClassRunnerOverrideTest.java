@@ -9,6 +9,7 @@ import static org.junit.experimental.results.ResultMatchers.isSuccessful;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
 import org.junit.runner.Description;
 import org.junit.runner.RunWith;
@@ -19,8 +20,9 @@ import org.junit.runners.model.Statement;
 
 public class BlockJUnit4ClassRunnerOverrideTest {
     public static class FlipBitRule implements MethodRule {
-        public Statement apply(final Statement base, FrameworkMethod method,
-                final Object target) {
+        @NotNull
+        public Statement apply(@NotNull final Statement base, FrameworkMethod method,
+                               @NotNull final Object target) {
             return new Statement() {
                 @Override
                 public void evaluate() throws Throwable {
@@ -37,6 +39,7 @@ public class BlockJUnit4ClassRunnerOverrideTest {
             super(klass);
         }
 
+        @NotNull
         @Override
         protected List<MethodRule> rules(Object test) {
             final LinkedList<MethodRule> methodRules = new LinkedList<MethodRule>(
@@ -67,12 +70,14 @@ public class BlockJUnit4ClassRunnerOverrideTest {
             super(klass);
         }
 
+        @NotNull
         @Override
-        protected List<TestRule> getTestRules(final Object test) {
+        protected List<TestRule> getTestRules(@NotNull final Object test) {
             final LinkedList<TestRule> methodRules = new LinkedList<TestRule>(
                     super.getTestRules(test));
             methodRules.add(new TestRule() {
-                public Statement apply(Statement base, Description description) {
+                @NotNull
+                public Statement apply(@NotNull Statement base, Description description) {
                     return new FlipBitRule().apply(base, null, test);
                 }
             });
@@ -97,12 +102,13 @@ public class BlockJUnit4ClassRunnerOverrideTest {
      * executed.
      */
     public static class OverrideCreateTestRunner extends BlockJUnit4ClassRunner {
-        public OverrideCreateTestRunner(final Class<?> klass) throws InitializationError {
+        public OverrideCreateTestRunner(@NotNull final Class<?> klass) throws InitializationError {
             super(klass);
 
             assert(klass.equals(OverrideCreateTest.class));
         }
 
+        @NotNull
         @Override
         protected Object createTest(FrameworkMethod method) {
             final OverrideCreateTest obj = new OverrideCreateTest();
@@ -142,12 +148,13 @@ public class BlockJUnit4ClassRunnerOverrideTest {
      * called.
      */
     public static class CreateTestDefersToNoArgCreateTestRunner extends BlockJUnit4ClassRunner {
-        public CreateTestDefersToNoArgCreateTestRunner(final Class<?> klass) throws InitializationError {
+        public CreateTestDefersToNoArgCreateTestRunner(@NotNull final Class<?> klass) throws InitializationError {
             super(klass);
 
             assert(klass.equals(CreateTestDefersToNoArgCreateTestTest.class));
         }
 
+        @NotNull
         @Override
         protected Object createTest() {
             final CreateTestDefersToNoArgCreateTestTest obj = new CreateTestDefersToNoArgCreateTestTest();

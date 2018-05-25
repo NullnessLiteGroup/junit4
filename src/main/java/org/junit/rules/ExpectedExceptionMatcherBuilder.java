@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.hamcrest.Matcher;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Builds special matcher used by {@link ExpectedException}.
@@ -23,10 +24,12 @@ class ExpectedExceptionMatcherBuilder {
         return !matchers.isEmpty();
     }
 
+    @NotNull
     Matcher<Throwable> build() {
         return isThrowable(allOfTheMatchers());
     }
 
+    @NotNull
     private Matcher<Throwable> allOfTheMatchers() {
         if (matchers.size() == 1) {
             return cast(matchers.get(0));
@@ -39,8 +42,9 @@ class ExpectedExceptionMatcherBuilder {
         return new ArrayList<Matcher<? super Throwable>>((List) matchers);
     }
 
+    @NotNull
     @SuppressWarnings("unchecked")
-    private Matcher<Throwable> cast(Matcher<?> singleMatcher) {
+    private Matcher<Throwable> cast(@NotNull Matcher<?> singleMatcher) {
         return (Matcher<Throwable>) singleMatcher;
     }
 }

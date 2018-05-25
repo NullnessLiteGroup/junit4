@@ -11,6 +11,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.jetbrains.annotations.NotNull;
 import org.junit.runner.Description;
 import org.junit.runner.Result;
 import org.junit.runner.notification.Failure;
@@ -30,6 +31,7 @@ public class MaxHistory implements Serializable {
      * Loads a {@link MaxHistory} from {@code file}, or generates a new one that
      * will be saved to {@code file}.
      */
+    @NotNull
     public static MaxHistory forFolder(File file) {
         if (file.exists()) {
             try {
@@ -42,7 +44,8 @@ public class MaxHistory implements Serializable {
         return new MaxHistory(file);
     }
 
-    private static MaxHistory readHistory(File storedResults)
+    @NotNull
+    private static MaxHistory readHistory(@NotNull File storedResults)
             throws CouldNotReadCoreException {
         try {
             FileInputStream file = new FileInputStream(storedResults);
@@ -81,29 +84,30 @@ public class MaxHistory implements Serializable {
         stream.close();
     }
 
-    Long getFailureTimestamp(Description key) {
+    Long getFailureTimestamp(@NotNull Description key) {
         return fFailureTimestamps.get(key.toString());
     }
 
-    void putTestFailureTimestamp(Description key, long end) {
+    void putTestFailureTimestamp(@NotNull Description key, long end) {
         fFailureTimestamps.put(key.toString(), end);
     }
 
-    boolean isNewTest(Description key) {
+    boolean isNewTest(@NotNull Description key) {
         return !fDurations.containsKey(key.toString());
     }
 
-    Long getTestDuration(Description key) {
+    Long getTestDuration(@NotNull Description key) {
         return fDurations.get(key.toString());
     }
 
-    void putTestDuration(Description description, long duration) {
+    void putTestDuration(@NotNull Description description, long duration) {
         fDurations.put(description.toString(), duration);
     }
 
     private final class RememberingListener extends RunListener {
         private long overallStart = System.currentTimeMillis();
 
+        @NotNull
         private Map<Description, Long> starts = new HashMap<Description, Long>();
 
         @Override
@@ -113,7 +117,7 @@ public class MaxHistory implements Serializable {
         }
 
         @Override
-        public void testFinished(Description description) throws Exception {
+        public void testFinished(@NotNull Description description) throws Exception {
             long end = System.nanoTime();
             long start = starts.get(description);
             putTestDuration(description, end - start);
@@ -131,7 +135,7 @@ public class MaxHistory implements Serializable {
     }
 
     private class TestComparator implements Comparator<Description> {
-        public int compare(Description o1, Description o2) {
+        public int compare(@NotNull Description o1, @NotNull Description o2) {
             // Always prefer new tests
             if (isNewTest(o1)) {
                 return -1;
@@ -146,7 +150,7 @@ public class MaxHistory implements Serializable {
                     : getTestDuration(o1).compareTo(getTestDuration(o2));
         }
 
-        private Long getFailure(Description key) {
+        private Long getFailure(@NotNull Description key) {
             Long result = getFailureTimestamp(key);
             if (result == null) {
                 return 0L; // 0 = "never failed (that I know about)"
@@ -159,6 +163,7 @@ public class MaxHistory implements Serializable {
      * @return a listener that will update this history based on the test
      *         results reported.
      */
+    @NotNull
     public RunListener listener() {
         return new RememberingListener();
     }
@@ -167,6 +172,7 @@ public class MaxHistory implements Serializable {
      * @return a comparator that ranks tests based on the JUnit Max sorting
      *         rules, as described in the {@link MaxCore} class comment.
      */
+    @NotNull
     public Comparator<Description> testComparator() {
         return new TestComparator();
     }

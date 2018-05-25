@@ -1,5 +1,6 @@
 package org.junit.rules;
 
+import org.jetbrains.annotations.NotNull;
 import org.junit.internal.AssumptionViolatedException;
 import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.Statement;
@@ -43,8 +44,9 @@ import org.junit.runners.model.Statement;
  */
 @Deprecated
 public class TestWatchman implements MethodRule {
-    public Statement apply(final Statement base, final FrameworkMethod method,
-            Object target) {
+    @NotNull
+    public Statement apply(@NotNull final Statement base, final FrameworkMethod method,
+                           Object target) {
         return new Statement() {
             @Override
             public void evaluate() throws Throwable {

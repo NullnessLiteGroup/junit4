@@ -1,5 +1,6 @@
 package org.junit.runner;
 
+import org.jetbrains.annotations.Nullable;
 import org.junit.runner.notification.RunNotifier;
 
 /**
@@ -24,6 +25,7 @@ public abstract class Runner implements Describable {
      * (non-Javadoc)
      * @see org.junit.runner.Describable#getDescription()
      */
+    @Nullable
     public abstract Description getDescription();
 
     /**

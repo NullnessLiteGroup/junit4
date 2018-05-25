@@ -1,5 +1,6 @@
 package org.junit.internal;
 
+import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -58,6 +59,7 @@ public class ArrayComparisonFailureTest {
         }
     }
 
+    @NotNull
     private ArrayComparisonFailure deserializeFailureFromFile(String fileName) throws IOException,
             ClassNotFoundException {
         InputStream resource = getClass().getResourceAsStream(fileName);

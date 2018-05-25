@@ -6,6 +6,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import org.jetbrains.annotations.NotNull;
 import org.junit.experimental.theories.ParametersSuppliedBy;
 
 /**
@@ -27,5 +28,5 @@ import org.junit.experimental.theories.ParametersSuppliedBy;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(PARAMETER)
 public @interface TestedOn {
-    int[] ints();
+    @NotNull int[] ints();
 }

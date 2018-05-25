@@ -8,6 +8,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import junit.framework.JUnit4TestAdapter;
+import org.jetbrains.annotations.Nullable;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.Description;
@@ -127,6 +128,7 @@ public class SingleMethodTest {
                 return false;
             }
 
+            @Nullable
             @Override
             public String describe() {
                 return null;

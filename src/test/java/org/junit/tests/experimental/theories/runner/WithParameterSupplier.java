@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.experimental.theories.ParameterSignature;
@@ -22,6 +24,7 @@ import org.junit.runners.model.TestClass;
 
 public class WithParameterSupplier {
     
+    @NotNull
     @Rule
     public ExpectedException expected = ExpectedException.none();
 
@@ -49,6 +52,7 @@ public class WithParameterSupplier {
 
     public static class SimpleSupplier extends ParameterSupplier {
 
+        @NotNull
         @Override
         public List<PotentialAssignment> getValueSources(ParameterSignature sig) {
             List<PotentialAssignment> assignments = new ArrayList<PotentialAssignment>();
@@ -87,6 +91,7 @@ public class WithParameterSupplier {
         public SupplierWithUnknownConstructor(String param) {
         }
 
+        @Nullable
         @Override
         public List<PotentialAssignment> getValueSources(ParameterSignature sig) {
             return null;
@@ -114,6 +119,7 @@ public class WithParameterSupplier {
         public SupplierWithTwoConstructors(String param) {
         }
 
+        @Nullable
         @Override
         public List<PotentialAssignment> getValueSources(ParameterSignature sig) {
             return null;
@@ -141,6 +147,7 @@ public class WithParameterSupplier {
         public SupplierWithTestClassConstructor(TestClass param) {
         }
 
+        @Nullable
         @Override
         public List<PotentialAssignment> getValueSources(ParameterSignature sig) {
             return null;

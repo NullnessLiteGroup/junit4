@@ -10,6 +10,7 @@ import junit.framework.TestResult;
 import junit.framework.TestSuite;
 import junit.textui.ResultPrinter;
 import junit.textui.TestRunner;
+import org.jetbrains.annotations.NotNull;
 
 public class TextFeedbackTest extends TestCase {
     OutputStream output;
@@ -22,6 +23,7 @@ public class TextFeedbackTest extends TestCase {
 
         /* Spoof printing time so the tests are deterministic
            */
+        @NotNull
         @Override
         protected String elapsedTimeAsString(long runTime) {
             return "0";

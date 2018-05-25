@@ -10,6 +10,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.util.Collection;
 import java.util.List;
 
+import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
 import org.junit.runners.model.FrameworkField;
 import org.junit.runners.model.FrameworkMethod;
@@ -23,16 +24,19 @@ public class AnnotationsValidatorTest {
 
         private static final String ANNOTATED_CLASS_CALLED= "annotated class called";
 
+        @NotNull
         @Override
         public List<Exception> validateAnnotatedClass(TestClass testClass) {
             return asList(new Exception(ANNOTATED_CLASS_CALLED));
         }
 
+        @NotNull
         @Override
         public List<Exception> validateAnnotatedField(FrameworkField field) {
             return asList(new Exception(ANNOTATED_FIELD_CALLED));
         }
 
+        @NotNull
         @Override
         public List<Exception> validateAnnotatedMethod(FrameworkMethod method) {
             return asList(new Exception(ANNOTATED_METHOD_CALLED));

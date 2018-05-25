@@ -20,6 +20,8 @@ import junit.framework.Test;
 import junit.framework.TestListener;
 import junit.framework.TestSuite;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.junit.internal.Throwables;
 
 /**
@@ -37,7 +39,7 @@ public abstract class BaseTestRunner implements TestListener {
     /*
     * Implementation of TestListener
     */
-    public synchronized void startTest(Test test) {
+    public synchronized void startTest(@NotNull Test test) {
         testStarted(test.toString());
     }
 
@@ -64,11 +66,11 @@ public abstract class BaseTestRunner implements TestListener {
         }
     }
 
-    public static void setPreference(String key, String value) {
+    public static void setPreference(@NotNull String key, @NotNull String value) {
         getPreferences().put(key, value);
     }
 
-    public synchronized void endTest(Test test) {
+    public synchronized void endTest(@NotNull Test test) {
         testEnded(test.toString());
     }
 
@@ -92,7 +94,8 @@ public abstract class BaseTestRunner implements TestListener {
      * Returns the Test corresponding to the given suite. This is
      * a template method, subclasses override runFailed(), clearStatus().
      */
-    public Test getTest(String suiteClassName) {
+    @Nullable
+    public Test getTest(@NotNull String suiteClassName) {
         if (suiteClassName.length() <= 0) {
             clearStatus();
             return null;
@@ -152,7 +155,8 @@ public abstract class BaseTestRunner implements TestListener {
      * Processes the command line arguments and
      * returns the name of the suite class to run or null
      */
-    protected String processArguments(String[] args) {
+    @Nullable
+    protected String processArguments(@NotNull String[] args) {
         String suiteName = null;
         for (int i = 0; i < args.length; i++) {
             if (args[i].equals("-noloading")) {
@@ -183,7 +187,8 @@ public abstract class BaseTestRunner implements TestListener {
     /**
      * Extract the class name from a String in VA/Java style
      */
-    public String extractClassName(String className) {
+    @NotNull
+    public String extractClassName(@NotNull String className) {
         if (className.startsWith("Default package for")) {
             return className.substring(className.lastIndexOf(".") + 1);
         }
@@ -193,7 +198,8 @@ public abstract class BaseTestRunner implements TestListener {
     /**
      * Truncates a String to the maximum length.
      */
-    public static String truncate(String s) {
+    @NotNull
+    public static String truncate(@NotNull String s) {
         if (fgMaxMessageLength != -1 && s.length() > fgMaxMessageLength) {
             s = s.substring(0, fgMaxMessageLength) + "...";
         }
@@ -246,11 +252,11 @@ public abstract class BaseTestRunner implements TestListener {
         }
     }
 
-    public static String getPreference(String key) {
+    public static String getPreference(@NotNull String key) {
         return getPreferences().getProperty(key);
     }
 
-    public static int getPreference(String key, int dflt) {
+    public static int getPreference(@NotNull String key, int dflt) {
         String value = getPreference(key);
         int intValue = dflt;
         if (value == null) {
@@ -266,14 +272,14 @@ public abstract class BaseTestRunner implements TestListener {
     /**
      * Returns a filtered stack trace
      */
-    public static String getFilteredTrace(Throwable e) {
+    public static String getFilteredTrace(@NotNull Throwable e) {
         return BaseTestRunner.getFilteredTrace(Throwables.getStacktrace(e));
     }
 
     /**
      * Filters stack frames from internal JUnit classes
      */
-    public static String getFilteredTrace(String stack) {
+    public static String getFilteredTrace(@NotNull String stack) {
         if (showStackRaw()) {
             return stack;
         }
@@ -300,7 +306,7 @@ public abstract class BaseTestRunner implements TestListener {
         return !getPreference("filterstack").equals("true") || fgFilterStack == false;
     }
 
-    static boolean filterLine(String line) {
+    static boolean filterLine(@NotNull String line) {
         String[] patterns = new String[]{
                 "junit.framework.TestCase",
                 "junit.framework.TestResult",

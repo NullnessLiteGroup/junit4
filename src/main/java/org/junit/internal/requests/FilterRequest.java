@@ -1,5 +1,6 @@
 package org.junit.internal.requests;
 
+import org.jetbrains.annotations.Nullable;
 import org.junit.internal.runners.ErrorReportingRunner;
 import org.junit.runner.Request;
 import org.junit.runner.Runner;
@@ -30,6 +31,7 @@ public final class FilterRequest extends Request {
         this.fFilter = filter;
     }
 
+    @Nullable
     @Override
     public Runner getRunner() {
         try {

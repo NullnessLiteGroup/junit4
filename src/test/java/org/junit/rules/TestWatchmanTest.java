@@ -5,6 +5,8 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assume.assumeTrue;
 import static org.junit.runner.JUnitCore.runClasses;
+
+import org.jetbrains.annotations.NotNull;
 import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
@@ -20,6 +22,7 @@ public class TestWatchmanTest {
             log = new StringBuilder();
         }
 
+        @NotNull
         @Rule
         public LoggingTestWatchman watchman = new LoggingTestWatchman(log);
 
@@ -44,6 +47,7 @@ public class TestWatchmanTest {
             log = new StringBuilder();
         }
 
+        @NotNull
         @Rule
         public LoggingTestWatchman watchman = new LoggingTestWatchman(log);
 

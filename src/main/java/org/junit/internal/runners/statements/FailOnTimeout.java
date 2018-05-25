@@ -10,6 +10,8 @@ import java.util.concurrent.FutureTask;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.junit.internal.management.ManagementFactory;
 import org.junit.internal.management.ThreadMXBean;
 import org.junit.runners.model.MultipleFailureException;
@@ -18,6 +20,7 @@ import org.junit.runners.model.TestTimedOutException;
 
 public class FailOnTimeout extends Statement {
     private final Statement originalStatement;
+    @Nullable
     private final TimeUnit timeUnit;
     private final long timeout;
     private final boolean lookForStuckThread;
@@ -58,6 +61,7 @@ public class FailOnTimeout extends Statement {
     public static class Builder {
         private boolean lookForStuckThread = false;
         private long timeout = 0;
+        @Nullable
         private TimeUnit unit = TimeUnit.SECONDS;
 
         private Builder() {
@@ -76,7 +80,8 @@ public class FailOnTimeout extends Statement {
          * @param unit the time unit of the {@code timeout} argument
          * @return {@code this} for method chaining.
          */
-        public Builder withTimeout(long timeout, TimeUnit unit) {
+        @NotNull
+        public Builder withTimeout(long timeout, @Nullable TimeUnit unit) {
             if (timeout < 0) {
                 throw new IllegalArgumentException("timeout must be non-negative");
             }
@@ -97,6 +102,7 @@ public class FailOnTimeout extends Statement {
          * @param enable {@code true} to enable the feature
          * @return {@code this} for method chaining.
          */
+        @NotNull
         public Builder withLookingForStuckThread(boolean enable) {
             this.lookForStuckThread = enable;
             return this;
@@ -108,7 +114,8 @@ public class FailOnTimeout extends Statement {
          *
          * @param statement
          */
-        public FailOnTimeout build(Statement statement) {
+        @NotNull
+        public FailOnTimeout build(@Nullable Statement statement) {
             if (statement == null) {
                 throw new NullPointerException("statement cannot be null");
             }
@@ -136,7 +143,7 @@ public class FailOnTimeout extends Statement {
      * test failed, an exception indicating a timeout if the test timed out, or
      * {@code null} if the test passed.
      */
-    private Throwable getResult(FutureTask<Throwable> task, Thread thread) {
+    private Throwable getResult(@NotNull FutureTask<Throwable> task, @NotNull Thread thread) {
         try {
             if (timeout > 0) {
                 return task.get(timeout, timeUnit);
@@ -153,6 +160,7 @@ public class FailOnTimeout extends Statement {
         }
     }
 
+    @NotNull
     private Exception createTimeoutException(Thread thread) {
         StackTraceElement[] stackTrace = thread.getStackTrace();
         final Thread stuckThread = lookForStuckThread ? getStuckThread(thread) : null;
@@ -230,6 +238,7 @@ public class FailOnTimeout extends Statement {
      * if this cannot be determined, e.g. because new threads are being created at an
      * extremely fast rate.
      */
+    @NotNull
     private List<Thread> getThreadsInGroup(ThreadGroup group) {
         final int activeThreadCount = group.activeCount(); // this is just an estimate
         int threadArraySize = Math.max(activeThreadCount * 2, 100);
@@ -254,7 +263,7 @@ public class FailOnTimeout extends Statement {
      * @param thr The thread to query.
      * @return The CPU time used by {@code thr}, or 0 if it cannot be determined.
      */
-    private long cpuTime(Thread thr) {
+    private long cpuTime(@NotNull Thread thr) {
         ThreadMXBean mxBean = ManagementFactory.getThreadMXBean();
         if (mxBean.isThreadCpuTimeSupported()) {
             try {
@@ -268,6 +277,7 @@ public class FailOnTimeout extends Statement {
     private class CallableStatement implements Callable<Throwable> {
         private final CountDownLatch startLatch = new CountDownLatch(1);
 
+        @Nullable
         public Throwable call() throws Exception {
             try {
                 startLatch.countDown();

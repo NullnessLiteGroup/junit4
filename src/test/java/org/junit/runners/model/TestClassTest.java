@@ -10,6 +10,7 @@ import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.jetbrains.annotations.NotNull;
 import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
@@ -19,6 +20,7 @@ import org.junit.runner.RunWith;
 
 public class TestClassTest {
 
+    @NotNull
     @Rule
     public ExpectedException exception = ExpectedException.none();
 
@@ -87,6 +89,7 @@ public class TestClassTest {
     }
 
     public static class FieldAnnotated {
+        @NotNull
         @Rule
         public String fieldC= "andromeda";
 
@@ -121,6 +124,7 @@ public class TestClassTest {
             return 0;
         }
 
+        @NotNull
         @Ignore
         @Test
         public String methodA() {
@@ -155,6 +159,7 @@ public class TestClassTest {
         assertThat(methodNames, not(hasItem("methodWithoutAnnotation")));
     }
 
+    @NotNull
     private List<String> extractNames(List<FrameworkMethod> methods) {
         List<String> names = new ArrayList<String>();
         for (FrameworkMethod method: methods) {

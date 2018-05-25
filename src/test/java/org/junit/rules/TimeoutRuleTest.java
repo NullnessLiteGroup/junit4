@@ -14,6 +14,7 @@ import java.util.Random;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReentrantLock;
 
+import org.jetbrains.annotations.Nullable;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -102,6 +103,7 @@ public class TimeoutRuleTest {
     
     public static class HasNullTimeUnit {
 
+        @Nullable
         @Rule
         public final TestRule globalTimeout = new Timeout(200, null);
         

@@ -6,6 +6,7 @@ import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestResult;
 import junit.framework.TestSuite;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * A fixture for testing the "auto" test suite feature.
@@ -22,6 +23,7 @@ public class SuiteTest extends TestCase {
         fResult = new TestResult();
     }
 
+    @NotNull
     public static Test suite() {
         TestSuite suite = new TestSuite("Suite Tests");
         // build the suite manually, because some of the suites are testing

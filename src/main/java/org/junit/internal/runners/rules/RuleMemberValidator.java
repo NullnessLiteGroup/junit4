@@ -1,5 +1,6 @@
 package org.junit.internal.runners.rules;
 
+import org.jetbrains.annotations.NotNull;
 import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.rules.MethodRule;
@@ -70,6 +71,7 @@ public class RuleMemberValidator {
 
     private final Class<? extends Annotation> annotation;
     private final boolean methods;
+    @NotNull
     private final List<RuleValidator> validatorStrategies;
 
     RuleMemberValidator(Builder builder) {
@@ -85,7 +87,7 @@ public class RuleMemberValidator {
      * @param target the {@code TestClass} to validate.
      * @param errors the list of errors.
      */
-    public void validate(TestClass target, List<Throwable> errors) {
+    public void validate(@NotNull TestClass target, List<Throwable> errors) {
         List<? extends FrameworkMember<?>> members = methods ? target.getAnnotatedMethods(annotation)
                 : target.getAnnotatedFields(annotation);
 
@@ -111,6 +113,7 @@ public class RuleMemberValidator {
     private static class Builder {
         private final Class<? extends Annotation> annotation;
         private boolean methods;
+        @NotNull
         private final List<RuleValidator> validators;
 
         private Builder(Class<? extends Annotation> annotation) {
@@ -119,22 +122,25 @@ public class RuleMemberValidator {
             this.validators = new ArrayList<RuleValidator>();
         }
 
+        @NotNull
         Builder forMethods() {
             methods = true;
             return this;
         }
 
+        @NotNull
         Builder withValidator(RuleValidator validator) {
             validators.add(validator);
             return this;
         }
 
+        @NotNull
         RuleMemberValidator build() {
             return new RuleMemberValidator(this);
         }
     }
 
-    private static boolean isRuleType(FrameworkMember<?> member) {
+    private static boolean isRuleType(@NotNull FrameworkMember<?> member) {
         return isMethodRule(member) || isTestRule(member);
     }
 
@@ -164,7 +170,7 @@ public class RuleMemberValidator {
      * Requires the validated member to be non-static
      */
     private static final class MemberMustBeNonStaticOrAlsoClassRule implements RuleValidator {
-        public void validate(FrameworkMember<?> member, Class<? extends Annotation> annotation, List<Throwable> errors) {
+        public void validate(@NotNull FrameworkMember<?> member, @NotNull Class<? extends Annotation> annotation, @NotNull List<Throwable> errors) {
             boolean isMethodRuleMember = isMethodRule(member);
             boolean isClassRuleAnnotated = (member.getAnnotation(ClassRule.class) != null);
 
@@ -189,7 +195,7 @@ public class RuleMemberValidator {
      * Requires the member to be static
      */
     private static final class MemberMustBeStatic implements RuleValidator {
-        public void validate(FrameworkMember<?> member, Class<? extends Annotation> annotation, List<Throwable> errors) {
+        public void validate(FrameworkMember<?> member, @NotNull Class<? extends Annotation> annotation, @NotNull List<Throwable> errors) {
             if (!member.isStatic()) {
                 errors.add(new ValidationError(member, annotation,
                         "must be static."));
@@ -201,7 +207,7 @@ public class RuleMemberValidator {
      * Requires the member's declaring class to be public
      */
     private static final class DeclaringClassMustBePublic implements RuleValidator {
-        public void validate(FrameworkMember<?> member, Class<? extends Annotation> annotation, List<Throwable> errors) {
+        public void validate(@NotNull FrameworkMember<?> member, @NotNull Class<? extends Annotation> annotation, @NotNull List<Throwable> errors) {
             if (!isDeclaringClassPublic(member)) {
                 errors.add(new ValidationError(member, annotation,
                         "must be declared in a public class."));
@@ -217,7 +223,7 @@ public class RuleMemberValidator {
      * Requires the member to be public
      */
     private static final class MemberMustBePublic implements RuleValidator {
-        public void validate(FrameworkMember<?> member, Class<? extends Annotation> annotation, List<Throwable> errors) {
+        public void validate(FrameworkMember<?> member, @NotNull Class<? extends Annotation> annotation, @NotNull List<Throwable> errors) {
             if (!member.isPublic()) {
                 errors.add(new ValidationError(member, annotation,
                         "must be public."));
@@ -229,7 +235,7 @@ public class RuleMemberValidator {
      * Requires the member is a field implementing {@link org.junit.rules.MethodRule} or {@link org.junit.rules.TestRule}
      */
     private static final class FieldMustBeARule implements RuleValidator {
-        public void validate(FrameworkMember<?> member, Class<? extends Annotation> annotation, List<Throwable> errors) {
+        public void validate(@NotNull FrameworkMember<?> member, @NotNull Class<? extends Annotation> annotation, @NotNull List<Throwable> errors) {
             if (!isRuleType(member)) {
                 errors.add(new ValidationError(member, annotation,
                         "must implement MethodRule or TestRule."));
@@ -242,7 +248,7 @@ public class RuleMemberValidator {
      * {@link org.junit.rules.TestRule}
      */
     private static final class MethodMustBeARule implements RuleValidator {
-        public void validate(FrameworkMember<?> member, Class<? extends Annotation> annotation, List<Throwable> errors) {
+        public void validate(@NotNull FrameworkMember<?> member, @NotNull Class<? extends Annotation> annotation, @NotNull List<Throwable> errors) {
             if (!isRuleType(member)) {
                 errors.add(new ValidationError(member, annotation,
                         "must return an implementation of MethodRule or TestRule."));
@@ -254,8 +260,8 @@ public class RuleMemberValidator {
      * Require the member to return an implementation of {@link org.junit.rules.TestRule}
      */
     private static final class MethodMustBeATestRule implements RuleValidator {
-        public void validate(FrameworkMember<?> member,
-                Class<? extends Annotation> annotation, List<Throwable> errors) {
+        public void validate(@NotNull FrameworkMember<?> member,
+                             @NotNull Class<? extends Annotation> annotation, @NotNull List<Throwable> errors) {
             if (!isTestRule(member)) {
                 errors.add(new ValidationError(member, annotation, 
                         "must return an implementation of TestRule."));
@@ -268,8 +274,8 @@ public class RuleMemberValidator {
      */
     private static final class FieldMustBeATestRule implements RuleValidator {
 
-        public void validate(FrameworkMember<?> member,
-                Class<? extends Annotation> annotation, List<Throwable> errors) {
+        public void validate(@NotNull FrameworkMember<?> member,
+                             @NotNull Class<? extends Annotation> annotation, @NotNull List<Throwable> errors) {
             if (!isTestRule(member)) {
                 errors.add(new ValidationError(member, annotation,
                         "must implement TestRule."));

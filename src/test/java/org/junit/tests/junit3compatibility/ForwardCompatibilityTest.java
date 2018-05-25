@@ -6,6 +6,7 @@ import junit.framework.TestCase;
 import junit.framework.TestFailure;
 import junit.framework.TestListener;
 import junit.framework.TestResult;
+import org.jetbrains.annotations.NotNull;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -56,6 +57,7 @@ public class ForwardCompatibilityTest extends TestCase {
         assertSame(adapter1.getTests().get(0), adapter2.getTests().get(0));
     }
 
+    @NotNull
     static Exception exception = new Exception();
 
     public static class ErrorTest {
@@ -229,6 +231,7 @@ public class ForwardCompatibilityTest extends TestCase {
             return 0;
         }
 
+        @NotNull
         @Override
         public Description getDescription() {
             return Description.EMPTY;

@@ -20,6 +20,8 @@ import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.StringDescription;
 import org.hamcrest.TypeSafeMatcher;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -36,6 +38,7 @@ import org.junit.runners.model.Statement;
 
 public class StackTracesTest {
     private static final String EOL = System.getProperty("line.separator", "\n");
+    @Nullable
     private static ExecutorService executorService;
 
     @BeforeClass
@@ -199,6 +202,7 @@ public class StackTracesTest {
      * A matcher that matches the exception message in a stack trace.
      */
     private static class ExceptionMessageMatcher extends StringMatcher {
+        @NotNull
         private final Matcher<String> matcher;
 
         public ExceptionMessageMatcher(String message) {
@@ -233,12 +237,12 @@ public class StackTracesTest {
             this.method = method;
         }
 
-        public void describeTo(Description description) {
+        public void describeTo(@NotNull Description description) {
             description.appendText("A stack trace line for method " + method);
         }
 
         @Override
-        protected boolean matchesSafely(String line) {
+        protected boolean matchesSafely(@NotNull String line) {
             if (!line.startsWith("\t")) {
                 return false;
             }
@@ -271,12 +275,12 @@ public class StackTracesTest {
             this.suffix = suffix;
         }
 
-        public void describeTo(Description description) {
+        public void describeTo(@NotNull Description description) {
             description.appendText("A line matching \"..x " + suffix + "\"");
         }
 
         @Override
-        protected boolean matchesSafely(String line) {
+        protected boolean matchesSafely(@NotNull String line) {
             if (!line.startsWith("\t")) {
                 return false;
             }
@@ -302,6 +306,7 @@ public class StackTracesTest {
 
     private static Result runTest(final Class<?> testClass) {
         Future<Result> future = executorService.submit(new Callable<Result>() {
+            @NotNull
             public Result call() throws Exception {
                 JUnitCore core = new JUnitCore();
                 return core.run(testClass);
@@ -317,7 +322,7 @@ public class StackTracesTest {
         }
     }
     
-    private static void assertHasTrimmedTrace(Failure failure, StringMatcher... matchers) {
+    private static void assertHasTrimmedTrace(Failure failure, @NotNull StringMatcher... matchers) {
         String trimmedTrace = failure.getTrimmedTrace();
         String[] lines = trimmedTrace.split(EOL);
 
@@ -456,6 +461,7 @@ public class StackTracesTest {
     }
 
     public static class TestWithSuppressedException {
+        @Nullable
         static final Method addSuppressed = initAddSuppressed();
 
         static Method initAddSuppressed() {

@@ -6,6 +6,8 @@ import java.util.Comparator;
 import java.util.IdentityHashMap;
 import java.util.List;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.junit.Rule;
 import org.junit.rules.MethodRule;
 import org.junit.rules.TestRule;
@@ -52,6 +54,7 @@ class RuleContainer {
     /**
      * Returns entries in the order how they should be applied, i.e. inner-to-outer.
      */
+    @NotNull
     private List<RuleEntry> getSortedEntries() {
         List<RuleEntry> ruleEntries = new ArrayList<RuleEntry>(
                 methodRules.size() + testRules.size());
@@ -68,8 +71,9 @@ class RuleContainer {
     /**
      * Applies all the rules ordered accordingly to the specified {@code statement}.
      */
+    @Nullable
     public Statement apply(FrameworkMethod method, Description description, Object target,
-            Statement statement) {
+                           Statement statement) {
         if (methodRules.isEmpty() && testRules.isEmpty()) {
             return statement;
         }
@@ -88,6 +92,7 @@ class RuleContainer {
      * Returns rule instances in the order how they should be applied, i.e. inner-to-outer.
      * VisibleForTesting
      */
+    @NotNull
     List<Object> getSortedRules() {
         List<Object> result = new ArrayList<Object>();
         for (RuleEntry entry : getSortedEntries()) {
@@ -104,7 +109,7 @@ class RuleContainer {
         final int type;
         final int order;
 
-        RuleEntry(Object rule, int type, Integer order) {
+        RuleEntry(Object rule, int type, @Nullable Integer order) {
             this.rule = rule;
             this.type = type;
             this.order = order != null ? order.intValue() : Rule.DEFAULT_ORDER;

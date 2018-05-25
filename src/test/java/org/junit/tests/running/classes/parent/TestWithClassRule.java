@@ -1,5 +1,6 @@
 package org.junit.tests.running.classes.parent;
 
+import org.jetbrains.annotations.NotNull;
 import org.junit.Assert;
 import org.junit.ClassRule;
 import org.junit.Test;
@@ -15,6 +16,7 @@ import java.lang.reflect.Field;
 public class TestWithClassRule {
     public static Class<?> applyTestClass;
 
+    @NotNull
     @ClassRule
     public static TestRule rule = new CustomRule();
 
@@ -25,7 +27,7 @@ public class TestWithClassRule {
 
     public static final class CustomRule implements TestRule {
 
-        public Statement apply(final Statement base, final Description description) {
+        public Statement apply(@NotNull final Statement base, @NotNull final Description description) {
             return new Statement() {
                 @Override
                 public void evaluate() throws Throwable {

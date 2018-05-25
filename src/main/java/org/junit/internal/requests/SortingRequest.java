@@ -2,6 +2,7 @@ package org.junit.internal.requests;
 
 import java.util.Comparator;
 
+import org.jetbrains.annotations.Nullable;
 import org.junit.runner.Description;
 import org.junit.runner.Request;
 import org.junit.runner.Runner;
@@ -16,6 +17,7 @@ public class SortingRequest extends Request {
         this.comparator = comparator;
     }
 
+    @Nullable
     @Override
     public Runner getRunner() {
         Runner runner = request.getRunner();

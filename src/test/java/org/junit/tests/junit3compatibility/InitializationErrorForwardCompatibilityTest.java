@@ -8,6 +8,7 @@ import junit.framework.AssertionFailedError;
 import junit.framework.JUnit4TestAdapter;
 import junit.framework.TestListener;
 import junit.framework.TestResult;
+import org.jetbrains.annotations.NotNull;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.Description;
@@ -24,6 +25,7 @@ public class InitializationErrorForwardCompatibilityTest {
             throw new Exception(UNIQUE_ERROR_MESSAGE);
         }
 
+        @NotNull
         @Override
         public Description getDescription() {
             return Description.EMPTY;

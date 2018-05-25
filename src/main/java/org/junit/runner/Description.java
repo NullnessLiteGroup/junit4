@@ -1,5 +1,8 @@
 package org.junit.runner;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.io.Serializable;
 import java.lang.annotation.Annotation;
 import java.util.ArrayList;
@@ -82,7 +85,7 @@ public class Description implements Serializable {
      * @param annotations meta-data about the test, for downstream interpreters
      * @return a <code>Description</code> named <code>name</code>
      */
-    public static Description createTestDescription(Class<?> clazz, String name, Annotation... annotations) {
+    public static Description createTestDescription(@NotNull Class<?> clazz, String name, Annotation... annotations) {
         return new Description(clazz, formatDisplayName(name, clazz.getName()), annotations);
     }
 
@@ -95,7 +98,7 @@ public class Description implements Serializable {
      * @param name the name of the test (a method name for test annotated with {@link org.junit.Test})
      * @return a <code>Description</code> named <code>name</code>
      */
-    public static Description createTestDescription(Class<?> clazz, String name) {
+    public static Description createTestDescription(@NotNull Class<?> clazz, String name) {
         return new Description(clazz, formatDisplayName(name, clazz.getName()));
     }
 
@@ -120,7 +123,7 @@ public class Description implements Serializable {
      * @param testClass A {@link Class} containing tests
      * @return a <code>Description</code> of <code>testClass</code>
      */
-    public static Description createSuiteDescription(Class<?> testClass) {
+    public static Description createSuiteDescription(@NotNull Class<?> testClass) {
         return new Description(testClass, testClass.getName(), testClass.getAnnotations());
     }
 
@@ -131,7 +134,7 @@ public class Description implements Serializable {
      * @param annotations meta-data about the test, for downstream interpreters
      * @return a <code>Description</code> of <code>testClass</code>
      */
-    public static Description createSuiteDescription(Class<?> testClass, Annotation... annotations) {
+    public static Description createSuiteDescription(@NotNull Class<?> testClass, Annotation... annotations) {
         return new Description(testClass, testClass.getName(), annotations);
     }
 
@@ -153,7 +156,9 @@ public class Description implements Serializable {
      * See https://github.com/junit-team/junit4/issues/976
      */
     private final Collection<Description> fChildren = new ConcurrentLinkedQueue<Description>();
+    @Nullable
     private final String fDisplayName;
+    @Nullable
     private final Serializable fUniqueId;
     private final Annotation[] fAnnotations;
     private volatile /* write-once */ Class<?> fTestClass;
@@ -162,7 +167,7 @@ public class Description implements Serializable {
         this(clazz, displayName, displayName, annotations);
     }
 
-    private Description(Class<?> testClass, String displayName, Serializable uniqueId, Annotation... annotations) {
+    private Description(Class<?> testClass, @Nullable String displayName, @Nullable Serializable uniqueId, Annotation... annotations) {
         if ((displayName == null) || (displayName.length() == 0)) {
             throw new IllegalArgumentException(
                     "The display name must not be empty.");
@@ -180,6 +185,7 @@ public class Description implements Serializable {
     /**
      * @return a user-understandable label
      */
+    @Nullable
     public String getDisplayName() {
         return fDisplayName;
     }
@@ -197,6 +203,7 @@ public class Description implements Serializable {
      * Gets the copy of the children of this {@code Description}.
      * Returns an empty list if there are no children.
      */
+    @NotNull
     public ArrayList<Description> getChildren() {
         return new ArrayList<Description>(fChildren);
     }
@@ -243,6 +250,7 @@ public class Description implements Serializable {
         return fUniqueId.equals(d.fUniqueId);
     }
 
+    @Nullable
     @Override
     public String toString() {
         return getDisplayName();
@@ -259,6 +267,7 @@ public class Description implements Serializable {
      * @return a copy of this description, with no children (on the assumption that some of the
      *         children will be added back)
      */
+    @NotNull
     public Description childlessCopy() {
         return new Description(fTestClass, fDisplayName, fAnnotations);
     }
@@ -267,7 +276,8 @@ public class Description implements Serializable {
      * @return the annotation of type annotationType that is attached to this description node,
      *         or null if none exists
      */
-    public <T extends Annotation> T getAnnotation(Class<T> annotationType) {
+    @Nullable
+    public <T extends Annotation> T getAnnotation(@NotNull Class<T> annotationType) {
         for (Annotation each : fAnnotations) {
             if (each.annotationType().equals(annotationType)) {
                 return annotationType.cast(each);
@@ -279,6 +289,7 @@ public class Description implements Serializable {
     /**
      * @return all of the annotations attached to this description node
      */
+    @NotNull
     public Collection<Annotation> getAnnotations() {
         return Arrays.asList(fAnnotations);
     }
@@ -287,6 +298,7 @@ public class Description implements Serializable {
      * @return If this describes a method invocation,
      *         the class of the test instance.
      */
+    @Nullable
     public Class<?> getTestClass() {
         if (fTestClass != null) {
             return fTestClass;

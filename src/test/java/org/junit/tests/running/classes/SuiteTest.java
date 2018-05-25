@@ -11,6 +11,7 @@ import java.util.List;
 
 import junit.framework.JUnit4TestAdapter;
 import junit.framework.TestResult;
+import org.jetbrains.annotations.NotNull;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
@@ -114,6 +115,7 @@ public class SuiteTest {
     }
 
 
+    @NotNull
     private static String log = "";
 
     @RunWith(Suite.class)

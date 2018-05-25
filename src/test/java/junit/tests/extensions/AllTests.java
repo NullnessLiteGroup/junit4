@@ -2,6 +2,7 @@ package junit.tests.extensions;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * TestSuite that runs all the extension tests
@@ -12,6 +13,7 @@ public class AllTests {
         junit.textui.TestRunner.run(suite());
     }
 
+    @NotNull
     public static Test suite() { // Collect tests manually because we have to test class collection code
         TestSuite suite = new TestSuite("Framework Tests");
         suite.addTestSuite(ExtensionTest.class);

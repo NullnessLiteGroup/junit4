@@ -1,5 +1,7 @@
 package org.junit;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -81,7 +83,7 @@ public @interface Test {
      * message or one of its properties should be verified, the
      * {@link org.junit.rules.ExpectedException ExpectedException} rule can be used instead.
      */
-    Class<? extends Throwable> expected() default None.class;
+    @NotNull Class<? extends Throwable> expected() default None.class;
 
     /**
      * Optionally specify <code>timeout</code> in milliseconds to cause a test method to fail if it

@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
+import org.jetbrains.annotations.NotNull;
 import org.junit.experimental.theories.DataPoint;
 import org.junit.experimental.theories.DataPoints;
 import org.junit.experimental.theories.FromDataPoints;
@@ -19,8 +20,9 @@ public class SpecificDataPointsSupplier extends AllMembersSupplier {
         super(testClass);
     }
     
+    @NotNull
     @Override
-    protected Collection<Field> getSingleDataPointFields(ParameterSignature sig) {
+    protected Collection<Field> getSingleDataPointFields(@NotNull ParameterSignature sig) {
         Collection<Field> fields = super.getSingleDataPointFields(sig);        
         String requestedName = sig.getAnnotation(FromDataPoints.class).value();
 
@@ -36,8 +38,9 @@ public class SpecificDataPointsSupplier extends AllMembersSupplier {
         return fieldsWithMatchingNames;
     }
     
+    @NotNull
     @Override
-    protected Collection<Field> getDataPointsFields(ParameterSignature sig) {
+    protected Collection<Field> getDataPointsFields(@NotNull ParameterSignature sig) {
         Collection<Field> fields = super.getDataPointsFields(sig);        
         String requestedName = sig.getAnnotation(FromDataPoints.class).value();
         
@@ -53,8 +56,9 @@ public class SpecificDataPointsSupplier extends AllMembersSupplier {
         return fieldsWithMatchingNames;
     }
     
+    @NotNull
     @Override
-    protected Collection<FrameworkMethod> getSingleDataPointMethods(ParameterSignature sig) {
+    protected Collection<FrameworkMethod> getSingleDataPointMethods(@NotNull ParameterSignature sig) {
         Collection<FrameworkMethod> methods = super.getSingleDataPointMethods(sig);
         String requestedName = sig.getAnnotation(FromDataPoints.class).value();
         
@@ -70,8 +74,9 @@ public class SpecificDataPointsSupplier extends AllMembersSupplier {
         return methodsWithMatchingNames;
     }
     
+    @NotNull
     @Override
-    protected Collection<FrameworkMethod> getDataPointsMethods(ParameterSignature sig) {
+    protected Collection<FrameworkMethod> getDataPointsMethods(@NotNull ParameterSignature sig) {
         Collection<FrameworkMethod> methods = super.getDataPointsMethods(sig);
         String requestedName = sig.getAnnotation(FromDataPoints.class).value();
         

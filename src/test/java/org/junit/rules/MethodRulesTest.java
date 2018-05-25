@@ -10,6 +10,9 @@ import static org.junit.experimental.results.PrintableResult.testResult;
 import static org.junit.experimental.results.ResultMatchers.failureCountIs;
 import static org.junit.experimental.results.ResultMatchers.hasSingleFailureContaining;
 import static org.junit.experimental.results.ResultMatchers.isSuccessful;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -24,7 +27,8 @@ public class MethodRulesTest {
 
     private static class TestMethodRule implements MethodRule {
 
-        public Statement apply(final Statement base, FrameworkMethod method, Object target) {
+        @NotNull
+        public Statement apply(@NotNull final Statement base, FrameworkMethod method, Object target) {
             return new Statement() {
                 @Override
                 public void evaluate() throws Throwable {
@@ -36,6 +40,7 @@ public class MethodRulesTest {
     }
 
     public static class ExampleTest {
+        @NotNull
         @Rule
         public MethodRule example = new TestMethodRule();
 
@@ -45,6 +50,7 @@ public class MethodRulesTest {
     }
 
     static abstract class NonPublicExampleTest {
+        @NotNull
         @Rule
         public MethodRule example = new TestMethodRule();
 
@@ -85,8 +91,9 @@ public class MethodRulesTest {
     private static int runCount;
 
     private static class Increment implements MethodRule {
-        public Statement apply(final Statement base,
-                FrameworkMethod method, Object target) {
+        @NotNull
+        public Statement apply(@NotNull final Statement base,
+                               FrameworkMethod method, Object target) {
             return new Statement() {
                 @Override
                 public void evaluate() throws Throwable {
@@ -99,9 +106,11 @@ public class MethodRulesTest {
     
     public static class MultipleRuleTest {
 
+        @NotNull
         @Rule
         public MethodRule incrementor1 = new Increment();
 
+        @NotNull
         @Rule
         public MethodRule incrementor2 = new Increment();
 
@@ -135,6 +144,7 @@ public class MethodRulesTest {
     private static String log;
 
     public static class OnFailureTest {
+        @NotNull
         @Rule
         public MethodRule watchman = new TestWatchman() {
             @Override
@@ -159,6 +169,7 @@ public class MethodRulesTest {
     public static class WatchmanTest {
         private static String watchedLog;
 
+        @NotNull
         @Rule
         public MethodRule watchman = new TestWatchman() {
             @Override
@@ -199,6 +210,7 @@ public class MethodRulesTest {
             watchedLog += "before ";
         }
 
+        @NotNull
         @Rule
         public MethodRule watchman = new TestWatchman() {
             @Override
@@ -261,6 +273,7 @@ public class MethodRulesTest {
     }
 
     public static class PrivateRule {
+        @NotNull
         @Rule
         private TestRule rule = new TestName();
 
@@ -276,9 +289,11 @@ public class MethodRulesTest {
     }
 
     public static class CustomTestName implements TestRule {
+        @Nullable
         public String name = null;
 
-        public Statement apply(final Statement base, final Description description) {
+        @NotNull
+        public Statement apply(@NotNull final Statement base, @NotNull final Description description) {
             return new Statement() {
                 @Override
                 public void evaluate() throws Throwable {
@@ -290,6 +305,7 @@ public class MethodRulesTest {
     }
 
     public static class UsesCustomMethodRule {
+        @NotNull
         @Rule
         public CustomTestName counter = new CustomTestName();
 
@@ -305,8 +321,9 @@ public class MethodRulesTest {
     }
     
     public static class HasMethodReturningMethodRule {
+        @NotNull
         private MethodRule methodRule = new MethodRule() {
-            public Statement apply(final Statement base, FrameworkMethod method, Object target) {
+            public Statement apply(@NotNull final Statement base, FrameworkMethod method, Object target) {
                 return new Statement() {
                     
                     @Override
@@ -318,6 +335,7 @@ public class MethodRulesTest {
             }
         };
         
+        @NotNull
         @Rule
         public MethodRule methodRule() {
             return methodRule;
@@ -345,11 +363,13 @@ public class MethodRulesTest {
     }
     
     public static class HasMultipleMethodsReturningMethodRule {
+        @NotNull
         @Rule
         public Increment methodRule1() {
             return new Increment();
         }
         
+        @NotNull
         @Rule
         public Increment methodRule2() {
             return new Increment();
@@ -381,7 +401,8 @@ public class MethodRulesTest {
         int callCount = 0;
         
         private static class Dummy implements MethodRule {
-            public Statement apply(final Statement base, FrameworkMethod method, Object target) {
+            @NotNull
+            public Statement apply(@NotNull final Statement base, FrameworkMethod method, Object target) {
                 return new Statement() {
                     
                     @Override
@@ -393,6 +414,7 @@ public class MethodRulesTest {
         }
        
         
+        @NotNull
         @Rule
         public MethodRule methodRule() {
             callCount++;

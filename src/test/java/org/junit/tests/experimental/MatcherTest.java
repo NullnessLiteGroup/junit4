@@ -9,6 +9,7 @@ import static org.junit.experimental.results.ResultMatchers.hasSingleFailureCont
 import java.util.Arrays;
 
 import org.hamcrest.Matcher;
+import org.jetbrains.annotations.NotNull;
 import org.junit.experimental.results.PrintableResult;
 import org.junit.experimental.theories.DataPoint;
 import org.junit.experimental.theories.Theories;
@@ -19,12 +20,15 @@ import org.junit.runner.notification.Failure;
 
 @RunWith(Theories.class)
 public class MatcherTest {
+    @NotNull
     @DataPoint
     public static Matcher<Object> SINGLE_FAILURE = hasSingleFailureContaining("cheese");
 
+    @NotNull
     @DataPoint
     public static Matcher<PrintableResult> ANY_FAILURE = hasFailureContaining("cheese");
 
+    @NotNull
     @DataPoint
     public static PrintableResult TWO_FAILURES_ONE_CHEESE = new PrintableResult(
             Arrays.asList(failure("cheese"), failure("mustard")));
@@ -32,7 +36,7 @@ public class MatcherTest {
     @Theory
     @SuppressWarnings({ "unchecked", "rawtypes" })
     public void differentMatchersHaveDifferentDescriptions(
-            Matcher matcher1, Matcher matcher2, Object value) {
+            @NotNull Matcher matcher1, @NotNull Matcher matcher2, Object value) {
         assumeThat(value, matcher1);
         assumeThat(value, not(matcher2));
         assertThat(matcher1.toString(), not(matcher2.toString()));

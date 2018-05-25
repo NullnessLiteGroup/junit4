@@ -1,5 +1,6 @@
 package org.junit.rules;
 
+import org.jetbrains.annotations.NotNull;
 import org.junit.AssumptionViolatedException;
 import org.junit.runner.Description;
 import org.junit.runners.model.Statement;
@@ -95,7 +96,7 @@ public class Stopwatch implements TestRule {
      * @param unit time unit for returned runtime
      * @return runtime measured during the test
      */
-    public long runtime(TimeUnit unit) {
+    public long runtime(@NotNull TimeUnit unit) {
         return unit.convert(getNanos(), TimeUnit.NANOSECONDS);
     }
 
@@ -144,7 +145,7 @@ public class Stopwatch implements TestRule {
         endNanos = clock.nanoTime();
     }
 
-    public final Statement apply(Statement base, Description description) {
+    public final Statement apply(@NotNull Statement base, Description description) {
         return new InternalWatcher().apply(base, description);
     }
 

@@ -4,6 +4,7 @@ import static org.junit.Assert.assertThat;
 import static org.junit.experimental.results.PrintableResult.testResult;
 import static org.junit.experimental.results.ResultMatchers.isSuccessful;
 
+import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
 import org.junit.experimental.theories.DataPoint;
 import org.junit.experimental.theories.DataPoints;
@@ -15,6 +16,7 @@ public class TypeMatchingBetweenMultiDataPointsMethod {
 
     @RunWith(Theories.class)
     public static class WithWrongfullyTypedDataPointsMethod {
+        @NotNull
         @DataPoint
         public static String[] correctlyTyped = {"Good", "Morning"};
 
@@ -35,6 +37,7 @@ public class TypeMatchingBetweenMultiDataPointsMethod {
 
     @RunWith(Theories.class)
     public static class WithCorrectlyTypedDataPointsMethod {
+        @NotNull
         @DataPoint
         public static String[] correctlyTyped = {"Good", "Morning"};
 

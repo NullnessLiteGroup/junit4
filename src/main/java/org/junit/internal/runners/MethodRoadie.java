@@ -10,6 +10,7 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
+import org.jetbrains.annotations.NotNull;
 import org.junit.internal.AssumptionViolatedException;
 import org.junit.runner.Description;
 import org.junit.runner.notification.Failure;
@@ -91,7 +92,7 @@ public class MethodRoadie {
         });
     }
 
-    public void runBeforesThenTestThenAfters(Runnable test) {
+    public void runBeforesThenTestThenAfters(@NotNull Runnable test) {
         try {
             runBefores();
             test.run();

@@ -7,6 +7,8 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assume.assumeThat;
 import org.hamcrest.Matcher;
 import org.hamcrest.StringDescription;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.junit.experimental.theories.DataPoint;
 import org.junit.experimental.theories.Theories;
 import org.junit.experimental.theories.Theory;
@@ -14,17 +16,20 @@ import org.junit.runner.RunWith;
 
 @RunWith(Theories.class)
 public class AssumptionViolatedExceptionTest {
+    @NotNull
     @DataPoint
     public static Integer TWO = 2;
 
+    @NotNull
     @DataPoint
     public static Matcher<Integer> IS_THREE = is(3);
 
+    @Nullable
     @DataPoint
     public static Matcher<Integer> NULL = null;
 
     @Theory
-    public void toStringReportsMatcher(Integer actual, Matcher<Integer> matcher) {
+    public void toStringReportsMatcher(Integer actual, @NotNull Matcher<Integer> matcher) {
         assumeThat(matcher, notNullValue());
         assertThat(new AssumptionViolatedException(actual, matcher).toString(),
                 containsString(matcher.toString()));

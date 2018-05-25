@@ -9,6 +9,8 @@ import static org.junit.internal.runners.rules.RuleMemberValidator.RULE_VALIDATO
 import java.util.ArrayList;
 import java.util.List;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
@@ -27,6 +29,7 @@ public class RuleMemberValidatorTest {
     }
 
     public static class TestWithProtectedClassRule {
+        @NotNull
         @ClassRule
         protected static TestRule temporaryFolder = new TemporaryFolder();
     }
@@ -39,6 +42,7 @@ public class RuleMemberValidatorTest {
     }
 
     public static class TestWithNonStaticClassRule {
+        @NotNull
         @ClassRule
         public TestRule temporaryFolder = new TemporaryFolder();
     }
@@ -51,6 +55,7 @@ public class RuleMemberValidatorTest {
     }
 
     public static class TestWithStaticClassAndTestRule {
+        @NotNull
         @ClassRule
         @Rule
         public static TestRule temporaryFolder = new TemporaryFolder();
@@ -64,6 +69,7 @@ public class RuleMemberValidatorTest {
     }
 
     static class NonPublicTestWithClassRule {
+        @NotNull
         @ClassRule
         public static TestRule temporaryFolder = new TemporaryFolder();
     }
@@ -83,6 +89,7 @@ public class RuleMemberValidatorTest {
     }
     
     public static class TestWithClassRuleIsImplementationOfMethodRule {
+        @NotNull
         @ClassRule
         public static MethodRule classRule = new MethodRule() {
             
@@ -133,6 +140,7 @@ public class RuleMemberValidatorTest {
     }
 
     public static class TestWithClassRuleIsAnArbitraryObject {
+        @NotNull
         @ClassRule
         public static Object arbitraryObject = 1;
     }
@@ -166,6 +174,7 @@ public class RuleMemberValidatorTest {
     }
 
     public static class TestWithNonStaticTestRule {
+        @NotNull
         @Rule
         public TestRule temporaryFolder = new TemporaryFolder();
     }
@@ -178,6 +187,7 @@ public class RuleMemberValidatorTest {
     }
 
     public static class TestWithStaticTestRule {
+        @NotNull
         @Rule
         public static TestRule temporaryFolder = new TemporaryFolder();
     }
@@ -190,6 +200,7 @@ public class RuleMemberValidatorTest {
     }
 
     public static class TestWithStaticMethodRule {
+        @NotNull
         @Rule
         public static MethodRule someMethodRule = new SomeMethodRule();
     }
@@ -202,6 +213,7 @@ public class RuleMemberValidatorTest {
     }
 
     public static class TestWithMethodRule {
+        @Nullable
         @Rule
         public MethodRule temporaryFolder = new MethodRule() {
             public Statement apply(Statement base, FrameworkMethod method,
@@ -219,6 +231,7 @@ public class RuleMemberValidatorTest {
     }
 
     public static class TestWithArbitraryObjectWithRuleAnnotation {
+        @NotNull
         @Rule
         public Object arbitraryObject = 1;
     }
@@ -245,6 +258,7 @@ public class RuleMemberValidatorTest {
     }
 
     public static class MethodTestWithNonStaticClassRule {
+        @NotNull
         @ClassRule
         public TestRule getTemporaryFolder() {
             return new TemporaryFolder();
@@ -274,6 +288,7 @@ public class RuleMemberValidatorTest {
     }
 
     public static class TestMethodWithNonStaticTestRule {
+        @NotNull
         @Rule
         public TestRule getTemporaryFolder() {
             return new TemporaryFolder();
@@ -314,11 +329,13 @@ public class RuleMemberValidatorTest {
     }
 
     public static class MethodTestWithMethodRule {
+        @Nullable
         @Rule
         public MethodRule getTemporaryFolder() {
             return new MethodRule() {
+                @Nullable
                 public Statement apply(Statement base, FrameworkMethod method,
-                        Object target) {
+                                       Object target) {
                     return null;
                 }
             };
@@ -333,6 +350,7 @@ public class RuleMemberValidatorTest {
     }
 
     public static class MethodTestWithArbitraryObjectWithRuleAnnotation {
+        @NotNull
         @Rule
         public Object getArbitraryObject() {
             return 1;

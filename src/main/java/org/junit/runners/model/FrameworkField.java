@@ -4,6 +4,8 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.List;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.junit.runners.BlockJUnit4ClassRunner;
 
 /**
@@ -13,9 +15,10 @@ import org.junit.runners.BlockJUnit4ClassRunner;
  * @since 4.7
  */
 public class FrameworkField extends FrameworkMember<FrameworkField> {
+    @Nullable
     private final Field field;
 
-    FrameworkField(Field field) {
+    FrameworkField(@Nullable Field field) {
         if (field == null) {
             throw new NullPointerException(
                     "FrameworkField cannot be created without an underlying field.");
@@ -41,12 +44,12 @@ public class FrameworkField extends FrameworkMember<FrameworkField> {
         return field.getAnnotations();
     }
 
-    public <T extends Annotation> T getAnnotation(Class<T> annotationType) {
+    public <T extends Annotation> T getAnnotation(@NotNull Class<T> annotationType) {
         return field.getAnnotation(annotationType);
     }
 
     @Override
-    public boolean isShadowedBy(FrameworkField otherMember) {
+    public boolean isShadowedBy(@NotNull FrameworkField otherMember) {
         return isStatic() && otherMember.getName().equals(getName());
     }
 
@@ -63,6 +66,7 @@ public class FrameworkField extends FrameworkMember<FrameworkField> {
     /**
      * @return the underlying java Field
      */
+    @Nullable
     public Field getField() {
         return field;
     }
@@ -88,6 +92,7 @@ public class FrameworkField extends FrameworkMember<FrameworkField> {
         return field.get(target);
     }
 
+    @NotNull
     @Override
     public String toString() {
         return field.toString();

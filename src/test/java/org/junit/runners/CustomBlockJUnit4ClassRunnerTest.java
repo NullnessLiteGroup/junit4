@@ -4,6 +4,8 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.junit.Test;
 import org.junit.runner.Description;
 import org.junit.runner.notification.Failure;
@@ -51,8 +53,9 @@ public class CustomBlockJUnit4ClassRunnerTest {
 			super(testClass);
 		}
 
-		@Override
-		protected Statement methodBlock(FrameworkMethod method) {
+		@Nullable
+        @Override
+		protected Statement methodBlock(@NotNull FrameworkMethod method) {
 			if ("throwException".equals(method.getName())) {
 				throw new RuntimeException("throwException() test method invoked");
 			}

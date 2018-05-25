@@ -10,6 +10,7 @@ import java.lang.annotation.Annotation;
 import java.net.URL;
 import java.net.URLClassLoader;
 
+import org.jetbrains.annotations.NotNull;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.Description;
@@ -75,7 +76,7 @@ public class DescriptionTest {
     @Test
     public void usesPassedInClassObject() throws Exception {
         class URLClassLoader2 extends URLClassLoader {
-            URLClassLoader2(URL... urls) {
+            URLClassLoader2(@NotNull URL... urls) {
                 super(urls);
             }
 

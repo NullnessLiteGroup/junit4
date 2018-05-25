@@ -12,6 +12,7 @@ import junit.extensions.TestDecorator;
 import junit.framework.JUnit4TestAdapter;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
+import org.jetbrains.annotations.NotNull;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.internal.runners.JUnit38ClassRunner;
@@ -134,10 +135,11 @@ public class JUnit38ClassRunnerTest {
 
     public static class RejectAllTestsFilter extends Filter {
         @Override
-        public boolean shouldRun(Description description) {
+        public boolean shouldRun(@NotNull Description description) {
             return description.isSuite();
         }
 
+        @NotNull
         @Override
         public String describe() {
             return "filter all";

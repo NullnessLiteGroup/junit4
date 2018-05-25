@@ -11,6 +11,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
 
 /**
@@ -21,8 +22,10 @@ import org.junit.Test;
 public class SynchronizedRunListenerTest {
 
     private static class MethodSignature {
+        @NotNull
         private final Method fMethod;
         private final String fName;
+        @NotNull
         private final List<Class<?>> fParameterTypes;
 
         public MethodSignature(Method method) {
@@ -54,6 +57,7 @@ public class SynchronizedRunListenerTest {
         }
     }
 
+    @NotNull
     private Set<MethodSignature> getAllDeclaredMethods(Class<?> type) {
         Set<MethodSignature> methods = new HashSet<MethodSignature>();
         for (Method method : type.getDeclaredMethods()) {
@@ -78,6 +82,7 @@ public class SynchronizedRunListenerTest {
             fName = name;
         }
 
+        @NotNull
         @Override
         public String toString() {
           return "NamedListener";

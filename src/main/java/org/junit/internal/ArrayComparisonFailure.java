@@ -3,6 +3,7 @@ package org.junit.internal;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.jetbrains.annotations.NotNull;
 import org.junit.Assert;
 
 /**
@@ -47,6 +48,7 @@ public class ArrayComparisonFailure extends AssertionError {
         return super.getCause() == null ? fCause : super.getCause();
     }
 
+    @NotNull
     @Override
     public String getMessage() {
         StringBuilder sb = new StringBuilder();
@@ -67,6 +69,7 @@ public class ArrayComparisonFailure extends AssertionError {
     /**
      * {@inheritDoc}
      */
+    @NotNull
     @Override
     public String toString() {
         return getMessage();

@@ -7,6 +7,7 @@ import static org.junit.tests.experimental.theories.TheoryTestUtils.potentialAss
 
 import java.util.List;
 
+import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
 import org.junit.experimental.theories.DataPoint;
 import org.junit.experimental.theories.DataPoints;
@@ -21,15 +22,19 @@ public class WithNamedDataPoints {
     @RunWith(Theories.class)
     public static class HasSpecificDatapointsParameters {
         
+        @NotNull
         @DataPoints
         public static String[] badStrings = new String[] { "bad" };
         
+        @NotNull
         @DataPoint
         public static String badString = "also bad";
         
+        @NotNull
         @DataPoints("named")
         public static String[] goodStrings = new String[] { "expected", "also expected" };
         
+        @NotNull
         @DataPoint("named")
         public static String goodString = "expected single value";
         

@@ -12,6 +12,7 @@ import static org.junit.experimental.results.ResultMatchers.isSuccessful;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.jetbrains.annotations.NotNull;
 import org.junit.ClassRule;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
@@ -35,6 +36,7 @@ public class ClassRulesTest {
     }
 
     public static class ExampleTestWithClassRule {
+        @NotNull
         @ClassRule
         public static Counter counter = new Counter();
 
@@ -71,7 +73,8 @@ public class ClassRulesTest {
     public static class CustomCounter implements TestRule {
         public int count = 0;
 
-        public Statement apply(final Statement base, Description description) {
+        @NotNull
+        public Statement apply(@NotNull final Statement base, Description description) {
             return new Statement() {
                 @Override
                 public void evaluate() throws Throwable {
@@ -83,6 +86,7 @@ public class ClassRulesTest {
     }
 
     public static class ExampleTestWithCustomClassRule {
+        @NotNull
         @ClassRule
         public static CustomCounter counter = new CustomCounter();
 
@@ -115,7 +119,8 @@ public class ClassRulesTest {
             this.name = name;
         }
 
-        public Statement apply(final Statement base, final Description description) {
+        @NotNull
+        public Statement apply(@NotNull final Statement base, final Description description) {
             return new Statement() {
                 @Override
                 public void evaluate() throws Throwable {
@@ -132,6 +137,7 @@ public class ClassRulesTest {
             return new OrderTestRule("orderMethod");
         }
 
+        @NotNull
         @ClassRule
         public static OrderTestRule orderField = new OrderTestRule("orderField");
 
@@ -150,8 +156,10 @@ public class ClassRulesTest {
 
 
     public static class MethodExampleTestWithClassRule {
+        @NotNull
         private static Counter counter = new Counter();
 
+        @NotNull
         @ClassRule
         public static Counter getCounter() {
             return counter;
@@ -188,8 +196,10 @@ public class ClassRulesTest {
     }
 
     public static class MethodExampleTestWithCustomClassRule {
+        @NotNull
         private static CustomCounter counter = new CustomCounter();
 
+        @NotNull
         @ClassRule
         public static CustomCounter getCounter() {
             return counter;
@@ -219,7 +229,8 @@ public class ClassRulesTest {
         static int countOfMethodCalls = 0;
 
         private static class Dummy implements TestRule {
-            public Statement apply(final Statement base, Description description) {
+            @NotNull
+            public Statement apply(@NotNull final Statement base, Description description) {
                 return new Statement() {
                     @Override
                     public void evaluate() throws Throwable {

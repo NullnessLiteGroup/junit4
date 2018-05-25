@@ -8,6 +8,7 @@ import java.util.List;
 
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
+import org.jetbrains.annotations.NotNull;
 import org.junit.runner.Description;
 import org.junit.runner.Result;
 import org.junit.runner.notification.Failure;
@@ -22,19 +23,19 @@ public class EventCollector extends RunListener {
             final int numberOfFailures) {
         return new TypeSafeMatcher<EventCollector>() {
             @Override
-            public boolean matchesSafely(EventCollector item) {
+            public boolean matchesSafely(@NotNull EventCollector item) {
                 return item.fFailures.size() == numberOfFailures;
             }
 
-            public void describeTo(org.hamcrest.Description description) {
+            public void describeTo(@NotNull org.hamcrest.Description description) {
                 description.appendText("has ");
                 description.appendValue(numberOfFailures);
                 description.appendText(" failures");
             }
 
             @Override
-            protected void describeMismatchSafely(EventCollector item,
-                    org.hamcrest.Description description) {
+            protected void describeMismatchSafely(@NotNull EventCollector item,
+                                                  org.hamcrest.Description description) {
                 description.appendValue(item.fFailures.size());
                 description.appendText(" failures");
             }
@@ -53,11 +54,11 @@ public class EventCollector extends RunListener {
             final int numberOfFailures) {
         return new TypeSafeMatcher<EventCollector>() {
             @Override
-            public boolean matchesSafely(EventCollector item) {
+            public boolean matchesSafely(@NotNull EventCollector item) {
                 return item.fAssumptionFailures.size() == numberOfFailures;
             }
 
-            public void describeTo(org.hamcrest.Description description) {
+            public void describeTo(@NotNull org.hamcrest.Description description) {
                 description.appendText("has ");
                 description.appendValue(numberOfFailures);
                 description.appendText(" assumption failures");
@@ -78,23 +79,23 @@ public class EventCollector extends RunListener {
     }
 
     static Matcher<EventCollector> hasSingleFailureWithMessage(
-            final Matcher<String> messageMatcher) {
+            @NotNull final Matcher<String> messageMatcher) {
         return new TypeSafeMatcher<EventCollector>() {
             @Override
-            public boolean matchesSafely(EventCollector item) {
+            public boolean matchesSafely(@NotNull EventCollector item) {
                 return hasSingleFailure().matches(item)
                         && messageMatcher.matches(item.fFailures.get(0)
                         .getMessage());
             }
 
-            public void describeTo(org.hamcrest.Description description) {
+            public void describeTo(@NotNull org.hamcrest.Description description) {
                 description.appendText("has single failure with message ");
                 messageMatcher.describeTo(description);
             }
 
             @Override
-            protected void describeMismatchSafely(EventCollector item,
-                    org.hamcrest.Description description) {
+            protected void describeMismatchSafely(@NotNull EventCollector item,
+                                                  org.hamcrest.Description description) {
                 description.appendText("was ");
                 hasSingleFailure().describeMismatch(item, description);
                 description.appendText(": ");
@@ -112,17 +113,17 @@ public class EventCollector extends RunListener {
         };
     }
 
-    static Matcher<EventCollector> failureIs(final Matcher<? super Throwable> exceptionMatcher) {
+    static Matcher<EventCollector> failureIs(@NotNull final Matcher<? super Throwable> exceptionMatcher) {
         return new TypeSafeMatcher<EventCollector>() {
             @Override
-            public boolean matchesSafely(EventCollector item) {
+            public boolean matchesSafely(@NotNull EventCollector item) {
                 for (Failure f : item.fFailures) {
                     return exceptionMatcher.matches(f.getException());
                 }
                 return false;
             }
 
-            public void describeTo(org.hamcrest.Description description) {
+            public void describeTo(@NotNull org.hamcrest.Description description) {
                 description.appendText("failure is ");
                 exceptionMatcher.describeTo(description);
             }
@@ -178,6 +179,7 @@ public class EventCollector extends RunListener {
         fTestsIgnored.add(description);
     }
 
+    @NotNull
     @Override
     public String toString() {
         return fTestRunsStarted.size() + " test runs started, "

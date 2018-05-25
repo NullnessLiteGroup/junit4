@@ -7,6 +7,7 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assume.assumeThat;
 
+import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
 import org.junit.experimental.theories.DataPoint;
 import org.junit.experimental.theories.Theories;
@@ -22,31 +23,35 @@ public class ParameterizedAssertionErrorTest {
     @DataPoint
     public static final NullPointerException NULL_POINTER_EXCEPTION = new NullPointerException();
 
+    @NotNull
     @DataPoint
     public static Object[] NO_OBJECTS = new Object[0];
 
+    @NotNull
     @DataPoint
     public static ParameterizedAssertionError A = new ParameterizedAssertionError(
             NULL_POINTER_EXCEPTION, METHOD_NAME);
 
+    @NotNull
     @DataPoint
     public static ParameterizedAssertionError B = new ParameterizedAssertionError(
             NULL_POINTER_EXCEPTION, METHOD_NAME);
 
+    @NotNull
     @DataPoint
     public static ParameterizedAssertionError B2 = new ParameterizedAssertionError(
             NULL_POINTER_EXCEPTION, "methodName2");
 
     @Theory
     public void equalParameterizedAssertionErrorsHaveSameToString(
-            ParameterizedAssertionError a, ParameterizedAssertionError b) {
+            @NotNull ParameterizedAssertionError a, @NotNull ParameterizedAssertionError b) {
         assumeThat(a, is(b));
         assertThat(a.toString(), is(b.toString()));
     }
 
     @Theory
     public void differentParameterizedAssertionErrorsHaveDifferentToStrings(
-            ParameterizedAssertionError a, ParameterizedAssertionError b) {
+            @NotNull ParameterizedAssertionError a, @NotNull ParameterizedAssertionError b) {
         assumeThat(a, not(b));
         assertThat(a.toString(), not(b.toString()));
     }
@@ -79,13 +84,14 @@ public class ParameterizedAssertionErrorTest {
     }
 
     @Theory
-    public void isNotEqualToNull(ParameterizedAssertionError a) {
+    public void isNotEqualToNull(@NotNull ParameterizedAssertionError a) {
         assertFalse(a.equals(null));
     }
 
     @Test
     public void canJoinWhenToStringFails() {
         assertThat(ParameterizedAssertionError.join(" ", new Object() {
+            @NotNull
             @Override
             public String toString() {
                 throw new UnsupportedOperationException();

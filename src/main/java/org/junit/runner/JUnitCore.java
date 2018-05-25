@@ -1,6 +1,7 @@
 package org.junit.runner;
 
 import junit.runner.Version;
+import org.jetbrains.annotations.NotNull;
 import org.junit.internal.JUnitSystem;
 import org.junit.internal.RealSystem;
 import org.junit.internal.TextListener;
@@ -45,6 +46,7 @@ public class JUnitCore {
      * @param classes Classes in which to find tests
      * @return a {@link Result} describing the details of the test run and the failed tests.
      */
+    @NotNull
     public static Result runClasses(Class<?>... classes) {
         return runClasses(defaultComputer(), classes);
     }
@@ -58,7 +60,8 @@ public class JUnitCore {
      * @param classes  Classes in which to find tests
      * @return a {@link Result} describing the details of the test run and the failed tests.
      */
-    public static Result runClasses(Computer computer, Class<?>... classes) {
+    @NotNull
+    public static Result runClasses(@NotNull Computer computer, Class<?>... classes) {
         return new JUnitCore().run(computer, classes);
     }
 
@@ -66,7 +69,8 @@ public class JUnitCore {
      * @param system
      * @param args from main()
      */
-    Result runMain(JUnitSystem system, String... args) {
+    @NotNull
+    Result runMain(@NotNull JUnitSystem system, String... args) {
         system.out().println("JUnit version " + Version.id());
 
         JUnitCommandLineParseResult jUnitCommandLineParseResult = JUnitCommandLineParseResult.parse(args);
@@ -80,6 +84,7 @@ public class JUnitCore {
     /**
      * @return the version number of this release
      */
+    @NotNull
     public String getVersion() {
         return Version.id();
     }
@@ -90,6 +95,7 @@ public class JUnitCore {
      * @param classes the classes containing tests
      * @return a {@link Result} describing the details of the test run and the failed tests.
      */
+    @NotNull
     public Result run(Class<?>... classes) {
         return run(defaultComputer(), classes);
     }
@@ -101,7 +107,8 @@ public class JUnitCore {
      * @param classes the classes containing tests
      * @return a {@link Result} describing the details of the test run and the failed tests.
      */
-    public Result run(Computer computer, Class<?>... classes) {
+    @NotNull
+    public Result run(@NotNull Computer computer, Class<?>... classes) {
         return run(Request.classes(computer, classes));
     }
 
@@ -111,7 +118,8 @@ public class JUnitCore {
      * @param request the request describing tests
      * @return a {@link Result} describing the details of the test run and the failed tests.
      */
-    public Result run(Request request) {
+    @NotNull
+    public Result run(@NotNull Request request) {
         return run(request.getRunner());
     }
 
@@ -121,6 +129,7 @@ public class JUnitCore {
      * @param test the old-style test
      * @return a {@link Result} describing the details of the test run and the failed tests.
      */
+    @NotNull
     public Result run(junit.framework.Test test) {
         return run(new JUnit38ClassRunner(test));
     }
@@ -128,7 +137,8 @@ public class JUnitCore {
     /**
      * Do not use. Testing purposes only.
      */
-    public Result run(Runner runner) {
+    @NotNull
+    public Result run(@NotNull Runner runner) {
         Result result = new Result();
         RunListener listener = result.createListener();
         notifier.addFirstListener(listener);

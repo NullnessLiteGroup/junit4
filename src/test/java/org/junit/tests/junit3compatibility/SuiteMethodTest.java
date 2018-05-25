@@ -8,6 +8,7 @@ import static org.junit.Assert.fail;
 import junit.framework.JUnit4TestAdapter;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
+import org.jetbrains.annotations.NotNull;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.Description;
@@ -23,6 +24,7 @@ public class SuiteMethodTest {
             super(name);
         }
 
+        @NotNull
         public static junit.framework.Test suite() {
             TestSuite suite = new TestSuite();
             suite.addTest(new OldTest("notObviouslyATest"));

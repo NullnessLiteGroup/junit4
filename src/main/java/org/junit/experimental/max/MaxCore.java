@@ -6,6 +6,8 @@ import java.util.Collections;
 import java.util.List;
 
 import junit.framework.TestSuite;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.junit.internal.requests.SortingRequest;
 import org.junit.internal.runners.ErrorReportingRunner;
 import org.junit.internal.runners.JUnit38ClassRunner;
@@ -38,20 +40,21 @@ public class MaxCore {
      * @deprecated use storedLocally()
      */
     @Deprecated
-    public static MaxCore forFolder(String folderName) {
+    public static MaxCore forFolder(@NotNull String folderName) {
         return storedLocally(new File(folderName));
     }
 
     /**
      * Create a new MaxCore from a serialized file stored at storedResults
      */
-    public static MaxCore storedLocally(File storedResults) {
+    public static MaxCore storedLocally(@NotNull File storedResults) {
         return new MaxCore(storedResults);
     }
 
+    @NotNull
     private final MaxHistory history;
 
-    private MaxCore(File storedResults) {
+    private MaxCore(@NotNull File storedResults) {
         history = MaxHistory.forFolder(storedResults);
     }
 
@@ -60,6 +63,7 @@ public class MaxCore {
      *
      * @return a {@link Result} describing the details of the test run and the failed tests.
      */
+    @NotNull
     public Result run(Class<?> testClass) {
         return run(Request.aClass(testClass));
     }
@@ -70,6 +74,7 @@ public class MaxCore {
      * @param request the request describing tests
      * @return a {@link Result} describing the details of the test run and the failed tests.
      */
+    @NotNull
     public Result run(Request request) {
         return run(request, new JUnitCore());
     }
@@ -84,7 +89,8 @@ public class MaxCore {
      * @param core a JUnitCore to delegate to.
      * @return a {@link Result} describing the details of the test run and the failed tests.
      */
-    public Result run(Request request, JUnitCore core) {
+    @NotNull
+    public Result run(Request request, @NotNull JUnitCore core) {
         core.addListener(history.listener());
         return core.run(sortRequest(request).getRunner());
     }
@@ -108,6 +114,7 @@ public class MaxCore {
             runners.add(buildRunner(each));
         }
         return new Request() {
+            @Nullable
             @Override
             public Runner getRunner() {
                 try {
@@ -120,6 +127,7 @@ public class MaxCore {
         };
     }
 
+    @Nullable
     private Runner buildRunner(Description each) {
         if (each.toString().equals("TestSuite with 0 tests")) {
             return Suite.emptySuite();
@@ -155,17 +163,19 @@ public class MaxCore {
      * @return a list of method-level tests to run, sorted in the order
      *         specified in the class comment.
      */
+    @NotNull
     public List<Description> sortedLeavesForTest(Request request) {
         return findLeaves(sortRequest(request));
     }
 
+    @NotNull
     private List<Description> findLeaves(Request request) {
         List<Description> results = new ArrayList<Description>();
         findLeaves(null, request.getRunner().getDescription(), results);
         return results;
     }
 
-    private void findLeaves(Description parent, Description description, List<Description> results) {
+    private void findLeaves(Description parent, Description description, @NotNull List<Description> results) {
         if (description.getChildren().isEmpty()) {
             if (description.toString().equals("warning(junit.framework.TestSuite$1)")) {
                 results.add(Description.createSuiteDescription(MALFORMED_JUNIT_3_TEST_CLASS_PREFIX + parent));

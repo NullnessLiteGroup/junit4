@@ -16,6 +16,8 @@ import java.util.List;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
@@ -66,9 +68,11 @@ public abstract class ParentRunner<T> extends Runner implements Filterable,
             new AnnotationsValidator());
 
     private final Lock childrenLock = new ReentrantLock();
+    @Nullable
     private final TestClass testClass;
 
     // Guarded by childrenLock
+    @Nullable
     private volatile Collection<T> filteredChildren = null;
 
     private volatile RunnerScheduler scheduler = new RunnerScheduler() {
@@ -103,6 +107,7 @@ public abstract class ParentRunner<T> extends Runner implements Filterable,
      * @deprecated Please use {@link #ParentRunner(org.junit.runners.model.TestClass)}.
      * @since 4.12
      */
+    @NotNull
     @Deprecated
     protected TestClass createTestClass(Class<?> testClass) {
         return new TestClass(testClass);
@@ -115,12 +120,14 @@ public abstract class ParentRunner<T> extends Runner implements Filterable,
     /**
      * Returns a list of objects that define the children of this Runner.
      */
+    @NotNull
     protected abstract List<T> getChildren();
 
     /**
      * Returns a {@link Description} for {@code child}, which can be assumed to
      * be an element of the list returned by {@link ParentRunner#getChildren()}
      */
+    @Nullable
     protected abstract Description describeChild(T child);
 
     /**
@@ -141,14 +148,14 @@ public abstract class ParentRunner<T> extends Runner implements Filterable,
      * {@code @BeforeClass} or {@code @AfterClass} that is not
      * {@code public static void} with no arguments.
      */
-    protected void collectInitializationErrors(List<Throwable> errors) {
+    protected void collectInitializationErrors(@NotNull List<Throwable> errors) {
         validatePublicVoidNoArgMethods(BeforeClass.class, true, errors);
         validatePublicVoidNoArgMethods(AfterClass.class, true, errors);
         validateClassRules(errors);
         applyValidators(errors);
     }
 
-    private void applyValidators(List<Throwable> errors) {
+    private void applyValidators(@NotNull List<Throwable> errors) {
         if (getTestClass().getJavaClass() != null) {
             for (TestClassValidator each : VALIDATORS) {
                 errors.addAll(each.validateTestClass(getTestClass()));
@@ -168,7 +175,7 @@ public abstract class ParentRunner<T> extends Runner implements Filterable,
      * </ul>
      */
     protected void validatePublicVoidNoArgMethods(Class<? extends Annotation> annotation,
-            boolean isStatic, List<Throwable> errors) {
+                                                  boolean isStatic, @NotNull List<Throwable> errors) {
         List<FrameworkMethod> methods = getTestClass().getAnnotatedMethods(annotation);
 
         for (FrameworkMethod eachTestMethod : methods) {
@@ -206,6 +213,7 @@ public abstract class ParentRunner<T> extends Runner implements Filterable,
      *
      * @return {@code Statement}
      */
+    @Nullable
     protected Statement classBlock(final RunNotifier notifier) {
         Statement statement = childrenInvoker(notifier);
         if (!areAllChildrenIgnored()) {
@@ -230,6 +238,7 @@ public abstract class ParentRunner<T> extends Runner implements Filterable,
      * and superclasses before executing {@code statement}; if any throws an
      * Exception, stop execution and pass the exception on.
      */
+    @Nullable
     protected Statement withBeforeClasses(Statement statement) {
         List<FrameworkMethod> befores = testClass
                 .getAnnotatedMethods(BeforeClass.class);
@@ -244,6 +253,7 @@ public abstract class ParentRunner<T> extends Runner implements Filterable,
      * necessary, with exceptions from AfterClass methods into a
      * {@link org.junit.runners.model.MultipleFailureException}.
      */
+    @Nullable
     protected Statement withAfterClasses(Statement statement) {
         List<FrameworkMethod> afters = testClass
                 .getAnnotatedMethods(AfterClass.class);
@@ -260,7 +270,8 @@ public abstract class ParentRunner<T> extends Runner implements Filterable,
      * @return a RunRules statement if any class-level {@link Rule}s are
      *         found, or the base statement
      */
-    private Statement withClassRules(Statement statement) {
+    @NotNull
+    private Statement withClassRules(@NotNull Statement statement) {
         List<TestRule> classRules = classRules();
         return classRules.isEmpty() ? statement :
                 new RunRules(statement, classRules, getDescription());
@@ -270,6 +281,7 @@ public abstract class ParentRunner<T> extends Runner implements Filterable,
      * @return the {@code ClassRule}s that can transform the block that runs
      *         each method in the tested class.
      */
+    @NotNull
     protected List<TestRule> classRules() {
         ClassRuleCollector collector = new ClassRuleCollector();
         testClass.collectAnnotatedMethodValues(null, ClassRule.class, TestRule.class, collector);
@@ -282,6 +294,7 @@ public abstract class ParentRunner<T> extends Runner implements Filterable,
      * on each object returned by {@link #getChildren()} (subject to any imposed
      * filter and sort)
      */
+    @NotNull
     protected Statement childrenInvoker(final RunNotifier notifier) {
         return new Statement() {
             @Override
@@ -331,6 +344,7 @@ public abstract class ParentRunner<T> extends Runner implements Filterable,
     /**
      * Returns a {@link TestClass} object wrapping the class to be executed.
      */
+    @Nullable
     public final TestClass getTestClass() {
         return testClass;
     }
@@ -338,8 +352,8 @@ public abstract class ParentRunner<T> extends Runner implements Filterable,
     /**
      * Runs a {@link Statement} that represents a leaf (aka atomic) test.
      */
-    protected final void runLeaf(Statement statement, Description description,
-            RunNotifier notifier) {
+    protected final void runLeaf(@NotNull Statement statement, Description description,
+                                 RunNotifier notifier) {
         EachTestNotifier eachNotifier = new EachTestNotifier(notifier, description);
         eachNotifier.fireTestStarted();
         try {
@@ -406,7 +420,7 @@ public abstract class ParentRunner<T> extends Runner implements Filterable,
     // Implementation of Filterable and Sortable
     //
 
-    public void filter(Filter filter) throws NoTestsRemainException {
+    public void filter(@NotNull Filter filter) throws NoTestsRemainException {
         childrenLock.lock();
         try {
             List<T> children = new ArrayList<T>(getFilteredChildren());
@@ -431,7 +445,7 @@ public abstract class ParentRunner<T> extends Runner implements Filterable,
         }
     }
 
-    public void sort(Sorter sorter) {
+    public void sort(@NotNull Sorter sorter) {
         childrenLock.lock();
         try {
             for (T each : getFilteredChildren()) {
@@ -457,6 +471,7 @@ public abstract class ParentRunner<T> extends Runner implements Filterable,
         }
     }
 
+    @Nullable
     private Collection<T> getFilteredChildren() {
         if (filteredChildren == null) {
             childrenLock.lock();
@@ -475,7 +490,7 @@ public abstract class ParentRunner<T> extends Runner implements Filterable,
         return filter.shouldRun(describeChild(each));
     }
 
-    private Comparator<? super T> comparator(final Sorter sorter) {
+    private Comparator<? super T> comparator(@NotNull final Sorter sorter) {
         return new Comparator<T>() {
             public int compare(T o1, T o2) {
                 return sorter.compare(describeChild(o1), describeChild(o2));
@@ -494,12 +509,13 @@ public abstract class ParentRunner<T> extends Runner implements Filterable,
     private static class ClassRuleCollector implements MemberValueConsumer<TestRule> {
         final List<RuleContainer.RuleEntry> entries = new ArrayList<RuleContainer.RuleEntry>();
 
-        public void accept(FrameworkMember member, TestRule value) {
+        public void accept(@NotNull FrameworkMember member, TestRule value) {
             ClassRule rule = member.getAnnotation(ClassRule.class);
             entries.add(new RuleContainer.RuleEntry(value, RuleContainer.RuleEntry.TYPE_TEST_RULE,
                     rule != null ? rule.order() : null));
         }
 
+        @NotNull
         public List<TestRule> getOrderedRules() {
             if (entries.isEmpty()) {
                 return Collections.emptyList();

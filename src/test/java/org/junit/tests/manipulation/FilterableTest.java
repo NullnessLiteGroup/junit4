@@ -5,6 +5,7 @@ import static org.junit.Assert.assertTrue;
 import java.util.Arrays;
 import java.util.List;
 
+import org.jetbrains.annotations.NotNull;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.Description;
@@ -22,10 +23,11 @@ public class FilterableTest {
             filter(new Filter() {
 
                 @Override
-                public boolean shouldRun(Description description) {
+                public boolean shouldRun(@NotNull Description description) {
                     return !description.getDisplayName().contains("skip");
                 }
 
+                @NotNull
                 @Override
                 public String describe() {
                     return "skip methods containing the word 'skip'";

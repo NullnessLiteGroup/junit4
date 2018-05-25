@@ -3,6 +3,8 @@ package org.junit.internal;
 import java.lang.reflect.Array;
 import java.util.Arrays;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.junit.Assert;
 
 /**
@@ -28,7 +30,7 @@ public abstract class ComparisonCriteria {
         arrayEquals(message, expecteds, actuals, true);
     }
 
-    private void arrayEquals(String message, Object expecteds, Object actuals, boolean outer)
+    private void arrayEquals(@Nullable String message, @Nullable Object expecteds, @Nullable Object actuals, boolean outer)
             throws ArrayComparisonFailure {
         if (expecteds == actuals
             || Arrays.deepEquals(new Object[] {expecteds}, new Object[] {actuals})) {
@@ -106,8 +108,9 @@ public abstract class ComparisonCriteria {
         }
     }
 
-    private static Object objectWithToString(final String string) {
+    private static Object objectWithToString(@NotNull final String string) {
         return new Object() {
+            @NotNull
             @Override
             public String toString() {
                 return string;
@@ -124,7 +127,7 @@ public abstract class ComparisonCriteria {
         }
     }
 
-    private boolean isArray(Object expected) {
+    private boolean isArray(@Nullable Object expected) {
         return expected != null && expected.getClass().isArray();
     }
 

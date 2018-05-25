@@ -4,6 +4,8 @@ import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsInstanceOf.instanceOf;
 import static org.hamcrest.core.IsNull.nullValue;
 import static org.junit.Assert.assertThat;
+
+import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runner.Runner;
@@ -12,6 +14,7 @@ import org.junit.runners.model.RunnerBuilder;
 import org.junit.runners.model.RunnerBuilderStub;
 
 public class AnnotatedBuilderTest {
+    @NotNull
     private AnnotatedBuilder builder = new AnnotatedBuilder(new RunnerBuilderStub());
 
     @Test

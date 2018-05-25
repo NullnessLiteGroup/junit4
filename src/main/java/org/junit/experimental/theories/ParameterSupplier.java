@@ -1,5 +1,7 @@
 package org.junit.experimental.theories;
 
+import org.jetbrains.annotations.Nullable;
+
 import java.util.List;
 
 /**
@@ -39,5 +41,6 @@ import java.util.List;
  * @see org.junit.experimental.theories.FromDataPoints
  */
 public abstract class ParameterSupplier {
+    @Nullable
     public abstract List<PotentialAssignment> getValueSources(ParameterSignature sig) throws Throwable;
 }

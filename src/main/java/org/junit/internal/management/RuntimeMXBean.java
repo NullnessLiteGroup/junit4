@@ -1,5 +1,7 @@
 package org.junit.internal.management;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.List;
 
 /**
@@ -10,5 +12,6 @@ public interface RuntimeMXBean {
   /**
    * @see java.lang.management.RuntimeMXBean#getInputArguments()
    */
+  @NotNull
   List<String> getInputArguments();
 }

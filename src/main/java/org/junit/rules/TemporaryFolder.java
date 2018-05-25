@@ -5,6 +5,8 @@ import static org.junit.Assert.fail;
 import java.io.File;
 import java.io.IOException;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.junit.Rule;
 
 /**
@@ -42,6 +44,7 @@ import org.junit.Rule;
 public class TemporaryFolder extends ExternalResource {
     private final File parentFolder;
     private final boolean assureDeletion;
+    @Nullable
     private File folder;
 
     private static final int TEMP_DIR_ATTEMPTS = 10000;
@@ -103,6 +106,7 @@ public class TemporaryFolder extends ExternalResource {
          *
          * @return this
          */
+        @NotNull
         public Builder parentFolder(File parentFolder) {
             this.parentFolder = parentFolder;
             return this;
@@ -115,6 +119,7 @@ public class TemporaryFolder extends ExternalResource {
          *
          * @return this
          */
+        @NotNull
         public Builder assureDeletion() {
             this.assureDeletion = true;
             return this;
@@ -123,6 +128,7 @@ public class TemporaryFolder extends ExternalResource {
         /**
          * Builds a {@link TemporaryFolder} instance using the values in this builder.
          */
+        @NotNull
         public TemporaryFolder build() {
             return new TemporaryFolder(this);
         }
@@ -150,7 +156,8 @@ public class TemporaryFolder extends ExternalResource {
     /**
      * Returns a new fresh file with the given name under the temporary folder.
      */
-    public File newFile(String fileName) throws IOException {
+    @NotNull
+    public File newFile(@NotNull String fileName) throws IOException {
         File file = new File(getRoot(), fileName);
         if (!file.createNewFile()) {
             throw new IOException(
@@ -162,6 +169,7 @@ public class TemporaryFolder extends ExternalResource {
     /**
      * Returns a new fresh file with a random name under the temporary folder.
      */
+    @NotNull
     public File newFile() throws IOException {
         return File.createTempFile(TMP_PREFIX, null, getRoot());
     }
@@ -170,6 +178,7 @@ public class TemporaryFolder extends ExternalResource {
      * Returns a new fresh folder with the given path under the temporary
      * folder.
      */
+    @Nullable
     public File newFolder(String path) throws IOException {
         return newFolder(new String[]{path});
     }
@@ -181,7 +190,8 @@ public class TemporaryFolder extends ExternalResource {
      * and a directory named {@code "child"} will be created under the newly-created
      * {@code "parent"} directory.
      */
-    public File newFolder(String... paths) throws IOException {
+    @Nullable
+    public File newFolder(@NotNull String... paths) throws IOException {
         if (paths.length == 0) {
             throw new IllegalArgumentException("must pass at least one path");
         }
@@ -220,11 +230,13 @@ public class TemporaryFolder extends ExternalResource {
     /**
      * Returns a new fresh folder with a random name under the temporary folder.
      */
+    @Nullable
     public File newFolder() throws IOException {
         return createTemporaryFolderIn(getRoot());
     }
 
-    private File createTemporaryFolderIn(File parentFolder) throws IOException {
+    @Nullable
+    private File createTemporaryFolderIn(@NotNull File parentFolder) throws IOException {
         File createdFolder = null;
         for (int i = 0; i < TEMP_DIR_ATTEMPTS; ++i) {
             // Use createTempFile to get a suitable folder name.
@@ -248,6 +260,7 @@ public class TemporaryFolder extends ExternalResource {
     /**
      * @return the location of this temporary folder.
      */
+    @Nullable
     public File getRoot() {
         if (folder == null) {
             throw new IllegalStateException(

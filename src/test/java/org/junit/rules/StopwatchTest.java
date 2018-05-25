@@ -10,6 +10,8 @@ import static org.junit.Assume.assumeTrue;
 
 import java.util.concurrent.TimeUnit;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.junit.AssumptionViolatedException;
 import org.junit.Before;
 import org.junit.Rule;
@@ -31,6 +33,7 @@ public class StopwatchTest {
 
     private static class Record {
         final long duration;
+        @Nullable
         final String name;
         final TestStatus status;
 
@@ -42,7 +45,7 @@ public class StopwatchTest {
             this(duration, null, description);
         }
 
-        Record(long duration, TestStatus status, Description description) {
+        Record(long duration, TestStatus status, @Nullable Description description) {
             this.duration = duration;
             this.status = status;
             this.name = description == null ? null : description.getMethodName();
@@ -155,6 +158,7 @@ public class StopwatchTest {
         simulateTimePassing(1L);
     }
 
+    @NotNull
     private static Result runTest(Class<?> test) {
         simulateTimePassing(1L);
         JUnitCore junitCore = new JUnitCore();

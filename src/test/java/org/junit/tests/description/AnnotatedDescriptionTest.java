@@ -7,6 +7,8 @@ import java.lang.annotation.Annotation;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.Description;
@@ -51,7 +53,7 @@ public class AnnotatedDescriptionTest {
 
     @Retention(RetentionPolicy.RUNTIME)
     public @interface ValuedAnnotation {
-        String value();
+        @NotNull String value();
     }
 
     @ValuedAnnotation("hello")
@@ -82,6 +84,7 @@ public class AnnotatedDescriptionTest {
                 return "message";
             }
 
+            @NotNull
             public Class<? extends Annotation> annotationType() {
                 return Ignore.class;
             }
@@ -90,6 +93,7 @@ public class AnnotatedDescriptionTest {
         assertEquals(Ignore.class, annotation.annotationType());
     }
 
+    @Nullable
     private Description describe(Class<?> testClass) {
         return Request.aClass(testClass).getRunner().getDescription();
     }

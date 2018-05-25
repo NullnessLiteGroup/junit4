@@ -15,6 +15,7 @@ import java.util.concurrent.TimeUnit;
 
 import junit.framework.JUnit4TestAdapter;
 import junit.framework.TestResult;
+import org.jetbrains.annotations.NotNull;
 import org.junit.After;
 import org.junit.Ignore;
 import org.junit.Rule;
@@ -198,6 +199,7 @@ public class TimeoutTest {
    }
     
     public static class InfiniteLoopWithStuckThreadTest {
+        @NotNull
         @Rule
         public TestRule globalTimeout = Timeout.builder()
             .withTimeout(100, TimeUnit.MILLISECONDS)
@@ -211,6 +213,7 @@ public class TimeoutTest {
     }
     
     public static class InfiniteLoopStuckInMainThreadTest {
+        @NotNull
         @Rule
         public TestRule globalTimeout = Timeout.builder()
             .withTimeout(100, TimeUnit.MILLISECONDS)
@@ -282,6 +285,7 @@ public class TimeoutTest {
     }
 
     public static class TimeOutZero {
+        @NotNull
         @Rule
         public Timeout timeout = Timeout.seconds(0);
 
@@ -309,12 +313,13 @@ public class TimeoutTest {
             super(timeout, timeUnit);
         }
 
-        public long getTimeoutFromSuperclass(TimeUnit unit) {
+        public long getTimeoutFromSuperclass(@NotNull TimeUnit unit) {
             return super.getTimeout(unit);
         }
     }
 
     public static class TimeOutOneSecond {
+        @NotNull
         @Rule
         public TimeoutSubclass timeout = new TimeoutSubclass(1, TimeUnit.SECONDS);
 

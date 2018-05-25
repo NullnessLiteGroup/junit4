@@ -14,6 +14,7 @@ import static org.junit.internal.runners.statements.FailOnTimeout.builder;
 
 import java.util.concurrent.TimeUnit;
 
+import org.jetbrains.annotations.Nullable;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -99,6 +100,7 @@ public class FailOnTimeoutTest {
     private static final class TestStatement extends Statement {
         long waitDuration;
 
+        @Nullable
         Exception nextException;
 
         @Override

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.jetbrains.annotations.NotNull;
 import org.junit.internal.Classes;
 import org.junit.runner.FilterFactory.FilterNotCreatedException;
 import org.junit.runner.manipulation.Filter;
@@ -22,6 +23,7 @@ class JUnitCommandLineParseResult {
     /**
      * Returns filter specs parsed from command line.
      */
+    @NotNull
     public List<String> getFilterSpecs() {
         return Collections.unmodifiableList(filterSpecs);
     }
@@ -29,6 +31,7 @@ class JUnitCommandLineParseResult {
     /**
      * Returns test classes parsed from command line.
      */
+    @NotNull
     public List<Class<?>> getClasses() {
         return Collections.unmodifiableList(classes);
     }
@@ -38,6 +41,7 @@ class JUnitCommandLineParseResult {
      *
      * @param args Arguments
      */
+    @NotNull
     public static JUnitCommandLineParseResult parse(String[] args) {
         JUnitCommandLineParseResult result = new JUnitCommandLineParseResult();
 
@@ -50,7 +54,8 @@ class JUnitCommandLineParseResult {
         parseParameters(parseOptions(args));
     }
 
-    String[] parseOptions(String... args) {
+    @NotNull
+    String[] parseOptions(@NotNull String... args) {
         for (int i = 0; i != args.length; ++i) {
             String arg = args[i];
 
@@ -84,6 +89,7 @@ class JUnitCommandLineParseResult {
         return new String[]{};
     }
 
+    @NotNull
     private String[] copyArray(String[] args, int from, int to) {
         String[] result = new String[to - from];
         for (int j = from; j != to; ++j) {
@@ -92,7 +98,7 @@ class JUnitCommandLineParseResult {
         return result;
     }
 
-    void parseParameters(String[] args) {
+    void parseParameters(@NotNull String[] args) {
         for (String arg : args) {
             try {
                 classes.add(Classes.getClass(arg));
@@ -111,7 +117,8 @@ class JUnitCommandLineParseResult {
      *
      * @param computer {@link Computer} to be used.
      */
-    public Request createRequest(Computer computer) {
+    @NotNull
+    public Request createRequest(@NotNull Computer computer) {
         if (parserErrors.isEmpty()) {
             Request request = Request.classes(
                     computer, classes.toArray(new Class<?>[classes.size()]));
@@ -121,7 +128,8 @@ class JUnitCommandLineParseResult {
         }
     }
 
-    private Request applyFilterSpecs(Request request) {
+    @NotNull
+    private Request applyFilterSpecs(@NotNull Request request) {
         try {
             for (String filterSpec : filterSpecs) {
                 Filter filter = FilterFactories.createFilterFromFilterSpec(

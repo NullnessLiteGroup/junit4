@@ -4,6 +4,7 @@ import org.hamcrest.Description;
 import org.hamcrest.Factory;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * A matcher that applies a delegate matcher to the cause of the current Throwable, returning the result of that
@@ -22,18 +23,18 @@ public class ThrowableCauseMatcher<T extends Throwable> extends
         this.causeMatcher = causeMatcher;
     }
 
-    public void describeTo(Description description) {
+    public void describeTo(@NotNull Description description) {
         description.appendText("exception with cause ");
         description.appendDescriptionOf(causeMatcher);
     }
 
     @Override
-    protected boolean matchesSafely(T item) {
+    protected boolean matchesSafely(@NotNull T item) {
         return causeMatcher.matches(item.getCause());
     }
 
     @Override
-    protected void describeMismatchSafely(T item, Description description) {
+    protected void describeMismatchSafely(@NotNull T item, Description description) {
         description.appendText("cause ");
         causeMatcher.describeMismatch(item.getCause(), description);
     }

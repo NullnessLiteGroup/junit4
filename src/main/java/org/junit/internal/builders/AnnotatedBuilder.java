@@ -1,5 +1,7 @@
 package org.junit.internal.builders;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.junit.runner.RunWith;
 import org.junit.runner.Runner;
 import org.junit.runners.model.InitializationError;
@@ -77,6 +79,7 @@ public class AnnotatedBuilder extends RunnerBuilder {
         this.suiteBuilder = suiteBuilder;
     }
 
+    @Nullable
     @Override
     public Runner runnerForClass(Class<?> testClass) throws Exception {
         for (Class<?> currentTestClass = testClass; currentTestClass != null;
@@ -98,8 +101,9 @@ public class AnnotatedBuilder extends RunnerBuilder {
         }
     }
 
-    public Runner buildRunner(Class<? extends Runner> runnerClass,
-            Class<?> testClass) throws Exception {
+    @NotNull
+    public Runner buildRunner(@NotNull Class<? extends Runner> runnerClass,
+                              Class<?> testClass) throws Exception {
         try {
             return runnerClass.getConstructor(Class.class).newInstance(testClass);
         } catch (NoSuchMethodException e) {

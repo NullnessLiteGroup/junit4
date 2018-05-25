@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.jetbrains.annotations.NotNull;
 import org.junit.TestCouldNotBeSkippedException;
 import org.junit.internal.AssumptionViolatedException;
 import org.junit.internal.Throwables;
@@ -23,6 +24,7 @@ public class MultipleFailureException extends Exception {
      * serialization compatibility. 
      * See https://github.com/junit-team/junit4/issues/976
      */
+    @NotNull
     private final List<Throwable> fErrors;
 
     public MultipleFailureException(List<Throwable> errors) {
@@ -39,10 +41,12 @@ public class MultipleFailureException extends Exception {
         }
     }
 
+    @NotNull
     public List<Throwable> getFailures() {
         return Collections.unmodifiableList(fErrors);
     }
 
+    @NotNull
     @Override
     public String getMessage() {
         StringBuilder sb = new StringBuilder(

@@ -5,6 +5,7 @@ import static org.junit.Assert.assertThat;
 import static org.junit.experimental.results.PrintableResult.testResult;
 import static org.junit.experimental.results.ResultMatchers.isSuccessful;
 
+import org.jetbrains.annotations.NotNull;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -13,6 +14,7 @@ public class VerifierRuleTest {
     private static String sequence;
 
     public static class UsesVerifier {
+        @NotNull
         @Rule
         public Verifier collector = new Verifier() {
             @Override

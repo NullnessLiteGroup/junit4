@@ -14,15 +14,18 @@ import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 
+import org.jetbrains.annotations.NotNull;
 import org.junit.After;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
 public class TempFolderRuleTest {
+    @NotNull
     private static File[] createdFiles = new File[20];
 
     public static class HasTempFolder {
+        @NotNull
         @Rule
         public TemporaryFolder folder = new TemporaryFolder();
 
@@ -47,6 +50,7 @@ public class TempFolderRuleTest {
     }
 
     public static class CreatesSubFolder {
+        @NotNull
         @Rule
         public TemporaryFolder folder = new TemporaryFolder();
 
@@ -108,6 +112,7 @@ public class TempFolderRuleTest {
     }
 
     public static class CreatesRandomSubFolders {
+        @NotNull
         @Rule
         public TemporaryFolder folder = new TemporaryFolder();
 
@@ -132,6 +137,7 @@ public class TempFolderRuleTest {
     }
 
     public static class CreatesRandomFiles {
+        @NotNull
         @Rule
         public TemporaryFolder folder = new TemporaryFolder();
 
@@ -183,6 +189,7 @@ public class TempFolderRuleTest {
     }
 
     public static class NameClashes {
+        @NotNull
         @Rule
         public TemporaryFolder folder = new TemporaryFolder();
 
@@ -211,6 +218,7 @@ public class TempFolderRuleTest {
     private static final String NEW_FOLDER_DUMMY = "dummy-newFolder";
 
     public static class IncorrectUsage {
+        @NotNull
         public TemporaryFolder folder = new TemporaryFolder();
 
         @Test

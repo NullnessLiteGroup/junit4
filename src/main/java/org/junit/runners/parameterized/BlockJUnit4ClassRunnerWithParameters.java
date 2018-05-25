@@ -4,6 +4,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.List;
 
+import org.jetbrains.annotations.NotNull;
 import org.junit.internal.runners.statements.RunAfters;
 import org.junit.internal.runners.statements.RunBefores;
 import org.junit.runner.RunWith;
@@ -26,6 +27,7 @@ public class BlockJUnit4ClassRunnerWithParameters extends
         CONSTRUCTOR, FIELD
     }
 
+    @NotNull
     private final Object[] parameters;
 
     private final String name;
@@ -98,8 +100,9 @@ public class BlockJUnit4ClassRunnerWithParameters extends
         return name;
     }
 
+    @NotNull
     @Override
-    protected String testName(FrameworkMethod method) {
+    protected String testName(@NotNull FrameworkMethod method) {
         return method.getName() + getName();
     }
 
@@ -112,7 +115,7 @@ public class BlockJUnit4ClassRunnerWithParameters extends
     }
 
     @Override
-    protected void validateFields(List<Throwable> errors) {
+    protected void validateFields(@NotNull List<Throwable> errors) {
         super.validateFields(errors);
         if (getInjectionType() == InjectionType.FIELD) {
             List<FrameworkField> annotatedFieldsByParameter = getAnnotatedFieldsByParameter();
@@ -151,7 +154,8 @@ public class BlockJUnit4ClassRunnerWithParameters extends
         return statement;
     }
 
-    private Statement withBeforeParams(Statement statement) {
+    @NotNull
+    private Statement withBeforeParams(@NotNull Statement statement) {
         List<FrameworkMethod> befores = getTestClass()
                 .getAnnotatedMethods(Parameterized.BeforeParam.class);
         return befores.isEmpty() ? statement : new RunBeforeParams(statement, befores);
@@ -163,13 +167,14 @@ public class BlockJUnit4ClassRunnerWithParameters extends
         }
 
         @Override
-        protected void invokeMethod(FrameworkMethod method) throws Throwable {
+        protected void invokeMethod(@NotNull FrameworkMethod method) throws Throwable {
             int paramCount = method.getMethod().getParameterTypes().length;
             method.invokeExplosively(null, paramCount == 0 ? (Object[]) null : parameters);
         }
     }
 
-    private Statement withAfterParams(Statement statement) {
+    @NotNull
+    private Statement withAfterParams(@NotNull Statement statement) {
         List<FrameworkMethod> afters = getTestClass()
                 .getAnnotatedMethods(Parameterized.AfterParam.class);
         return afters.isEmpty() ? statement : new RunAfterParams(statement, afters);
@@ -181,12 +186,13 @@ public class BlockJUnit4ClassRunnerWithParameters extends
         }
 
         @Override
-        protected void invokeMethod(FrameworkMethod method) throws Throwable {
+        protected void invokeMethod(@NotNull FrameworkMethod method) throws Throwable {
             int paramCount = method.getMethod().getParameterTypes().length;
             method.invokeExplosively(null, paramCount == 0 ? (Object[]) null : parameters);
         }
     }
 
+    @NotNull
     @Override
     protected Annotation[] getRunnerAnnotations() {
         Annotation[] allAnnotations = super.getRunnerAnnotations();
@@ -201,10 +207,12 @@ public class BlockJUnit4ClassRunnerWithParameters extends
         return annotationsWithoutRunWith;
     }
 
+    @NotNull
     private List<FrameworkField> getAnnotatedFieldsByParameter() {
         return getTestClass().getAnnotatedFields(Parameter.class);
     }
 
+    @NotNull
     private InjectionType getInjectionType() {
         if (fieldsAreAnnotated()) {
             return InjectionType.FIELD;

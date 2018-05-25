@@ -11,6 +11,7 @@ import java.util.HashSet;
 
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
+import org.jetbrains.annotations.NotNull;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -461,6 +462,7 @@ public class AnnotationTest extends TestCase {
 
     static public abstract class SuperShadowing {
 
+        @NotNull
         @Rule
         public TestRule rule() {
             return new ExternalResource() {
@@ -489,6 +491,7 @@ public class AnnotationTest extends TestCase {
 
     static public class SubShadowing extends SuperShadowing {
 
+        @NotNull
         @Override
         @Rule
         public TestRule rule() {
@@ -645,6 +648,7 @@ public class AnnotationTest extends TestCase {
 
     static public abstract class SuperStaticFieldShadowing {
 
+        @NotNull
         @ClassRule
         public static TestRule rule = new ExternalResource() {
             @Override
@@ -661,6 +665,7 @@ public class AnnotationTest extends TestCase {
 
     static public class SubStaticFieldShadowing extends SuperStaticFieldShadowing {
 
+        @NotNull
         @ClassRule
         public static TestRule rule = new ExternalResource() {
             @Override

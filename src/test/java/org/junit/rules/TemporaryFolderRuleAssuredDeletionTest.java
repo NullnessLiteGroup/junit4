@@ -8,6 +8,7 @@ import static org.junit.experimental.results.ResultMatchers.isSuccessful;
 
 import java.io.IOException;
 
+import org.jetbrains.annotations.NotNull;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.experimental.results.PrintableResult;
@@ -15,7 +16,7 @@ import org.junit.experimental.results.PrintableResult;
 public class TemporaryFolderRuleAssuredDeletionTest {
 
     private static class StubTemporaryFolder extends TemporaryFolder {
-        private StubTemporaryFolder(Builder builder) {
+        private StubTemporaryFolder(@NotNull Builder builder) {
             super(builder);
         }
 
@@ -36,6 +37,7 @@ public class TemporaryFolderRuleAssuredDeletionTest {
 
         public static Builder builder() {
             return new TemporaryFolder.Builder() {
+                @NotNull
                 @Override
                 public TemporaryFolder build() {
                     return new StubTemporaryFolder(this);
@@ -45,6 +47,7 @@ public class TemporaryFolderRuleAssuredDeletionTest {
     }
 
     public static class HasTempFolderWithAssuredDeletion {
+        @NotNull
         @Rule public TemporaryFolder folder = StubTemporaryFolder.builder()
                 .assureDeletion()
                 .build();
@@ -62,6 +65,7 @@ public class TemporaryFolderRuleAssuredDeletionTest {
     }
 
     public static class HasTempFolderWithoutAssuredDeletion {
+        @NotNull
         @Rule public TemporaryFolder folder = StubTemporaryFolder.builder().build();
 
         @Test

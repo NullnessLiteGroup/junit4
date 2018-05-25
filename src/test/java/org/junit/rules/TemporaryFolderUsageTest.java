@@ -9,6 +9,7 @@ import static org.junit.Assert.assertTrue;
 import java.io.File;
 import java.io.IOException;
 
+import org.jetbrains.annotations.NotNull;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -246,6 +247,7 @@ public class TemporaryFolderUsageTest {
         assertThat(tempDir, is(folder.getRoot().getParentFile()));
     }
 
+    @NotNull
     private File createTemporaryFolder() throws IOException {
         File tempDir = File.createTempFile("junit", "tempFolder");
         assertTrue("Unable to delete temporary file", tempDir.delete());
@@ -253,33 +255,33 @@ public class TemporaryFolderUsageTest {
         return tempDir;
     }
 
-    private void assertFileDoesNotExist(File file) {
+    private void assertFileDoesNotExist(@NotNull File file) {
         checkFileExists("exists", file, false);
     }
 
-    private void checkFileExists(String msg, File file, boolean exists) {
+    private void checkFileExists(String msg, @NotNull File file, boolean exists) {
         assertThat("File is null", file, is(notNullValue()));
         assertThat("File '" + file.getAbsolutePath() + "' " + msg,
                 file.exists(), is(exists));
     }
 
-    private void checkFileIsDirectory(String msg, File file, boolean isDirectory) {
+    private void checkFileIsDirectory(String msg, @NotNull File file, boolean isDirectory) {
         assertThat("File is null", file, is(notNullValue()));
         assertThat("File '" + file.getAbsolutePath() + "' " + msg,
                 file.isDirectory(), is(isDirectory));
     }
 
-    private void assertFileExists(File file) {
+    private void assertFileExists(@NotNull File file) {
         checkFileExists("does not exist", file, true);
         checkFileIsDirectory("is a directory", file, false);
     }
 
-    private void assertFileIsDirectory(File file) {
+    private void assertFileIsDirectory(@NotNull File file) {
         checkFileExists("does not exist", file, true);
         checkFileIsDirectory("is not a directory", file, true);
     }
 
-    private void assertFileCreatedUnderRootFolder(String msg, File f) {
+    private void assertFileCreatedUnderRootFolder(String msg, @NotNull File f) {
         assertParentFolderForFileIs(f, tempFolder.getRoot());
     }
 

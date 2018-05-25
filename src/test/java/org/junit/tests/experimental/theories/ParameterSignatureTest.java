@@ -11,6 +11,7 @@ import java.lang.reflect.Method;
 import java.util.List;
 
 import org.hamcrest.CoreMatchers;
+import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
 import org.junit.experimental.theories.DataPoint;
 import org.junit.experimental.theories.ParameterSignature;
@@ -35,7 +36,7 @@ public class ParameterSignatureTest {
     public static int ONE = 1;
 
     @Theory
-    public void getType(Method method, int index) {
+    public void getType(@NotNull Method method, int index) {
         assumeTrue(index < method.getParameterTypes().length);
         assertEquals(method.getParameterTypes()[index], ParameterSignature
                 .signatures(method).get(index).getType());

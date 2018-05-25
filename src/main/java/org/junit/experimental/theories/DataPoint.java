@@ -1,5 +1,7 @@
 package org.junit.experimental.theories;
 
+import org.jetbrains.annotations.NotNull;
+
 import static java.lang.annotation.ElementType.FIELD;
 import static java.lang.annotation.ElementType.METHOD;
 
@@ -51,6 +53,6 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target({FIELD, METHOD})
 public @interface DataPoint {
-    String[] value() default {};
-    Class<? extends Throwable>[] ignoredExceptions() default {};
+    @NotNull String[] value() default {};
+    @NotNull Class<? extends Throwable>[] ignoredExceptions() default {};
 }

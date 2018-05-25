@@ -6,6 +6,8 @@ import static org.junit.runner.Description.createSuiteDescription;
 
 import java.util.List;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -16,9 +18,11 @@ import org.junit.runner.FilterFactoryParams;
 import org.junit.runner.manipulation.Filter;
 
 public class CategoryFilterFactoryTest {
+    @NotNull
     @Rule
     public ExpectedException expectedException = ExpectedException.none();
 
+    @NotNull
     @Rule
     public TestName testName = new TestName();
 
@@ -46,6 +50,7 @@ public class CategoryFilterFactoryTest {
     }
 
     private static class CategoryFilterFactoryStub extends CategoryFilterFactory {
+        @NotNull
         @Override
         protected Filter createFilter(List<Class<?>> categories) {
             return new DummyFilter();
@@ -58,6 +63,7 @@ public class CategoryFilterFactoryTest {
             return false;
         }
 
+        @Nullable
         @Override
         public String describe() {
             return null;

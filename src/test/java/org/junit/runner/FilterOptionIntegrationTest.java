@@ -3,6 +3,7 @@ package org.junit.runner;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.jetbrains.annotations.NotNull;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
@@ -22,7 +23,9 @@ public class FilterOptionIntegrationTest {
     private static final String EXCLUDES_DUMMY_CATEGORY_1 = "--filter=" +
             ExcludeCategories.class.getName() + "=" + DummyCategory1.class.getName();
 
+    @NotNull
     private JUnitCore jUnitCore = new JUnitCore();
+    @NotNull
     private TestListener testListener = new TestListener();
 
     @Before
@@ -106,6 +109,7 @@ public class FilterOptionIntegrationTest {
         assertThat("failureCount does not match", result.getFailureCount(), is(0));
     }
 
+    @NotNull
     private Result runJUnit(final String... args) {
         return jUnitCore.runMain(new TestSystem(), args);
     }
@@ -121,11 +125,13 @@ public class FilterOptionIntegrationTest {
     }
 
     private static class TestListener extends RunListener {
+        @NotNull
         private Set<String> startedTests = new HashSet<String>();
+        @NotNull
         private Set<String> finishedTests = new HashSet<String>();
 
         @Override
-        public void testFinished(final Description description) {
+        public void testFinished(@NotNull final Description description) {
             finishedTests.add(description.getClassName());
         }
 
@@ -134,7 +140,7 @@ public class FilterOptionIntegrationTest {
         }
 
         @Override
-        public void testStarted(final Description description) {
+        public void testStarted(@NotNull final Description description) {
             startedTests.add(description.getClassName());
         }
 
@@ -142,7 +148,7 @@ public class FilterOptionIntegrationTest {
             return startedTests.contains(testClass.getName());
         }
 
-        public boolean wasRun(final Class<?> testClass) {
+        public boolean wasRun(@NotNull final Class<?> testClass) {
             return testStarted(testClass) && testFinished(testClass);
         }
     }

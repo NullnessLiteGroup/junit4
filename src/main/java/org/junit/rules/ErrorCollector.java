@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.junit.function.ThrowingRunnable;
 import org.junit.internal.AssumptionViolatedException;
 import org.hamcrest.Matcher;
@@ -35,6 +37,7 @@ import org.junit.runners.model.MultipleFailureException;
  * @since 4.7
  */
 public class ErrorCollector extends Verifier {
+    @NotNull
     private List<Throwable> errors = new ArrayList<Throwable>();
 
     @Override
@@ -45,7 +48,7 @@ public class ErrorCollector extends Verifier {
     /**
      * Adds a Throwable to the table.  Execution continues, but the test will fail at the end.
      */
-    public void addError(Throwable error) {
+    public void addError(@Nullable Throwable error) {
         if (error == null) {
             throw new NullPointerException("Error cannot be null");
         }
@@ -65,7 +68,7 @@ public class ErrorCollector extends Verifier {
      * @deprecated use {@code org.hamcrest.junit.ErrorCollector.checkThat()}
      */
     @Deprecated
-    public <T> void checkThat(final T value, final Matcher<T> matcher) {
+    public <T> void checkThat(final T value, @NotNull final Matcher<T> matcher) {
         checkThat("", value, matcher);
     }
 
@@ -77,7 +80,7 @@ public class ErrorCollector extends Verifier {
      * @deprecated use {@code org.hamcrest.junit.ErrorCollector.checkThat()}
      */
     @Deprecated
-    public <T> void checkThat(final String reason, final T value, final Matcher<T> matcher) {
+    public <T> void checkThat(final String reason, final T value, @NotNull final Matcher<T> matcher) {
         checkSucceeds(new Callable<Object>() {
             public Object call() throws Exception {
                 assertThat(reason, value, matcher);
@@ -91,7 +94,8 @@ public class ErrorCollector extends Verifier {
      * Execution continues, but the test will fail at the end if
      * {@code callable} threw an exception.
      */
-    public <T> T checkSucceeds(Callable<T> callable) {
+    @Nullable
+    public <T> T checkSucceeds(@NotNull Callable<T> callable) {
         try {
             return callable.call();
         } catch (AssumptionViolatedException e) {
@@ -115,7 +119,7 @@ public class ErrorCollector extends Verifier {
      * @param runnable       a function that is expected to throw an exception when executed
      * @since 4.13
      */
-    public void checkThrows(Class<? extends Throwable> expectedThrowable, ThrowingRunnable runnable) {
+    public void checkThrows(@NotNull Class<? extends Throwable> expectedThrowable, @NotNull ThrowingRunnable runnable) {
         try {
             assertThrows(expectedThrowable, runnable);
         } catch (AssertionError e) {

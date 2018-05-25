@@ -9,6 +9,7 @@ import static org.junit.Assert.assertTrue;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
+import org.jetbrains.annotations.Nullable;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -18,7 +19,9 @@ import org.junit.runner.Result;
 
 public class ParallelMethodTest {
     private static final long TIMEOUT = 15;
+    @Nullable
     private static volatile Thread fOne = null;
+    @Nullable
     private static volatile Thread fTwo = null;
 
     public static class Example {

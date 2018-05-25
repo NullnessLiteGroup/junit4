@@ -3,6 +3,8 @@ package org.junit.tests.experimental.theories;
 import java.lang.reflect.Method;
 import java.util.List;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.junit.experimental.theories.PotentialAssignment;
 import org.junit.experimental.theories.Theories;
 import org.junit.experimental.theories.internal.Assignments;
@@ -17,13 +19,15 @@ public final class TheoryTestUtils {
     
     private TheoryTestUtils() { }
     
-    public static List<PotentialAssignment> potentialAssignments(Method method)
+    @Nullable
+    public static List<PotentialAssignment> potentialAssignments(@NotNull Method method)
             throws Throwable {
         return Assignments.allUnassigned(method,
                 new TestClass(method.getDeclaringClass()))
                 .potentialsForNextUnassigned();
     }
     
+    @NotNull
     public static Result runTheoryClass(Class<?> testClass) throws InitializationError {
         Runner theoryRunner = new Theories(testClass);
         Request request = Request.runner(theoryRunner);

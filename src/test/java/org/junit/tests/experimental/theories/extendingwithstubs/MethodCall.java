@@ -1,5 +1,7 @@
 package org.junit.tests.experimental.theories.extendingwithstubs;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -41,6 +43,7 @@ public class MethodCall {
         return argList().toString().substring(1, argList().toString().length() - 1);
     }
 
+    @NotNull
     private List<Object> argList() {
         ArrayList<Object> list = new ArrayList<Object>();
         for (Object arg : args) {

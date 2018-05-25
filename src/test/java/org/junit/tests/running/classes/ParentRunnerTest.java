@@ -9,6 +9,7 @@ import java.util.List;
 
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
+import org.jetbrains.annotations.NotNull;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
@@ -30,6 +31,7 @@ import org.junit.rules.RuleMemberValidatorTest.TestWithNonStaticClassRule;
 import org.junit.rules.RuleMemberValidatorTest.TestWithProtectedClassRule;
 
 public class ParentRunnerTest {
+    @NotNull
     public static String log = "";
 
     public static class FruitTest {
@@ -49,7 +51,7 @@ public class ParentRunnerTest {
         log = "";
         ParentRunner<?> runner = new BlockJUnit4ClassRunner(FruitTest.class);
         runner.setScheduler(new RunnerScheduler() {
-            public void schedule(Runnable childStatement) {
+            public void schedule(@NotNull Runnable childStatement) {
                 log += "before ";
                 childStatement.run();
                 log += "after ";
@@ -78,12 +80,12 @@ public class ParentRunnerTest {
 
     private Matcher<List<?>> isEmpty() {
         return new TypeSafeMatcher<List<?>>() {
-            public void describeTo(org.hamcrest.Description description) {
+            public void describeTo(@NotNull org.hamcrest.Description description) {
                 description.appendText("is empty");
             }
 
             @Override
-            public boolean matchesSafely(List<?> item) {
+            public boolean matchesSafely(@NotNull List<?> item) {
                 return item.size() == 0;
             }
         };
@@ -97,10 +99,11 @@ public class ParentRunnerTest {
         }
 
         @Override
-        public boolean shouldRun(Description description) {
+        public boolean shouldRun(@NotNull Description description) {
             return !description.getMethodName().equals(methodName);
         }
 
+        @NotNull
         @Override
         public String describe() {
             return "filter method name: " + methodName;
@@ -243,6 +246,7 @@ public class ParentRunnerTest {
         Assert.assertEquals(1, countingRunListener.testIgnored);
     }
 
+    @NotNull
     private CountingRunListener runTestWithParentRunner(Class<?> testClass) throws InitializationError {
         CountingRunListener listener = new CountingRunListener();
         RunNotifier runNotifier = new RunNotifier();
@@ -285,7 +289,7 @@ public class ParentRunnerTest {
         }
 
         @Override
-        public void testFailure(Failure failure) throws Exception {
+        public void testFailure(@NotNull Failure failure) throws Exception {
             if (failure.getDescription().isSuite()) {
                 testSuiteFailure++;
             } else {
@@ -294,7 +298,7 @@ public class ParentRunnerTest {
         }
 
         @Override
-        public void testAssumptionFailure(Failure failure) {
+        public void testAssumptionFailure(@NotNull Failure failure) {
             if (failure.getDescription().isSuite()) {
                 testSuiteAssumptionFailure++;
             } else {

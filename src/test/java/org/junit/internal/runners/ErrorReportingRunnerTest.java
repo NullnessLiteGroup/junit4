@@ -1,5 +1,6 @@
 package org.junit.internal.runners;
 
+import org.jetbrains.annotations.NotNull;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -81,6 +82,7 @@ public class ErrorReportingRunnerTest {
         @Before public static void staticBeforeMethod() {}
         @After public static void staticAfterMethod() {}
 
+        @NotNull
         @Test public String testMethodReturningString() {
             return "this should not be allowed";
         }

@@ -4,6 +4,7 @@ import junit.framework.Protectable;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestResult;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Test an implementor of junit.framework.Test other than TestCase or TestSuite
@@ -20,7 +21,7 @@ public class TestImplementorTest extends TestCase {
             return 2;
         }
 
-        public void run(TestResult result) {
+        public void run(@NotNull TestResult result) {
             result.startTest(this);
             Protectable p = new Protectable() {
                 public void protect() throws Throwable {

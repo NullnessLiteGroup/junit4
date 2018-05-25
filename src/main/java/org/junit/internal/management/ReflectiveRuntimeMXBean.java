@@ -1,5 +1,7 @@
 package org.junit.internal.management;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.junit.internal.Classes;
 
 import java.lang.reflect.InvocationTargetException;
@@ -14,6 +16,7 @@ final class ReflectiveRuntimeMXBean implements RuntimeMXBean {
   private final Object runtimeMxBean;
 
   private static final class Holder {
+    @Nullable
     private static final Method getInputArgumentsMethod;
     static {
       Method inputArguments = null;
@@ -39,6 +42,7 @@ final class ReflectiveRuntimeMXBean implements RuntimeMXBean {
   /**
    * {@inheritDoc}
    */
+  @NotNull
   @SuppressWarnings("unchecked")
   public List<String> getInputArguments() {
     if (Holder.getInputArgumentsMethod != null) {

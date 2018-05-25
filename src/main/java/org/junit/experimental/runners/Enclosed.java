@@ -4,6 +4,7 @@ import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.jetbrains.annotations.NotNull;
 import org.junit.runners.Suite;
 import org.junit.runners.model.RunnerBuilder;
 
@@ -27,7 +28,7 @@ public class Enclosed extends Suite {
     /**
      * Only called reflectively. Do not use programmatically.
      */
-    public Enclosed(Class<?> klass, RunnerBuilder builder) throws Throwable {
+    public Enclosed(@NotNull Class<?> klass, @NotNull RunnerBuilder builder) throws Throwable {
         super(builder, klass, filterAbstractClasses(klass.getClasses()));
     }
     

@@ -1,5 +1,6 @@
 package org.junit.rules;
 
+import org.jetbrains.annotations.NotNull;
 import org.junit.runner.Description;
 import org.junit.runners.model.Statement;
 
@@ -12,6 +13,7 @@ class LoggingTestRule implements TestRule {
         this.log = log;
     }
 
+    @NotNull
     public Statement apply(Statement base, Description description) {
         return new LoggingStatement(base, log, name);
     }

@@ -1,5 +1,8 @@
 package junit.framework;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 /**
  * Thrown when an assertion failed.
  */
@@ -23,7 +26,8 @@ public class AssertionFailedError extends AssertionError {
         super(defaultString(message));
     }
 
-    private static String defaultString(String message) {
+    @NotNull
+    private static String defaultString(@Nullable String message) {
         return message == null ? "" : message;
     }
 }

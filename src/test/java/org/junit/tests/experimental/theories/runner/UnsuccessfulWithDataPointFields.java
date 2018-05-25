@@ -7,6 +7,8 @@ import static org.junit.experimental.results.PrintableResult.testResult;
 import static org.junit.experimental.results.ResultMatchers.hasFailureContaining;
 import static org.junit.experimental.results.ResultMatchers.hasSingleFailureContaining;
 import org.hamcrest.CoreMatchers;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.junit.Test;
 import org.junit.experimental.results.PrintableResult;
 import org.junit.experimental.theories.DataPoint;
@@ -65,9 +67,11 @@ public class UnsuccessfulWithDataPointFields {
 
     @RunWith(Theories.class)
     public static class NullsOK {
+        @Nullable
         @DataPoint
         public static String NULL = null;
 
+        @NotNull
         @DataPoint
         public static String A = "A";
 
@@ -106,6 +110,7 @@ public class UnsuccessfulWithDataPointFields {
         @DataPoint
         public int THREE = 3;
         
+        @NotNull
         @DataPoints
         public int[] FOURS = new int[] { 4 };
         
@@ -130,6 +135,7 @@ public class UnsuccessfulWithDataPointFields {
             return 1;
         }
         
+        @NotNull
         @DataPoints
         public int[] dataPointArrayMethod() {
             return new int[] { 1, 2, 3 };
@@ -156,18 +162,21 @@ public class UnsuccessfulWithDataPointFields {
         @DataPoint
         static int THREE = 3;
         
+        @NotNull
         @DataPoints
         static int[] THREES = new int[] { 3 };
 
         @DataPoint
         protected static int FOUR = 4;
         
+        @NotNull
         @DataPoints
         protected static int[] FOURS = new int[] { 4 };
 
         @DataPoint
         private static int FIVE = 5;
         
+        @NotNull
         @DataPoints
         private static int[] FIVES = new int[] { 5 };
 

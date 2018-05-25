@@ -1,5 +1,7 @@
 package org.junit.internal.management;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.junit.internal.Classes;
 
 import java.lang.reflect.InvocationTargetException;
@@ -9,6 +11,7 @@ import java.lang.reflect.InvocationTargetException;
  */
 public class ManagementFactory {
   private static final class FactoryHolder {
+    @Nullable
     private static final Class<?> MANAGEMENT_FACTORY_CLASS;
 
     static {
@@ -21,7 +24,7 @@ public class ManagementFactory {
       MANAGEMENT_FACTORY_CLASS = managementFactoryClass;
     }
 
-    static Object getBeanObject(String methodName) {
+    static Object getBeanObject(@NotNull String methodName) {
       if (MANAGEMENT_FACTORY_CLASS != null) {
         try {
           return MANAGEMENT_FACTORY_CLASS.getMethod(methodName).invoke(null);
@@ -45,7 +48,7 @@ public class ManagementFactory {
     private static final RuntimeMXBean RUNTIME_MX_BEAN =
         getBean(FactoryHolder.getBeanObject("getRuntimeMXBean"));
 
-    private static final RuntimeMXBean getBean(Object runtimeMxBean) {
+    private static final RuntimeMXBean getBean(@Nullable Object runtimeMxBean) {
       return runtimeMxBean != null
           ? new ReflectiveRuntimeMXBean(runtimeMxBean) : new FakeRuntimeMXBean();
     }
@@ -55,7 +58,7 @@ public class ManagementFactory {
     private static final ThreadMXBean THREAD_MX_BEAN =
         getBean(FactoryHolder.getBeanObject("getThreadMXBean"));
 
-    private static final ThreadMXBean getBean(Object threadMxBean) {
+    private static final ThreadMXBean getBean(@Nullable Object threadMxBean) {
       return threadMxBean != null
           ? new ReflectiveThreadMXBean(threadMxBean) : new FakeThreadMXBean();
     }
@@ -64,6 +67,7 @@ public class ManagementFactory {
   /**
    * @see java.lang.management.ManagementFactory#getRuntimeMXBean()
    */
+  @NotNull
   public static RuntimeMXBean getRuntimeMXBean() {
     return RuntimeHolder.RUNTIME_MX_BEAN;
   }
@@ -71,6 +75,7 @@ public class ManagementFactory {
   /**
    * @see java.lang.management.ManagementFactory#getThreadMXBean()
    */
+  @NotNull
   public static ThreadMXBean getThreadMXBean() {
     return ThreadHolder.THREAD_MX_BEAN;
   }

@@ -5,6 +5,7 @@ import junit.extensions.RepeatedTest;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestResult;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Testing the ActiveTest support
@@ -53,6 +54,7 @@ public class ActiveTestTest extends TestCase {
         assertEquals(0, result.errorCount());
     }
 
+    @NotNull
     ActiveTestSuite createActiveTestSuite() {
         ActiveTestSuite suite = new ActiveTestSuite();
         for (int i = 0; i < 100; i++) {

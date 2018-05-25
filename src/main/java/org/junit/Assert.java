@@ -2,6 +2,8 @@ package org.junit;
 
 import org.hamcrest.Matcher;
 import org.hamcrest.MatcherAssert;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.junit.function.ThrowingRunnable;
 import org.junit.internal.ArrayComparisonFailure;
 import org.junit.internal.ExactComparisonCriteria;
@@ -82,7 +84,7 @@ public class Assert {
      * okay)
      * @see AssertionError
      */
-    public static void fail(String message) {
+    public static void fail(@Nullable String message) {
         if (message == null) {
             throw new AssertionError();
         }
@@ -107,8 +109,8 @@ public class Assert {
      * @param expected expected value
      * @param actual actual value
      */
-    public static void assertEquals(String message, Object expected,
-            Object actual) {
+    public static void assertEquals(@Nullable String message, Object expected,
+                                    Object actual) {
         if (equalsRegardingNull(expected, actual)) {
             return;
         }
@@ -121,7 +123,7 @@ public class Assert {
         }
     }
 
-    private static boolean equalsRegardingNull(Object expected, Object actual) {
+    private static boolean equalsRegardingNull(@Nullable Object expected, @Nullable Object actual) {
         if (expected == null) {
             return actual == null;
         }
@@ -177,7 +179,7 @@ public class Assert {
         assertNotEquals(null, unexpected, actual);
     }
 
-    private static void failEquals(String message, Object actual) {
+    private static void failEquals(@Nullable String message, Object actual) {
         String formatted = "Values should be different. ";
         if (message != null) {
             formatted = message + ". ";
@@ -709,7 +711,7 @@ public class Assert {
      * okay)
      * @param object Object to check or <code>null</code>
      */
-    public static void assertNotNull(String message, Object object) {
+    public static void assertNotNull(String message, @Nullable Object object) {
         assertTrue(message, object != null);
     }
 
@@ -731,7 +733,7 @@ public class Assert {
      * okay)
      * @param object Object to check or <code>null</code>
      */
-    public static void assertNull(String message, Object object) {
+    public static void assertNull(String message, @Nullable Object object) {
         if (object == null) {
             return;
         }
@@ -748,7 +750,7 @@ public class Assert {
         assertNull(null, object);
     }
 
-    private static void failNotNull(String message, Object actual) {
+    private static void failNotNull(@Nullable String message, Object actual) {
         String formatted = "";
         if (message != null) {
             formatted = message + " ";
@@ -812,7 +814,7 @@ public class Assert {
         assertNotSame(null, unexpected, actual);
     }
 
-    private static void failSame(String message) {
+    private static void failSame(@Nullable String message) {
         String formatted = "";
         if (message != null) {
             formatted = message + " ";
@@ -820,8 +822,8 @@ public class Assert {
         fail(formatted + "expected not same");
     }
 
-    private static void failNotSame(String message, Object expected,
-            Object actual) {
+    private static void failNotSame(@Nullable String message, Object expected,
+                                    Object actual) {
         String formatted = "";
         if (message != null) {
             formatted = message + " ";
@@ -835,7 +837,7 @@ public class Assert {
         fail(format(message, expected, actual));
     }
 
-    static String format(String message, Object expected, Object actual) {
+    static String format(@Nullable String message, Object expected, Object actual) {
         String formatted = "";
         if (message != null && !"".equals(message)) {
             formatted = message + " ";
@@ -857,7 +859,7 @@ public class Assert {
         return className == null ? value.getName() : className;
     }
 
-    private static String formatClassAndValue(Object value, String valueString) {
+    private static String formatClassAndValue(@Nullable Object value, String valueString) {
         String className = value == null ? "null" : value.getClass().getName();
         return className + "<" + valueString + ">";
     }
@@ -927,7 +929,7 @@ public class Assert {
      * @deprecated use {@code org.hamcrest.junit.MatcherAssert.assertThat()}
      */
     @Deprecated
-    public static <T> void assertThat(T actual, Matcher<? super T> matcher) {
+    public static <T> void assertThat(T actual, @NotNull Matcher<? super T> matcher) {
         assertThat("", actual, matcher);
     }
 
@@ -962,7 +964,7 @@ public class Assert {
      */
     @Deprecated
     public static <T> void assertThat(String reason, T actual,
-            Matcher<? super T> matcher) {
+                                      @NotNull Matcher<? super T> matcher) {
         MatcherAssert.assertThat(reason, actual, matcher);
     }
 
@@ -978,8 +980,9 @@ public class Assert {
      * @return the exception thrown by {@code runnable}
      * @since 4.13
      */
-    public static <T extends Throwable> T assertThrows(Class<T> expectedThrowable,
-            ThrowingRunnable runnable) {
+    @NotNull
+    public static <T extends Throwable> T assertThrows(@NotNull Class<T> expectedThrowable,
+                                                       @NotNull ThrowingRunnable runnable) {
         return assertThrows(null, expectedThrowable, runnable);
     }
 
@@ -997,8 +1000,9 @@ public class Assert {
      * @return the exception thrown by {@code runnable}
      * @since 4.13
      */
-    public static <T extends Throwable> T assertThrows(String message, Class<T> expectedThrowable,
-            ThrowingRunnable runnable) {
+    @NotNull
+    public static <T extends Throwable> T assertThrows(String message, @NotNull Class<T> expectedThrowable,
+                                                       @NotNull ThrowingRunnable runnable) {
         try {
             runnable.run();
         } catch (Throwable actualThrown) {
@@ -1030,7 +1034,7 @@ public class Assert {
         throw new AssertionError(notThrownMessage);
     }
 
-    private static String buildPrefix(String message) {
+    private static String buildPrefix(@Nullable String message) {
         return message != null && message.length() != 0 ? message + ": " : "";
     }
 }

@@ -1,5 +1,7 @@
 package org.junit.runner;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.junit.internal.Classes;
 import org.junit.runner.FilterFactory.FilterNotCreatedException;
 import org.junit.runner.manipulation.Filter;
@@ -18,6 +20,7 @@ class FilterFactories {
      * @param filterSpec the filter specification
      * @throws org.junit.runner.FilterFactory.FilterNotCreatedException
      */
+    @Nullable
     public static Filter createFilterFromFilterSpec(Request request, String filterSpec)
             throws FilterFactory.FilterNotCreatedException {
         Description topLevelDescription = request.getRunner().getDescription();
@@ -38,6 +41,7 @@ class FilterFactories {
      * @param filterFactoryFqcn The fully qualified class name of the {@link FilterFactory}
      * @param params The arguments to the {@link FilterFactory}
      */
+    @Nullable
     public static Filter createFilter(String filterFactoryFqcn, FilterFactoryParams params)
             throws FilterFactory.FilterNotCreatedException {
         FilterFactory filterFactory = createFilterFactory(filterFactoryFqcn);
@@ -52,7 +56,8 @@ class FilterFactories {
      * @param params             The arguments to the {@link FilterFactory}
      *
      */
-    public static Filter createFilter(Class<? extends FilterFactory> filterFactoryClass, FilterFactoryParams params)
+    @Nullable
+    public static Filter createFilter(@NotNull Class<? extends FilterFactory> filterFactoryClass, FilterFactoryParams params)
             throws FilterFactory.FilterNotCreatedException {
         FilterFactory filterFactory = createFilterFactory(filterFactoryClass);
 
@@ -71,7 +76,7 @@ class FilterFactories {
         return createFilterFactory(filterFactoryClass);
     }
 
-    static FilterFactory createFilterFactory(Class<? extends FilterFactory> filterFactoryClass)
+    static FilterFactory createFilterFactory(@NotNull Class<? extends FilterFactory> filterFactoryClass)
             throws FilterNotCreatedException {
         try {
             return filterFactoryClass.getConstructor().newInstance();
