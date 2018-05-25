@@ -108,9 +108,6 @@ public class BlockJUnit4ClassRunnerWithParameters extends
     // helper from testName
     @SuppressWarnings("nullness")
     protected String getName(@UnknownInitialization BlockJUnit4ClassRunnerWithParameters this) {
-        // [return.type.incompatible] FALSE_POSITIVE
-        //   name is initialized in the constructor, taking test.getName()
-        // TestWithParameters ensures in its constructor name is non-null
         return name;
     }
 
