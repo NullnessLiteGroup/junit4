@@ -62,6 +62,7 @@ public class FrameworkMethod extends FrameworkMember<FrameworkMethod> {
             throws Throwable {
         return new ReflectiveCallable() {
             @Override
+            // Nullable Object returned from method.invoke()
             protected @Nullable Object runReflectiveCall() throws Throwable {
                 return method.invoke(target, params);
             }

@@ -76,13 +76,15 @@ public abstract class RunnerBuilder {
     // Nullable Class<?> if parent is null and called only once
     @Nullable Class<?> addParent(@Nullable Class<?> parent) throws InitializationError {
         if (!parents.add(parent)) {
-            // [dereference.of.nullable] TRUE_POSITIVE
-            // dereference of parent is unsafe here
-            // parents is HashSet and parents.add(parent) permits null
-            // but if runners(null, ...) is called twice,
-            // then we enter this if branch where parent.getName() throws NPEs
-            // And the JUnit4 API doesn't prevent users from calling
-            // runners(null, ...).
+            // [dereference.of.nullable] FALSE_POSITIVE
+            // parent cannot be null here
+            // because the underlying type of parents is HashSet;
+            // parents.add(parent) returns true if the parent doesn't exist in parents
+            // or the parent exist with the value null
+            // If we want parent to be null at this point,
+            // we need to satisfy !parents.add(null), which means
+            // null exists in parents with a old value non-null,
+            // which is a contradiction
             throw new InitializationError(String.format("class '%s' (possibly indirectly) contains itself as a SuiteClass", parent.getName()));
         }
         return parent;

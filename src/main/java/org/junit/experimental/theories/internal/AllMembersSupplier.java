@@ -150,6 +150,19 @@ public class AllMembersSupplier extends ParameterSupplier {
         // dereference of possibly-null reference iterable
         // the caller method only ensures the type is Iterable.class
         // but did not ensure that value is non-null
+        //
+        // One example to raise NPEs is:
+        // @RunWith(Theories.class)
+        // public class Empty {
+        //    @DataPoints
+        //    public static List<String> dataPoints = null;
+        //    @Theory
+        //    public void testList(List<String> list) {
+        //        for (String s: list) {
+        //            System.out.println(s);
+        //        }
+        //    }
+        // }
         Iterator<?> iterator = iterable.iterator();
         int i = 0;
         while (iterator.hasNext()) {
