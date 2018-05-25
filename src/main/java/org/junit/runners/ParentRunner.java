@@ -434,8 +434,6 @@ public abstract class ParentRunner<T> extends Runner implements Filterable,
                 T each = iter.next();
                 if (shouldRun(filter, each)) {
                     try {
-                        // [argument.type.incompatible] FALSE_POSITIVE
-                        //  each is ensured to be non-null if shouldRun(filter,each) is true above
                         filter.apply(each);
                     } catch (NoTestsRemainException e) {
                         iter.remove();

@@ -47,8 +47,6 @@ public final class Throwables {
     @SuppressWarnings("nullness")
     public static Exception rethrowAsException(Throwable e) throws Exception {
         Throwables.<Exception>rethrow(e);
-        // [return.type.incompatible] FALSE_POSITIVE
-        //   As documented, we never return
         return null; // we never get here
     }
 
