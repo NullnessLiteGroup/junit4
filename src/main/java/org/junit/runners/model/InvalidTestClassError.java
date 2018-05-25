@@ -17,19 +17,14 @@ public class InvalidTestClassError extends InitializationError {
     private final String message;
 
     // Nullable offendingTestClass from validate(ParentRunner<T> this)
-    public InvalidTestClassError(@Nullable Class<?> offendingTestClass, List<Throwable> validationErrors) {
+    public InvalidTestClassError(Class<?> offendingTestClass, List<Throwable> validationErrors) {
         super(validationErrors);
         this.message = createMessage(offendingTestClass, validationErrors);
     }
 
     // Nullable testClass from the constructor
-    private static String createMessage(@Nullable Class<?> testClass, List<Throwable> validationErrors) {
+    private static String createMessage(Class<?> testClass, List<Throwable> validationErrors) {
         StringBuilder sb = new StringBuilder();
-        // [dereference.of.nullable] TRUE_POSITIVE
-        // dereference of possibly-null reference testClass
-        // JUnit4 doesn't prevent users from calling
-        // new BlockJUnit4ClassRunner(null) which raise NPEs
-        // during validate()
         sb.append(String.format("Invalid test class '%s':", testClass.getName()));
         int i = 1;
         for (Throwable error : validationErrors) {

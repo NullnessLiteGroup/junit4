@@ -480,6 +480,11 @@ public abstract class ParentRunner<T> extends Runner implements Filterable,
             // dereference of testClass cannot raise NPEs here
             // since testClass is initialized non-null before validate()
             // is called in the constructor
+            //
+            // [argument.type.incompatible] FALSE_POSITIVE
+            // new ParentRunner(null) {...} will never enter this branch,
+            // because it will not cause error in collectInitializationErrors(errors),
+            // which never de-reference testClass.getJavaClass() directly or indirectly
             throw new InvalidTestClassError(testClass.getJavaClass(), errors);
         }
     }

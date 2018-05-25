@@ -301,6 +301,13 @@ public class Parameterized extends Suite {
         validatePublicStaticVoidMethods(Parameterized.BeforeParam.class, parameterCount, errors);
         validatePublicStaticVoidMethods(Parameterized.AfterParam.class, parameterCount, errors);
         if (!errors.isEmpty()) {
+            // [argument.type.incompatible] FALSE_POSITIVE
+            // getTestClass().getJavaClass() cannot be null here
+            // because Users can not call Parameterized(null) by the documents
+            // Parameterized(klass) is not called internally in source folder
+            // and it's not called with null klass in the test folder;
+            // Note FilterableTest.FilteredRunner is the subclass of Parameterized
+            // but it is never instantiated;
             throw new InvalidTestClassError(getTestClass().getJavaClass(), errors);
         }
     }

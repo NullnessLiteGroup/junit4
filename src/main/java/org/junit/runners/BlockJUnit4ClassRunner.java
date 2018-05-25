@@ -217,9 +217,13 @@ public class BlockJUnit4ClassRunner extends ParentRunner<FrameworkMethod> {
 
     // helper from validateOnlyOneConstructor
     private boolean hasOneConstructor(@UnknownInitialization BlockJUnit4ClassRunner this) {
-        // [dereference.of.nullable] TRUE_POSITIVE
-        // dereference of possibly-null reference getTestClass().getJavaClass()
-        // JUnit4 API doesn't prevent users from running (new BlockJUnit4ClassRunner(null))
+        // [dereference.of.nullable] FALSE_POSITIVE
+        // getTestClass().getJavaClass() cannot be null at this point
+        // because in the validate() process, the NPEs caused by
+        // getTestClass().getJavaClass() is already caught in
+        // validateNoNonStaticInnerClass(errors), which calls
+        // getTestClass().isANonStaticInnerClass(), where the
+        // getTestClass().getJavaClass() is de-referenced
         return getTestClass().getJavaClass().getConstructors().length == 1;
     }
 
