@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.junit.runner.Description;
 import org.junit.runner.Result;
 
@@ -25,7 +27,7 @@ public class RunNotifier {
     /**
      * Internal use only
      */
-    public void addListener(RunListener listener) {
+    public void addListener(@Nullable RunListener listener) {
         if (listener == null) {
             throw new NullPointerException("Cannot add a null listener");
         }
@@ -35,7 +37,7 @@ public class RunNotifier {
     /**
      * Internal use only
      */
-    public void removeListener(RunListener listener) {
+    public void removeListener(@Nullable RunListener listener) {
         if (listener == null) {
             throw new NullPointerException("Cannot remove a null listener");
         }
@@ -46,7 +48,8 @@ public class RunNotifier {
      * Wraps the given listener with {@link SynchronizedRunListener} if
      * it is not annotated with {@link RunListener.ThreadSafe}.
      */
-    RunListener wrapIfNotThreadSafe(RunListener listener) {
+    @NotNull
+    RunListener wrapIfNotThreadSafe(@NotNull RunListener listener) {
         return listener.getClass().isAnnotationPresent(RunListener.ThreadSafe.class) ?
                 listener : new SynchronizedRunListener(listener, this);
     }
@@ -87,7 +90,7 @@ public class RunNotifier {
     public void fireTestRunStarted(final Description description) {
         new SafeNotifier() {
             @Override
-            protected void notifyListener(RunListener each) throws Exception {
+            protected void notifyListener(@NotNull RunListener each) throws Exception {
                 each.testRunStarted(description);
             }
         }.run();
@@ -99,7 +102,7 @@ public class RunNotifier {
     public void fireTestRunFinished(final Result result) {
         new SafeNotifier() {
             @Override
-            protected void notifyListener(RunListener each) throws Exception {
+            protected void notifyListener(@NotNull RunListener each) throws Exception {
                 each.testRunFinished(result);
             }
         }.run();
@@ -117,7 +120,7 @@ public class RunNotifier {
     public void fireTestSuiteStarted(final Description description) {
         new SafeNotifier() {
             @Override
-            protected void notifyListener(RunListener each) throws Exception {
+            protected void notifyListener(@NotNull RunListener each) throws Exception {
                 each.testSuiteStarted(description);
             }
         }.run();
@@ -134,7 +137,7 @@ public class RunNotifier {
     public void fireTestSuiteFinished(final Description description) {
         new SafeNotifier() {
             @Override
-            protected void notifyListener(RunListener each) throws Exception {
+            protected void notifyListener(@NotNull RunListener each) throws Exception {
                 each.testSuiteFinished(description);
             }
         }.run();
@@ -152,7 +155,7 @@ public class RunNotifier {
         }
         new SafeNotifier() {
             @Override
-            protected void notifyListener(RunListener each) throws Exception {
+            protected void notifyListener(@NotNull RunListener each) throws Exception {
                 each.testStarted(description);
             }
         }.run();
@@ -172,7 +175,7 @@ public class RunNotifier {
         if (!failures.isEmpty()) {
             new SafeNotifier(listeners) {
                 @Override
-                protected void notifyListener(RunListener listener) throws Exception {
+                protected void notifyListener(@NotNull RunListener listener) throws Exception {
                     for (Failure each : failures) {
                         listener.testFailure(each);
                     }
@@ -191,7 +194,7 @@ public class RunNotifier {
     public void fireTestAssumptionFailed(final Failure failure) {
         new SafeNotifier() {
             @Override
-            protected void notifyListener(RunListener each) throws Exception {
+            protected void notifyListener(@NotNull RunListener each) throws Exception {
                 each.testAssumptionFailure(failure);
             }
         }.run();
@@ -205,7 +208,7 @@ public class RunNotifier {
     public void fireTestIgnored(final Description description) {
         new SafeNotifier() {
             @Override
-            protected void notifyListener(RunListener each) throws Exception {
+            protected void notifyListener(@NotNull RunListener each) throws Exception {
                 each.testIgnored(description);
             }
         }.run();
@@ -221,7 +224,7 @@ public class RunNotifier {
     public void fireTestFinished(final Description description) {
         new SafeNotifier() {
             @Override
-            protected void notifyListener(RunListener each) throws Exception {
+            protected void notifyListener(@NotNull RunListener each) throws Exception {
                 each.testFinished(description);
             }
         }.run();
@@ -240,7 +243,7 @@ public class RunNotifier {
     /**
      * Internal use only. The Result's listener must be first.
      */
-    public void addFirstListener(RunListener listener) {
+    public void addFirstListener(@Nullable RunListener listener) {
         if (listener == null) {
             throw new NullPointerException("Cannot add a null listener");
         }

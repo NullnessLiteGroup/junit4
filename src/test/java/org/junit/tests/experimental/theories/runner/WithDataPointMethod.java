@@ -15,6 +15,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.hamcrest.Matcher;
+import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
 import org.junit.experimental.theories.DataPoint;
 import org.junit.experimental.theories.Theories;
@@ -55,7 +56,7 @@ public class WithDataPointMethod {
         public static int TWO = 2;
 
         @Theory
-        public void everythingsEmpty(List<Object> first, int number) {
+        public void everythingsEmpty(@NotNull List<Object> first, int number) {
             assertThat(first.size(), is(0));
             first.add("a");
         }

@@ -4,6 +4,7 @@ import org.hamcrest.BaseMatcher;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
+import org.jetbrains.annotations.NotNull;
 import org.junit.runner.notification.Failure;
 
 /**
@@ -36,12 +37,12 @@ public class ResultMatchers {
      */
     public static Matcher<PrintableResult> failureCountIs(final int count) {
         return new TypeSafeMatcher<PrintableResult>() {
-            public void describeTo(Description description) {
+            public void describeTo(@NotNull Description description) {
                 description.appendText("has " + count + " failures");
             }
 
             @Override
-            public boolean matchesSafely(PrintableResult item) {
+            public boolean matchesSafely(@NotNull PrintableResult item) {
                 return item.failureCount() == count;
             }
         };
@@ -50,13 +51,13 @@ public class ResultMatchers {
     /**
      * Matches if the result has exactly one failure, and it contains {@code string}
      */
-    public static Matcher<Object> hasSingleFailureContaining(final String string) {
+    public static Matcher<Object> hasSingleFailureContaining(@NotNull final String string) {
         return new BaseMatcher<Object>() {
-            public boolean matches(Object item) {
+            public boolean matches(@NotNull Object item) {
                 return item.toString().contains(string) && failureCountIs(1).matches(item);
             }
 
-            public void describeTo(Description description) {
+            public void describeTo(@NotNull Description description) {
                 description.appendText("has single failure containing " + string);
             }
         };
@@ -67,14 +68,14 @@ public class ResultMatchers {
      *
      * @since 4.13
      */
-    public static Matcher<PrintableResult> hasSingleFailureMatching(final Matcher<Throwable> matcher) {
+    public static Matcher<PrintableResult> hasSingleFailureMatching(@NotNull final Matcher<Throwable> matcher) {
         return new TypeSafeMatcher<PrintableResult>() {
             @Override
-            public boolean matchesSafely(PrintableResult item) {
+            public boolean matchesSafely(@NotNull PrintableResult item) {
                 return item.failureCount() == 1 && matcher.matches(item.failures().get(0).getException());
             }
 
-            public void describeTo(Description description) {
+            public void describeTo(@NotNull Description description) {
                 description.appendText("has failure with exception matching ");
                 matcher.describeTo(description);
             }
@@ -85,14 +86,14 @@ public class ResultMatchers {
      * Matches if the result has one or more failures, and at least one of them
      * contains {@code string}
      */
-    public static Matcher<PrintableResult> hasFailureContaining(final String string) {
+    public static Matcher<PrintableResult> hasFailureContaining(@NotNull final String string) {
         return new TypeSafeMatcher<PrintableResult>() {
             @Override
-            public boolean matchesSafely(PrintableResult item) {
+            public boolean matchesSafely(@NotNull PrintableResult item) {
                 return item.failureCount() > 0 && item.toString().contains(string);
             }
 
-            public void describeTo(Description description) {
+            public void describeTo(@NotNull Description description) {
                 description.appendText("has failure containing " + string);
             }
         };

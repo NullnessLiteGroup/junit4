@@ -1,5 +1,7 @@
 package org.junit.runner.manipulation;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.junit.runner.Description;
 import org.junit.runner.Request;
 
@@ -34,6 +36,7 @@ public abstract class Filter {
             // do nothing
         }
 
+        @NotNull
         @Override
         public Filter intersect(Filter second) {
             return second;
@@ -44,7 +47,7 @@ public abstract class Filter {
      * Returns a {@code Filter} that only runs the single method described by
      * {@code desiredDescription}
      */
-    public static Filter matchMethodDescription(final Description desiredDescription) {
+    public static Filter matchMethodDescription(@NotNull final Description desiredDescription) {
         return new Filter() {
             @Override
             public boolean shouldRun(Description description) {
@@ -80,6 +83,7 @@ public abstract class Filter {
      *
      * @return a textual description of this Filter
      */
+    @Nullable
     public abstract String describe();
 
     /**
@@ -101,7 +105,8 @@ public abstract class Filter {
      * Returns a new Filter that accepts the intersection of the tests accepted
      * by this Filter and {@code second}
      */
-    public Filter intersect(final Filter second) {
+    @Nullable
+    public Filter intersect(@NotNull final Filter second) {
         if (second == this || second == ALL) {
             return this;
         }
@@ -113,6 +118,7 @@ public abstract class Filter {
                         && second.shouldRun(description);
             }
 
+            @NotNull
             @Override
             public String describe() {
                 return first.describe() + " and " + second.describe();

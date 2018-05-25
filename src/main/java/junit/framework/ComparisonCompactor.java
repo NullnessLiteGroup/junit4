@@ -1,5 +1,7 @@
 package junit.framework;
 
+import org.jetbrains.annotations.NotNull;
+
 public class ComparisonCompactor {
 
     private static final String ELLIPSIS = "...";
@@ -18,6 +20,7 @@ public class ComparisonCompactor {
         fActual = actual;
     }
 
+    @NotNull
     @SuppressWarnings("deprecation")
     public String compact(String message) {
         if (fExpected == null || fActual == null || areStringsEqual()) {
@@ -31,6 +34,7 @@ public class ComparisonCompactor {
         return Assert.format(message, expected, actual);
     }
 
+    @NotNull
     private String compactString(String source) {
         String result = DELTA_START + source.substring(fPrefix, source.length() - fSuffix + 1) + DELTA_END;
         if (fPrefix > 0) {

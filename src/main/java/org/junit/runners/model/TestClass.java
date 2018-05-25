@@ -18,6 +18,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -32,8 +34,11 @@ public class TestClass implements Annotatable {
     private static final FieldComparator FIELD_COMPARATOR = new FieldComparator();
     private static final MethodComparator METHOD_COMPARATOR = new MethodComparator();
 
+    @Nullable
     private final Class<?> clazz;
+    @NotNull
     private final Map<Class<? extends Annotation>, List<FrameworkMethod>> methodsForAnnotations;
+    @NotNull
     private final Map<Class<? extends Annotation>, List<FrameworkField>> fieldsForAnnotations;
 
     /**
@@ -42,7 +47,7 @@ public class TestClass implements Annotatable {
      * an expensive process (we hope in future JDK's it will not be.) Therefore,
      * try to share instances of {@code TestClass} where possible.
      */
-    public TestClass(Class<?> clazz) {
+    public TestClass(@Nullable Class<?> clazz) {
         this.clazz = clazz;
         if (clazz != null && clazz.getConstructors().length > 1) {
             throw new IllegalArgumentException(
@@ -60,7 +65,7 @@ public class TestClass implements Annotatable {
         this.fieldsForAnnotations = makeDeeplyUnmodifiable(fieldsForAnnotations);
     }
 
-    protected void scanAnnotatedMembers(Map<Class<? extends Annotation>, List<FrameworkMethod>> methodsForAnnotations, Map<Class<? extends Annotation>, List<FrameworkField>> fieldsForAnnotations) {
+    protected void scanAnnotatedMembers(@NotNull Map<Class<? extends Annotation>, List<FrameworkMethod>> methodsForAnnotations, @NotNull Map<Class<? extends Annotation>, List<FrameworkField>> fieldsForAnnotations) {
         for (Class<?> eachClass : getSuperClasses(clazz)) {
             for (Method eachMethod : MethodSorter.getDeclaredMethods(eachClass)) {
                 addToAnnotationLists(new FrameworkMethod(eachMethod), methodsForAnnotations);
@@ -80,7 +85,7 @@ public class TestClass implements Annotatable {
     }
 
     protected static <T extends FrameworkMember<T>> void addToAnnotationLists(T member,
-            Map<Class<? extends Annotation>, List<T>> map) {
+                                                                              @NotNull Map<Class<? extends Annotation>, List<T>> map) {
         for (Annotation each : member.getAnnotations()) {
             Class<? extends Annotation> type = each.annotationType();
             List<T> members = getAnnotatedMembers(map, type, true);
@@ -112,6 +117,7 @@ public class TestClass implements Annotatable {
      * 
      * @since 4.12
      */
+    @NotNull
     public List<FrameworkMethod> getAnnotatedMethods() {
         List<FrameworkMethod> methods = collectValues(methodsForAnnotations);
         Collections.sort(methods, METHOD_COMPARATOR);
@@ -122,6 +128,7 @@ public class TestClass implements Annotatable {
      * Returns, efficiently, all the non-overridden methods in this class and
      * its superclasses that are annotated with {@code annotationClass}.
      */
+    @NotNull
     public List<FrameworkMethod> getAnnotatedMethods(
             Class<? extends Annotation> annotationClass) {
         return Collections.unmodifiableList(getAnnotatedMembers(methodsForAnnotations, annotationClass, false));
@@ -133,6 +140,7 @@ public class TestClass implements Annotatable {
      * 
      * @since 4.12
      */
+    @NotNull
     public List<FrameworkField> getAnnotatedFields() {
         return collectValues(fieldsForAnnotations);
     }
@@ -141,6 +149,7 @@ public class TestClass implements Annotatable {
      * Returns, efficiently, all the non-overridden fields in this class and its
      * superclasses that are annotated with {@code annotationClass}.
      */
+    @NotNull
     public List<FrameworkField> getAnnotatedFields(
             Class<? extends Annotation> annotationClass) {
         return Collections.unmodifiableList(getAnnotatedMembers(fieldsForAnnotations, annotationClass, false));
@@ -154,8 +163,9 @@ public class TestClass implements Annotatable {
         return new ArrayList<T>(values);
     }
 
+    @NotNull
     private static <T> List<T> getAnnotatedMembers(Map<Class<? extends Annotation>, List<T>> map,
-            Class<? extends Annotation> type, boolean fillIfAbsent) {
+                                                   Class<? extends Annotation> type, boolean fillIfAbsent) {
         if (!map.containsKey(type) && fillIfAbsent) {
             map.put(type, new ArrayList<T>());
         }
@@ -168,6 +178,7 @@ public class TestClass implements Annotatable {
                 || annotation.equals(BeforeClass.class);
     }
 
+    @NotNull
     private static List<Class<?>> getSuperClasses(Class<?> testClass) {
         List<Class<?>> results = new ArrayList<Class<?>>();
         Class<?> current = testClass;
@@ -181,6 +192,7 @@ public class TestClass implements Annotatable {
     /**
      * Returns the underlying Java class.
      */
+    @Nullable
     public Class<?> getJavaClass() {
         return clazz;
     }
@@ -216,15 +228,17 @@ public class TestClass implements Annotatable {
         return clazz.getAnnotations();
     }
 
-    public <T extends Annotation> T getAnnotation(Class<T> annotationType) {
+    @Nullable
+    public <T extends Annotation> T getAnnotation(@NotNull Class<T> annotationType) {
         if (clazz == null) {
             return null;
         }
         return clazz.getAnnotation(annotationType);
     }
 
+    @NotNull
     public <T> List<T> getAnnotatedFieldValues(Object test,
-            Class<? extends Annotation> annotationClass, Class<T> valueClass) {
+                                               Class<? extends Annotation> annotationClass, @NotNull Class<T> valueClass) {
         final List<T> results = new ArrayList<T>();
         collectAnnotatedFieldValues(test, annotationClass, valueClass,
                 new MemberValueConsumer<T>() {
@@ -242,8 +256,8 @@ public class TestClass implements Annotatable {
      * @since 4.13
      */
     public <T> void collectAnnotatedFieldValues(Object test,
-            Class<? extends Annotation> annotationClass, Class<T> valueClass,
-            MemberValueConsumer<T> consumer) {
+                                                Class<? extends Annotation> annotationClass, @NotNull Class<T> valueClass,
+                                                @NotNull MemberValueConsumer<T> consumer) {
         for (FrameworkField each : getAnnotatedFields(annotationClass)) {
             try {
                 Object fieldValue = each.get(test);
@@ -257,8 +271,9 @@ public class TestClass implements Annotatable {
         }
     }
 
+    @NotNull
     public <T> List<T> getAnnotatedMethodValues(Object test,
-            Class<? extends Annotation> annotationClass, Class<T> valueClass) {
+                                                Class<? extends Annotation> annotationClass, @NotNull Class<T> valueClass) {
         final List<T> results = new ArrayList<T>();
         collectAnnotatedMethodValues(test, annotationClass, valueClass,
                 new MemberValueConsumer<T>() {
@@ -276,8 +291,8 @@ public class TestClass implements Annotatable {
      * @since 4.13
      */
     public <T> void collectAnnotatedMethodValues(Object test,
-            Class<? extends Annotation> annotationClass, Class<T> valueClass,
-            MemberValueConsumer<T> consumer) {
+                                                 Class<? extends Annotation> annotationClass, @NotNull Class<T> valueClass,
+                                                 @NotNull MemberValueConsumer<T> consumer) {
         for (FrameworkMethod each : getAnnotatedMethods(annotationClass)) {
             try {
                 /*
@@ -313,7 +328,7 @@ public class TestClass implements Annotatable {
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(@Nullable Object obj) {
         if (this == obj) {
             return true;
         }
@@ -331,7 +346,7 @@ public class TestClass implements Annotatable {
      * Compares two fields by its name.
      */
     private static class FieldComparator implements Comparator<Field> {
-        public int compare(Field left, Field right) {
+        public int compare(@NotNull Field left, @NotNull Field right) {
             return left.getName().compareTo(right.getName());
         }
     }
@@ -341,7 +356,7 @@ public class TestClass implements Annotatable {
      */
     private static class MethodComparator implements
             Comparator<FrameworkMethod> {
-        public int compare(FrameworkMethod left, FrameworkMethod right) {
+        public int compare(@NotNull FrameworkMethod left, @NotNull FrameworkMethod right) {
             return NAME_ASCENDING.compare(left.getMethod(), right.getMethod());
         }
     }

@@ -9,6 +9,7 @@ import java.util.Enumeration;
 import java.util.List;
 import java.util.Vector;
 
+import org.jetbrains.annotations.NotNull;
 import org.junit.internal.MethodSorter;
 import org.junit.internal.Throwables;
 
@@ -46,7 +47,8 @@ public class TestSuite implements Test {
      * ...as the moon sets over the early morning Merlin, Oregon
      * mountains, our intrepid adventurers type...
      */
-    static public Test createTest(Class<?> theClass, String name) {
+    @NotNull
+    static public Test createTest(@NotNull Class<?> theClass, String name) {
         Constructor<?> constructor;
         try {
             constructor = getTestConstructor(theClass);
@@ -100,6 +102,7 @@ public class TestSuite implements Test {
 
     private String fName;
 
+    @NotNull
     private Vector<Test> fTests = new Vector<Test>(10); // Cannot convert this to List because it is used directly by some test runners
 
     /**
@@ -114,7 +117,7 @@ public class TestSuite implements Test {
      * Parts of this method were written at 2337 meters in the Hueffihuette,
      * Kanton Uri
      */
-    public TestSuite(final Class<?> theClass) {
+    public TestSuite(@NotNull final Class<?> theClass) {
         addTestsFromTestCase(theClass);
     }
 
@@ -150,7 +153,7 @@ public class TestSuite implements Test {
      *
      * @see TestSuite#TestSuite(Class)
      */
-    public TestSuite(Class<? extends TestCase> theClass, String name) {
+    public TestSuite(@NotNull Class<? extends TestCase> theClass, String name) {
         this(theClass);
         setName(name);
     }
@@ -173,7 +176,7 @@ public class TestSuite implements Test {
         }
     }
 
-    private Test testCaseForClass(Class<?> each) {
+    private Test testCaseForClass(@NotNull Class<?> each) {
         if (TestCase.class.isAssignableFrom(each)) {
             return new TestSuite(each.asSubclass(TestCase.class));
         } else {
@@ -201,7 +204,7 @@ public class TestSuite implements Test {
     /**
      * Adds the tests from the given class to the suite.
      */
-    public void addTestSuite(Class<? extends TestCase> testClass) {
+    public void addTestSuite(@NotNull Class<? extends TestCase> testClass) {
         addTest(new TestSuite(testClass));
     }
 
@@ -228,7 +231,7 @@ public class TestSuite implements Test {
     /**
      * Runs the tests and collects their result in a TestResult.
      */
-    public void run(TestResult result) {
+    public void run(@NotNull TestResult result) {
         for (Test each : fTests) {
             if (result.shouldStop()) {
                 break;
@@ -237,7 +240,7 @@ public class TestSuite implements Test {
         }
     }
 
-    public void runTest(Test test, TestResult result) {
+    public void runTest(@NotNull Test test, TestResult result) {
         test.run(result);
     }
 
@@ -281,7 +284,7 @@ public class TestSuite implements Test {
         return super.toString();
     }
 
-    private void addTestMethod(Method m, List<String> names, Class<?> theClass) {
+    private void addTestMethod(Method m, List<String> names, @NotNull Class<?> theClass) {
         String name = m.getName();
         if (names.contains(name)) {
             return;
@@ -296,7 +299,7 @@ public class TestSuite implements Test {
         addTest(createTest(theClass, name));
     }
 
-    private boolean isPublicTestMethod(Method m) {
+    private boolean isPublicTestMethod(@NotNull Method m) {
         return isTestMethod(m) && Modifier.isPublic(m.getModifiers());
     }
 

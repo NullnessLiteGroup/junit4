@@ -2,6 +2,7 @@ package junit.tests;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * TestSuite that runs all the JUnit tests
@@ -12,6 +13,7 @@ public class AllTests {
         junit.textui.TestRunner.run(suite());
     }
 
+    @NotNull
     public static Test suite() {
         TestSuite suite = new TestSuite("Framework Tests");
         suite.addTest(junit.tests.framework.AllTests.suite());

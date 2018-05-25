@@ -4,6 +4,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.rules.EventCollector.hasSingleFailureWithMessage;
 
+import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
 import org.junit.rules.EventCollector;
 import org.junit.runners.model.InitializationError;
@@ -35,6 +36,7 @@ public class RequestTest {
     }
 
     private static class FailingComputer extends Computer {
+        @NotNull
         @Override
         public Runner getSuite(RunnerBuilder builder, Class<?>[] classes)
                 throws InitializationError {

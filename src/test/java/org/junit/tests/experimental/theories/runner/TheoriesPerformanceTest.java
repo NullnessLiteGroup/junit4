@@ -5,6 +5,7 @@ import static org.junit.Assume.assumeTrue;
 import static org.junit.experimental.results.PrintableResult.testResult;
 import static org.junit.experimental.results.ResultMatchers.isSuccessful;
 
+import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
 import org.junit.experimental.theories.DataPoints;
 import org.junit.experimental.theories.Theories;
@@ -14,6 +15,7 @@ import org.junit.runner.RunWith;
 public class TheoriesPerformanceTest {
     @RunWith(Theories.class)
     public static class UpToTen {
+        @NotNull
         @DataPoints
         public static int[] ints = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
 

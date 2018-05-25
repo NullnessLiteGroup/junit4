@@ -1,5 +1,8 @@
 package org.junit.tests.running.core;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.io.ByteArrayOutputStream;
 import java.io.FileDescriptor;
 import java.io.PrintStream;
@@ -272,7 +275,8 @@ public class MainRunner {
      *
      * @return null if System.exit() is not called, Integer.valueof(status) if not
      */
-    public Integer runWithCheckForSystemExit(Runnable runnable) {
+    @Nullable
+    public Integer runWithCheckForSystemExit(@NotNull Runnable runnable) {
         SecurityManager oldSecurityManager = System.getSecurityManager();
         System.setSecurityManager(new NoExitSecurityManager(oldSecurityManager));
         PrintStream oldOut = System.out;

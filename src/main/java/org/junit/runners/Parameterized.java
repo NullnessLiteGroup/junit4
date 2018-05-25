@@ -13,6 +13,8 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.junit.internal.AssumptionViolatedException;
 import org.junit.runner.Description;
 import org.junit.runner.Runner;
@@ -213,7 +215,7 @@ public class Parameterized extends Suite {
          *         placeholder.
          * @see MessageFormat
          */
-        String name() default "{index}";
+        @NotNull String name() default "{index}";
     }
 
     /**
@@ -251,7 +253,7 @@ public class Parameterized extends Suite {
          * @return a {@link ParametersRunnerFactory} class (must have a default
          *         constructor)
          */
-        Class<? extends ParametersRunnerFactory> value() default BlockJUnit4ClassRunnerWithParametersFactory.class;
+        @NotNull Class<? extends ParametersRunnerFactory> value() default BlockJUnit4ClassRunnerWithParametersFactory.class;
     }
 
     /**
@@ -303,8 +305,8 @@ public class Parameterized extends Suite {
     }
 
     private void validatePublicStaticVoidMethods(
-            Class<? extends Annotation> annotation, Integer parameterCount,
-            List<Throwable> errors) {
+            Class<? extends Annotation> annotation, @Nullable Integer parameterCount,
+            @NotNull List<Throwable> errors) {
         List<FrameworkMethod> methods = getTestClass().getAnnotatedMethods(annotation);
         for (FrameworkMethod fm : methods) {
             fm.validatePublicVoid(true, errors);
@@ -319,6 +321,7 @@ public class Parameterized extends Suite {
     }
 
     private static class AssumptionViolationRunner extends Runner {
+        @NotNull
         private final Description description;
         private final AssumptionViolatedException exception;
 
@@ -330,13 +333,14 @@ public class Parameterized extends Suite {
             this.exception = exception;
         }
 
+        @NotNull
         @Override
         public Description getDescription() {
             return description;
         }
 
         @Override
-        public void run(RunNotifier notifier) {
+        public void run(@NotNull RunNotifier notifier) {
             notifier.fireTestAssumptionFailed(new Failure(description, exception));
         }
     }
@@ -344,10 +348,13 @@ public class Parameterized extends Suite {
     private static class RunnersFactory {
         private static final ParametersRunnerFactory DEFAULT_FACTORY = new BlockJUnit4ClassRunnerWithParametersFactory();
 
+        @NotNull
         private final TestClass testClass;
+        @NotNull
         private final FrameworkMethod parametersMethod;
         private final List<Object> allParameters;
         private final int parameterCount;
+        @Nullable
         private final Runner runnerOverride;
 
         private RunnersFactory(Class<?> klass) throws Throwable {
@@ -368,6 +375,7 @@ public class Parameterized extends Suite {
                     allParameters.isEmpty() ? 0 : normalizeParameters(allParameters.get(0)).length;
         }
 
+        @NotNull
         private List<Runner> createRunners() throws Exception {
             if (runnerOverride != null) {
                 return Collections.singletonList(runnerOverride);
@@ -392,19 +400,21 @@ public class Parameterized extends Suite {
         }
 
         private TestWithParameters createTestWithNotNormalizedParameters(
-                String pattern, int index, Object parametersOrSingleParameter) {
+                @NotNull String pattern, int index, Object parametersOrSingleParameter) {
             Object[] parameters = normalizeParameters(parametersOrSingleParameter);
             return createTestWithParameters(testClass, pattern, index, parameters);
         }
 
+        @NotNull
         private static Object[] normalizeParameters(Object parametersOrSingleParameter) {
             return (parametersOrSingleParameter instanceof Object[]) ? (Object[]) parametersOrSingleParameter
                     : new Object[] { parametersOrSingleParameter };
         }
 
+        @NotNull
         @SuppressWarnings("unchecked")
         private static List<Object> allParameters(
-                TestClass testClass, FrameworkMethod parametersMethod) throws Throwable {
+                @NotNull TestClass testClass, FrameworkMethod parametersMethod) throws Throwable {
             Object parameters = parametersMethod.invokeExplosively(null);
             if (parameters instanceof List) {
                 return (List<Object>) parameters;
@@ -423,6 +433,7 @@ public class Parameterized extends Suite {
             }
         }
 
+        @NotNull
         private static FrameworkMethod getParametersMethod(TestClass testClass) throws Exception {
             List<FrameworkMethod> methods = testClass
                     .getAnnotatedMethods(Parameters.class);
@@ -436,9 +447,10 @@ public class Parameterized extends Suite {
                     + testClass.getName());
         }
 
+        @NotNull
         private List<Runner> createRunnersForParameters(
-                Iterable<Object> allParameters, String namePattern,
-                ParametersRunnerFactory runnerFactory) throws Exception {
+                @NotNull Iterable<Object> allParameters, @NotNull String namePattern,
+                @NotNull ParametersRunnerFactory runnerFactory) throws Exception {
             try {
                 List<TestWithParameters> tests = createTestsForParameters(
                         allParameters, namePattern);
@@ -453,8 +465,9 @@ public class Parameterized extends Suite {
             }
         }
 
+        @NotNull
         private List<TestWithParameters> createTestsForParameters(
-                Iterable<Object> allParameters, String namePattern)
+                Iterable<Object> allParameters, @NotNull String namePattern)
                 throws Exception {
             int i = 0;
             List<TestWithParameters> children = new ArrayList<TestWithParameters>();

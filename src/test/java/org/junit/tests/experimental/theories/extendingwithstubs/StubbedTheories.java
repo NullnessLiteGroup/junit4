@@ -4,6 +4,7 @@ package org.junit.tests.experimental.theories.extendingwithstubs;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.jetbrains.annotations.NotNull;
 import org.junit.experimental.theories.ParameterSignature;
 import org.junit.experimental.theories.Theories;
 import org.junit.experimental.theories.internal.Assignments;
@@ -18,6 +19,7 @@ public class StubbedTheories extends Theories {
         super(klass);
     }
 
+    @NotNull
     @Override
     public Statement methodBlock(FrameworkMethod method) {
         return new StubbedTheoryAnchor(method, getTestClass());
@@ -28,6 +30,7 @@ public class StubbedTheories extends Theories {
             super(method, testClass);
         }
 
+        @NotNull
         private List<GuesserQueue> queues = new ArrayList<GuesserQueue>();
 
         @Override
@@ -39,7 +42,7 @@ public class StubbedTheories extends Theories {
         }
 
         @Override
-        protected void runWithIncompleteAssignment(Assignments incomplete)
+        protected void runWithIncompleteAssignment(@NotNull Assignments incomplete)
                 throws Throwable {
             GuesserQueue guessers = createGuesserQueue(incomplete);
             queues.add(guessers);
@@ -48,6 +51,7 @@ public class StubbedTheories extends Theories {
             queues.remove(guessers);
         }
 
+        @NotNull
         private GuesserQueue createGuesserQueue(Assignments incomplete)
                 throws Throwable {
             ParameterSignature nextUnassigned = incomplete.nextUnassigned();

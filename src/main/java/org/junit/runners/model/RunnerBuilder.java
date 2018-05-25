@@ -5,6 +5,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.junit.internal.runners.ErrorReportingRunner;
 import org.junit.runner.Runner;
 
@@ -46,6 +48,7 @@ public abstract class RunnerBuilder {
      * @return a Runner
      * @throws Throwable if a runner cannot be constructed
      */
+    @Nullable
     public abstract Runner runnerForClass(Class<?> testClass) throws Throwable;
 
     /**
@@ -61,6 +64,7 @@ public abstract class RunnerBuilder {
      * @param testClass class to be run
      * @return a Runner
      */
+    @Nullable
     public Runner safeRunnerForClass(Class<?> testClass) {
         try {
             return runnerForClass(testClass);
@@ -69,7 +73,8 @@ public abstract class RunnerBuilder {
         }
     }
 
-    Class<?> addParent(Class<?> parent) throws InitializationError {
+    @NotNull
+    Class<?> addParent(@NotNull Class<?> parent) throws InitializationError {
         if (!parents.add(parent)) {
             throw new InitializationError(String.format("class '%s' (possibly indirectly) contains itself as a SuiteClass", parent.getName()));
         }
@@ -86,7 +91,8 @@ public abstract class RunnerBuilder {
      * this builder will throw an exception if it is requested for another
      * runner for {@code parent} before this call completes.
      */
-    public List<Runner> runners(Class<?> parent, Class<?>[] children)
+    @NotNull
+    public List<Runner> runners(@NotNull Class<?> parent, @NotNull Class<?>[] children)
             throws InitializationError {
         addParent(parent);
 
@@ -97,11 +103,13 @@ public abstract class RunnerBuilder {
         }
     }
 
-    public List<Runner> runners(Class<?> parent, List<Class<?>> children)
+    @NotNull
+    public List<Runner> runners(@NotNull Class<?> parent, @NotNull List<Class<?>> children)
             throws InitializationError {
         return runners(parent, children.toArray(new Class<?>[0]));
     }
 
+    @NotNull
     private List<Runner> runners(Class<?>[] children) {
         List<Runner> runners = new ArrayList<Runner>();
         for (Class<?> each : children) {

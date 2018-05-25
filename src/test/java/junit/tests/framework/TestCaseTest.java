@@ -6,6 +6,7 @@ import junit.framework.TestFailure;
 import junit.framework.TestResult;
 import junit.framework.TestSuite;
 import junit.tests.WasRun;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * A test case testing the testing framework.
@@ -182,21 +183,21 @@ public class TestCaseTest extends TestCase {
         assertEquals(1, result.failureCount());
     }
 
-    void verifyError(TestCase test) {
+    void verifyError(@NotNull TestCase test) {
         TestResult result = test.run();
         assertTrue(result.runCount() == 1);
         assertTrue(result.failureCount() == 0);
         assertTrue(result.errorCount() == 1);
     }
 
-    void verifyFailure(TestCase test) {
+    void verifyFailure(@NotNull TestCase test) {
         TestResult result = test.run();
         assertTrue(result.runCount() == 1);
         assertTrue(result.failureCount() == 1);
         assertTrue(result.errorCount() == 0);
     }
 
-    void verifySuccess(TestCase test) {
+    void verifySuccess(@NotNull TestCase test) {
         TestResult result = test.run();
         assertTrue(result.runCount() == 1);
         assertTrue(result.failureCount() == 0);

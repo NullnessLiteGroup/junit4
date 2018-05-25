@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
@@ -23,6 +25,7 @@ public class MethodSorterTest {
     private static final String SUB_METHOD = "void subBowser()";
 
     static class DummySortWithoutAnnotation {
+        @Nullable
         Object alpha(int i, double d, Thread t) {
             return null;
         }
@@ -54,7 +57,8 @@ public class MethodSorterTest {
         }
     }
 
-    private List<String> getDeclaredMethodNames(Class<?> clazz) {
+    @NotNull
+    private List<String> getDeclaredMethodNames(@NotNull Class<?> clazz) {
         Method[] actualMethods = MethodSorter.getDeclaredMethods(clazz);
 
         // Obtain just the names instead of the full methods.
@@ -92,6 +96,7 @@ public class MethodSorterTest {
 
     @FixMethodOrder(MethodSorters.DEFAULT)
     static class DummySortWithDefault {
+        @Nullable
         Object alpha(int i, double d, Thread t) {
             return null;
         }
@@ -122,6 +127,7 @@ public class MethodSorterTest {
 
     @FixMethodOrder(MethodSorters.JVM)
     static class DummySortJvm {
+        @Nullable
         Object alpha(int i, double d, Thread t) {
             return null;
         }
@@ -152,6 +158,7 @@ public class MethodSorterTest {
 
     @FixMethodOrder(MethodSorters.NAME_ASCENDING)
     static class DummySortWithNameAsc {
+        @Nullable
         Object alpha(int i, double d, Thread t) {
             return null;
         }

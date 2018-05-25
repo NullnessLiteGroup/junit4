@@ -2,6 +2,8 @@ package org.junit.rules;
 
 import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.function.ThrowingRunnable;
@@ -107,6 +109,7 @@ public class ErrorCollectorTest {
     }
 
     public static class AddSingleError {
+        @NotNull
         @Rule
         public ErrorCollector collector = new ErrorCollector();
 
@@ -117,6 +120,7 @@ public class ErrorCollectorTest {
     }
 
     public static class AddTwoErrors {
+        @NotNull
         @Rule
         public ErrorCollector collector = new ErrorCollector();
 
@@ -128,6 +132,7 @@ public class ErrorCollectorTest {
     }
 
     public static class AddInternalAssumptionViolatedException {
+        @NotNull
         @Rule
         public ErrorCollector collector = new ErrorCollector();
 
@@ -138,6 +143,7 @@ public class ErrorCollectorTest {
     }
 
     public static class CheckMatcherThatDoesNotFailWithProvidedReason {
+        @NotNull
         @Rule
         public ErrorCollector collector = new ErrorCollector();
 
@@ -148,6 +154,7 @@ public class ErrorCollectorTest {
     }
 
     public static class CheckMatcherThatDoesNotFailWithoutProvidedReason {
+        @NotNull
         @Rule
         public ErrorCollector collector = new ErrorCollector();
 
@@ -158,6 +165,7 @@ public class ErrorCollectorTest {
     }
 
     public static class CheckMatcherThatFailsWithoutProvidedReason {
+        @NotNull
         @Rule
         public ErrorCollector collector = new ErrorCollector();
 
@@ -168,6 +176,7 @@ public class ErrorCollectorTest {
     }
 
     public static class CheckMatcherThatFailsWithProvidedReason {
+        @NotNull
         @Rule
         public ErrorCollector collector = new ErrorCollector();
 
@@ -178,6 +187,7 @@ public class ErrorCollectorTest {
     }
 
     public static class CheckTwoMatchersThatFail {
+        @NotNull
         @Rule
         public ErrorCollector collector = new ErrorCollector();
 
@@ -189,12 +199,14 @@ public class ErrorCollectorTest {
     }
 
     public static class CheckCallableThatThrowsAnException {
+        @NotNull
         @Rule
         public ErrorCollector collector = new ErrorCollector();
 
         @Test
         public void example() {
             collector.checkSucceeds(new Callable<Object>() {
+                @NotNull
                 public Object call() throws Exception {
                     throw new RuntimeException("first!");
                 }
@@ -203,17 +215,20 @@ public class ErrorCollectorTest {
     }
 
     public static class CheckTwoCallablesThatThrowExceptions {
+        @NotNull
         @Rule
         public ErrorCollector collector = new ErrorCollector();
 
         @Test
         public void example() {
             collector.checkSucceeds(new Callable<Object>() {
+                @NotNull
                 public Object call() throws Exception {
                     throw new RuntimeException("first!");
                 }
             });
             collector.checkSucceeds(new Callable<Integer>() {
+                @NotNull
                 public Integer call() throws Exception {
                     throw new RuntimeException("second!");
                 }
@@ -222,12 +237,14 @@ public class ErrorCollectorTest {
     }
 
     public static class CheckCallableThatThrowsInternalAssumptionViolatedException {
+        @NotNull
         @Rule
         public ErrorCollector collector = new ErrorCollector();
 
         @Test
         public void example() {
             collector.checkSucceeds(new Callable<Object>() {
+                @NotNull
                 public Object call() throws Exception {
                     throw new AssumptionViolatedException("message");
                 }
@@ -236,12 +253,14 @@ public class ErrorCollectorTest {
     }
 
     public static class CheckCallableWithFailingAssumption {
+        @NotNull
         @Rule
         public ErrorCollector collector = new ErrorCollector();
 
         @Test
         public void example() {
             collector.checkSucceeds(new Callable<Object>() {
+                @Nullable
                 public Object call() throws Exception {
                     assumeTrue(false);
                     return null;
@@ -251,12 +270,14 @@ public class ErrorCollectorTest {
     }
 
     public static class CheckCallableThatDoesNotThrowAnException {
+        @NotNull
         @Rule
         public ErrorCollector collector = new ErrorCollector();
 
         @Test
         public void example() {
             Object result = collector.checkSucceeds(new Callable<Object>() {
+                @NotNull
                 public Object call() throws Exception {
                     return 3;
                 }
@@ -266,6 +287,7 @@ public class ErrorCollectorTest {
     }
 
     public static class CheckRunnableThatThrowsExpectedTypeOfException {
+        @NotNull
         @Rule
         public ErrorCollector collector = new ErrorCollector();
 
@@ -280,6 +302,7 @@ public class ErrorCollectorTest {
     }
 
     public static class CheckRunnableThatThrowsUnexpectedTypeOfException {
+        @NotNull
         @Rule
         public ErrorCollector collector = new ErrorCollector();
 
@@ -294,6 +317,7 @@ public class ErrorCollectorTest {
     }
 
     public static class CheckRunnableThatThrowsNoExceptionAlthoughOneIsExpected {
+        @NotNull
         @Rule
         public ErrorCollector collector = new ErrorCollector();
 
@@ -307,6 +331,7 @@ public class ErrorCollectorTest {
     }
 
     public static class ErrorCollectorNotCalledBySuccessfulTest {
+        @NotNull
         @Rule
         public ErrorCollector collector = new ErrorCollector();
 
@@ -316,6 +341,7 @@ public class ErrorCollectorTest {
     }
 
     public static class ErrorCollectorNotCalledByFailingTest {
+        @NotNull
         @Rule
         public ErrorCollector collector = new ErrorCollector();
 

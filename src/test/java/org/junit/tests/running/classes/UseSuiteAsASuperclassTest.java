@@ -3,6 +3,7 @@ package org.junit.tests.running.classes;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
+import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
 import org.junit.runner.JUnitCore;
 import org.junit.runner.Result;
@@ -26,7 +27,7 @@ public class UseSuiteAsASuperclassTest {
     }
 
     public static class MySuite extends Suite {
-        public MySuite(Class<?> klass) throws InitializationError {
+        public MySuite(@NotNull Class<?> klass) throws InitializationError {
             super(klass, new Class[]{TestA.class, TestB.class});
         }
     }

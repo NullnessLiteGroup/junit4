@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import junit.framework.TestCase;
+import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
 import org.junit.runner.Description;
 import org.junit.runner.JUnitCore;
@@ -18,7 +19,7 @@ public class RunnerTest {
         int testCount;
 
         @Override
-        public void testRunStarted(Description description) {
+        public void testRunStarted(@NotNull Description description) {
             this.testCount = description.testCount();
         }
     }

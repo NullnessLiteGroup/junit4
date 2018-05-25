@@ -3,6 +3,7 @@ package junit.extensions;
 import junit.framework.Protectable;
 import junit.framework.Test;
 import junit.framework.TestResult;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * A Decorator to set up and tear down additional fixture state. Subclass
@@ -16,7 +17,7 @@ public class TestSetup extends TestDecorator {
     }
 
     @Override
-    public void run(final TestResult result) {
+    public void run(@NotNull final TestResult result) {
         Protectable p = new Protectable() {
             public void protect() throws Exception {
                 setUp();

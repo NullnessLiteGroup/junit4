@@ -12,6 +12,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
 import org.junit.experimental.results.PrintableResult;
 import org.junit.experimental.theories.DataPoint;
@@ -29,6 +30,7 @@ public class WithUnresolvedGenericTypeVariablesOnTheoryParms {
 
     @RunWith(Theories.class)
     public static class TypeVariableOnTheoryOnly {
+        @NotNull
         @DataPoint
         public static List<String> strings = Arrays.asList("foo", "bar");
 
@@ -45,6 +47,7 @@ public class WithUnresolvedGenericTypeVariablesOnTheoryParms {
 
     @RunWith(Theories.class)
     public static class TypeVariableOnTheoryParm {
+        @NotNull
         @DataPoint
         public static String string = "foo";
 
@@ -61,6 +64,7 @@ public class WithUnresolvedGenericTypeVariablesOnTheoryParms {
 
     @RunWith(Theories.class)
     public static class TypeVariableOnParameterizedTheoryParm {
+        @NotNull
         @DataPoint
         public static List<String> strings = Arrays.asList("foo", "bar");
 
@@ -77,6 +81,7 @@ public class WithUnresolvedGenericTypeVariablesOnTheoryParms {
 
     @RunWith(Theories.class)
     public static class TypeVariableOnWildcardUpperBoundOnTheoryParm {
+        @NotNull
         @DataPoint
         public static List<String> strings = Arrays.asList("foo", "bar");
 
@@ -93,6 +98,7 @@ public class WithUnresolvedGenericTypeVariablesOnTheoryParms {
 
     @RunWith(Theories.class)
     public static class TypeVariableOnWildcardLowerBoundOnTheoryParm {
+        @NotNull
         @DataPoint
         public static List<String> strings = Arrays.asList("foo", "bar");
 
@@ -148,6 +154,7 @@ public class WithUnresolvedGenericTypeVariablesOnTheoryParms {
 
     @RunWith(Theories.class)
     public static class TypeVariableOnTheoryClass<T> {
+        @NotNull
         @DataPoint
         public static String item = "bar";
 

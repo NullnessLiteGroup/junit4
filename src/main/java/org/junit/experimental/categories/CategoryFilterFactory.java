@@ -3,6 +3,7 @@ package org.junit.experimental.categories;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.jetbrains.annotations.NotNull;
 import org.junit.internal.Classes;
 import org.junit.runner.FilterFactory;
 import org.junit.runner.FilterFactoryParams;
@@ -18,7 +19,8 @@ abstract class CategoryFilterFactory implements FilterFactory {
      *
      * @param params Parameters needed to create the {@link Filter}
      */
-    public Filter createFilter(FilterFactoryParams params) throws FilterNotCreatedException {
+    @NotNull
+    public Filter createFilter(@NotNull FilterFactoryParams params) throws FilterNotCreatedException {
         try {
             return createFilter(parseCategories(params.getArgs()));
         } catch (ClassNotFoundException e) {
@@ -31,8 +33,10 @@ abstract class CategoryFilterFactory implements FilterFactory {
      *
      * @param categories Category classes.
      */
+    @NotNull
     protected abstract Filter createFilter(List<Class<?>> categories);
 
+    @NotNull
     private List<Class<?>> parseCategories(String categories) throws ClassNotFoundException {
         List<Class<?>> categoryClasses = new ArrayList<Class<?>>();
 

@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
 import org.junit.runner.Description;
 import org.junit.runner.JUnitCore;
@@ -31,11 +32,12 @@ public class ParentRunnerFilteringTest {
     private static Filter notThisMethodName(final String methodName) {
         return new Filter() {
             @Override
-            public boolean shouldRun(Description description) {
+            public boolean shouldRun(@NotNull Description description) {
                 return description.getMethodName() == null
                         || !description.getMethodName().equals(methodName);
             }
 
+            @NotNull
             @Override
             public String describe() {
                 return "don't run method name: " + methodName;
@@ -57,6 +59,7 @@ public class ParentRunnerFilteringTest {
             return true;
         }
 
+        @NotNull
         @Override
         public String describe() {
             return "filter counter";
@@ -98,11 +101,12 @@ public class ParentRunnerFilteringTest {
     public static class SuiteWithUnmodifyableChildList extends Suite {
 
         public SuiteWithUnmodifyableChildList(
-                Class<?> klass, RunnerBuilder builder)
+                @NotNull Class<?> klass, @NotNull RunnerBuilder builder)
                 throws InitializationError {
             super(klass, builder);
         }
 
+        @NotNull
         @Override
         protected List<Runner> getChildren() {
             return Collections.unmodifiableList(super.getChildren());

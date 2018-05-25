@@ -3,6 +3,8 @@ package org.junit.internal.runners;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.junit.runner.Description;
 import org.junit.runner.Runner;
 import org.junit.runner.notification.Failure;
@@ -15,13 +17,14 @@ import static java.util.Collections.singletonList;
 public class ErrorReportingRunner extends Runner {
     private final List<Throwable> causes;
 
+    @NotNull
     private final String classNames;
 
     public ErrorReportingRunner(Class<?> testClass, Throwable cause) {
         this(cause, testClass);
     }
     
-    public ErrorReportingRunner(Throwable cause, Class<?>... testClasses) {
+    public ErrorReportingRunner(Throwable cause, @Nullable Class<?>... testClasses) {
         if (testClasses == null || testClasses.length == 0) {
             throw new NullPointerException("Test classes cannot be null or empty");
         }
@@ -34,6 +37,7 @@ public class ErrorReportingRunner extends Runner {
         causes = getCauses(cause);
     }
     
+    @NotNull
     @Override
     public Description getDescription() {
         Description description = Description.createSuiteDescription(classNames);
@@ -44,7 +48,7 @@ public class ErrorReportingRunner extends Runner {
     }
 
     @Override
-    public void run(RunNotifier notifier) {
+    public void run(@NotNull RunNotifier notifier) {
         for (Throwable each : causes) {
             runCause(each, notifier);
         }

@@ -1,5 +1,7 @@
 package junit.samples.money;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,6 +17,7 @@ import java.util.List;
  * different constructors to create a MoneyBag.
  */
 public class MoneyBag implements IMoney {
+    @NotNull
     private List<Money> fMonies = new ArrayList<Money>(5);
 
     public static IMoney create(IMoney m1, IMoney m2) {
@@ -24,25 +27,25 @@ public class MoneyBag implements IMoney {
         return result.simplify();
     }
 
-    public IMoney add(IMoney m) {
+    public IMoney add(@NotNull IMoney m) {
         return m.addMoneyBag(this);
     }
 
-    public IMoney addMoney(Money m) {
+    public IMoney addMoney(@NotNull Money m) {
         return MoneyBag.create(m, this);
     }
 
-    public IMoney addMoneyBag(MoneyBag s) {
+    public IMoney addMoneyBag(@NotNull MoneyBag s) {
         return MoneyBag.create(s, this);
     }
 
-    void appendBag(MoneyBag aBag) {
+    void appendBag(@NotNull MoneyBag aBag) {
         for (Money each : aBag.fMonies) {
             appendMoney(each);
         }
     }
 
-    void appendMoney(Money aMoney) {
+    void appendMoney(@NotNull Money aMoney) {
         if (aMoney.isZero()) return;
         IMoney old = findMoney(aMoney.currency());
         if (old == null) {
@@ -109,6 +112,7 @@ public class MoneyBag implements IMoney {
         return fMonies.size() == 0;
     }
 
+    @NotNull
     public IMoney multiply(int factor) {
         MoneyBag result = new MoneyBag();
         if (factor != 0) {
@@ -119,6 +123,7 @@ public class MoneyBag implements IMoney {
         return result;
     }
 
+    @NotNull
     public IMoney negate() {
         MoneyBag result = new MoneyBag();
         for (Money each : fMonies) {
@@ -134,10 +139,11 @@ public class MoneyBag implements IMoney {
         return this;
     }
 
-    public IMoney subtract(IMoney m) {
+    public IMoney subtract(@NotNull IMoney m) {
         return add(m.negate());
     }
 
+    @NotNull
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -149,7 +155,7 @@ public class MoneyBag implements IMoney {
         return sb.toString();
     }
 
-    public void appendTo(MoneyBag m) {
+    public void appendTo(@NotNull MoneyBag m) {
         m.appendBag(this);
     }
 }

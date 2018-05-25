@@ -1,5 +1,6 @@
 package org.junit.rules;
 
+import org.jetbrains.annotations.NotNull;
 import org.junit.internal.runners.statements.FailOnTimeout;
 import org.junit.runner.Description;
 import org.junit.runners.model.Statement;
@@ -142,6 +143,7 @@ public class Timeout implements TestRule {
      *
      * @since 4.12
      */
+    @NotNull
     protected Statement createFailOnTimeoutStatement(
             Statement statement) throws Exception {
         return FailOnTimeout.builder()
@@ -150,10 +152,11 @@ public class Timeout implements TestRule {
             .build(statement);
     }
 
+    @NotNull
     public Statement apply(Statement base, Description description) {
         try {
             return createFailOnTimeoutStatement(base);
-        } catch (final Exception e) {
+        } catch (@NotNull final Exception e) {
             return new Statement() {
                 @Override public void evaluate() throws Throwable {
                     throw new RuntimeException("Invalid parameters for Timeout", e);
@@ -190,6 +193,7 @@ public class Timeout implements TestRule {
          * @param unit the time unit of the {@code timeout} argument
          * @return {@code this} for method chaining.
          */
+        @NotNull
         public Builder withTimeout(long timeout, TimeUnit unit) {
             this.timeout = timeout;
             this.timeUnit = unit;
@@ -213,6 +217,7 @@ public class Timeout implements TestRule {
          * @param enable {@code true} to enable the feature
          * @return {@code this} for method chaining.
          */
+        @NotNull
         public Builder withLookingForStuckThread(boolean enable) {
             this.lookForStuckThread = enable;
             return this;
@@ -226,6 +231,7 @@ public class Timeout implements TestRule {
         /**
          * Builds a {@link Timeout} instance using the values in this builder.,
          */
+        @NotNull
         public Timeout build() {
             return new Timeout(this);
         }

@@ -1,5 +1,6 @@
 package org.junit.rules;
 
+import org.jetbrains.annotations.NotNull;
 import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.Statement;
 
@@ -12,6 +13,7 @@ class LoggingMethodRule implements MethodRule {
         this.log = log;
     }
 
+    @NotNull
     public Statement apply(Statement base, FrameworkMethod method, Object target) {
         return new LoggingStatement(base, log, name);
     }

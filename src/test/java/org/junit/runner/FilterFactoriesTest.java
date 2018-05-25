@@ -5,6 +5,9 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.startsWith;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assume.assumeThat;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.experimental.categories.ExcludeCategories;
@@ -15,9 +18,11 @@ import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
 public class FilterFactoriesTest {
+    @NotNull
     @Rule
     public ExpectedException expectedException = ExpectedException.none();
 
+    @NotNull
     @Rule
     public TestName testName = new TestName();
 
@@ -88,13 +93,15 @@ public class FilterFactoriesTest {
         private NonInstantiableFilterFactory() {
         }
 
+        @NotNull
         public Filter createFilter(FilterFactoryParams params) throws FilterNotCreatedException {
             throw new FilterNotCreatedException(new Exception("not implemented"));
         }
     }
 
     public static class FilterFactoryStub implements FilterFactory {
-        public Filter createFilter(FilterFactoryParams params) {
+        @Nullable
+        public Filter createFilter(@NotNull FilterFactoryParams params) {
             return new DummyFilter(params.getTopLevelDescription());
         }
     }
@@ -115,6 +122,7 @@ public class FilterFactoriesTest {
             return false;
         }
 
+        @Nullable
         @Override
         public String describe() {
             return null;

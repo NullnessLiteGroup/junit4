@@ -1,5 +1,7 @@
 package org.junit;
 
+import org.jetbrains.annotations.NotNull;
+
 /**
  * Thrown when an {@link org.junit.Assert#assertEquals(Object, Object) assertEquals(String, String)} fails.
  * Create and throw a <code>ComparisonFailure</code> manually if you want to show users the
@@ -44,6 +46,7 @@ public class ComparisonFailure extends AssertionError {
      *
      * @see Throwable#getMessage()
      */
+    @NotNull
     @Override
     public String getMessage() {
         return new ComparisonCompactor(MAX_CONTEXT_LENGTH, fExpected, fActual).compact(super.getMessage());
@@ -92,6 +95,7 @@ public class ComparisonFailure extends AssertionError {
             this.actual = actual;
         }
 
+        @NotNull
         public String compact(String message) {
             if (expected == null || actual == null || expected.equals(actual)) {
                 return Assert.format(message, expected, actual);
@@ -129,7 +133,9 @@ public class ComparisonFailure extends AssertionError {
         }
 
         private class DiffExtractor {
+            @NotNull
             private final String sharedPrefix;
+            @NotNull
             private final String sharedSuffix;
 
             /**
@@ -140,14 +146,17 @@ public class ComparisonFailure extends AssertionError {
                 sharedSuffix = sharedSuffix(sharedPrefix);
             }
 
+            @NotNull
             public String expectedDiff() {
                 return extractDiff(expected);
             }
 
+            @NotNull
             public String actualDiff() {
                 return extractDiff(actual);
             }
 
+            @NotNull
             public String compactPrefix() {
                 if (sharedPrefix.length() <= contextLength) {
                     return sharedPrefix;
@@ -155,6 +164,7 @@ public class ComparisonFailure extends AssertionError {
                 return ELLIPSIS + sharedPrefix.substring(sharedPrefix.length() - contextLength);
             }
 
+            @NotNull
             public String compactSuffix() {
                 if (sharedSuffix.length() <= contextLength) {
                     return sharedSuffix;

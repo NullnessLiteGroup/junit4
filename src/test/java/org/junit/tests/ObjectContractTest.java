@@ -7,6 +7,8 @@ import static org.junit.Assume.assumeThat;
 
 import java.lang.reflect.Method;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.junit.Test;
 import org.junit.Test.None;
 import org.junit.experimental.theories.DataPoints;
@@ -17,19 +19,20 @@ import org.junit.runners.model.FrameworkMethod;
 
 @RunWith(Theories.class)
 public class ObjectContractTest {
+    @Nullable
     @DataPoints
     public static Object[] objects = {new FrameworkMethod(toStringMethod()),
             new FrameworkMethod(toStringMethod()), 3, null};
 
     @Theory
     @Test(expected = None.class)
-    public void equalsThrowsNoException(Object a, Object b) {
+    public void equalsThrowsNoException(@NotNull Object a, Object b) {
         assumeNotNull(a);
         a.equals(b);
     }
 
     @Theory
-    public void equalsMeansEqualHashCodes(Object a, Object b) {
+    public void equalsMeansEqualHashCodes(@NotNull Object a, @NotNull Object b) {
         assumeNotNull(a, b);
         assumeThat(a, is(b));
         assertThat(a.hashCode(), is(b.hashCode()));

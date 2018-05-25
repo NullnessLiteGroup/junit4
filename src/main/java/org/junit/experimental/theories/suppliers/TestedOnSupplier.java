@@ -3,6 +3,7 @@ package org.junit.experimental.theories.suppliers;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.jetbrains.annotations.NotNull;
 import org.junit.experimental.theories.ParameterSignature;
 import org.junit.experimental.theories.ParameterSupplier;
 import org.junit.experimental.theories.PotentialAssignment;
@@ -12,8 +13,9 @@ import org.junit.experimental.theories.PotentialAssignment;
  * @see org.junit.experimental.theories.ParameterSupplier
  */
 public class TestedOnSupplier extends ParameterSupplier {
+    @NotNull
     @Override
-    public List<PotentialAssignment> getValueSources(ParameterSignature sig) {
+    public List<PotentialAssignment> getValueSources(@NotNull ParameterSignature sig) {
         List<PotentialAssignment> list = new ArrayList<PotentialAssignment>();
         TestedOn testedOn = sig.getAnnotation(TestedOn.class);
         int[] ints = testedOn.ints();

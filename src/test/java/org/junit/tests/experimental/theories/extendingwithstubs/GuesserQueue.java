@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.jetbrains.annotations.NotNull;
 import org.junit.experimental.theories.PotentialAssignment;
 import org.junit.internal.AssumptionViolatedException;
 
@@ -15,6 +16,7 @@ public class GuesserQueue extends ArrayList<ReguessableValue> {
             this.delegate = delegate;
         }
 
+        @NotNull
         @Override
         public List<ReguessableValue> reguesses(AssumptionViolatedException e) {
             return Collections.emptyList();
@@ -31,6 +33,7 @@ public class GuesserQueue extends ArrayList<ReguessableValue> {
         }
     }
 
+    @NotNull
     static GuesserQueue forSingleValues(
             List<PotentialAssignment> potentials) {
         GuesserQueue returnThis = new GuesserQueue();

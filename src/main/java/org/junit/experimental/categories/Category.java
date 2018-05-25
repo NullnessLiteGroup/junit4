@@ -4,6 +4,7 @@ import java.lang.annotation.Inherited;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
+import org.jetbrains.annotations.NotNull;
 import org.junit.validator.ValidateWith;
 
 /**
@@ -44,5 +45,5 @@ import org.junit.validator.ValidateWith;
 @Inherited
 @ValidateWith(CategoryValidator.class)
 public @interface Category {
-    Class<?>[] value();
+    @NotNull Class<?>[] value();
 }

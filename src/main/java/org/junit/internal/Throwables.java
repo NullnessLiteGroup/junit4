@@ -1,5 +1,8 @@
 package org.junit.internal;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -70,7 +73,7 @@ public final class Throwables {
      *
      * @return a trimmed stack trace, or the original trace if trimming wasn't possible
      */
-    public static String getTrimmedStackTrace(Throwable exception) {
+    public static String getTrimmedStackTrace(@NotNull Throwable exception) {
         List<String> trimmedStackTraceLines = getTrimmedStackTraceLines(exception);
         if (trimmedStackTraceLines.isEmpty()) {
             return getFullStackTrace(exception);
@@ -82,6 +85,7 @@ public final class Throwables {
         return result.toString();
     }
 
+    @NotNull
     private static List<String> getTrimmedStackTraceLines(Throwable exception) {
         List<StackTraceElement> stackTraceElements = Arrays.asList(exception.getStackTrace());
         int linesToInclude = stackTraceElements.size();
@@ -105,6 +109,7 @@ public final class Throwables {
         return Collections.emptyList();
     }
 
+    @Nullable
     private static final Method getSuppressed = initGetSuppressed();
 
     private static Method initGetSuppressed() {
@@ -127,6 +132,7 @@ public final class Throwables {
         }
     }
 
+    @NotNull
     private static List<String> getCauseStackTraceLines(Throwable exception) {
         if (exception.getCause() != null || hasSuppressed(exception)) {
             String fullTrace = getFullStackTrace(exception);
@@ -161,13 +167,13 @@ public final class Throwables {
     }
 
     private static void appendStackTraceLines(
-            List<String> stackTraceLines, StringBuilder destBuilder) {
+            List<String> stackTraceLines, @NotNull StringBuilder destBuilder) {
         for (String stackTraceLine : stackTraceLines) {
             destBuilder.append(String.format("%s%n", stackTraceLine));
         }
     }
 
-    private static <T> List<T> asReversedList(final List<T> list) {
+    private static <T> List<T> asReversedList(@NotNull final List<T> list) {
         return new AbstractList<T>() {
 
             @Override
@@ -184,7 +190,8 @@ public final class Throwables {
 
     private enum State {
         PROCESSING_OTHER_CODE {
-            @Override public State processLine(String methodName) {
+            @NotNull
+            @Override public State processLine(@NotNull String methodName) {
                 if (isTestFrameworkMethod(methodName)) {
                     return PROCESSING_TEST_FRAMEWORK_CODE;
                 }
@@ -192,7 +199,8 @@ public final class Throwables {
             }
         },
         PROCESSING_TEST_FRAMEWORK_CODE {
-            @Override public State processLine(String methodName) {
+            @NotNull
+            @Override public State processLine(@NotNull String methodName) {
                 if (isReflectionMethod(methodName)) {
                     return PROCESSING_REFLECTION_CODE;
                 } else if (isTestFrameworkMethod(methodName)) {
@@ -202,7 +210,8 @@ public final class Throwables {
             } 
         },
         PROCESSING_REFLECTION_CODE {
-            @Override public State processLine(String methodName) {
+            @NotNull
+            @Override public State processLine(@NotNull String methodName) {
                 if (isReflectionMethod(methodName)) {
                     return this;
                 } else if (isTestFrameworkMethod(methodName)) {
@@ -213,15 +222,18 @@ public final class Throwables {
             } 
         },
         DONE {
+            @NotNull
             @Override public State processLine(String methodName) {
                 return this;
             } 
         };
 
         /** Processes a stack trace element method name, possibly moving to a new state. */
+        @NotNull
         protected abstract State processLine(String methodName);
         
         /** Processes a stack trace element, possibly moving to a new state. */
+        @NotNull
         public final State processStackTraceElement(StackTraceElement element) {
             return processLine(element.getClassName() + "." + element.getMethodName() + "()");
         }
@@ -239,7 +251,7 @@ public final class Throwables {
         "org.junit.internal.StackTracesTest",
     };
 
-    private static boolean isTestFrameworkMethod(String methodName) {
+    private static boolean isTestFrameworkMethod(@NotNull String methodName) {
         return isMatchingMethod(methodName, TEST_FRAMEWORK_METHOD_NAME_PREFIXES) &&
                 !isMatchingMethod(methodName, TEST_FRAMEWORK_TEST_METHOD_NAME_PREFIXES);
     }
@@ -254,11 +266,11 @@ public final class Throwables {
         "junit.framework.TestCase.runBare(", // runBare() directly calls setUp() and tearDown()
    };
     
-    private static boolean isReflectionMethod(String methodName) {
+    private static boolean isReflectionMethod(@NotNull String methodName) {
         return isMatchingMethod(methodName, REFLECTION_METHOD_NAME_PREFIXES);
     }
 
-    private static boolean isMatchingMethod(String methodName, String[] methodNamePrefixes) {
+    private static boolean isMatchingMethod(@NotNull String methodName, String[] methodNamePrefixes) {
         for (String methodNamePrefix : methodNamePrefixes) {
             if (methodName.startsWith(methodNamePrefix)) {
                 return true;

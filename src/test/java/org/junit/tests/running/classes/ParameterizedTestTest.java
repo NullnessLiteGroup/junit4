@@ -18,6 +18,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import org.jetbrains.annotations.NotNull;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
@@ -663,6 +664,7 @@ public class ParameterizedTestTest {
             this.delegate = delegate;
         }
 
+        @NotNull
         public Iterator<T> iterator() {
             if (iterated.compareAndSet(false, true)) {
                 return delegate.iterator();
@@ -703,6 +705,7 @@ public class ParameterizedTestTest {
 
     static public class ExceptionThrowingRunnerFactory implements
             ParametersRunnerFactory {
+        @NotNull
         public Runner createRunnerForTestWithParameters(TestWithParameters test)
                 throws InitializationError {
             throw new InitializationError(

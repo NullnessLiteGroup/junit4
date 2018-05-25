@@ -1,5 +1,6 @@
 package org.junit.validator;
 
+import org.jetbrains.annotations.NotNull;
 import org.junit.runners.model.FrameworkField;
 import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.TestClass;
@@ -29,6 +30,7 @@ public abstract class AnnotationValidator {
      *
      * @since 4.12
      */
+    @NotNull
     public List<Exception> validateAnnotatedClass(TestClass testClass) {
         return NO_VALIDATION_ERRORS;
     }
@@ -41,6 +43,7 @@ public abstract class AnnotationValidator {
      *
      * @since 4.12
      */
+    @NotNull
     public List<Exception> validateAnnotatedField(FrameworkField field) {
         return NO_VALIDATION_ERRORS;
 
@@ -54,6 +57,7 @@ public abstract class AnnotationValidator {
      *
      * @since 4.12
      */
+    @NotNull
     public List<Exception> validateAnnotatedMethod(FrameworkMethod method) {
         return NO_VALIDATION_ERRORS;
     }

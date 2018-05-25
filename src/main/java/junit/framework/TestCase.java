@@ -1,5 +1,8 @@
 package junit.framework;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -78,6 +81,7 @@ public abstract class TestCase extends Assert implements Test {
     /**
      * the name of the test case
      */
+    @Nullable
     private String fName;
 
     /**
@@ -107,6 +111,7 @@ public abstract class TestCase extends Assert implements Test {
      *
      * @see TestResult
      */
+    @NotNull
     protected TestResult createResult() {
         return new TestResult();
     }
@@ -117,6 +122,7 @@ public abstract class TestCase extends Assert implements Test {
      *
      * @see TestResult
      */
+    @NotNull
     public TestResult run() {
         TestResult result = createResult();
         run(result);
@@ -126,7 +132,7 @@ public abstract class TestCase extends Assert implements Test {
     /**
      * Runs the test case and collects the results in TestResult.
      */
-    public void run(TestResult result) {
+    public void run(@NotNull TestResult result) {
         result.run(this);
     }
 
@@ -484,6 +490,7 @@ public abstract class TestCase extends Assert implements Test {
     /**
      * Returns a string representation of the test case.
      */
+    @NotNull
     @Override
     public String toString() {
         return getName() + "(" + getClass().getName() + ")";
@@ -494,6 +501,7 @@ public abstract class TestCase extends Assert implements Test {
      *
      * @return the name of the TestCase
      */
+    @Nullable
     public String getName() {
         return fName;
     }

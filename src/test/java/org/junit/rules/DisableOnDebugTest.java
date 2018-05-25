@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import org.jetbrains.annotations.NotNull;
 import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
@@ -35,8 +36,9 @@ public class DisableOnDebugTest {
      */
     private static class FailOnExecution implements TestRule {
 
+        @NotNull
         public Statement apply(Statement base,
-                Description description) {
+                               Description description) {
             return new Statement() {
 
                 @Override
@@ -53,7 +55,7 @@ public class DisableOnDebugTest {
         @Rule
         public TestRule failOnExecution;
 
-        public AbstractDisableOnDebugTest(List<String> arguments) {
+        public AbstractDisableOnDebugTest(@NotNull List<String> arguments) {
             this.failOnExecution = new DisableOnDebug(new FailOnExecution(),
                     arguments);
         }

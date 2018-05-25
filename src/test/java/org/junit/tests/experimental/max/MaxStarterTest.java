@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import junit.framework.TestCase;
+import org.jetbrains.annotations.NotNull;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -163,7 +164,7 @@ public class MaxStarterTest {
         final List<Failure> failures = new ArrayList<Failure>();
         core.addListener(new RunListener() {
             @Override
-            public void testRunFinished(Result result) throws Exception {
+            public void testRunFinished(@NotNull Result result) throws Exception {
                 failures.addAll(result.getFailures());
             }
         });
@@ -216,6 +217,7 @@ public class MaxStarterTest {
                 return true;
             }
 
+            @NotNull
             @Override
             public String describe() {
                 return "Everything";

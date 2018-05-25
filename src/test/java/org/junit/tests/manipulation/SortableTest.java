@@ -5,6 +5,7 @@ import static org.junit.Assert.assertEquals;
 import java.util.Comparator;
 
 import junit.framework.JUnit4TestAdapter;
+import org.jetbrains.annotations.NotNull;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.experimental.runners.Enclosed;
@@ -19,7 +20,7 @@ import org.junit.runner.notification.RunNotifier;
 public class SortableTest {
     private static Comparator<Description> forward() {
         return new Comparator<Description>() {
-            public int compare(Description o1, Description o2) {
+            public int compare(@NotNull Description o1, @NotNull Description o2) {
                 return o1.getDisplayName().compareTo(o2.getDisplayName());
             }
         };
@@ -27,13 +28,14 @@ public class SortableTest {
 
     private static Comparator<Description> backward() {
         return new Comparator<Description>() {
-            public int compare(Description o1, Description o2) {
+            public int compare(@NotNull Description o1, @NotNull Description o2) {
                 return o2.getDisplayName().compareTo(o1.getDisplayName());
             }
         };
     }
 
     public static class TestClassRunnerIsSortable {
+        @NotNull
         private static String log = "";
 
         public static class SortMe {
@@ -129,6 +131,7 @@ public class SortableTest {
     }
 
     public static class TestClassRunnerIsSortableWithSuiteMethod {
+        @NotNull
         private static String log = "";
 
         public static class SortMe {
@@ -179,6 +182,7 @@ public class SortableTest {
             public UnsortableRunner(Class<?> klass) {
             }
 
+            @NotNull
             @Override
             public Description getDescription() {
                 return Description.EMPTY;

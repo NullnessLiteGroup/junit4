@@ -5,6 +5,7 @@ import static org.junit.Assert.assertThat;
 
 import java.util.List;
 
+import org.jetbrains.annotations.NotNull;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -70,7 +71,7 @@ public class CategoryValidatorTest {
         testAndAssertErrorMessage(method, "@After can not be combined with @Category");
     }
 
-    private void testAndAssertErrorMessage(FrameworkMethod method, String expectedErrorMessage) {
+    private void testAndAssertErrorMessage(@NotNull FrameworkMethod method, String expectedErrorMessage) {
         List<Exception> errors = new CategoryValidator().validateAnnotatedMethod(method);
 
         assertThat(errors.size(), is(1));

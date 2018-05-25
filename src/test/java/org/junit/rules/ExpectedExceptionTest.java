@@ -20,6 +20,7 @@ import java.util.Collection;
 
 import org.hamcrest.CoreMatchers;
 import org.hamcrest.Matcher;
+import org.jetbrains.annotations.NotNull;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.JUnitCore;
@@ -113,6 +114,7 @@ public class ExpectedExceptionTest {
     }
 
     public static class EmptyTestExpectingNoException {
+        @NotNull
         @Rule
         public ExpectedException thrown = none();
 
@@ -122,6 +124,7 @@ public class ExpectedExceptionTest {
     }
 
     public static class ThrowExceptionWithExpectedType {
+        @NotNull
         @Rule
         public ExpectedException thrown = none();
 
@@ -133,6 +136,7 @@ public class ExpectedExceptionTest {
     }
 
     public static class ThrowExceptionWithExpectedPartOfMessage {
+        @NotNull
         @Rule
         public ExpectedException thrown = none();
 
@@ -145,6 +149,7 @@ public class ExpectedExceptionTest {
     }
 
     public static class ThrowExceptionWithWrongType {
+        @NotNull
         @Rule
         public ExpectedException thrown = none();
 
@@ -156,6 +161,7 @@ public class ExpectedExceptionTest {
     }
 
     public static class HasWrongMessage {
+        @NotNull
         @Rule
         public ExpectedException thrown = none();
 
@@ -167,6 +173,7 @@ public class ExpectedExceptionTest {
     }
 
     public static class ThrowNoExceptionButExpectExceptionWithType {
+        @NotNull
         @Rule
         public ExpectedException thrown = none();
 
@@ -177,6 +184,7 @@ public class ExpectedExceptionTest {
     }
 
     public static class WronglyExpectsExceptionMessage {
+        @NotNull
         @Rule
         public ExpectedException thrown = none();
 
@@ -187,6 +195,7 @@ public class ExpectedExceptionTest {
     }
 
     public static class ExpectsSubstring {
+        @NotNull
         @Rule
         public ExpectedException thrown = none();
 
@@ -199,6 +208,7 @@ public class ExpectedExceptionTest {
     }
 
     public static class ExpectsSubstringNullMessage {
+        @NotNull
         @Rule
         public ExpectedException thrown = none();
 
@@ -210,6 +220,7 @@ public class ExpectedExceptionTest {
     }
 
     public static class ExpectsMessageMatcher {
+        @NotNull
         @Rule
         public ExpectedException thrown = none();
 
@@ -221,6 +232,7 @@ public class ExpectedExceptionTest {
     }
 
     public static class ExpectedMessageMatcherFails {
+        @NotNull
         @Rule
         public ExpectedException thrown = none();
 
@@ -232,6 +244,7 @@ public class ExpectedExceptionTest {
     }
 
     public static class ExpectsMatcher {
+        @NotNull
         @Rule
         public ExpectedException thrown = none();
 
@@ -243,6 +256,7 @@ public class ExpectedExceptionTest {
     }
 
     public static class ExpectsMultipleMatchers {
+        @NotNull
         @Rule
         public ExpectedException thrown = none();
 
@@ -256,6 +270,7 @@ public class ExpectedExceptionTest {
 
     //https://github.com/junit-team/junit4/pull/583
     public static class ExpectAssertionErrorWhichIsNotThrown {
+        @NotNull
         @Rule
         public ExpectedException thrown = none();
 
@@ -266,6 +281,7 @@ public class ExpectedExceptionTest {
     }
 
     public static class FailBeforeExpectingException {
+        @NotNull
         @Rule
         public ExpectedException thrown = none();
 
@@ -277,6 +293,7 @@ public class ExpectedExceptionTest {
     }
 
     public static class FailedAssumptionAndExpectException {
+        @NotNull
         @Rule
         public ExpectedException thrown = none();
 
@@ -288,6 +305,7 @@ public class ExpectedExceptionTest {
     }
 
     public static class ThrowExceptionWithMatchingCause {
+        @NotNull
         @Rule
         public ExpectedException thrown = none();
 
@@ -304,6 +322,7 @@ public class ExpectedExceptionTest {
     }
 
     public static class ThrowExpectedNullCause {
+        @NotNull
         @Rule
         public ExpectedException thrown = none();
 
@@ -319,6 +338,7 @@ public class ExpectedExceptionTest {
 
     public static class ThrowUnexpectedCause {
 
+        @NotNull
         @Rule
         public ExpectedException thrown = ExpectedException.none();
 
@@ -334,6 +354,7 @@ public class ExpectedExceptionTest {
     
     public static class UseNoCustomMessage {
 
+        @NotNull
         @Rule
         public ExpectedException thrown= ExpectedException.none();
 
@@ -345,6 +366,7 @@ public class ExpectedExceptionTest {
 
     public static class UseCustomMessageWithPlaceHolder {
 
+        @NotNull
         @Rule
         public ExpectedException thrown = ExpectedException.none();
 
@@ -358,6 +380,7 @@ public class ExpectedExceptionTest {
 
     public static class UseCustomMessageWithoutPlaceHolder {
 
+        @NotNull
         @Rule
         public ExpectedException thrown= ExpectedException.none();
 
@@ -370,9 +393,11 @@ public class ExpectedExceptionTest {
 
     public static class ErrorCollectorShouldFailAlthoughExpectedExceptionDoesNot {
 
+        @NotNull
         @Rule
         public ErrorCollector collector = new ErrorCollector();
 
+        @NotNull
         @Rule(order = Integer.MAX_VALUE)
         public ExpectedException thrown = ExpectedException.none();
 

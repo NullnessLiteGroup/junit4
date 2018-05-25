@@ -4,6 +4,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.util.List;
 
+import org.jetbrains.annotations.NotNull;
 import org.junit.internal.TextListener;
 import org.junit.runner.JUnitCore;
 import org.junit.runner.Request;
@@ -32,7 +33,7 @@ public class PrintableResult {
     /**
      * The result of running JUnit on Request {@code request}
      */
-    public static PrintableResult testResult(Request request) {
+    public static PrintableResult testResult(@NotNull Request request) {
         return new PrintableResult(new JUnitCore().run(request));
     }
 

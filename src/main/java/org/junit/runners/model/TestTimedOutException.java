@@ -1,5 +1,7 @@
 package org.junit.runners.model;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -12,6 +14,7 @@ public class TestTimedOutException extends Exception {
 
     private static final long serialVersionUID = 31935685163547539L;
 
+    @NotNull
     private final TimeUnit timeUnit;
     private final long timeout;
 
@@ -38,6 +41,7 @@ public class TestTimedOutException extends Exception {
     /**
      * Gets the time unit for the timeout value
      */
+    @NotNull
     public TimeUnit getTimeUnit() {
         return timeUnit;
     }

@@ -7,6 +7,8 @@ import junit.framework.TestCase;
 import junit.framework.TestListener;
 import junit.framework.TestResult;
 import junit.framework.TestSuite;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.junit.runner.Describable;
 import org.junit.runner.Description;
 import org.junit.runner.Runner;
@@ -43,6 +45,7 @@ public class JUnit38ClassRunner extends Runner implements Filterable, Sortable {
             notifier.fireTestFailure(failure);
         }
 
+        @Nullable
         private Description asDescription(Test test) {
             if (test instanceof Describable) {
                 Describable facade = (Describable) test;
@@ -55,6 +58,7 @@ public class JUnit38ClassRunner extends Runner implements Filterable, Sortable {
             return test.getClass();
         }
 
+        @Nullable
         private String getName(Test test) {
             if (test instanceof TestCase) {
                 return ((TestCase) test).getName();
@@ -86,15 +90,18 @@ public class JUnit38ClassRunner extends Runner implements Filterable, Sortable {
         getTest().run(result);
     }
 
+    @NotNull
     public TestListener createAdaptingListener(final RunNotifier notifier) {
         return new OldTestClassAdaptingListener(notifier);
     }
 
+    @Nullable
     @Override
     public Description getDescription() {
         return makeDescription(getTest());
     }
 
+    @Nullable
     private static Description makeDescription(Test test) {
         if (test instanceof TestCase) {
             TestCase tc = (TestCase) test;
@@ -142,7 +149,7 @@ public class JUnit38ClassRunner extends Runner implements Filterable, Sortable {
         return String.format("TestSuite with %s tests%s", count, example);
     }
 
-    public void filter(Filter filter) throws NoTestsRemainException {
+    public void filter(@NotNull Filter filter) throws NoTestsRemainException {
         if (getTest() instanceof Filterable) {
             Filterable adapter = (Filterable) getTest();
             adapter.filter(filter);

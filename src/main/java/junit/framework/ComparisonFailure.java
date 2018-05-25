@@ -1,5 +1,7 @@
 package junit.framework;
 
+import org.jetbrains.annotations.NotNull;
+
 /**
  * Thrown when an assert equals for Strings failed.
  *
@@ -31,6 +33,7 @@ public class ComparisonFailure extends AssertionFailedError {
      *
      * @see Throwable#getMessage()
      */
+    @NotNull
     @Override
     public String getMessage() {
         return new ComparisonCompactor(MAX_CONTEXT_LENGTH, fExpected, fActual).compact(super.getMessage());

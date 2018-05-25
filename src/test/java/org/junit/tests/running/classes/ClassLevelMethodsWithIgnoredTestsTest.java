@@ -4,6 +4,7 @@ import static org.junit.Assert.fail;
 
 import java.util.List;
 
+import org.jetbrains.annotations.NotNull;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
@@ -120,12 +121,14 @@ public class ClassLevelMethodsWithIgnoredTestsTest {
     }
 
     public static class BrokenRule implements TestRule {
+        @NotNull
         public Statement apply(Statement base, Description description) {
             throw new RuntimeException("this rule is broken");
         }
     }
 
     public static class ClassRuleWithIgnoredTest {
+        @NotNull
         @ClassRule
         public static BrokenRule brokenRule = new BrokenRule();
 

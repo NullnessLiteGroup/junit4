@@ -2,6 +2,7 @@ package org.junit.rules;
 
 import static org.junit.Assert.assertEquals;
 
+import org.jetbrains.annotations.NotNull;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -12,6 +13,7 @@ import org.junit.runner.RunWith;
 @RunWith(Enclosed.class)
 public class NameRulesTest {
     public static class TestNames {
+        @NotNull
         @Rule
         public TestName name = new TestName();
 
@@ -27,6 +29,7 @@ public class NameRulesTest {
     }
 
     public static class BeforeAndAfterTest {
+        @NotNull
         @Rule
         public TestName name = new TestName();
 

@@ -8,6 +8,7 @@ import static org.junit.Assert.assertTrue;
 import junit.framework.JUnit4TestAdapter;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
+import org.jetbrains.annotations.NotNull;
 import org.junit.runner.JUnitCore;
 import org.junit.runner.RunWith;
 import org.junit.runners.AllTests;
@@ -24,6 +25,7 @@ public class AllTestsTest {
 
     @RunWith(AllTests.class)
     public static class All {
+        @NotNull
         static public junit.framework.Test suite() {
             TestSuite suite = new TestSuite();
             suite.addTestSuite(OneTest.class);
@@ -60,6 +62,7 @@ public class AllTestsTest {
 
     @RunWith(AllTests.class)
     public static class AllJUnit4 {
+        @NotNull
         static public junit.framework.Test suite() {
             TestSuite suite = new TestSuite();
             suite.addTest(new JUnit4TestAdapter(JUnit4Test.class));
@@ -75,6 +78,7 @@ public class AllTestsTest {
 
     @RunWith(AllTests.class)
     public static class BadSuiteMethod {
+        @NotNull
         public static junit.framework.Test suite() {
             throw new RuntimeException("can't construct");
         }

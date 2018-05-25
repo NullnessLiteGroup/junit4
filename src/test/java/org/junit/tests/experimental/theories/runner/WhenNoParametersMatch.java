@@ -8,6 +8,8 @@ import static org.junit.Assume.assumeThat;
 import static org.junit.experimental.results.PrintableResult.testResult;
 
 import org.hamcrest.Matcher;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.junit.experimental.theories.DataPoint;
 import org.junit.experimental.theories.DataPoints;
 import org.junit.experimental.theories.Theories;
@@ -16,9 +18,11 @@ import org.junit.runner.RunWith;
 
 @RunWith(Theories.class)
 public class WhenNoParametersMatch {
+    @NotNull
     @DataPoints
     public static int[] ints = {0, 1, 3, 5, 1776};
 
+    @NotNull
     @DataPoints
     public static Matcher<?>[] matchers = {not(0), is(1)};
 
@@ -27,6 +31,7 @@ public class WhenNoParametersMatch {
         @DataPoint
         public static int DATA = 0;
 
+        @Nullable
         @DataPoint
         public static Matcher<Integer> MATCHER = null;
 
@@ -38,7 +43,7 @@ public class WhenNoParametersMatch {
 
     @Theory
     public void showFailedAssumptionsWhenNoParametersFound(int data,
-            Matcher<Integer> matcher) throws Exception {
+                                                           @NotNull Matcher<Integer> matcher) throws Exception {
         assumeThat(data, not(matcher));
         AssumptionsFail.DATA = data;
         AssumptionsFail.MATCHER = matcher;

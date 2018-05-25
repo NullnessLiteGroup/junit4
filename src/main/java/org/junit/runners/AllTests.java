@@ -1,5 +1,6 @@
 package org.junit.runners;
 
+import org.jetbrains.annotations.NotNull;
 import org.junit.internal.runners.SuiteMethod;
 
 /**
@@ -21,7 +22,7 @@ public class AllTests extends SuiteMethod {
     /**
      * Only called reflectively. Do not use programmatically.
      */
-    public AllTests(Class<?> klass) throws Throwable {
+    public AllTests(@NotNull Class<?> klass) throws Throwable {
         super(klass);
     }
 }

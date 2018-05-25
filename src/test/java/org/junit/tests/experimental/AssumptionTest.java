@@ -17,6 +17,7 @@ import static org.junit.experimental.results.ResultMatchers.isSuccessful;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.jetbrains.annotations.NotNull;
 import org.junit.Assume;
 import org.junit.AssumptionViolatedException;
 import org.junit.Before;
@@ -278,6 +279,7 @@ public class AssumptionTest {
      * Helper method that runs tests on <code>clazz</code> and returns any
      * {@link Failure} objects that were {@link AssumptionViolatedException}s.
      */
+    @NotNull
     private static List<Failure> runAndGetAssumptionFailures(Class<?> clazz) {
         final List<Failure> failures = new ArrayList<Failure>();
         final JUnitCore core = new JUnitCore();

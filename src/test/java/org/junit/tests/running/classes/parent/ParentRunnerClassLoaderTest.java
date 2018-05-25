@@ -1,6 +1,7 @@
 package org.junit.tests.running.classes.parent;
 
 
+import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
 import org.junit.runner.Description;
 import org.junit.runner.notification.RunNotifier;
@@ -84,7 +85,7 @@ public class ParentRunnerClassLoaderTest {
 
 
     private static class VisibleClassLoader extends URLClassLoader {
-        public VisibleClassLoader(URL[] urls, ClassLoader parent) {
+        public VisibleClassLoader(@NotNull URL[] urls, ClassLoader parent) {
             super(urls, parent);
         }
 

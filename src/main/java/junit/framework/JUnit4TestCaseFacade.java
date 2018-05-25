@@ -1,5 +1,6 @@
 package junit.framework;
 
+import org.jetbrains.annotations.Nullable;
 import org.junit.runner.Describable;
 import org.junit.runner.Description;
 
@@ -10,6 +11,7 @@ public class JUnit4TestCaseFacade implements Test, Describable {
         fDescription = description;
     }
 
+    @Nullable
     @Override
     public String toString() {
         return getDescription().toString();

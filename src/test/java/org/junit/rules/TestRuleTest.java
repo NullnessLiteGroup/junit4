@@ -13,6 +13,8 @@ import static org.junit.experimental.results.ResultMatchers.isSuccessful;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.junit.After;
 import org.junit.Assume;
 import org.junit.Before;
@@ -29,9 +31,10 @@ public class TestRuleTest {
     private static boolean wasRun;
 
     public static class ExampleTest {
+        @NotNull
         @Rule
         public TestRule example = new TestRule() {
-            public Statement apply(final Statement base, Description description) {
+            public Statement apply(@NotNull final Statement base, Description description) {
                 return new Statement() {
                     @Override
                     public void evaluate() throws Throwable {
@@ -71,6 +74,7 @@ public class TestRuleTest {
     }
 
     public static class OneFieldTwoKindsOfRule {
+        @NotNull
         @Rule
         public BothKindsOfRule both = new BothKindsOfRule();
 
@@ -101,7 +105,8 @@ public class TestRuleTest {
 
     public static class MultipleRuleTest {
         private static class Increment implements TestRule {
-            public Statement apply(final Statement base, Description description) {
+            @NotNull
+            public Statement apply(@NotNull final Statement base, Description description) {
                 return new Statement() {
                     @Override
                     public void evaluate() throws Throwable {
@@ -112,9 +117,11 @@ public class TestRuleTest {
             }
         }
 
+        @NotNull
         @Rule
         public TestRule incrementor1 = new Increment();
 
+        @NotNull
         @Rule
         public TestRule incrementor2 = new Increment();
 
@@ -149,6 +156,7 @@ public class TestRuleTest {
     private static String log;
 
     public static class BeforesAndAfters {
+        @NotNull
         private static StringBuilder watchedLog = new StringBuilder();
 
         @Before
@@ -156,6 +164,7 @@ public class TestRuleTest {
             watchedLog.append("before ");
         }
 
+        @NotNull
         @Rule
         public TestRule watcher = new LoggingTestWatcher(watchedLog);
 
@@ -204,6 +213,7 @@ public class TestRuleTest {
     }
 
     public static class PrivateRule {
+        @NotNull
         @Rule
         private TestRule rule = new TestName();
 
@@ -219,9 +229,11 @@ public class TestRuleTest {
     }
 
     public static class CustomTestName implements TestRule {
+        @Nullable
         public String name = null;
 
-        public Statement apply(final Statement base, final Description description) {
+        @NotNull
+        public Statement apply(@NotNull final Statement base, @NotNull final Description description) {
             return new Statement() {
                 @Override
                 public void evaluate() throws Throwable {
@@ -233,6 +245,7 @@ public class TestRuleTest {
     }
 
     public static class UsesCustomMethodRule {
+        @NotNull
         @Rule
         public CustomTestName counter = new CustomTestName();
 
@@ -248,8 +261,9 @@ public class TestRuleTest {
     }
 
     public static class MethodExampleTest {
+        @NotNull
         private TestRule example = new TestRule() {
-            public Statement apply(final Statement base, Description description) {
+            public Statement apply(@NotNull final Statement base, Description description) {
                 return new Statement() {
                     @Override
                     public void evaluate() throws Throwable {
@@ -260,6 +274,7 @@ public class TestRuleTest {
             }
         };
 
+        @NotNull
         @Rule
         public TestRule getExample() {
             return example;
@@ -294,8 +309,10 @@ public class TestRuleTest {
     }
 
     public static class MethodOneFieldTwoKindsOfRule {
+        @NotNull
         private MethodBothKindsOfRule both = new MethodBothKindsOfRule();
 
+        @NotNull
         @Rule
         public MethodBothKindsOfRule getBoth() {
             return both;
@@ -326,7 +343,8 @@ public class TestRuleTest {
 
     public static class MethodMultipleRuleTest {
         private static class Increment implements TestRule {
-            public Statement apply(final Statement base, Description description) {
+            @NotNull
+            public Statement apply(@NotNull final Statement base, Description description) {
                 return new Statement() {
                     @Override
                     public void evaluate() throws Throwable {
@@ -337,15 +355,19 @@ public class TestRuleTest {
             }
         }
 
+        @NotNull
         private TestRule incrementor1 = new Increment();
 
+        @NotNull
         @Rule
         public TestRule getIncrementor1() {
             return incrementor1;
         }
 
+        @NotNull
         private TestRule incrementor2 = new Increment();
 
+        @NotNull
         @Rule
         public TestRule getIncrementor2() {
             return incrementor2;
@@ -382,6 +404,7 @@ public class TestRuleTest {
     public static class BeforesAndAftersAreEnclosedByRule {
         private static StringBuilder log;
 
+        @NotNull
         @Rule
         public TestRule watcher = new LoggingTestWatcher(log);
 
@@ -454,8 +477,10 @@ public class TestRuleTest {
     }
 
     public static class MethodUsesCustomMethodRule {
+        @NotNull
         private CustomTestName counter = new CustomTestName();
 
+        @NotNull
         @Rule
         public CustomTestName getCounter() {
             return counter;
@@ -481,7 +506,8 @@ public class TestRuleTest {
             this.name = name;
         }
 
-        public Statement apply(final Statement base, final Description description) {
+        @NotNull
+        public Statement apply(@NotNull final Statement base, final Description description) {
             return new Statement() {
                 @Override
                 public void evaluate() throws Throwable {
@@ -493,11 +519,13 @@ public class TestRuleTest {
     }
 
     public static class UsesFieldAndMethodRule {
+        @NotNull
         @Rule
         public OrderTestRule orderMethod() {
             return new OrderTestRule("orderMethod");
         }
 
+        @NotNull
         @Rule
         public OrderTestRule orderField = new OrderTestRule("orderField");
 
@@ -518,7 +546,8 @@ public class TestRuleTest {
         int countOfMethodCalls = 0;
 
         private static class Dummy implements TestRule {
-            public Statement apply(final Statement base, Description description) {
+            @NotNull
+            public Statement apply(@NotNull final Statement base, Description description) {
                 return new Statement() {
                     @Override
                     public void evaluate() throws Throwable {
@@ -528,6 +557,7 @@ public class TestRuleTest {
             }
         }
 
+        @NotNull
         @Rule
         public Dummy both() {
             countOfMethodCalls++;

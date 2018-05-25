@@ -3,6 +3,7 @@ package org.junit.experimental.theories.internal;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.jetbrains.annotations.NotNull;
 import org.junit.experimental.theories.ParameterSignature;
 import org.junit.experimental.theories.ParameterSupplier;
 import org.junit.experimental.theories.PotentialAssignment;
@@ -15,6 +16,7 @@ public class EnumSupplier extends ParameterSupplier {
         this.enumType = enumType;
     }
 
+    @NotNull
     @Override
     public List<PotentialAssignment> getValueSources(ParameterSignature sig) {
         Object[] enumValues = enumType.getEnumConstants();

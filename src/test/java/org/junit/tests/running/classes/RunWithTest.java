@@ -3,6 +3,8 @@ package org.junit.tests.running.classes;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.junit.Test;
 import org.junit.runner.Description;
 import org.junit.runner.JUnitCore;
@@ -30,6 +32,7 @@ public class RunWithTest {
             return 0;
         }
 
+        @NotNull
         @Override
         public Description getDescription() {
             log += "plan";
@@ -63,6 +66,7 @@ public class RunWithTest {
     }
 
     public static class BadRunner extends Runner {
+        @Nullable
         @Override
         public Description getDescription() {
             return null;

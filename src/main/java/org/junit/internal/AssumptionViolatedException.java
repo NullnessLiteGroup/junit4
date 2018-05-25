@@ -4,6 +4,7 @@ import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.SelfDescribing;
 import org.hamcrest.StringDescription;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * An exception class used to implement <i>assumptions</i> (state in which a given test
@@ -88,7 +89,7 @@ public class AssumptionViolatedException extends RuntimeException implements Sel
         return StringDescription.asString(this);
     }
 
-    public void describeTo(Description description) {
+    public void describeTo(@NotNull Description description) {
         if (fAssumption != null) {
             description.appendText(fAssumption);
         }

@@ -9,6 +9,7 @@ import static org.junit.Assert.assertTrue;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
+import org.jetbrains.annotations.Nullable;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.experimental.ParallelComputer;
@@ -17,9 +18,13 @@ import org.junit.runner.Result;
 
 public class ParallelClassTest {
     private static final long TIMEOUT = 15;
+    @Nullable
     private static volatile Thread fExample1One = null;
+    @Nullable
     private static volatile Thread fExample1Two = null;
+    @Nullable
     private static volatile Thread fExample2One = null;
+    @Nullable
     private static volatile Thread fExample2Two = null;
     private static volatile CountDownLatch fSynchronizer;
 

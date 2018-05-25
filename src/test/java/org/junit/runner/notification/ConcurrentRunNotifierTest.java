@@ -1,5 +1,6 @@
 package org.junit.runner.notification;
 
+import org.jetbrains.annotations.Nullable;
 import org.junit.Test;
 import org.junit.runner.Description;
 
@@ -107,6 +108,7 @@ public final class ConcurrentRunNotifierTest {
 
             ExecutorService notificationsPool = Executors.newFixedThreadPool(4);
             notificationsPool.submit(new Callable<Void>() {
+                @Nullable
                 public Void call() throws Exception {
                     trigger.await();
                     while (condition.get()) {

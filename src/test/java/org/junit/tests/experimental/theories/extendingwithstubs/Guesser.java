@@ -11,6 +11,8 @@ import java.util.Random;
 
 import org.hamcrest.BaseDescription;
 import org.hamcrest.Description;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.junit.internal.AssumptionViolatedException;
 
 public class Guesser<T> extends ReguessableValue {
@@ -18,13 +20,14 @@ public class Guesser<T> extends ReguessableValue {
             InvocationHandler {
         private static final long serialVersionUID = 1L;
 
-        public GuessMap(GuessMap guesses) {
+        public GuessMap(@NotNull GuessMap guesses) {
             super(guesses);
         }
 
         public GuessMap() {
         }
 
+        @NotNull
         GuessMap replaceGuess(Object oldValue, Object newValue) {
             GuessMap newGuesses = new GuessMap(this);
             for (Entry<MethodCall, Object> entry : newGuesses.entrySet()) {
@@ -35,7 +38,8 @@ public class Guesser<T> extends ReguessableValue {
             return newGuesses;
         }
 
-        protected Object generateGuess(Class<?> returnType) {
+        @Nullable
+        protected Object generateGuess(@NotNull Class<?> returnType) {
             if (returnType.equals(String.class)) {
                 return "GUESS" + new Random().nextInt();
             }
@@ -46,7 +50,7 @@ public class Guesser<T> extends ReguessableValue {
             return null;
         }
 
-        Object getGuess(MethodCall call) {
+        Object getGuess(@NotNull MethodCall call) {
             if (!containsKey(call)) {
                 put(call, generateGuess(call.getReturnType()));
             }
@@ -72,14 +76,16 @@ public class Guesser<T> extends ReguessableValue {
         this.guesses = guesses;
     }
 
+    @NotNull
     @SuppressWarnings("unchecked")
     public T getProxy() {
         return (T) Proxy.newProxyInstance(getClass().getClassLoader(),
                 new Class[]{getType()}, guesses);
     }
 
+    @NotNull
     @Override
-    public List<ReguessableValue> reguesses(AssumptionViolatedException e) {
+    public List<ReguessableValue> reguesses(@NotNull AssumptionViolatedException e) {
         final ArrayList<ReguessableValue> returnThis = new ArrayList<ReguessableValue>();
         e.describeTo(new BaseDescription() {
             @Override
@@ -87,6 +93,7 @@ public class Guesser<T> extends ReguessableValue {
             }
 
             boolean expectedSeen = false;
+            @Nullable
             Object expected = null;
 
             @Override
@@ -109,6 +116,7 @@ public class Guesser<T> extends ReguessableValue {
         return returnThis;
     }
 
+    @NotNull
     @Override
     public Object getValue() throws CouldNotGenerateValueException {
         return getProxy();
@@ -118,6 +126,7 @@ public class Guesser<T> extends ReguessableValue {
         return type;
     }
 
+    @NotNull
     @Override
     public String getDescription() throws CouldNotGenerateValueException {
         return "guesser[" + type + "]";

@@ -1,5 +1,7 @@
 package junit.samples.money;
 
+import org.jetbrains.annotations.NotNull;
+
 /**
  * The common interface for simple Monies and MoneyBags
  */
@@ -29,11 +31,13 @@ public interface IMoney {
     /**
      * Multiplies a money by the given factor.
      */
+    @NotNull
     IMoney multiply(int factor);
 
     /**
      * Negates this money.
      */
+    @NotNull
     IMoney negate();
 
     /**

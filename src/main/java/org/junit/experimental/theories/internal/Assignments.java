@@ -7,6 +7,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.jetbrains.annotations.NotNull;
 import org.junit.experimental.theories.ParameterSignature;
 import org.junit.experimental.theories.ParameterSupplier;
 import org.junit.experimental.theories.ParametersSuppliedBy;
@@ -36,8 +37,8 @@ public class Assignments {
      * Returns a new assignment list for {@code testMethod}, with no params
      * assigned.
      */
-    public static Assignments allUnassigned(Method testMethod,
-            TestClass testClass) {
+    public static Assignments allUnassigned(@NotNull Method testMethod,
+                                            TestClass testClass) {
         List<ParameterSignature> signatures;
         signatures = ParameterSignature.signatures(testClass
                 .getOnlyConstructor());
@@ -54,6 +55,7 @@ public class Assignments {
         return unassigned.get(0);
     }
 
+    @NotNull
     public Assignments assignNext(PotentialAssignment source) {
         List<PotentialAssignment> potentialAssignments = new ArrayList<PotentialAssignment>(assigned);
         potentialAssignments.add(source);
@@ -62,7 +64,8 @@ public class Assignments {
                 unassigned.size()), clazz);
     }
 
-    public Object[] getActualValues(int start, int stop) 
+    @NotNull
+    public Object[] getActualValues(int start, int stop)
             throws CouldNotGenerateValueException {
         Object[] values = new Object[stop - start];
         for (int i = start; i < stop; i++) {
@@ -83,6 +86,7 @@ public class Assignments {
         return assignments;
     }
 
+    @NotNull
     private List<PotentialAssignment> generateAssignmentsFromTypeAlone(ParameterSignature unassigned) {
         Class<?> paramType = unassigned.getType();
         
@@ -122,15 +126,18 @@ public class Assignments {
         return cls.newInstance();
     }
 
+    @NotNull
     public Object[] getConstructorArguments()
             throws CouldNotGenerateValueException {
         return getActualValues(0, getConstructorParameterCount());
     }
 
+    @NotNull
     public Object[] getMethodArguments() throws CouldNotGenerateValueException {
         return getActualValues(getConstructorParameterCount(), assigned.size());
     }
 
+    @NotNull
     public Object[] getAllArguments() throws CouldNotGenerateValueException {
         return getActualValues(0, assigned.size());
     }
@@ -142,6 +149,7 @@ public class Assignments {
         return constructorParameterCount;
     }
 
+    @NotNull
     public Object[] getArgumentStrings(boolean nullsOk)
             throws CouldNotGenerateValueException {
         Object[] values = new Object[assigned.size()];

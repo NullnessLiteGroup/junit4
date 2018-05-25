@@ -9,6 +9,7 @@ import static org.junit.tests.experimental.theories.TheoryTestUtils.potentialAss
 import java.util.Arrays;
 import java.util.List;
 
+import org.jetbrains.annotations.NotNull;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.experimental.theories.DataPoint;
@@ -21,10 +22,12 @@ import org.junit.rules.ExpectedException;
 import org.junit.runners.model.TestClass;
 
 public class AllMembersSupplierTest {
+    @NotNull
     @Rule
     public ExpectedException expected = ExpectedException.none();
     
     public static class HasDataPointsArrayField {
+        @NotNull
         @DataPoints
         public static String[] list = new String[] { "qwe", "asd" };
 
@@ -42,6 +45,7 @@ public class AllMembersSupplierTest {
     }
     
     public static class HasDataPointsArrayWithMatchingButInaccurateTypes {
+        @NotNull
         @DataPoints
         public static Object[] objects = {1, "string!", 2};
 
@@ -78,6 +82,7 @@ public class AllMembersSupplierTest {
     }
     
     public static class HasDataPointsWithObjectParameter {
+        @NotNull
         @DataPoints
         public static Object[] objectField = {1, 2};
 
@@ -98,6 +103,7 @@ public class AllMembersSupplierTest {
     }
 
     public static class HasDataPointsFieldWithNullValue {
+        @NotNull
         @DataPoints
         public static Object[] objects = {null, "a"};
 
@@ -130,6 +136,7 @@ public class AllMembersSupplierTest {
     }
     
     public static class HasFailingDataPointsArrayMethod {
+        @NotNull
         @DataPoints
         public static Object[] objects() {
             throw new RuntimeException("failing method");
@@ -146,8 +153,9 @@ public class AllMembersSupplierTest {
         allMemberValuesFor(HasFailingDataPointsArrayMethod.class, Object.class);
     }
 
-    private List<PotentialAssignment> allMemberValuesFor(Class<?> testClass,
-            Class<?>... constructorParameterTypes) throws Throwable {
+    @NotNull
+    private List<PotentialAssignment> allMemberValuesFor(@NotNull Class<?> testClass,
+                                                         Class<?>... constructorParameterTypes) throws Throwable {
         return new AllMembersSupplier(new TestClass(testClass))
                 .getValueSources(ParameterSignature.signatures(
                         testClass.getConstructor(constructorParameterTypes))
@@ -155,6 +163,7 @@ public class AllMembersSupplierTest {
     }
     
     public static class HasDataPointsListField {
+        @NotNull
         @DataPoints
         public static List<String> list = Arrays.asList("one", "two");
 
@@ -191,6 +200,7 @@ public class AllMembersSupplierTest {
     }
     
     public static class HasDataPointsListFieldWithOverlyGenericTypes {
+        @NotNull
         @DataPoints
         public static List<Object> list = Arrays.asList("string", new Object());
 

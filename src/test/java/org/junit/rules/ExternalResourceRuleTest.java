@@ -17,6 +17,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import org.hamcrest.CoreMatchers;
 import org.hamcrest.Matcher;
+import org.jetbrains.annotations.NotNull;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.TestCouldNotBeSkippedException;
@@ -33,6 +34,7 @@ public class ExternalResourceRuleTest {
     private static String callSequence;
 
     public static class UsesExternalResource {
+        @NotNull
         @Rule
         public ExternalResource resource = new ExternalResource() {
             @Override
@@ -84,6 +86,7 @@ public class ExternalResourceRuleTest {
     }
 
     public static class TestFailsAndTwoClosingResourcesFail {
+        @NotNull
         @Rule
         public ExternalResource resourceRule1 = new ExternalResource() {
             @Override
@@ -92,6 +95,7 @@ public class ExternalResourceRuleTest {
             }
         };
 
+        @NotNull
         @Rule
         public ExternalResource resourceRule2 = new ExternalResource() {
             @Override

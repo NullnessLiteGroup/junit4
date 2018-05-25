@@ -8,6 +8,7 @@ import static org.junit.Assert.assertThat;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
 import org.junit.experimental.theories.DataPoint;
 import org.junit.experimental.theories.DataPoints;
@@ -22,9 +23,11 @@ public class SpecificDataPointsSupplierTest {
 
     public static class TestClassWithNamedDataPoints {
 
+        @NotNull
         @DataPoints({"field", "named"})
         public static String[] values = new String[] { "named field" };
 
+        @NotNull
         @DataPoints
         public static String[] otherValues = new String[] { "other" };
         
@@ -33,9 +36,11 @@ public class SpecificDataPointsSupplierTest {
             return new String[] { "named method" };
         }
         
+        @NotNull
         @DataPoint({"single", "named"})
         public static String singleValue = "named single value";
         
+        @NotNull
         @DataPoint
         public static String otherSingleValue = "other value";
         
@@ -120,6 +125,7 @@ public class SpecificDataPointsSupplierTest {
         assertEquals(0, assignedStrings.size());
     }
 
+    @NotNull
     private List<String> getStringValuesFromAssignments(List<PotentialAssignment> assignments) throws CouldNotGenerateValueException {
         List<String> stringValues = new ArrayList<String>();
         for (PotentialAssignment assignment : assignments) {
@@ -128,7 +134,7 @@ public class SpecificDataPointsSupplierTest {
         return stringValues;
     }
 
-    private ParameterSignature signature(String methodName) throws Exception {
+    private ParameterSignature signature(@NotNull String methodName) throws Exception {
         return ParameterSignature.signatures(this.getClass().getMethod(methodName, String.class)).get(0);
     }
 

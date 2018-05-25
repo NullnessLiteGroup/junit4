@@ -1,5 +1,6 @@
 package org.junit.runner;
 
+import org.jetbrains.annotations.NotNull;
 import org.junit.runner.notification.RunNotifier;
 import org.junit.runners.model.RunnerBuilder;
 
@@ -18,6 +19,7 @@ public class RunnerSpy extends Runner {
         invokedRunnerBuilder = runnerBuilder;
     }
 
+    @NotNull
     @Override
     public Description getDescription() {
         return DESCRIPTION;

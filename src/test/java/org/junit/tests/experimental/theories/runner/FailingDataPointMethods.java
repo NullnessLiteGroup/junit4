@@ -4,6 +4,8 @@ import static org.hamcrest.CoreMatchers.not;
 import static org.junit.Assert.assertThat;
 import static org.junit.experimental.results.PrintableResult.testResult;
 import static org.junit.experimental.results.ResultMatchers.isSuccessful;
+
+import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
 import org.junit.experimental.theories.DataPoint;
 import org.junit.experimental.theories.DataPoints;
@@ -35,9 +37,11 @@ public class FailingDataPointMethods {
     
     @RunWith(Theories.class)
     public static class HasFailingDataPointArrayMethod {
+        @NotNull
         @DataPoints
         public static int[] num = { 1, 2, 3 };
 
+        @NotNull
         @DataPoints
         public static int[] failingDataPoints() {
             throw new RuntimeException();
@@ -78,6 +82,7 @@ public class FailingDataPointMethods {
         @DataPoint
         public static int num = 10;
 
+        @NotNull
         @DataPoints(ignoredExceptions=Throwable.class)
         public static int[] failingDataPoint() {
             throw new RuntimeException();

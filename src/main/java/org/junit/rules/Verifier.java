@@ -1,5 +1,6 @@
 package org.junit.rules;
 
+import org.jetbrains.annotations.NotNull;
 import org.junit.runner.Description;
 import org.junit.runners.model.Statement;
 
@@ -28,7 +29,8 @@ import org.junit.runners.model.Statement;
  * @since 4.7
  */
 public abstract class Verifier implements TestRule {
-    public Statement apply(final Statement base, Description description) {
+    @NotNull
+    public Statement apply(@NotNull final Statement base, Description description) {
         return new Statement() {
             @Override
             public void evaluate() throws Throwable {

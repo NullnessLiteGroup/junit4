@@ -1,5 +1,7 @@
 package junit.samples.money;
 
+import org.jetbrains.annotations.NotNull;
+
 /**
  * A simple Money.
  */
@@ -19,18 +21,18 @@ public class Money implements IMoney {
     /**
      * Adds a money to this money. Forwards the request to the addMoney helper.
      */
-    public IMoney add(IMoney m) {
+    public IMoney add(@NotNull IMoney m) {
         return m.addMoney(this);
     }
 
-    public IMoney addMoney(Money m) {
+    public IMoney addMoney(@NotNull Money m) {
         if (m.currency().equals(currency())) {
             return new Money(amount() + m.amount(), currency());
         }
         return MoneyBag.create(this, m);
     }
 
-    public IMoney addMoneyBag(MoneyBag s) {
+    public IMoney addMoneyBag(@NotNull MoneyBag s) {
         return s.addMoney(this);
     }
 
@@ -69,24 +71,27 @@ public class Money implements IMoney {
         return amount() == 0;
     }
 
+    @NotNull
     public IMoney multiply(int factor) {
         return new Money(amount() * factor, currency());
     }
 
+    @NotNull
     public IMoney negate() {
         return new Money(-amount(), currency());
     }
 
-    public IMoney subtract(IMoney m) {
+    public IMoney subtract(@NotNull IMoney m) {
         return add(m.negate());
     }
 
+    @NotNull
     @Override
     public String toString() {
         return "[" + amount() + " " + currency() + "]";
     }
 
-    public /*this makes no sense*/ void appendTo(MoneyBag m) {
+    public /*this makes no sense*/ void appendTo(@NotNull MoneyBag m) {
         m.appendMoney(this);
     }
 }

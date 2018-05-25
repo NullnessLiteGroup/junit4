@@ -1,5 +1,6 @@
 package org.junit.runners.parameterized;
 
+import org.jetbrains.annotations.NotNull;
 import org.junit.runner.Runner;
 import org.junit.runners.model.InitializationError;
 
@@ -11,7 +12,8 @@ import org.junit.runners.model.InitializationError;
  */
 public class BlockJUnit4ClassRunnerWithParametersFactory implements
         ParametersRunnerFactory {
-    public Runner createRunnerForTestWithParameters(TestWithParameters test)
+    @NotNull
+    public Runner createRunnerForTestWithParameters(@NotNull TestWithParameters test)
             throws InitializationError {
         return new BlockJUnit4ClassRunnerWithParameters(test);
     }

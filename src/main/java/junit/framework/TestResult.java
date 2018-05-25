@@ -1,5 +1,7 @@
 package junit.framework;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
@@ -68,6 +70,7 @@ public class TestResult {
     /**
      * Returns a copy of the listeners.
      */
+    @NotNull
     private synchronized List<TestListener> cloneListeners() {
         List<TestListener> result = new ArrayList<TestListener>();
         result.addAll(fListeners);
@@ -93,6 +96,7 @@ public class TestResult {
     /**
      * Returns an Enumeration for the errors.
      */
+    @NotNull
     public synchronized Enumeration<TestFailure> errors() {
         return Collections.enumeration(fErrors);
     }
@@ -108,6 +112,7 @@ public class TestResult {
     /**
      * Returns an Enumeration for the failures.
      */
+    @NotNull
     public synchronized Enumeration<TestFailure> failures() {
         return Collections.enumeration(fFailures);
     }
@@ -115,7 +120,7 @@ public class TestResult {
     /**
      * Runs a TestCase.
      */
-    protected void run(final TestCase test) {
+    protected void run(@NotNull final TestCase test) {
         startTest(test);
         Protectable p = new Protectable() {
             public void protect() throws Throwable {
@@ -137,7 +142,7 @@ public class TestResult {
     /**
      * Runs a TestCase.
      */
-    public void runProtected(final Test test, Protectable p) {
+    public void runProtected(final Test test, @NotNull Protectable p) {
         try {
             p.protect();
         } catch (AssertionFailedError e) {
@@ -159,7 +164,7 @@ public class TestResult {
     /**
      * Informs the result that a test will be started.
      */
-    public void startTest(Test test) {
+    public void startTest(@NotNull Test test) {
         final int count = test.countTestCases();
         synchronized (this) {
             fRunTests += count;
