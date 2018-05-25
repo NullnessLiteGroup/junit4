@@ -40,7 +40,7 @@ public class FrameworkField extends FrameworkMember<FrameworkField> {
         return getField().getName();
         /*
           This is a false positive. By looking at the implementation of
-          getField() (line 80),
+          getField() (line 101),
           we get to know that it returns the field called "field" which might be null.
           However, the constructor (line 21) checks its parameter: if the passing
           parameter is null, it throws an exception; otherwise, it assigns the parameter
