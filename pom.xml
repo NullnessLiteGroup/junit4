@@ -122,6 +122,12 @@
             <version>${hamcrestVersion}</version>
             <scope>test</scope>
         </dependency>
+
+        <dependency>
+            <groupId>org.jetbrains</groupId>
+            <artifactId>annotations-java5</artifactId>
+            <version>RELEASE</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -144,7 +150,6 @@
             Each mojo is an executable goal in Maven, and a plugin is a distribution of
             one or more related mojos.
             For more information see http://maven.apache.org/plugin-developers/index.html
-
             The following plugins are ordered according the Maven build lifecycle.
             http://maven.apache.org/guides/introduction/introduction-to-the-lifecycle.html
             -->
