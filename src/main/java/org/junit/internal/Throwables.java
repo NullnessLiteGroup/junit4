@@ -67,8 +67,8 @@ public final class Throwables {
         // [dereference.of.nullable] TRUE_POSITIVE
         // dereference of exception is unsafe here
         // because the JUnit4 API doesn't prevent
-        // users from running (new Failure(...,null)).getTrace()
-        // to raise NPEs here
+        // users from calling:
+        // (new Failure(null, null)).getTrace();
         exception.printStackTrace(writer);
         return stringWriter.toString();
     }
@@ -102,8 +102,6 @@ public final class Throwables {
     private static List<String> getTrimmedStackTraceLines(@Nullable Throwable exception) {
         // [dereference.of.nullable] TRUE_POSITIVE
         // dereference exception can be unsafe here
-        // although the method is not exposed in JUnit4 API,
-        // users can throw new Failure
         List<StackTraceElement> stackTraceElements = Arrays.asList(exception.getStackTrace());
         int linesToInclude = stackTraceElements.size();
 

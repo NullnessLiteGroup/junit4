@@ -149,7 +149,7 @@ public class TestSuite implements Test {
             superClass = superClass.getSuperclass();
         }
         // [dereference.of.nullable] FALSE_POSITIVE
-        //  fTests cannot be null here, it is already assigned some value
+        // fTests cannot be null here, it is already assigned some value
         // up in the declaration; As a private field, it is never reassigned
         // to be null in this class
         if (fTests.size() == 0) {

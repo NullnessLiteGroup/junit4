@@ -111,16 +111,10 @@ public class TestRunner extends BaseTestRunner {
         return doRun(test, false);
     }
 
-    // Nullable suite from start(String[] args)
-    public TestResult doRun(@Nullable Test suite, boolean wait) {
+    public TestResult doRun(Test suite, boolean wait) {
         TestResult result = createTestResult();
         result.addListener(fPrinter);
         long startTime = System.currentTimeMillis();
-        // [dereference.of.nullable] TRUE_POSITIVE
-        // de-referencing suite is not safe here
-        // because users can run JUnit4 from the command line
-        // and can passed a malformed test class where the suite
-        // method doesn't exist
         suite.run(result);
         long endTime = System.currentTimeMillis();
         long runTime = endTime - startTime;
@@ -188,6 +182,11 @@ public class TestRunner extends BaseTestRunner {
                 return runSingleMethod(testCase, method, wait);
             }
             Test suite = getTest(testCase);
+            // [dereference.of.nullable] FALSE_POSITIVE
+            // because the JUnit wiki (https://github.com/junit-team/junit4/wiki/test-runners)
+            // and JUnit4 API don't introduce TestRunner and its usage.
+            // Besides, the internal calls to this method in the project
+            // will never get this line;
             return doRun(suite, wait);
         } catch (Exception e) {
             throw new Exception("Could not create and run test suite: " + e);

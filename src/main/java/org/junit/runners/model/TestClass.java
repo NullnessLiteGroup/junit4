@@ -210,9 +210,9 @@ public class TestClass implements Annotatable {
 
     public Constructor<?> getOnlyConstructor() {
         // [dereference.of.nullable] TRUE_POSITIVE
-        // TestClass constructor is exposed in JUnit4 API,
-        // and does not prevent clazz from null,
-        // then NPEs will raise if users call getOnlyConstructor()
+        // TestClass class is exposed in JUnit4 API,
+        // so users can call the following code to raise NPEs here:
+        // (new TestClass(null)).getOnlyConstructor();
         Constructor<?>[] constructors = clazz.getConstructors();
         Assert.assertEquals(1, constructors.length);
         return constructors[0];
@@ -316,17 +316,17 @@ public class TestClass implements Annotatable {
 
     public boolean isPublic() {
         // [dereference.of.nullable] TRUE_POSITIVE
-        // TestClass constructor is exposed in JUnit4 API,
-        // and does not prevent clazz from null,
-        // then NPEs will raise if users call isPublic()
+        // TestClass class is exposed in JUnit4 API,
+        // so users can call the following code to raise NPEs here:
+        // (new TestClass(null)).isPublic();
         return Modifier.isPublic(clazz.getModifiers());
     }
 
     public boolean isANonStaticInnerClass() {
         // [dereference.of.nullable] TRUE_POSITIVE
-        // TestClass constructor is exposed in JUnit4 API,
-        // and does not prevent clazz from null,
-        // then NPEs will raise if users call isANonStaticInnerClass()
+        // TestClass class is exposed in JUnit4 API,
+        // so users can call the following code to raise NPEs here:
+        // (new TestClass(null)).isANonStaticInnerClass();
         return clazz.isMemberClass() && !isStatic(clazz.getModifiers());
     }
 
