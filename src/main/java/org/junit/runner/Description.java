@@ -238,6 +238,14 @@ public class Description implements Serializable {
 
     @Override
     public int hashCode() {
+        /*
+          This is a false positive. By looking at the declaration of fUniqueId, we know
+          that it might be null. But looking at the constructor (line 170), we can see that
+          it checks the passing parameters: if the parameter "uniqueId" is null, it throws an
+          exception; otherwise, it assigns uniqueId to fUniqueId. So without an exception,
+          fUniqueId won't be null, which means calling fUniqueId.hashCode() won't cause
+          a NullPointerException here.
+         */
         return fUniqueId.hashCode();
     }
 
@@ -247,6 +255,14 @@ public class Description implements Serializable {
             return false;
         }
         @NotNull Description d = (Description) obj;
+        /*
+          This is a false positive. By looking at the declaration of fUniqueId, we know
+          that it might be null. But looking at the constructor (line 170), we can see that
+          it checks the passing parameters: if the parameter "uniqueId" is null, it throws an
+          exception; otherwise, it assigns uniqueId to fUniqueId. So without an exception,
+          fUniqueId won't be null, which means calling fUniqueId.hashCode() won't cause
+          a NullPointerException here.
+         */
         return fUniqueId.equals(d.fUniqueId);
     }
 
@@ -334,6 +350,16 @@ public class Description implements Serializable {
     private String methodAndClassNamePatternGroupOrDefault(int group,
             String defaultString) {
         @NotNull Matcher matcher = METHOD_AND_CLASS_NAME_PATTERN.matcher(toString());
+        /*
+          This is a false positive because toString() will never return null. Let's look
+          at the implementation of toString() (line 271): it calls getDisplayName(), and
+          getDisplayName() returns the field "fDisplayName".
+          The constructor checks its parameter "displayName": if "displayName" is null, it
+          throws an exception; otherwise, it assigns "displayName" to fDisplayName.
+          Therefore, without an exception, fDisplayName will never be null, which means getDisplayName()
+          won't return null, which then means getDisplayName() won't return null. Thus toString()
+          won't return null and this is a false positive.
+         */
         return matcher.matches() ? matcher.group(group) : defaultString;
     }
 }
