@@ -34,6 +34,9 @@ public abstract class PotentialAssignment {
                 String valueString;
 
                 if (value == null) {
+                    /*
+                      This is not related to NullPointerException. So ignore it.
+                     */
                     valueString = "null";
                 } else {
                     try {

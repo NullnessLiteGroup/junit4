@@ -110,6 +110,11 @@ public class MethodRoadie {
             testMethod.invoke(test);
             if (testMethod.expectsException()) {
                 addFailure(new AssertionError("Expected exception: " + testMethod.getExpectedException().getName()));
+                /*
+                  This is a true positive. By looking at the implementation of testMethod.getExpectedException(), we get
+                  to know that it might return null (src/main/java/org/junit/internal/runners/Testmethod.java: line 48).
+                  So there exists a potential NullPointerException.
+                 */
             }
         } catch (InvocationTargetException e) {
             Throwable actual = e.getTargetException();
@@ -120,6 +125,11 @@ public class MethodRoadie {
             } else if (testMethod.isUnexpected(actual)) {
                 @NotNull String message = "Unexpected exception, expected<" + testMethod.getExpectedException().getName() + "> but was<"
                         + actual.getClass().getName() + ">";
+                /*
+                  This is a true positive. By looking at the implementation of testMethod.getExpectedException(), we get
+                  to know that it might return null (src/main/java/org/junit/internal/runners/Testmethod.java: line 48).
+                  So there exists a potential NullPointerException.
+                 */
                 addFailure(new Exception(message, actual));
             }
         } catch (Throwable e) {

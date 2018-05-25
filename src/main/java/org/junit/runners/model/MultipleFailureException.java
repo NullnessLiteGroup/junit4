@@ -94,6 +94,11 @@ public class MultipleFailureException extends Exception {
         }
         if (errors.size() == 1) {
             throw Throwables.rethrowAsException(errors.get(0));
+            /*
+              Throwables.rethrowAsException(errors.get(0)) returns null and IntelliJ treats
+              "throw Throwables.rethrowAsException(errors.get(0));" as "throwing a NullPointerException".
+              But this is not related to our evaluation. So ignore it.
+             */
         }
 
         /*
