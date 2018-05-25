@@ -30,6 +30,11 @@ public class AnnotationValidatorFactory {
         try {
             AnnotationValidator annotationValidator = clazz.newInstance();
             VALIDATORS_FOR_ANNOTATION_TYPES.putIfAbsent(validateWithAnnotation, annotationValidator);
+            // [return.type.incompatible] FALSE_POSITIVE
+            // VALIDATORS_FOR_ANNOTATION_TYPES.get(validateWithAnnotation) cannot be null
+            // because the key validateWithAnnotation must exist in VALIDATORS_FOR_ANNOTATION_TYPES,
+            // ensured by VALIDATORS_FOR_ANNOTATION_TYPES.putIfAbsent(validateWithAnnotation, annotationValidator);
+            // And the value annotationValidator cannot be null from clazz.newInstance()
             return VALIDATORS_FOR_ANNOTATION_TYPES.get(validateWithAnnotation);
         } catch (Exception e) {
             throw new RuntimeException("Exception received when creating AnnotationValidator class " + clazz.getName(), e);
