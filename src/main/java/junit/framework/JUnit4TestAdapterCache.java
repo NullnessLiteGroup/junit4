@@ -65,11 +65,11 @@ public class JUnit4TestAdapterCache extends HashMap<Description, Test> {
                 result.startTest(asTest(description));
                 /*
                   This is a true positive because asTest(description) might return null, which violates the contract
-                  that asTest() requires a NotNull parameter. By looking at the implementation of asTest(), we
+                  that startsTest() requires a NotNull parameter. By looking at the implementation of asTest(), we
                   get to know that it might return null: in the else-branch, it "return get(description);"
                   (line 32). get() is a method of HashMap and if the given parameter (description) is not in the key set,
                   it returns null.
-                  However, if we change the annotation of the parameter of asTest() to Nullable, there will be a potential
+                  However, if we change the annotation of the parameter of startsTest() to Nullable, there will be a potential
                   NullPointerException when test.countTestCases() is called (src/main/java/junit/framework/TestResult.java: line 169).
                   And thus we cannot change the annotation in order to eliminate this error.
                  */

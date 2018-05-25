@@ -371,6 +371,15 @@ public class TestClass implements Annotatable {
             Comparator<FrameworkMethod> {
         public int compare(@NotNull FrameworkMethod left, @NotNull FrameworkMethod right) {
             return NAME_ASCENDING.compare(left.getMethod(), right.getMethod());
+            /*
+                These two are false positives. By looking at the implementation of
+                getMethod() (src/main/java/org/junit/runners/model/FrameworkMethod.java),
+                we get to know that it returns the field called "method" which might be null.
+                However, the constructor of FrameworkMethod checks its parameter: if the passing
+                parameter is null, it throws an exception; otherwise, it assigns the parameter
+                to the field "method". This means without an exception, left.getMethod() and right.getMethod()
+                won't return null.
+             */
         }
     }
 }

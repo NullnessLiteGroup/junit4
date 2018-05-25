@@ -25,6 +25,15 @@ public class SpecificDataPointsSupplier extends AllMembersSupplier {
     protected Collection<Field> getSingleDataPointFields(@NotNull ParameterSignature sig) {
         Collection<Field> fields = super.getSingleDataPointFields(sig);        
         String requestedName = sig.getAnnotation(FromDataPoints.class).value();
+        /*
+          All six errors in this class are true positives (they are in the same pattern).
+          We can see from the implementation of getAnnotation()
+          (src/main/java/org/junit/experimental/theories/ParameterSignature.java: line 135)
+          that if the field "annotations" (ParameterSignature.java: line 65) is initialized as
+          an empty array (ParameterSignature.java: line 69),
+          getAnnotations() (ParameterSignature.java: line 101) will return an empty ArrayList
+          and then getAnnotation() will return null, which means testedOn will be null.
+         */
 
         @NotNull List<Field> fieldsWithMatchingNames = new ArrayList<Field>();
         

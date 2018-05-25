@@ -53,6 +53,9 @@ public class TestMethod {
 
     boolean isUnexpected(@NotNull Throwable exception) {
         return !getExpectedException().isAssignableFrom(exception.getClass());
+        /*
+          This is a true positive because getExpectedException() might return null. (line 48)
+         */
     }
 
     boolean expectsException() {

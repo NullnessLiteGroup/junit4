@@ -9,6 +9,7 @@ import java.util.Collections;
 import java.util.List;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.junit.internal.builders.AllDefaultPossibilitiesBuilder;
 import org.junit.runner.Description;
 import org.junit.runner.Runner;
@@ -32,6 +33,9 @@ public class Suite extends ParentRunner<Runner> {
     public static Runner emptySuite() {
         try {
             return new Suite((Class<?>) null, new Class<?>[0]);
+            /*
+              This is a true positive because Suite() requires its first parameter to be NotNull.
+             */
         } catch (InitializationError e) {
             throw new RuntimeException("This shouldn't be possible");
         }
@@ -82,6 +86,9 @@ public class Suite extends ParentRunner<Runner> {
      */
     public Suite(RunnerBuilder builder, @NotNull Class<?>[] classes) throws InitializationError {
         this(null, builder.runners(null, classes));
+        /*
+           This is a true positive because runners() requires its first parameter to be NotNull.
+         */
     }
 
     /**
@@ -90,7 +97,7 @@ public class Suite extends ParentRunner<Runner> {
      * @param klass the root of the suite
      * @param suiteClasses the classes in the suite
      */
-    protected Suite(@NotNull Class<?> klass, @NotNull Class<?>[] suiteClasses) throws InitializationError {
+    protected Suite(@Nullable Class<?> klass, @NotNull Class<?>[] suiteClasses) throws InitializationError {
         this(new AllDefaultPossibilitiesBuilder(), klass, suiteClasses);
     }
 

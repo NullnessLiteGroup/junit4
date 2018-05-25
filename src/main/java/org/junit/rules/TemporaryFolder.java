@@ -232,6 +232,10 @@ public class TemporaryFolder extends ExternalResource {
     @Nullable
     public File newFolder() throws IOException {
         return createTemporaryFolderIn(getRoot());
+        /*
+          This is a false positve because getRoot() (line 267) will never return null.
+          It either returns a File instance or throw an IllegalStatementException.
+         */
     }
 
     @Nullable

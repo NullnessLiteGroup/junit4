@@ -167,7 +167,7 @@ public class MaxCore {
             /*
                This is a true positive because getMalformedTestClass(each) might return null, which violates the
                contract that TestSuite() requires a NotNull parameter.
-               (If getMalformedTestClass(each) catches a ClassNotFoundException, it will return null. (line 188))
+               (If getMalformedTestClass(each) catches a ClassNotFoundException, it will return null. (line 201))
              */
         }
         @Nullable Class<?> type = each.getTestClass();

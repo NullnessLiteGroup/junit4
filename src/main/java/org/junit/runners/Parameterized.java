@@ -303,15 +303,15 @@ public class Parameterized extends Suite {
             throw new InvalidTestClassError(getTestClass().getJavaClass(), errors);
             /*
               This is a true positive. By looking at the implementation of getJavaClass(), we know that
-              its return type is @Nullable (and we've checked through TestClass.java where getJavaClass() is
+              its return type is Nullable (and we've checked through TestClass.java where getJavaClass() is
               implemented in order to ensure that getJavaClass() might return null).
               And this contradicts the implementation of InvalidTestClassError()
-              (see src/main/java/org/junit/runners/model/InvalidTestClassError.java)
-              which annotates its first parameter @NotNull.
+              (src/main/java/org/junit/runners/model/InvalidTestClassError.java)
+              which requires its first parameter to be NotNull.
 
-              However, we cannot change that annotation to @Nullable in order to eliminate the above error,
-              because if we change it to @Nullable, createMessage() (line 22 of InvalidTestClassError.java)
-              will then call testClass.getName() (line 27 of InvalidTestClassError.java),
+              However, we cannot change that annotation to Nullable in order to eliminate this error,
+              because if we change it to Nullable, createMessage() (InvalidTestClassError.java: line 22)
+              will then call testClass.getName() (InvalidTestClassError.java: line 27),
               which will cause a NullPointerException.
              */
         }
@@ -328,7 +328,7 @@ public class Parameterized extends Suite {
                 /*
                   This is a false positive.
                   By looking at src/main/java/org/junit/runners/model/FrameworkMethod.java (where getMethod() is implemented),
-                  we get to know that although the return type of fm.getMethod() is annotated @Nullable,
+                  we get to know that although the return type of fm.getMethod() is annotated Nullable,
                   actually it will never return null
                   (because the constructor of FrameworkMethod checks for nullity of its parameter
                   and will throw an exception if the parameter is actually null; otherwise, it initializes its field "method"
@@ -353,6 +353,17 @@ public class Parameterized extends Suite {
             this.description = Description
                     .createTestDescription(testClass.getJavaClass(),
                             methodName + "() assumption violation");
+            /*
+              This is a true positive. By looking at the implementation of getJavaClass(), we know that
+              its return type is Nullable (see src/main/java/org/junit/runners/model/TestClass.java).
+              And this contradicts the implementation of createTestDescription()
+              (src/main/java/org/junit/runner/Description.java: line 101)
+              which requires its first parameter to be NotNull.
+
+              However, we cannot change that annotation to Nullable in order to eliminate this error,
+              because if we change it to Nullable, calling clazz.getName() (Description.java: line 102)
+              will cause a NullPointerException.
+             */
             this.exception = exception;
         }
 
@@ -404,6 +415,11 @@ public class Parameterized extends Suite {
                 return Collections.singletonList(runnerOverride);
             }
             Parameters parameters = parametersMethod.getAnnotation(Parameters.class);
+            /*
+              ? Calling getAnnotation() will always get an exception. And thus IntelliJ reports
+              calling parameters.name() may throw a NullPointerException.
+              This is not related to our evaluation. So ignore it.
+             */
             return Collections.unmodifiableList(createRunnersForParameters(
                     allParameters, parameters.name(),
                     getParametersRunnerFactory()));
