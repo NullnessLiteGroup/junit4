@@ -183,9 +183,8 @@ public class MaxCore {
         List<Description> results = new ArrayList<Description>();
         // [dereference.of.nullable] TRUE_POSITIVE
         // dereference of request.getRunner() is unsafe here
-        // because JUnit4 API doesn't prevent users from calling
-        // storedLocally() to create a new MaxCore and
-        // sortRequest(Request.runner(null)) to raise the NPEs here
+        // because JUnit4 API doesn't prevent users from calling:
+        // MaxCore.storedLocally(new File("/* some path */")).sortRequest(Request.runner(null));
         findLeaves(null, request.getRunner().getDescription(), results);
         return results;
     }
