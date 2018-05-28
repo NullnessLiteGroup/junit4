@@ -14,7 +14,6 @@ final class ReflectiveRuntimeMXBean implements RuntimeMXBean {
   private final Object runtimeMxBean;
 
   private static final class Holder {
-    // Nullable field if no getInputArguments method
     private static final Method getInputArgumentsMethod;
     static {
       Method inputArguments = null;
