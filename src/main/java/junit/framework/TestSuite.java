@@ -115,10 +115,7 @@ public class TestSuite implements Test {
      * Parts of this method were written at 2337 meters in the Hueffihuette,
      * Kanton Uri
      */
-    @SuppressWarnings("nullness")
     public TestSuite(final @Nullable Class<?> theClass) {
-        // [method.invocation.invalid] FALSE_POSITIVE
-        // constructor helper methods
         addTestsFromTestCase(theClass);
     }
 
@@ -157,21 +154,15 @@ public class TestSuite implements Test {
      *
      * @see TestSuite#TestSuite(Class)
      */
-    @SuppressWarnings("nullness")
     public TestSuite(Class<? extends TestCase> theClass, String name) {
         this(theClass);
-        // [method.invocation.invalid] FALSE_POSITIVE
-        // constructor helper methods
         setName(name);
     }
 
     /**
      * Constructs an empty TestSuite.
      */
-    @SuppressWarnings("nullness")
     public TestSuite(String name) {
-        // [method.invocation.invalid] FALSE_POSITIVE
-        // constructor helper methods
         setName(name);
     }
 
@@ -180,13 +171,8 @@ public class TestSuite implements Test {
      *
      * @param classes {@link TestCase}s
      */
-    @SuppressWarnings("nullness")
     public TestSuite(Class<?>... classes) {
         for (Class<?> each : classes) {
-            // [method.invocation.invalid] FALSE_POSITIVE
-            // constructor helper methods: addTest
-            // [method.invocation.invalid] FALSE_POSITIVE
-            // constructor helper methods: testCaseForClass
             addTest(testCaseForClass(each));
         }
     }
@@ -204,11 +190,8 @@ public class TestSuite implements Test {
      *
      * @see TestSuite#TestSuite(Class[])
      */
-    @SuppressWarnings("nullness")
     public TestSuite(Class<? extends TestCase>[] classes, String name) {
         this(classes);
-        // [method.invocation.invalid] FALSE_POSITIVE
-        // constructor helper methods
         setName(name);
     }
 

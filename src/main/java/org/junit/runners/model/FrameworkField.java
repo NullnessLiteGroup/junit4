@@ -16,7 +16,6 @@ import org.junit.runners.BlockJUnit4ClassRunner;
 public class FrameworkField extends FrameworkMember<FrameworkField> {
     private final Field field;
 
-    @SuppressWarnings("nullness")
     FrameworkField(Field field) {
         if (field == null) {
             throw new NullPointerException(
@@ -24,8 +23,6 @@ public class FrameworkField extends FrameworkMember<FrameworkField> {
         }
         this.field = field;
 
-        // [method.invocation.invalid] FALSE_POSITIVE
-        // pure helper method in the constructor
         if (isPublic()) {
             // This field could be a public field in a package-scope base class
             try {

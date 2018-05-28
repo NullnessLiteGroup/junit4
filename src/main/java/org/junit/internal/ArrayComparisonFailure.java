@@ -39,7 +39,7 @@ public class ArrayComparisonFailure extends AssertionError {
         addDimension(index);
     }
 
-    public void addDimension(@UnderInitialization(ArrayComparisonFailure.class) int index) {
+    public void addDimension(@UnderInitialization(ArrayComparisonFailure.class) ArrayComparisonFailure this, int index) {
         fIndices.add(0, index);
     }
 

@@ -56,8 +56,6 @@ public class TestClass implements Annotatable {
         Map<Class<? extends Annotation>, List<FrameworkField>> fieldsForAnnotations =
                 new LinkedHashMap<Class<? extends Annotation>, List<FrameworkField>>();
 
-        // [method.invocation.invalid] FALSE_POSITIVE
-        // helper method for constructor
         scanAnnotatedMembers(methodsForAnnotations, fieldsForAnnotations);
 
         this.methodsForAnnotations = makeDeeplyUnmodifiable(methodsForAnnotations);

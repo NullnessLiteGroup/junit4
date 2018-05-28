@@ -63,7 +63,6 @@ public class TemporaryFolder extends ExternalResource {
      * @param parentFolder folder where temporary resources will be created.
      * If {@code null} then system default temporary-file directory is used.
      */
-    @SuppressWarnings("nullness")
     public TemporaryFolder(@Nullable File parentFolder) {
         this.parentFolder = parentFolder;
         this.assureDeletion = false;
@@ -183,7 +182,6 @@ public class TemporaryFolder extends ExternalResource {
      * and a directory named {@code "child"} will be created under the newly-created
      * {@code "parent"} directory.
      */
-    @SuppressWarnings("nullness")
     public File newFolder(String... paths) throws IOException {
         if (paths.length == 0) {
             throw new IllegalArgumentException("must pass at least one path");
@@ -232,7 +230,6 @@ public class TemporaryFolder extends ExternalResource {
         return createTemporaryFolderIn(getRoot());
     }
 
-    @SuppressWarnings("nullness")
     private File createTemporaryFolderIn(@Nullable File parentFolder) throws IOException {
         File createdFolder = null;
         for (int i = 0; i < TEMP_DIR_ATTEMPTS; ++i) {

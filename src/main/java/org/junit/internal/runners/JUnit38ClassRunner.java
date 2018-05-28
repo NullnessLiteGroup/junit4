@@ -78,8 +78,6 @@ public class JUnit38ClassRunner extends Runner implements Filterable, Sortable {
 
     public JUnit38ClassRunner(@Nullable Test test) {
         super();
-        // [method.invocation.invalid] FALSE_POSITIVE
-        //  helper method to set field
         setTest(test);
     }
 
@@ -174,7 +172,7 @@ public class JUnit38ClassRunner extends Runner implements Filterable, Sortable {
         }
     }
 
-    private void setTest(@UnderInitialization JUnit38ClassRunner this, Test test) {
+    private void setTest(@UnderInitialization JUnit38ClassRunner this, @Nullable Test test) {
         this.test = test;
     }
 

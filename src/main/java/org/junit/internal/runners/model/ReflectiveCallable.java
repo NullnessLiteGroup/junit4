@@ -8,7 +8,6 @@ import java.lang.reflect.InvocationTargetException;
  * When invoked, throws the exception from the reflected method, rather than
  * wrapping it in an InvocationTargetException.
  */
-@SuppressWarnings("nullness")
 public abstract class ReflectiveCallable {
     public @Nullable Object run() throws Throwable {
         try {

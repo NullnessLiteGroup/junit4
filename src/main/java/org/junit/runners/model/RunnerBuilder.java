@@ -70,7 +70,6 @@ public abstract class RunnerBuilder {
         }
     }
 
-    @SuppressWarnings("nullness")
     @Nullable Class<?> addParent(@Nullable Class<?> parent) throws InitializationError {
         if (!parents.add(parent)) {
             // [dereference.of.nullable] TRUE_POSITIVE

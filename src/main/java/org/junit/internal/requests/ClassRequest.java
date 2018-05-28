@@ -32,7 +32,6 @@ public class ClassRequest extends Request {
     }
 
     @Override
-    @SuppressWarnings("nullness")
     public Runner getRunner() {
         if (runner == null) {
             runnerLock.lock();

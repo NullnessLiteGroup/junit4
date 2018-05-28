@@ -30,14 +30,9 @@ public class JUnit4ClassRunner extends Runner implements Filterable, Sortable {
     private final List<Method> testMethods;
     private TestClass testClass;
 
-    @SuppressWarnings("nullness")
     public JUnit4ClassRunner(Class<?> klass) throws InitializationError {
         testClass = new TestClass(klass);
-        // [method.invocation.invalid] FALSE_POSITIVE
-        // helper method in the constructor
         testMethods = getTestMethods();
-        // [method.invocation.invalid] FALSE_POSITIVE
-        // helper method in the constructor
         validate();
     }
 

@@ -83,7 +83,7 @@ public class MultipleFailureException extends Exception {
      * @param errors list to check
      * @throws Exception or Error if the list is not empty
      */
-    @SuppressWarnings({"deprecation","nullness"})
+    @SuppressWarnings({"deprecation"})
     public static void assertEmpty(List<Throwable> errors) throws Exception {
         if (errors.isEmpty()) {
             return;

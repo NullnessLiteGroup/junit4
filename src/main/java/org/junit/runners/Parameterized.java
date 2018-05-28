@@ -294,7 +294,7 @@ public class Parameterized extends Suite {
         validateBeforeParamAndAfterParamMethods(runnersFactory.parameterCount);
     }
 
-    private void validateBeforeParamAndAfterParamMethods(@UnderInitialization Integer parameterCount)
+    private void validateBeforeParamAndAfterParamMethods(@UnderInitialization Parameterized this, Integer parameterCount)
             throws InvalidTestClassError {
         List<Throwable> errors = new ArrayList<Throwable>();
         validatePublicStaticVoidMethods(Parameterized.BeforeParam.class, parameterCount, errors);
@@ -305,7 +305,7 @@ public class Parameterized extends Suite {
     }
 
     private void validatePublicStaticVoidMethods(
-            Class<? extends Annotation> annotation, @UnderInitialization Integer parameterCount,
+            @UnderInitialization Parameterized this, Class<? extends Annotation> annotation, Integer parameterCount,
             List<Throwable> errors) {
         List<FrameworkMethod> methods = getTestClass().getAnnotatedMethods(annotation);
         for (FrameworkMethod fm : methods) {

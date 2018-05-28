@@ -106,7 +106,6 @@ public class ParameterSignature {
         return findDeepAnnotation(annotations2, annotationType, 3);
     }
 
-    @SuppressWarnings("nullness")
     private <T extends Annotation> @Nullable T findDeepAnnotation(
             Annotation[] annotations, Class<T> annotationType, int depth) {
         if (depth == 0) {

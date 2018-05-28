@@ -117,7 +117,6 @@ public final class Throwables {
         }
     }
 
-    @SuppressWarnings("nullness")
     private static boolean hasSuppressed(Throwable exception) {
         if (getSuppressed == null) {
             return false;
