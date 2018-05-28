@@ -1,6 +1,5 @@
 package org.junit.internal.management;
 
-import org.checkerframework.checker.nullness.qual.Nullable;
 import org.junit.internal.Classes;
 
 import java.lang.reflect.InvocationTargetException;
