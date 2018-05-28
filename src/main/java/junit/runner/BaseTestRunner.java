@@ -134,10 +134,21 @@ public abstract class BaseTestRunner implements TestListener {
                 return test;
             }
         } catch (InvocationTargetException e) {
-            // [dereference.of.nullable] TRUE_POSITIVE
-            // dereference of e.getTargetException() is unsafe
-            // the public constructor InvocationTargetException(target)
-            // doesn't prevent null target, which is returned from e.getTargetException()
+            // [dereference.of.nullable] FALSE_POSITIVE
+            // e.getTargetException() cannot be null here because
+            // 1). JUnit4 uses the Java reflection to invoke the method to catch
+            //     InvocationTargetException, which "wraps an exception thrown by
+            //     an invoked method or constructor" documented by the Java 8 API;
+            //     @See(https://docs.oracle.com/javase/8/docs/api/java/lang/reflect/InvocationTargetException.html)
+            //     but an exception cannot be null, because even if we "throw null;"
+            //     from our code, the InvocationTargetException wraps an unchecked
+            //     NullPointerException thrown by our method, instead of null;
+            // 2). BaseTestRunner is not exposed in JUnit4 API,
+            //     so users cannot tweak the invoke behavior of the method
+            //     instantiated in this class by writing code;
+            // 3). It is possible that users can change the binary of the method
+            //     to change the runtime behavior, but we seriously doubt whether
+            //     users will do that to use JUnit4.
             runFailed("Failed to invoke suite():" + e.getTargetException().toString());
             return null;
         } catch (IllegalAccessException e) {

@@ -79,7 +79,7 @@ public final class Throwables {
      *
      * @return a trimmed stack trace, or the original trace if trimming wasn't possible
      */
-    // Nullable exception from Failure.getTrimmedTrace()
+    // Nullable exception from Failure: getTrimmedTrace()
     public static String getTrimmedStackTrace(@Nullable Throwable exception) {
         List<String> trimmedStackTraceLines = getTrimmedStackTraceLines(exception);
         if (trimmedStackTraceLines.isEmpty()) {
@@ -101,7 +101,12 @@ public final class Throwables {
     // Nullable exception from Throwables.getTrimmedStackTrace
     private static List<String> getTrimmedStackTraceLines(@Nullable Throwable exception) {
         // [dereference.of.nullable] TRUE_POSITIVE
-        // dereference exception can be unsafe here
+        // dereference of exception is unsafe here
+        // because although this Throwables are not exposed in JUnit4 API
+        // its callers are. The JUnit 4 API allow users to call:
+        // List<Failure> list = new ArrayList<>();
+        // list.add(new Failure(Description.createTestDescription(Object.class, ""), null));
+        // (new PrintableResult(list)).toString();
         List<StackTraceElement> stackTraceElements = Arrays.asList(exception.getStackTrace());
         int linesToInclude = stackTraceElements.size();
 

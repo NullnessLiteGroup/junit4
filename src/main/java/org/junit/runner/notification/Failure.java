@@ -98,9 +98,8 @@ public class Failure implements Serializable {
         // [dereference.of.nullable] TRUE_POSITIVE
         //  dereference of getException(), which returns
         // fThrownException is unsafe here;
-        // because JUnit4 API is not banned for users to initialize
-        // fThrownException to be null from the public constructor
-        // of Failure and call getMessage()
+        // because JUnit4 API allows users to call:
+        // (new Failure(Description.createTestDescription(Object.class, ""), null)).getMessage();
         return getException().getMessage();
     }
 }

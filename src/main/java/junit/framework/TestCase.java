@@ -185,10 +185,20 @@ public abstract class TestCase extends Assert implements Test {
             runMethod.invoke(this);
         } catch (InvocationTargetException e) {
             e.fillInStackTrace();
-            // [throwing.nullable] TRUE_POSITIVE
-            // e.getTargetException() is nullable
-            // since its public constructor InvocationTargetException(target)
-            // doesn't prevent target to be null
+            // [throwing.nullable] FALSE_POSITIVE
+            // 1). TestCase calls invoke on the method instance to catch
+            //     InvocationTargetException, which "wraps an exception thrown by
+            //     an invoked method or constructor" documented by the Java 8 API;
+            //     @See(https://docs.oracle.com/javase/8/docs/api/java/lang/reflect/InvocationTargetException.html)
+            //     but an exception cannot be null, because even if we "throw null;"
+            //     from our code, the InvocationTargetException wraps an unchecked
+            //     NullPointerException thrown by our method, instead of null;
+            // 2). TestCase is not exposed in JUnit4 API,
+            //     so users cannot tweak the invoke behavior of the method
+            //     instantiated in this class by writing code;
+            // 3). It is possible that users can change the binary of the method
+            //     to change the runtime behavior, but we seriously doubt whether
+            //     users will do that to use JUnit4.
             throw e.getTargetException();
         } catch (IllegalAccessException e) {
             e.fillInStackTrace();
