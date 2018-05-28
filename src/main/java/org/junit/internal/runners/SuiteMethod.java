@@ -35,20 +35,20 @@ public class SuiteMethod extends JUnit38ClassRunner {
             }
             suite = (Test) suiteMethod.invoke(null); // static method
         } catch (InvocationTargetException e) {
-            // [throwing.nullable] FALSE_POSITIVE
-            // 1). SuiteMethod calls invoke on the method instance to catch
-            //     InvocationTargetException, which "wraps an exception thrown by
-            //     an invoked method or constructor" documented by the Java 8 API;
-            //     @See(https://docs.oracle.com/javase/8/docs/api/java/lang/reflect/InvocationTargetException.html)
-            //     but an exception cannot be null, because even if we "throw null;"
-            //     from our code, the InvocationTargetException wraps an unchecked
-            //     NullPointerException thrown by our method, instead of null;
-            // 2). SuiteMethod is not exposed in JUnit4 API,
-            //     so users cannot tweak the invoke behavior of the method
-            //     instantiated in this class by writing code;
-            // 3). It is possible that users can change the binary of the method
-            //     to change the runtime behavior, but we seriously doubt whether
-            //     users will do that to use JUnit4.
+            // [throwing.nullable] TRUE_POSITIVE
+            // e.getCause() is nullable from the Java API;
+            // Although e.getCause() in InvocationTargetException
+            // may be intended to be non-null in Java reflection,
+            // we decided it JUnit4 needs to be safer.
+            // @See Java API that documents getCause can be null
+            //      (https://docs.oracle.com/javase/8/docs/api/
+            //      java/lang/reflect/InvocationTargetException.html)
+            // @See StackOverFlow discussion about when InvocationTargetException
+            //      has a null cause (https://stackoverflow.com/questions/
+            //      17684484/when-is-invocationtargetexception-getcause-null)
+            // @See The blog in Oracle forum discussing the four possibilities of
+            //      getCause() (https://blogs.oracle.com/chengfang/
+            //      whats-inside-invocationtargetexception-not-just-exception)
             throw e.getCause();
         }
         // [return.type.incompatible] FALSE_POSITIVE

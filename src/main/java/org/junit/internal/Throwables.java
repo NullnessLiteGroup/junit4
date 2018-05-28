@@ -102,7 +102,7 @@ public final class Throwables {
     private static List<String> getTrimmedStackTraceLines(@Nullable Throwable exception) {
         // [dereference.of.nullable] TRUE_POSITIVE
         // dereference of exception is unsafe here
-        // because although this Throwables are not exposed in JUnit4 API
+        // because although Throwables is not exposed in JUnit4 API
         // its callers are. The JUnit 4 API allow users to call:
         // List<Failure> list = new ArrayList<>();
         // list.add(new Failure(Description.createTestDescription(Object.class, ""), null));
