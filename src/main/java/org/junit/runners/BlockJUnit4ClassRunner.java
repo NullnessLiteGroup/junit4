@@ -381,7 +381,6 @@ public class BlockJUnit4ClassRunner extends ParentRunner<FrameworkMethod> {
      * @deprecated
      */
     @Deprecated
-    // Nullable test from methodBlock(final FrameworkMethod method)
     protected Statement withPotentialTimeout(FrameworkMethod method,
             Object test, Statement next) {
         long timeout = getTimeout(method.getAnnotation(Test.class));
