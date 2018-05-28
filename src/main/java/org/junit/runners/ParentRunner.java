@@ -480,7 +480,8 @@ public abstract class ParentRunner<T> extends Runner implements Filterable,
             // is called in the constructor
             //
             // [argument.type.incompatible] FALSE_POSITIVE
-            // new ParentRunner(null) {...} will never enter this branch,
+            // dereference of testClass.getJavaClass() is safe here because
+            // new ParentRunner(null) {...} will never enter this if-branch,
             // because it will not cause error in collectInitializationErrors(errors),
             // which never de-reference testClass.getJavaClass() directly or indirectly
             throw new InvalidTestClassError(testClass.getJavaClass(), errors);

@@ -51,11 +51,12 @@ public class TestMethod {
     }
 
     // Nullable exception from MethodRoadie.runTestMethod()
-    boolean isUnexpected(@Nullable Throwable exception) {
-        // [dereference.of.nullable] TRUE_POSITIVE
-        // dereference of possibly-null reference getExpectedException()
-        // [dereference.of.nullable] TRUE_POSITIVE
-        // dereference of possibly-null reference exception
+    boolean isUnexpected(Throwable exception) {
+        // [dereference.of.nullable] FALSE_POSITIVE
+        // getExpectedException() will not return null in this case
+        // because 1). TestMethod is not exposed in the JUnit4 API
+        // 2). the only caller in this project MethodRoadie: runTestMethod()
+        // checks the expectsException() == true before it calls this method;
         return !getExpectedException().isAssignableFrom(exception.getClass());
     }
 

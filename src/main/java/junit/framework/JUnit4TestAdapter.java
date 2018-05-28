@@ -41,7 +41,7 @@ public class JUnit4TestAdapter implements Test, Filterable, Sortable, Describabl
         fNewTestClass = newTestClass;
         // [assignment.type.incompatible] FALSE_POSITIVE
         // fRunner cannot be null here, because the underlying
-        //  implementation of Request.classWithoutSuiteMethod(newTestClass)
+        // implementation of Request.classWithoutSuiteMethod(newTestClass)
         // is ClassRequest, which returns non-null runner for getRunner()
         fRunner = Request.classWithoutSuiteMethod(newTestClass).getRunner();
     }
