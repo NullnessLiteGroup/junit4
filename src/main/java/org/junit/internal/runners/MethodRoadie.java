@@ -120,21 +120,6 @@ public class MethodRoadie {
                 return;
             } else if (!testMethod.expectsException()) {
                 addFailure(actual);
-                // [argument.type.incompatible] FALSE_POSITIVE
-                // actual cannot be null here because
-                // 1). JUnit4 uses the Java reflection to invoke the method to catch
-                //     InvocationTargetException, which "wraps an exception thrown by
-                //     an invoked method or constructor" documented by the Java 8 API;
-                //     @See(https://docs.oracle.com/javase/8/docs/api/java/lang/reflect/InvocationTargetException.html)
-                //     but an exception cannot be null, because even if we "throw null;"
-                //     from our code, the InvocationTargetException wraps an unchecked
-                //     NullPointerException thrown by our method, instead of null;
-                // 2). MethodRoadie is not exposed in JUnit4 API,
-                //     so users cannot tweak the invoke behavior of the method
-                //     instantiated in this class by writing code;
-                // 3). It is possible that users can change the binary of the method
-                //     to change the runtime behavior, but we seriously doubt whether
-                //     users will do that to use JUnit4.
             } else if (testMethod.isUnexpected(actual)) {
                 // 1) [dereference.of.nullable] FALSE_POSITIVE
                 // testMethod.getExpectedException() could not be null
