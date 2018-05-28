@@ -51,12 +51,16 @@ public class TestMethod {
     }
 
     // Nullable exception from MethodRoadie.runTestMethod()
-    boolean isUnexpected(Throwable exception) {
+    boolean isUnexpected(@Nullable Throwable exception) {
         // [dereference.of.nullable] FALSE_POSITIVE
         // getExpectedException() will not return null in this case
         // because 1). TestMethod is not exposed in the JUnit4 API
         // 2). the only caller in this project MethodRoadie: runTestMethod()
         // checks the expectsException() == true before it calls this method;
+        //
+        // [dereference.of.nullable] TRUE_POSITIVE
+        // exception can be null,
+        // if e.getTargetException() is null from MethodRoadie.runTestMethod()
         return !getExpectedException().isAssignableFrom(exception.getClass());
     }
 
