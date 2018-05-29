@@ -148,10 +148,14 @@ public class AllMembersSupplier extends ParameterSupplier {
     private void addIterableValues(ParameterSignature sig, String name, List<PotentialAssignment> list, @Nullable Iterable<?> iterable) {
         // [dereference.of.nullable] TRUE_POSITIVE
         // dereference of possibly-null reference iterable
-        // the caller method only ensures the type is Iterable.class
-        // but did not ensure that value is non-null
+        // Although JUnit4 API documented that users can use @DataPoints
+        // to annotate the iterable-typed static field, which is used as
+        // parameters for corresponding theories methods, it doesn't explicitly
+        // say that users cannot assign null to the field. Plus, the implementation
+        // doesn't check whether the iterable passed into this method is null, so
+        // we consider dereference iterable is unsafe here.
         //
-        // One example to raise NPEs is:
+        // One example to raise NPEs here is:
         // @RunWith(Theories.class)
         // public class Empty {
         //    @DataPoints
