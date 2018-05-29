@@ -118,6 +118,7 @@ public abstract class ComparisonCriteria {
         };
     }
 
+    @SuppressWarnings("nullness")
     private String componentTypeName(Class<?> arrayClass) {
         Class<?> componentType = arrayClass.getComponentType();
         // [dereference.of.nullable] FALSE_POSITIVE

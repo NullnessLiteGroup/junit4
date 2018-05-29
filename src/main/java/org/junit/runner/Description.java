@@ -86,6 +86,7 @@ public class Description implements Serializable {
      */
     // Nullable name from JUnit38ClassRunner: makeDescription(new TestCase(){})
     // Nullable clazz from BlockJUnit4ClassRunner.describeChild(BlockJUnit4ClassRunner this, FrameworkMethod method)
+    @SuppressWarnings("nullness")
     public static Description createTestDescription(@Nullable Class<?> clazz, @Nullable String name, Annotation... annotations) {
         // [dereference.of.nullable] TRUE_POSITIVE
         // clazz.getName() can raise NPEs
@@ -105,6 +106,7 @@ public class Description implements Serializable {
      */
     // Nullable name from JUnit38ClassRunner.asDescription(Test test)
     // Nullable clazz for its public static method
+    @SuppressWarnings("nullness")
     public static Description createTestDescription(@Nullable Class<?> clazz, @Nullable String name) {
         // [dereference.of.nullable] TRUE_POSITIVE
         // clazz.getName() can raise NPEs
@@ -328,6 +330,7 @@ public class Description implements Serializable {
      * @return If this describes a method invocation,
      *         the name of the class of the test instance
      */
+    @SuppressWarnings("nullness")
     public String getClassName() {
         // [return.type.incompatible] FALSE_POSITIVE
         // fTestClass.getName() ensures non-null name returned

@@ -121,6 +121,7 @@ public class MaxCore {
         };
     }
 
+    @SuppressWarnings("nullness")
     private Runner buildRunner(Description each) {
         if (each.toString().equals("TestSuite with 0 tests")) {
             return Suite.emptySuite();
@@ -157,6 +158,7 @@ public class MaxCore {
     }
 
     // Nullable Class<?> returned if throw ClassNotFoundException
+    @SuppressWarnings("nullness")
     private Class<?> getMalformedTestClass(Description each) {
         try {
             return Class.forName(each.toString().replace(MALFORMED_JUNIT_3_TEST_CLASS_PREFIX, ""));
@@ -181,6 +183,7 @@ public class MaxCore {
         return findLeaves(sortRequest(request));
     }
 
+    @SuppressWarnings("nullness")
     private List<Description> findLeaves(Request request) {
         List<Description> results = new ArrayList<Description>();
         // [dereference.of.nullable] TRUE_POSITIVE

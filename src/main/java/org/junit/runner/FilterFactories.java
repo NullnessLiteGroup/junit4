@@ -18,6 +18,7 @@ class FilterFactories {
      * @param filterSpec the filter specification
      * @throws org.junit.runner.FilterFactory.FilterNotCreatedException
      */
+    @SuppressWarnings("nullness")
     public static Filter createFilterFromFilterSpec(Request request, String filterSpec)
             throws FilterFactory.FilterNotCreatedException {
         // [dereference.of.nullable] FALSE_POSITIVE

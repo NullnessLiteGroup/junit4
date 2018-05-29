@@ -13,6 +13,7 @@ import org.junit.experimental.theories.PotentialAssignment;
  */
 public class TestedOnSupplier extends ParameterSupplier {
     @Override
+    @SuppressWarnings("nullness")
     public List<PotentialAssignment> getValueSources(ParameterSignature sig) {
         List<PotentialAssignment> list = new ArrayList<PotentialAssignment>();
         TestedOn testedOn = sig.getAnnotation(TestedOn.class);

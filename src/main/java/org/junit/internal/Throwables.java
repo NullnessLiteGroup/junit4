@@ -61,6 +61,7 @@ public final class Throwables {
      * @since 4.13
      */
     // Nullable exception from Failure.getTrace()
+    @SuppressWarnings("nullness")
     public static String getStacktrace(@Nullable Throwable exception) {
         StringWriter stringWriter = new StringWriter();
         PrintWriter writer = new PrintWriter(stringWriter);
@@ -80,6 +81,7 @@ public final class Throwables {
      * @return a trimmed stack trace, or the original trace if trimming wasn't possible
      */
     // Nullable exception from Failure: getTrimmedTrace()
+    @SuppressWarnings("nullness")
     public static String getTrimmedStackTrace(@Nullable Throwable exception) {
         List<String> trimmedStackTraceLines = getTrimmedStackTraceLines(exception);
         if (trimmedStackTraceLines.isEmpty()) {
@@ -99,6 +101,7 @@ public final class Throwables {
     }
 
     // Nullable exception from Throwables.getTrimmedStackTrace
+    @SuppressWarnings("nullness")
     private static List<String> getTrimmedStackTraceLines(@Nullable Throwable exception) {
         // [dereference.of.nullable] TRUE_POSITIVE
         // dereference of exception is unsafe here
@@ -141,6 +144,7 @@ public final class Throwables {
         }
     }
 
+    @SuppressWarnings("nullness")
     private static boolean hasSuppressed(Throwable exception) {
         if (getSuppressed == null) {
             return false;

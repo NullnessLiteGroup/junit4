@@ -25,6 +25,7 @@ public class SuiteMethod extends JUnit38ClassRunner {
         super(testFromSuiteMethod(klass));
     }
 
+    @SuppressWarnings("nullness")
     public static Test testFromSuiteMethod(Class<?> klass) throws Throwable {
         Method suiteMethod = null;
         Test suite = null;

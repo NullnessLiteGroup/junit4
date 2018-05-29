@@ -54,8 +54,9 @@ public class ParallelComputer extends Computer {
         return runner;
     }
 
-    @Override
     // Nullable Runner returned by super.getSuite(builder, classes) and parallelize(suite)
+    @Override
+    @SuppressWarnings("nullness")
     public Runner getSuite(RunnerBuilder builder, java.lang.Class<?>[] classes)
             throws InitializationError {
         Runner suite = super.getSuite(builder, classes);

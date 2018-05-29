@@ -122,6 +122,7 @@ public class TestSuite implements Test {
     }
 
     // helper method to for the constructor of TestSuite
+    @SuppressWarnings("nullness")
     private void addTestsFromTestCase(@UnderInitialization TestSuite this, final Class<?> theClass) {
         fName = theClass.getName();
         try {
@@ -208,6 +209,7 @@ public class TestSuite implements Test {
      * Adds a test to the suite.
      */
     // helper method to for the constructor of TestSuite
+    @SuppressWarnings("nullness")
     public void addTest(@UnknownInitialization TestSuite this, Test test) {
         // [dereference.of.nullable] FALSE_POSITIVE
         //  fTests cannot be null here, it is already assigned some value

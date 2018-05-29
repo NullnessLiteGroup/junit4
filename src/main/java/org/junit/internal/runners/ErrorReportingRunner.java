@@ -25,6 +25,7 @@ public class ErrorReportingRunner extends Runner {
     }
 
     // Nullable testClasses from ErrorReportingRunner(Class<?> testClass, Throwable cause)
+    @SuppressWarnings("nullness")
     public ErrorReportingRunner(Throwable cause, @Nullable Class<?>... testClasses) {
         if (testClasses == null || testClasses.length == 0) {
             throw new NullPointerException("Test classes cannot be null or empty");
@@ -69,9 +70,9 @@ public class ErrorReportingRunner extends Runner {
         return builder.toString();
     }
 
-    @SuppressWarnings("deprecation")
     // helper method for the constructor of ErrorReportingRunner
     // Nullable cause from itself, recursive call
+    @SuppressWarnings({"deprecation","nullness"})
     private List<Throwable> getCauses(@UnderInitialization ErrorReportingRunner this, @Nullable Throwable cause) {
         if (cause instanceof InvocationTargetException) {
             return getCauses(cause.getCause());

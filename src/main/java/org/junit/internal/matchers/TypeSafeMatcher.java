@@ -28,6 +28,7 @@ public abstract class TypeSafeMatcher<T> extends BaseMatcher<T> {
         expectedType = findExpectedType(getClass());
     }
 
+    @SuppressWarnings("nullness")
     private static Class<?> findExpectedType(Class<?> fromClass) {
         for (Class<?> c = fromClass; c != Object.class; c = c.getSuperclass()) {
             // [argument.type.incompatible] FALSE_POSITIVE

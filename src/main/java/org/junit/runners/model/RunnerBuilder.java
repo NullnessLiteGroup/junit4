@@ -74,6 +74,7 @@ public abstract class RunnerBuilder {
 
     // Nullable parent from runners(Class<?> parent, Class<?>[] children)
     // Nullable Class<?> if parent is null and called only once
+    @SuppressWarnings("nullness")
     @Nullable Class<?> addParent(@Nullable Class<?> parent) throws InitializationError {
         if (!parents.add(parent)) {
             // [dereference.of.nullable] FALSE_POSITIVE

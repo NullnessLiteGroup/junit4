@@ -151,6 +151,7 @@ public class TestRunner extends BaseTestRunner {
      * Starts a test run. Analyzes the command line arguments and runs the given
      * test suite.
      */
+    @SuppressWarnings("nullness")
     public TestResult start(String[] args) throws Exception {
         String testCase = "";
         String method = "";

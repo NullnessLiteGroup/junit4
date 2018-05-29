@@ -64,6 +64,7 @@ public class Failure implements Serializable {
     }
 
     @Override
+    @SuppressWarnings("nullness")
     public String toString() {
         // [dereference.of.nullable] TRUE_POSITIVE
         // dereference of fThrownException is unsafe here
@@ -94,6 +95,7 @@ public class Failure implements Serializable {
      * @return the message of the thrown exception
      */
     // Nullable String returned from null detailed message of an exception (e.g. FileNotFoundException())
+    @SuppressWarnings("nullness")
     public @Nullable String getMessage() {
         // [dereference.of.nullable] TRUE_POSITIVE
         //  dereference of getException(), which returns

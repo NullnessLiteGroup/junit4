@@ -96,6 +96,7 @@ public abstract class BaseTestRunner implements TestListener {
      * a template method, subclasses override runFailed(), clearStatus().
      */
     // Nullable Test returned from getTest("")
+    @SuppressWarnings("nullness")
     public @Nullable Test getTest(String suiteClassName) {
         if (suiteClassName.length() <= 0) {
             clearStatus();
@@ -240,6 +241,7 @@ public abstract class BaseTestRunner implements TestListener {
     protected void clearStatus() { // Belongs in the GUI TestRunner class
     }
 
+    @SuppressWarnings("nullness")
     protected boolean useReloadingTestSuiteLoader() {
         // [dereference.of.nullable] FALSE_POSITIVE
         //  de-referencing getPreference("loading") cannot raise NPE
@@ -322,6 +324,7 @@ public abstract class BaseTestRunner implements TestListener {
         return sw.toString();
     }
 
+    @SuppressWarnings("nullness")
     protected static boolean showStackRaw() {
         // [dereference.of.nullable] FALSE_POSITIVE
         //  de-referencing getPreference("filterstack") cannot raise NPE

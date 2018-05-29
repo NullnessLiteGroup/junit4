@@ -105,6 +105,7 @@ public class MethodRoadie {
         }
     }
 
+    @SuppressWarnings("nullness")
     protected void runTestMethod() {
         try {
             testMethod.invoke(test);
@@ -137,6 +138,7 @@ public class MethodRoadie {
         }
     }
 
+    @SuppressWarnings("nullness")
     private void runBefores() throws FailedBefore {
         try {
             try {

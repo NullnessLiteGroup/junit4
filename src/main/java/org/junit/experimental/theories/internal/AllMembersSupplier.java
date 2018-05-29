@@ -145,6 +145,7 @@ public class AllMembersSupplier extends ParameterSupplier {
 
     // Nullable array from addDataPointsValues(Class<?> type, ParameterSignature sig, String name,
     //            List<PotentialAssignment> list, Object value)
+    @SuppressWarnings("nullness")
     private void addIterableValues(ParameterSignature sig, String name, List<PotentialAssignment> list, @Nullable Iterable<?> iterable) {
         // [dereference.of.nullable] TRUE_POSITIVE
         // dereference of possibly-null reference iterable
