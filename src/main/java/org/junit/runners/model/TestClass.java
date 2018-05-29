@@ -213,6 +213,9 @@ public class TestClass implements Annotatable {
         // TestClass class is exposed in JUnit4 API,
         // so users can call the following code to raise NPEs here:
         // (new TestClass(null)).getOnlyConstructor();
+
+        // Also found by Nullaway with annotations required by NullnessLite
+        // true positive for the same reason
         Constructor<?>[] constructors = clazz.getConstructors();
         Assert.assertEquals(1, constructors.length);
         return constructors[0];
@@ -319,6 +322,9 @@ public class TestClass implements Annotatable {
         // TestClass class is exposed in JUnit4 API,
         // so users can call the following code to raise NPEs here:
         // (new TestClass(null)).isPublic();
+
+        // Also found by Nullaway with annotations required by NullnessLite
+        // true positive for the same reason
         return Modifier.isPublic(clazz.getModifiers());
     }
 
@@ -327,6 +333,9 @@ public class TestClass implements Annotatable {
         // TestClass class is exposed in JUnit4 API,
         // so users can call the following code to raise NPEs here:
         // (new TestClass(null)).isANonStaticInnerClass();
+
+        // Also found by Nullaway with annotations required by NullnessLite
+        // true positive for the same reason
         return clazz.isMemberClass() && !isStatic(clazz.getModifiers());
     }
 
