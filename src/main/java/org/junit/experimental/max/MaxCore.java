@@ -162,10 +162,12 @@ public class MaxCore {
             return Class.forName(each.toString().replace(MALFORMED_JUNIT_3_TEST_CLASS_PREFIX, ""));
         } catch (ClassNotFoundException e) {
             // [return.type.incompatible] FALSE_POSITIVE
-            // cheating methods for JUnit4 test purpose only
-            // because its caller buildRunner(Description each) only calls
-            // this method when each is ensured to have MALFORMED_JUNIT_3_TEST_CLASS_PREFIX
-            // which is not exposed to users
+            // we never reach this line
+            // cheating methods if user test is in JUnit3 style
+            // keyword MALFORMED_JUNIT_3_TEST_CLASS_PREFIX is not exposed to users
+            // we can see MALFORMED_JUNIT_3_TEST_CLASS_PREFIX is only used in
+            // MaxCore: findLeaves when we get description: "warning(junit.framework.TestSuite$1)"
+            // so the class exists and is already examined by the JUnit4 runner.
             return null;
         }
     }
