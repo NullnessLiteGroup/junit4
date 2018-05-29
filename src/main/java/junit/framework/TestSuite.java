@@ -109,6 +109,16 @@ public class TestSuite implements Test {
      * Constructs an empty TestSuite.
      */
     public TestSuite() {
+        // [initialization.fields.uninitialized] FALSE_POSITIVE
+        // TestSuite is not exposed in JUnit4 API,
+        // TestSuite() and its subclass constructor ActiveTestSuite()
+        // are not internally called in this project;
+        // TestSuite() is called in the test folder,
+        // but it is okay because, fName is a private field that can
+        // only be accessed from getName();
+        // getName() is called in the test folder only when fName is
+        // ensured to be non-null or with extra control flow to prevent
+        // NPEs.
     }
 
     /**
@@ -118,6 +128,9 @@ public class TestSuite implements Test {
      * Kanton Uri
      */
     public TestSuite(final Class<?> theClass) {
+        // [initialization.fields.uninitialized] FALSE_POSITIVE
+        // fName is initialized in the helper method
+        // addTestsFromTestCase(theClass)
         addTestsFromTestCase(theClass);
     }
 

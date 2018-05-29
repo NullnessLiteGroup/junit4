@@ -500,6 +500,9 @@ public abstract class ParentRunner<T> extends Runner implements Filterable,
                 childrenLock.unlock();
             }
         }
+        // [return.type.incompatible] FALSE_POSITIVE
+        // filteredChildren cannot be uninitialized at this point,
+        // due to the code above
         return filteredChildren;
     }
 
