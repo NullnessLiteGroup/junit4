@@ -82,7 +82,7 @@ public class MaxHistory implements Serializable {
         stream.close();
     }
 
-    // Nullable Long returned because fFailureTimestamps.put()
+    // Nullable Long returned because of fFailureTimestamps.get()
     // is called when a Failure occurs
     @Nullable Long getFailureTimestamp(Description key) {
         return fFailureTimestamps.get(key.toString());
@@ -100,8 +100,13 @@ public class MaxHistory implements Serializable {
         // [return.type.incompatible] FALSE_POSITIVE
         // this method is accessible with in the package only,
         // thus, not exposed to the users;
-        // the internal calls ensures key exist in fDurations
-        // and every test's duration is put in fDurations
+        // the class documentation says this class
+        // "Stores a subset of the history of each test", which is only
+        // used in MaxCore: sortRequest(Request);
+        // Its caller MaxCore: run registers a
+        // RememberingListener for the MaxHistory instance,
+        // which ensures the test duration of every test
+        // is put into fDurations, before this method is called.
         return fDurations.get(key.toString());
     }
 
