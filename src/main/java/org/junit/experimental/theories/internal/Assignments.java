@@ -7,6 +7,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.junit.experimental.theories.ParameterSignature;
 import org.junit.experimental.theories.ParameterSupplier;
 import org.junit.experimental.theories.ParametersSuppliedBy;
@@ -62,9 +63,10 @@ public class Assignments {
                 unassigned.size()), clazz);
     }
 
-    public Object[] getActualValues(int start, int stop) 
+    // Nullable Object[] from assigned.get(i).getValue()
+    public @Nullable Object[] getActualValues(int start, int stop)
             throws CouldNotGenerateValueException {
-        Object[] values = new Object[stop - start];
+        @Nullable Object[] values = new Object[stop - start];
         for (int i = start; i < stop; i++) {
             values[i - start] = assigned.get(i).getValue();
         }
@@ -122,16 +124,19 @@ public class Assignments {
         return cls.newInstance();
     }
 
-    public Object[] getConstructorArguments()
+    // Nullable Object[] from getActualValues(int start, int stop)
+    public @Nullable Object[] getConstructorArguments()
             throws CouldNotGenerateValueException {
         return getActualValues(0, getConstructorParameterCount());
     }
 
-    public Object[] getMethodArguments() throws CouldNotGenerateValueException {
+    // Nullable Object[] from getActualValues(int start, int stop)
+    public @Nullable Object[] getMethodArguments() throws CouldNotGenerateValueException {
         return getActualValues(getConstructorParameterCount(), assigned.size());
     }
 
-    public Object[] getAllArguments() throws CouldNotGenerateValueException {
+    // Nullable Object[] from getActualValues(int start, int stop)
+    public @Nullable Object[] getAllArguments() throws CouldNotGenerateValueException {
         return getActualValues(0, assigned.size());
     }
 

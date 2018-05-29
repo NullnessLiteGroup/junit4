@@ -2,6 +2,7 @@ package org.junit.runner;
 
 import java.util.Comparator;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.junit.internal.builders.AllDefaultPossibilitiesBuilder;
 import org.junit.internal.requests.ClassRequest;
 import org.junit.internal.requests.FilterRequest;
@@ -103,10 +104,14 @@ public abstract class Request {
      * @param runner the runner to return
      * @return a <code>Request</code> that will run the given runner when invoked
      */
-    public static Request runner(final Runner runner) {
+    // Nullable runner because it is a public static method, where
+    // users we can call runner(null)
+    public static Request runner(final @Nullable Runner runner) {
         return new Request() {
             @Override
-            public Runner getRunner() {
+            // Nullable Runner returned because it's public method
+            // and we can call runner(null)
+            public @Nullable Runner getRunner() {
                 return runner;
             }
         };
@@ -117,7 +122,8 @@ public abstract class Request {
      *
      * @return corresponding {@link Runner} for this Request
      */
-    public abstract Runner getRunner();
+    // Nullable Runner returned override required from Request.runner(final Runner runner)
+    public abstract @Nullable Runner getRunner();
 
     /**
      * Returns a Request that only contains those tests that should run when

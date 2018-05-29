@@ -20,6 +20,14 @@ class FilterFactories {
      */
     public static Filter createFilterFromFilterSpec(Request request, String filterSpec)
             throws FilterFactory.FilterNotCreatedException {
+        // [dereference.of.nullable] FALSE_POSITIVE
+        // dereference of request.getRunner() is safe here
+        // this class is not exposed in JUnit4 API, the only caller to this method,
+        // JUnitCommandLineParseResult.applyFilterSpecs, is called from
+        // JUnitCommandLineParseResult.createRequest and passed a request
+        // with AllDefaultPossibilitiesBuilder as the underlying RunnerBuilder;
+        // And AllDefaultPossibilitiesBuilder.getRunner() always return a
+        // non-null runner.
         Description topLevelDescription = request.getRunner().getDescription();
         String[] tuple;
 

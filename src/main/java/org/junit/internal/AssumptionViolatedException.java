@@ -1,5 +1,6 @@
 package org.junit.internal;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.SelfDescribing;
@@ -20,16 +21,19 @@ public class AssumptionViolatedException extends RuntimeException implements Sel
      * serialization compatibility. 
      * See https://github.com/junit-team/junit4/issues/976
      */
-    private final String fAssumption;
+    private final @Nullable String fAssumption;
     private final boolean fValueMatcher;
-    private final Object fValue;
-    private final Matcher<?> fMatcher;
+    private final @Nullable Object fValue;
+    private final @Nullable Matcher<?> fMatcher;
 
     /**
      * @deprecated Please use {@link org.junit.AssumptionViolatedException} instead.
      */
     @Deprecated
-    public AssumptionViolatedException(String assumption, boolean hasValue, Object value, Matcher<?> matcher) {
+    // Nullable assumption from AssumptionViolatedException(Object value, Matcher<?> matcher)
+    // Nullable value from AssumptionViolatedException(String assumption)
+    // Nullable matcher from AssumptionViolatedException(String assumption)
+    public AssumptionViolatedException(@Nullable String assumption, boolean hasValue, @Nullable Object value, @Nullable Matcher<?> matcher) {
         this.fAssumption = assumption;
         this.fValue = value;
         this.fMatcher = matcher;
@@ -47,7 +51,8 @@ public class AssumptionViolatedException extends RuntimeException implements Sel
      * @deprecated Please use {@link org.junit.AssumptionViolatedException} instead.
      */
     @Deprecated
-    public AssumptionViolatedException(Object value, Matcher<?> matcher) {
+    // Nullable value from new AssumptionViolatedException(T actual, Matcher<T> matcher)
+    public AssumptionViolatedException(@Nullable Object value, Matcher<?> matcher) {
         this(null, true, value, matcher);
     }
 
@@ -58,7 +63,8 @@ public class AssumptionViolatedException extends RuntimeException implements Sel
      * @deprecated Please use {@link org.junit.AssumptionViolatedException} instead.
      */
     @Deprecated
-    public AssumptionViolatedException(String assumption, Object value, Matcher<?> matcher) {
+    // Nullable value from AssumptionViolatedException(String message, T actual, Matcher<T> matcher)
+    public AssumptionViolatedException(String assumption, @Nullable Object value, Matcher<?> matcher) {
         this(assumption, true, value, matcher);
     }
 

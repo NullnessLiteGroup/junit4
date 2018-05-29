@@ -16,6 +16,9 @@ import java.util.List;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+import org.checkerframework.checker.initialization.qual.UnderInitialization;
+import org.checkerframework.checker.initialization.qual.UnknownInitialization;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
@@ -69,7 +72,7 @@ public abstract class ParentRunner<T> extends Runner implements Filterable,
     private final TestClass testClass;
 
     // Guarded by childrenLock
-    private volatile Collection<T> filteredChildren = null;
+    private volatile @Nullable Collection<T> filteredChildren = null;
 
     private volatile RunnerScheduler scheduler = new RunnerScheduler() {
         public void schedule(Runnable childStatement) {
@@ -84,7 +87,8 @@ public abstract class ParentRunner<T> extends Runner implements Filterable,
     /**
      * Constructs a new {@code ParentRunner} that will run {@code @TestClass}
      */
-    protected ParentRunner(Class<?> testClass) throws InitializationError {
+    // Nullable testClass from Suite: Suite(Class<?> klass, List<Runner> runners)
+    protected ParentRunner(@Nullable Class<?> testClass) throws InitializationError {
         this.testClass = createTestClass(testClass);
         validate();
     }
@@ -104,7 +108,9 @@ public abstract class ParentRunner<T> extends Runner implements Filterable,
      * @since 4.12
      */
     @Deprecated
-    protected TestClass createTestClass(Class<?> testClass) {
+    // helper method for the constructor of ParentRunner
+    // Nullable testClass from ParentRunner(Class<?> testClass)
+    protected TestClass createTestClass(@UnderInitialization ParentRunner<T> this, @Nullable Class<?> testClass) {
         return new TestClass(testClass);
     }
 
@@ -115,13 +121,15 @@ public abstract class ParentRunner<T> extends Runner implements Filterable,
     /**
      * Returns a list of objects that define the children of this Runner.
      */
-    protected abstract List<T> getChildren();
+    // helper method for getFilteredChildren(@UnknownInitialization ParentRunner<T> this)
+    protected abstract List<T> getChildren(@UnknownInitialization ParentRunner<T> this);
 
     /**
      * Returns a {@link Description} for {@code child}, which can be assumed to
      * be an element of the list returned by {@link ParentRunner#getChildren()}
      */
-    protected abstract Description describeChild(T child);
+    // helper method from shouldRun(@UnknownInitialization ParentRunner<T> this, Filter filter, T each)
+    protected abstract Description describeChild(@UnknownInitialization ParentRunner<T> this, T child);
 
     /**
      * Runs the test corresponding to {@code child}, which can be assumed to be
@@ -141,14 +149,17 @@ public abstract class ParentRunner<T> extends Runner implements Filterable,
      * {@code @BeforeClass} or {@code @AfterClass} that is not
      * {@code public static void} with no arguments.
      */
-    protected void collectInitializationErrors(List<Throwable> errors) {
+    // called from helper method validate(@UnknownInitialization ParentRunner<T> this) for the constructor of ParentRunner
+    protected void collectInitializationErrors(@UnknownInitialization ParentRunner<T> this, List<Throwable> errors) {
         validatePublicVoidNoArgMethods(BeforeClass.class, true, errors);
         validatePublicVoidNoArgMethods(AfterClass.class, true, errors);
         validateClassRules(errors);
         applyValidators(errors);
     }
 
-    private void applyValidators(List<Throwable> errors) {
+    // called from helper method collectInitializationErrors(@UnknownInitialization ParentRunner<T> this, List<Throwable> errors)
+    // for the constructor of ParentRunner
+    private void applyValidators(@UnknownInitialization ParentRunner<T> this, List<Throwable> errors) {
         if (getTestClass().getJavaClass() != null) {
             for (TestClassValidator each : VALIDATORS) {
                 errors.addAll(each.validateTestClass(getTestClass()));
@@ -167,7 +178,9 @@ public abstract class ParentRunner<T> extends Runner implements Filterable,
      * <li>is not static (given {@code isStatic is true}).
      * </ul>
      */
-    protected void validatePublicVoidNoArgMethods(Class<? extends Annotation> annotation,
+    // called from helper method collectInitializationErrors(@UnknownInitialization ParentRunner<T> this, List<Throwable> errors)
+    // for the constructor of ParentRunner
+    protected void validatePublicVoidNoArgMethods(@UnknownInitialization ParentRunner<T> this, Class<? extends Annotation> annotation,
             boolean isStatic, List<Throwable> errors) {
         List<FrameworkMethod> methods = getTestClass().getAnnotatedMethods(annotation);
 
@@ -176,7 +189,9 @@ public abstract class ParentRunner<T> extends Runner implements Filterable,
         }
     }
 
-    private void validateClassRules(List<Throwable> errors) {
+    // called from helper method collectInitializationErrors(@UnknownInitialization ParentRunner<T> this, List<Throwable> errors)
+    // for the constructor of ParentRunner
+    private void validateClassRules(@UnknownInitialization ParentRunner<T> this, List<Throwable> errors) {
         CLASS_RULE_VALIDATOR.validate(getTestClass(), errors);
         CLASS_RULE_METHOD_VALIDATOR.validate(getTestClass(), errors);
     }
@@ -331,7 +346,11 @@ public abstract class ParentRunner<T> extends Runner implements Filterable,
     /**
      * Returns a {@link TestClass} object wrapping the class to be executed.
      */
-    public final TestClass getTestClass() {
+    // from applyValidators(ParentRunner<T> this, List<Throwable> errors)
+    public final TestClass getTestClass(@UnknownInitialization ParentRunner<T> this) {
+        // [return.type.incompatible] FALSE_POSITIVE
+        // both ParentRunner constructors ensure testClass non-null
+        // and testClass is a final field only assigned in constructors
         return testClass;
     }
 
@@ -406,7 +425,8 @@ public abstract class ParentRunner<T> extends Runner implements Filterable,
     // Implementation of Filterable and Sortable
     //
 
-    public void filter(Filter filter) throws NoTestsRemainException {
+    // helper methods in subclass Categories.Categories(Class<?> klass, RunnerBuilder builder)
+    public void filter(@UnknownInitialization ParentRunner<T> this, Filter filter) throws NoTestsRemainException {
         childrenLock.lock();
         try {
             List<T> children = new ArrayList<T>(getFilteredChildren());
@@ -449,15 +469,27 @@ public abstract class ParentRunner<T> extends Runner implements Filterable,
     // Private implementation
     //
 
-    private void validate() throws InitializationError {
+    // helper method for the constructor of ParentRunner
+    private void validate(@UnknownInitialization ParentRunner<T> this) throws InitializationError {
         List<Throwable> errors = new ArrayList<Throwable>();
         collectInitializationErrors(errors);
         if (!errors.isEmpty()) {
+            // [dereference.of.nullable] FALSE_POSITIVE
+            // dereference of testClass cannot raise NPEs here
+            // since testClass is initialized non-null before validate()
+            // is called in the constructor
+            //
+            // [argument.type.incompatible] FALSE_POSITIVE
+            // dereference of testClass.getJavaClass() is safe here because
+            // new ParentRunner(null) {...} will never enter this if-branch,
+            // because it will not cause error in collectInitializationErrors(errors),
+            // which never de-reference testClass.getJavaClass() directly or indirectly
             throw new InvalidTestClassError(testClass.getJavaClass(), errors);
         }
     }
 
-    private Collection<T> getFilteredChildren() {
+    // helper method from filter(@UnknownInitialization ParentRunner<T> this, Filter filter)
+    private Collection<T> getFilteredChildren(@UnknownInitialization ParentRunner<T> this) {
         if (filteredChildren == null) {
             childrenLock.lock();
             try {
@@ -471,7 +503,8 @@ public abstract class ParentRunner<T> extends Runner implements Filterable,
         return filteredChildren;
     }
 
-    private boolean shouldRun(Filter filter, T each) {
+    // helper method from filter(@UnknownInitialization ParentRunner<T> this, Filter filter)
+    private boolean shouldRun(@UnknownInitialization ParentRunner<T> this, Filter filter, T each) {
         return filter.shouldRun(describeChild(each));
     }
 

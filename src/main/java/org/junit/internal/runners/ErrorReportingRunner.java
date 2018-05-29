@@ -3,6 +3,8 @@ package org.junit.internal.runners;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
+import org.checkerframework.checker.initialization.qual.UnderInitialization;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.junit.runner.Description;
 import org.junit.runner.Runner;
 import org.junit.runner.notification.Failure;
@@ -17,11 +19,13 @@ public class ErrorReportingRunner extends Runner {
 
     private final String classNames;
 
-    public ErrorReportingRunner(Class<?> testClass, Throwable cause) {
+    // Nullable testClass from MaxCore.constructLeafRequest(List<Description> leaves)
+    public ErrorReportingRunner(@Nullable Class<?> testClass, Throwable cause) {
         this(cause, testClass);
     }
-    
-    public ErrorReportingRunner(Throwable cause, Class<?>... testClasses) {
+
+    // Nullable testClasses from ErrorReportingRunner(Class<?> testClass, Throwable cause)
+    public ErrorReportingRunner(Throwable cause, @Nullable Class<?>... testClasses) {
         if (testClasses == null || testClasses.length == 0) {
             throw new NullPointerException("Test classes cannot be null or empty");
         }
@@ -30,6 +34,9 @@ public class ErrorReportingRunner extends Runner {
                 throw new NullPointerException("Test class cannot be null");
             }
         }
+        // [argument.type.incompatible] FALSE_POSITIVE
+        // testClasses cannot be null here
+        // otherwise the control flow above captured it
         classNames = getClassNames(testClasses);
         causes = getCauses(cause);
     }
@@ -50,7 +57,8 @@ public class ErrorReportingRunner extends Runner {
         }
     }
 
-    private String getClassNames(Class<?>... testClasses) {
+    // helper method for the constructor of ErrorReportingRunner
+    private String getClassNames(@UnderInitialization ErrorReportingRunner this, Class<?>... testClasses) {
         final StringBuilder builder = new StringBuilder();
         for (Class<?> testClass : testClasses) {
             if (builder.length() != 0) {
@@ -62,7 +70,9 @@ public class ErrorReportingRunner extends Runner {
     }
 
     @SuppressWarnings("deprecation")
-    private List<Throwable> getCauses(Throwable cause) {
+    // helper method for the constructor of ErrorReportingRunner
+    // Nullable cause from itself, recursive call
+    private List<Throwable> getCauses(@UnderInitialization ErrorReportingRunner this, @Nullable Throwable cause) {
         if (cause instanceof InvocationTargetException) {
             return getCauses(cause.getCause());
         }
@@ -76,6 +86,10 @@ public class ErrorReportingRunner extends Runner {
             return ((org.junit.internal.runners.InitializationError) cause)
                     .getCauses();
         }
+        // [return.type.incompatible] SPECIAL_CASE
+        // List<Nullable Throwable> is incompatible with List<Throwable>
+        // by the Checker Framework, see section 24.1.2 in the manual of
+        // the Checker Framework (https://checkerframework.org/manual/#generics)
         return singletonList(cause);
     }
 

@@ -13,6 +13,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.junit.runner.notification.Failure;
 import org.junit.runner.notification.RunListener;
 
@@ -25,9 +26,14 @@ import org.junit.runner.notification.RunListener;
 public class Result implements Serializable {
     private static final long serialVersionUID = 1L;
     private static final ObjectStreamField[] serialPersistentFields =
+            // [dereference.of.nullable] FALSE_POSITIVE
+            // de-referencing lookup() cannot raise NPE in this case,
+            // since SerializedFrom.class implements Serializable so
+            // that lookup() will not return null
             ObjectStreamClass.lookup(SerializedForm.class).getFields();
-    private final AtomicInteger count;
-    private final AtomicInteger ignoreCount;
+    // Nullable fields below from Result(SerializedForm serializedForm)
+    private final @Nullable AtomicInteger count;
+    private final @Nullable AtomicInteger ignoreCount;
     private final CopyOnWriteArrayList<Failure> failures;
     private final AtomicLong runTime;
     private final AtomicLong startTime;
@@ -55,6 +61,12 @@ public class Result implements Serializable {
      * @return the number of tests run
      */
     public int getRunCount() {
+        // [dereference.of.nullable] FALSE_POSITIVE
+        //  count.get() cannot raise NPE
+        // count can only be null if the private constructor of Result is called,
+        // and it is only called from another private method,
+        // readResolve, called from nowhere in this project.
+        // Besides, count is a final field.
         return count.get();
     }
 
@@ -83,6 +95,12 @@ public class Result implements Serializable {
      * @return the number of tests ignored during the run
      */
     public int getIgnoreCount() {
+        // [dereference.of.nullable] FALSE_POSITIVE
+        //  ignoreCount.get() cannot raise NPE
+        // count can only be null if the private constructor of
+        // Result is called, and it is only called from another
+        // private method, readResolve, called from nowhere
+        // in this project. Besides, ignoreCount is a final field.
         return ignoreCount.get();
     }
 
@@ -122,6 +140,12 @@ public class Result implements Serializable {
 
         @Override
         public void testFinished(Description description) throws Exception {
+            // [dereference.of.nullable] FALSE_POSITIVE
+            //  count.get() cannot raise NPE
+            // count can only be null if the private constructor of Result is called,
+            // and it is only called from another private method,
+            // readResolve, called from nowhere in this project.
+            // Besides, count is a final field.
             count.getAndIncrement();
         }
 
@@ -132,6 +156,12 @@ public class Result implements Serializable {
 
         @Override
         public void testIgnored(Description description) throws Exception {
+            // [dereference.of.nullable] FALSE_POSITIVE
+            //  ignoreCount.get() cannot raise NPE
+            // count can only be null if the private constructor of
+            // Result is called, and it is only called from another
+            // private method, readResolve, called from nowhere
+            // in this project. Besides, ignoreCount is a final field.
             ignoreCount.getAndIncrement();
         }
 
@@ -154,9 +184,10 @@ public class Result implements Serializable {
      */
     private static class SerializedForm implements Serializable {
         private static final long serialVersionUID = 1L;
-        private final AtomicInteger fCount;
-        private final AtomicInteger fIgnoreCount;
-        private final List<Failure> fFailures;
+        // Nullable fields below from SerializedForm deserialize(ObjectInputStream s)
+        private final @Nullable AtomicInteger fCount;
+        private final @Nullable AtomicInteger fIgnoreCount;
+        private final @Nullable List<Failure> fFailures;
         private final long fRunTime;
         private final long fStartTime;
 

@@ -1,5 +1,7 @@
 package org.junit;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 /**
  * Thrown when an {@link org.junit.Assert#assertEquals(Object, Object) assertEquals(String, String)} fails.
  * Create and throw a <code>ComparisonFailure</code> manually if you want to show users the
@@ -92,7 +94,8 @@ public class ComparisonFailure extends AssertionError {
             this.actual = actual;
         }
 
-        public String compact(String message) {
+        // Nullable message from ComparisonFailure.getMessage()
+        public String compact(@Nullable String message) {
             if (expected == null || actual == null || expected.equals(actual)) {
                 return Assert.format(message, expected, actual);
             } else {

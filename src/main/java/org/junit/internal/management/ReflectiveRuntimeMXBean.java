@@ -27,6 +27,10 @@ final class ReflectiveRuntimeMXBean implements RuntimeMXBean {
       } catch (SecurityException e) {
         // do nothing, input arguments will be null on failure
       }
+      // [assignment.type.incompatible] FALSE_POSITIVE
+      // java.lang.management.RuntimeMXBean class exist and
+      // has getInputArguments method
+      // so getInputArgumentsMethod cannot be null
       getInputArgumentsMethod = inputArguments;
     }
   }
@@ -43,6 +47,10 @@ final class ReflectiveRuntimeMXBean implements RuntimeMXBean {
   public List<String> getInputArguments() {
     if (Holder.getInputArgumentsMethod != null) {
       try {
+        // [return.type.incompatible] FALSE_POSITIVE
+        // getInputArgumentsMethod always exists and
+        // return a non-null list by its documentation
+        // @see java.lang.management.RuntimeMXBean#getInputArguments()
         return (List<String>) Holder.getInputArgumentsMethod.invoke(runtimeMxBean);
       } catch (ClassCastException e) { // no multi-catch with source level 6
         // fallthrough

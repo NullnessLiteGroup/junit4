@@ -1,5 +1,6 @@
 package org.junit.internal.management;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.junit.internal.Classes;
 
 import java.lang.reflect.InvocationTargetException;
@@ -18,12 +19,24 @@ public class ManagementFactory {
       } catch (ClassNotFoundException e) {
         // do nothing, managementFactoryClass will be none on failure
       }
+      // [assignment.type.incompatible] FALSE_POSITIVE
+      // java.lang.management.ManagementFactory class exist
+      // so it can never be null
       MANAGEMENT_FACTORY_CLASS = managementFactoryClass;
     }
 
+    // Nullable Object returned when invoke returns null
     static Object getBeanObject(String methodName) {
       if (MANAGEMENT_FACTORY_CLASS != null) {
         try {
+          // [return.type.incompatible] FALSE_POSITIVE
+          // this class is not exposed in JUnit4 to clients;
+          // the calls from this project is not malformed;
+          // MANAGEMENT_FACTORY_CLASS always exists, and has methods
+          // getThreadMXBean() and getRuntimeMXBean() for calls from this project
+          // and both of them return the non-null object
+          // @see ava.lang.management.ManagementFactory#getThreadMXBean()
+          // @see ava.lang.management.ManagementFactory#getRuntimeMXBean()
           return MANAGEMENT_FACTORY_CLASS.getMethod(methodName).invoke(null);
         } catch (IllegalAccessException e) {
           // fallthrough
@@ -37,6 +50,15 @@ public class ManagementFactory {
           // fallthrough
         }
       }
+      // [return.type.incompatible] FALSE_POSITIVE
+      // this class is not exposed in JUnit4 to clients;
+      // the calls from this project is not malformed;
+      // MANAGEMENT_FACTORY_CLASS always exists, and has methods
+      // getThreadMXBean() and getRuntimeMXBean() for calls from this project
+      // and both of them return the non-null object
+      // so we never reach this line
+      // @see ava.lang.management.ManagementFactory#getThreadMXBean()
+      // @see ava.lang.management.ManagementFactory#getRuntimeMXBean()
       return null;
     }
   }
@@ -45,7 +67,8 @@ public class ManagementFactory {
     private static final RuntimeMXBean RUNTIME_MX_BEAN =
         getBean(FactoryHolder.getBeanObject("getRuntimeMXBean"));
 
-    private static final RuntimeMXBean getBean(Object runtimeMxBean) {
+    // Nullable runtimeMxBean indicated from implementation
+    private static final RuntimeMXBean getBean(@Nullable Object runtimeMxBean) {
       return runtimeMxBean != null
           ? new ReflectiveRuntimeMXBean(runtimeMxBean) : new FakeRuntimeMXBean();
     }
@@ -55,7 +78,8 @@ public class ManagementFactory {
     private static final ThreadMXBean THREAD_MX_BEAN =
         getBean(FactoryHolder.getBeanObject("getThreadMXBean"));
 
-    private static final ThreadMXBean getBean(Object threadMxBean) {
+    //  @Nullable threadMxBean indicated from implementation
+    private static final ThreadMXBean getBean(@Nullable Object threadMxBean) {
       return threadMxBean != null
           ? new ReflectiveThreadMXBean(threadMxBean) : new FakeThreadMXBean();
     }

@@ -18,6 +18,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.checkerframework.checker.initialization.qual.UnderInitialization;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -32,7 +34,8 @@ public class TestClass implements Annotatable {
     private static final FieldComparator FIELD_COMPARATOR = new FieldComparator();
     private static final MethodComparator METHOD_COMPARATOR = new MethodComparator();
 
-    private final Class<?> clazz;
+    // Nullable clazz from the constructor
+    private final @Nullable Class<?> clazz;
     private final Map<Class<? extends Annotation>, List<FrameworkMethod>> methodsForAnnotations;
     private final Map<Class<? extends Annotation>, List<FrameworkField>> fieldsForAnnotations;
 
@@ -42,7 +45,9 @@ public class TestClass implements Annotatable {
      * an expensive process (we hope in future JDK's it will not be.) Therefore,
      * try to share instances of {@code TestClass} where possible.
      */
-    public TestClass(Class<?> clazz) {
+    // Nullable clazz from ParentRunner.createTestClass(ParentRunner<T> this, Class<?> testClass)
+    // and TestClass is exposed to users in JUnit4 API
+    public TestClass(@Nullable Class<?> clazz) {
         this.clazz = clazz;
         if (clazz != null && clazz.getConstructors().length > 1) {
             throw new IllegalArgumentException(
@@ -60,7 +65,8 @@ public class TestClass implements Annotatable {
         this.fieldsForAnnotations = makeDeeplyUnmodifiable(fieldsForAnnotations);
     }
 
-    protected void scanAnnotatedMembers(Map<Class<? extends Annotation>, List<FrameworkMethod>> methodsForAnnotations, Map<Class<? extends Annotation>, List<FrameworkField>> fieldsForAnnotations) {
+    // helper method of TestClass constructor
+    protected void scanAnnotatedMembers(@UnderInitialization TestClass this, Map<Class<? extends Annotation>, List<FrameworkMethod>> methodsForAnnotations, Map<Class<? extends Annotation>, List<FrameworkField>> fieldsForAnnotations) {
         for (Class<?> eachClass : getSuperClasses(clazz)) {
             for (Method eachMethod : MethodSorter.getDeclaredMethods(eachClass)) {
                 addToAnnotationLists(new FrameworkMethod(eachMethod), methodsForAnnotations);
@@ -168,7 +174,8 @@ public class TestClass implements Annotatable {
                 || annotation.equals(BeforeClass.class);
     }
 
-    private static List<Class<?>> getSuperClasses(Class<?> testClass) {
+    // Nullable testClass from scanAnnotatedMembers which passed the possible null clazz
+    private static List<Class<?>> getSuperClasses(@Nullable Class<?> testClass) {
         List<Class<?>> results = new ArrayList<Class<?>>();
         Class<?> current = testClass;
         while (current != null) {
@@ -181,7 +188,8 @@ public class TestClass implements Annotatable {
     /**
      * Returns the underlying Java class.
      */
-    public Class<?> getJavaClass() {
+    // Nullable clazz from constructor
+    public @Nullable Class<?> getJavaClass() {
         return clazz;
     }
 
@@ -201,6 +209,10 @@ public class TestClass implements Annotatable {
      */
 
     public Constructor<?> getOnlyConstructor() {
+        // [dereference.of.nullable] TRUE_POSITIVE
+        // TestClass class is exposed in JUnit4 API,
+        // so users can call the following code to raise NPEs here:
+        // (new TestClass(null)).getOnlyConstructor();
         Constructor<?>[] constructors = clazz.getConstructors();
         Assert.assertEquals(1, constructors.length);
         return constructors[0];
@@ -216,7 +228,8 @@ public class TestClass implements Annotatable {
         return clazz.getAnnotations();
     }
 
-    public <T extends Annotation> T getAnnotation(Class<T> annotationType) {
+    // Nullable T returned from (new TestClass(null)).getAnnotation(...)
+    public <T extends Annotation> @Nullable T getAnnotation(Class<T> annotationType) {
         if (clazz == null) {
             return null;
         }
@@ -241,7 +254,8 @@ public class TestClass implements Annotatable {
      *
      * @since 4.13
      */
-    public <T> void collectAnnotatedFieldValues(Object test,
+    // Nullable test from ParentRunner: classRules()
+    public <T> void collectAnnotatedFieldValues(@Nullable Object test,
             Class<? extends Annotation> annotationClass, Class<T> valueClass,
             MemberValueConsumer<T> consumer) {
         for (FrameworkField each : getAnnotatedFields(annotationClass)) {
@@ -275,7 +289,8 @@ public class TestClass implements Annotatable {
      *
      * @since 4.13
      */
-    public <T> void collectAnnotatedMethodValues(Object test,
+    // Nullable test from ParentRunner: classRules()
+    public <T> void collectAnnotatedMethodValues(@Nullable Object test,
             Class<? extends Annotation> annotationClass, Class<T> valueClass,
             MemberValueConsumer<T> consumer) {
         for (FrameworkMethod each : getAnnotatedMethods(annotationClass)) {
@@ -300,10 +315,18 @@ public class TestClass implements Annotatable {
     }
 
     public boolean isPublic() {
+        // [dereference.of.nullable] TRUE_POSITIVE
+        // TestClass class is exposed in JUnit4 API,
+        // so users can call the following code to raise NPEs here:
+        // (new TestClass(null)).isPublic();
         return Modifier.isPublic(clazz.getModifiers());
     }
 
     public boolean isANonStaticInnerClass() {
+        // [dereference.of.nullable] TRUE_POSITIVE
+        // TestClass class is exposed in JUnit4 API,
+        // so users can call the following code to raise NPEs here:
+        // (new TestClass(null)).isANonStaticInnerClass();
         return clazz.isMemberClass() && !isStatic(clazz.getModifiers());
     }
 
@@ -313,7 +336,8 @@ public class TestClass implements Annotatable {
     }
 
     @Override
-    public boolean equals(Object obj) {
+    // Nullable obj override super requires
+    public boolean equals(@Nullable Object obj) {
         if (this == obj) {
             return true;
         }

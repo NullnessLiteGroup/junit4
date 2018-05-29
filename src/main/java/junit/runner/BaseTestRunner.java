@@ -20,6 +20,7 @@ import junit.framework.Test;
 import junit.framework.TestListener;
 import junit.framework.TestSuite;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.junit.internal.Throwables;
 
 /**
@@ -72,7 +73,8 @@ public abstract class BaseTestRunner implements TestListener {
         testEnded(test.toString());
     }
 
-    public synchronized void addError(final Test test, final Throwable e) {
+    // Nullable e from override super class TestListener
+    public synchronized void addError(final Test test, final @Nullable Throwable e) {
         testFailed(TestRunListener.STATUS_ERROR, test, e);
     }
 
@@ -86,13 +88,15 @@ public abstract class BaseTestRunner implements TestListener {
 
     public abstract void testEnded(String testName);
 
-    public abstract void testFailed(int status, Test test, Throwable e);
+    // Nullable e from BaseTestRunner: addError
+    public abstract void testFailed(int status, Test test, @Nullable Throwable e);
 
     /**
      * Returns the Test corresponding to the given suite. This is
      * a template method, subclasses override runFailed(), clearStatus().
      */
-    public Test getTest(String suiteClassName) {
+    // Nullable Test returned from getTest("")
+    public @Nullable Test getTest(String suiteClassName) {
         if (suiteClassName.length() <= 0) {
             clearStatus();
             return null;
@@ -130,6 +134,22 @@ public abstract class BaseTestRunner implements TestListener {
                 return test;
             }
         } catch (InvocationTargetException e) {
+            // [throwing.nullable] TRUE_POSITIVE
+            // e.getTargetException() is nullable from the
+            // documentation of getCause(), a substitute method
+            // since the release of Java 1.4;
+            // Although e.getCause() in InvocationTargetException
+            // may be intended to be non-null in Java reflection,
+            // we decided it JUnit4 needs to be safer.
+            // @See Java API that documents getCause can be null
+            //      (https://docs.oracle.com/javase/8/docs/api/
+            //      java/lang/reflect/InvocationTargetException.html)
+            // @See StackOverFlow discussion about when InvocationTargetException
+            //      has a null cause (https://stackoverflow.com/questions/
+            //      17684484/when-is-invocationtargetexception-getcause-null)
+            // @See The blog in Oracle forum discussing the four possibilities of
+            //      getCause() (https://blogs.oracle.com/chengfang/
+            //      whats-inside-invocationtargetexception-not-just-exception)
             runFailed("Failed to invoke suite():" + e.getTargetException().toString());
             return null;
         } catch (IllegalAccessException e) {
@@ -152,7 +172,8 @@ public abstract class BaseTestRunner implements TestListener {
      * Processes the command line arguments and
      * returns the name of the suite class to run or null
      */
-    protected String processArguments(String[] args) {
+    // Nullable String returned by documentation above
+    protected @Nullable String processArguments(String[] args) {
         String suiteName = null;
         for (int i = 0; i < args.length; i++) {
             if (args[i].equals("-noloading")) {
@@ -220,6 +241,10 @@ public abstract class BaseTestRunner implements TestListener {
     }
 
     protected boolean useReloadingTestSuiteLoader() {
+        // [dereference.of.nullable] FALSE_POSITIVE
+        //  de-referencing getPreference("loading") cannot raise NPE
+        // getPreferences, called by getPreference, always returns
+        // Properties that has key "loading"
         return getPreference("loading").equals("true") && fLoading;
     }
 
@@ -246,7 +271,8 @@ public abstract class BaseTestRunner implements TestListener {
         }
     }
 
-    public static String getPreference(String key) {
+    // Nullable String returned if key is not found in Property
+    public static @Nullable String getPreference(String key) {
         return getPreferences().getProperty(key);
     }
 
@@ -297,6 +323,10 @@ public abstract class BaseTestRunner implements TestListener {
     }
 
     protected static boolean showStackRaw() {
+        // [dereference.of.nullable] FALSE_POSITIVE
+        //  de-referencing getPreference("filterstack") cannot raise NPE
+        // getPreferences, called by getPreference, always returns
+        // Properties that has key "filterstack"
         return !getPreference("filterstack").equals("true") || fgFilterStack == false;
     }
 

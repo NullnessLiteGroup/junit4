@@ -1,5 +1,6 @@
 package org.junit;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.hamcrest.Matcher;
 import org.hamcrest.MatcherAssert;
 import org.junit.function.ThrowingRunnable;
@@ -37,7 +38,8 @@ public class Assert {
      * okay)
      * @param condition condition to be checked
      */
-    public static void assertTrue(String message, boolean condition) {
+    // Nullable message from Assert.assertTrue(boolean condition)
+    public static void assertTrue(@Nullable String message, boolean condition) {
         if (!condition) {
             fail(message);
         }
@@ -61,7 +63,8 @@ public class Assert {
      * okay)
      * @param condition condition to be checked
      */
-    public static void assertFalse(String message, boolean condition) {
+    // Nullable message from Assert.assertFalse(boolean condition)
+    public static void assertFalse(@Nullable String message, boolean condition) {
         assertTrue(message, !condition);
     }
 
@@ -82,7 +85,8 @@ public class Assert {
      * okay)
      * @see AssertionError
      */
-    public static void fail(String message) {
+    // Nullable message from Assert.fail()
+    public static void fail(@Nullable String message) {
         if (message == null) {
             throw new AssertionError();
         }
@@ -107,7 +111,8 @@ public class Assert {
      * @param expected expected value
      * @param actual actual value
      */
-    public static void assertEquals(String message, Object expected,
+    // Nullable message from Assert.assertEquals(Object expected, Object actual)
+    public static void assertEquals(@Nullable String message, Object expected,
             Object actual) {
         if (equalsRegardingNull(expected, actual)) {
             return;
@@ -157,7 +162,8 @@ public class Assert {
      * @param unexpected unexpected value to check
      * @param actual the value to check against <code>unexpected</code>
      */
-    public static void assertNotEquals(String message, Object unexpected,
+    // Nullable message from Assert.assertNotEquals(Object unexpected, Object actual)
+    public static void assertNotEquals(@Nullable String message, Object unexpected,
             Object actual) {
         if (equalsRegardingNull(unexpected, actual)) {
             failEquals(message, actual);
@@ -177,7 +183,8 @@ public class Assert {
         assertNotEquals(null, unexpected, actual);
     }
 
-    private static void failEquals(String message, Object actual) {
+    // Nullable message from assertNotEquals(String message, Object unexpected, Object actual)
+    private static void failEquals(@Nullable String message, Object actual) {
         String formatted = "Values should be different. ";
         if (message != null) {
             formatted = message + ". ";
@@ -196,7 +203,8 @@ public class Assert {
      * @param unexpected unexpected value to check
      * @param actual the value to check against <code>unexpected</code>
      */
-    public static void assertNotEquals(String message, long unexpected, long actual) {
+    // Nullable message from Assert.assertNotEquals(long unexpected, long actual)
+    public static void assertNotEquals(@Nullable String message, long unexpected, long actual) {
         if (unexpected == actual) {
             failEquals(message, Long.valueOf(actual));
         }
@@ -228,7 +236,8 @@ public class Assert {
      * <code>actual</code> for which both numbers are still
      * considered equal.
      */
-    public static void assertNotEquals(String message, double unexpected,
+    // Nullable message from Assert.assertNotEquals(double unexpected, double actual, double delta)
+    public static void assertNotEquals(@Nullable String message, double unexpected,
             double actual, double delta) {
         if (!doubleIsDifferent(unexpected, actual, delta)) {
             failEquals(message, Double.valueOf(actual));
@@ -280,7 +289,8 @@ public class Assert {
      * @param actuals Object array or array of arrays (multi-dimensional array) with
      * actual values
      */
-    public static void assertArrayEquals(String message, Object[] expecteds,
+    // Nullable message from Assert.assertArrayEquals(Object[] expecteds, Object[] actuals)
+    public static void assertArrayEquals(@Nullable String message, Object[] expecteds,
             Object[] actuals) throws ArrayComparisonFailure {
         internalArrayEquals(message, expecteds, actuals);
     }
@@ -311,7 +321,8 @@ public class Assert {
      * @param expecteds boolean array with expected values.
      * @param actuals boolean array with expected values.
      */
-    public static void assertArrayEquals(String message, boolean[] expecteds,
+    // Nullable message from Assert.assertArrayEquals(boolean[] expecteds, boolean[] actuals)
+    public static void assertArrayEquals(@Nullable String message, boolean[] expecteds,
             boolean[] actuals) throws ArrayComparisonFailure {
         internalArrayEquals(message, expecteds, actuals);
     }
@@ -338,7 +349,8 @@ public class Assert {
      * @param expecteds byte array with expected values.
      * @param actuals byte array with actual values
      */
-    public static void assertArrayEquals(String message, byte[] expecteds,
+    // Nullable message from Assert.assertArrayEquals(byte[] expecteds, byte[] actuals)
+    public static void assertArrayEquals(@Nullable String message, byte[] expecteds,
             byte[] actuals) throws ArrayComparisonFailure {
         internalArrayEquals(message, expecteds, actuals);
     }
@@ -363,7 +375,8 @@ public class Assert {
      * @param expecteds char array with expected values.
      * @param actuals char array with actual values
      */
-    public static void assertArrayEquals(String message, char[] expecteds,
+    // Nullable message from Assert.assertArrayEquals(char[] expecteds, char[] actuals)
+    public static void assertArrayEquals(@Nullable String message, char[] expecteds,
             char[] actuals) throws ArrayComparisonFailure {
         internalArrayEquals(message, expecteds, actuals);
     }
@@ -388,7 +401,8 @@ public class Assert {
      * @param expecteds short array with expected values.
      * @param actuals short array with actual values
      */
-    public static void assertArrayEquals(String message, short[] expecteds,
+    // Nullable message from Assert.assertArrayEquals(short[] expecteds, short[] actuals)
+    public static void assertArrayEquals(@Nullable String message, short[] expecteds,
             short[] actuals) throws ArrayComparisonFailure {
         internalArrayEquals(message, expecteds, actuals);
     }
@@ -413,7 +427,8 @@ public class Assert {
      * @param expecteds int array with expected values.
      * @param actuals int array with actual values
      */
-    public static void assertArrayEquals(String message, int[] expecteds,
+    // Nullable message from Assert.assertArrayEquals(int[] expecteds, int[] actuals)
+    public static void assertArrayEquals(@Nullable String message, int[] expecteds,
             int[] actuals) throws ArrayComparisonFailure {
         internalArrayEquals(message, expecteds, actuals);
     }
@@ -438,7 +453,8 @@ public class Assert {
      * @param expecteds long array with expected values.
      * @param actuals long array with actual values
      */
-    public static void assertArrayEquals(String message, long[] expecteds,
+    // Nullable message from Assert.assertArrayEquals(long[] expecteds, long[] actuals)
+    public static void assertArrayEquals(@Nullable String message, long[] expecteds,
             long[] actuals) throws ArrayComparisonFailure {
         internalArrayEquals(message, expecteds, actuals);
     }
@@ -466,7 +482,8 @@ public class Assert {
      * <code>actuals[i]</code> for which both numbers are still
      * considered equal.
      */
-    public static void assertArrayEquals(String message, double[] expecteds,
+    // Nullable message from Assert.assertArrayEquals(double[] expecteds, double[] actuals, double delta)
+    public static void assertArrayEquals(@Nullable String message, double[] expecteds,
             double[] actuals, double delta) throws ArrayComparisonFailure {
         new InexactComparisonCriteria(delta).arrayEquals(message, expecteds, actuals);
     }
@@ -497,7 +514,8 @@ public class Assert {
      * <code>actuals[i]</code> for which both numbers are still
      * considered equal.
      */
-    public static void assertArrayEquals(String message, float[] expecteds,
+    // Nullable message from Assert.assertArrayEquals(float[] expecteds, float[] actuals, float delta)
+    public static void assertArrayEquals(@Nullable String message, float[] expecteds,
             float[] actuals, float delta) throws ArrayComparisonFailure {
         new InexactComparisonCriteria(delta).arrayEquals(message, expecteds, actuals);
     }
@@ -529,7 +547,8 @@ public class Assert {
      * @param actuals Object array or array of arrays (multi-dimensional array) with
      * actual values
      */
-    private static void internalArrayEquals(String message, Object expecteds,
+    // Nullable message from assertArrayEquals(String message, Object[] expecteds, Object[] actuals)
+    private static void internalArrayEquals(@Nullable String message, Object expecteds,
             Object actuals) throws ArrayComparisonFailure {
         new ExactComparisonCriteria().arrayEquals(message, expecteds, actuals);
     }
@@ -549,7 +568,8 @@ public class Assert {
      * <code>actual</code> for which both numbers are still
      * considered equal.
      */
-    public static void assertEquals(String message, double expected,
+    // Nullable message from Assert.assertEquals(double expected, double actual, double delta)
+    public static void assertEquals(@Nullable String message, double expected,
             double actual, double delta) {
         if (doubleIsDifferent(expected, actual, delta)) {
             failNotEquals(message, Double.valueOf(expected), Double.valueOf(actual));
@@ -571,7 +591,8 @@ public class Assert {
      * <code>actual</code> for which both numbers are still
      * considered equal.
      */
-    public static void assertEquals(String message, float expected,
+    // Nullable message from Assert.assertEquals(float expected, float actual, float delta)
+    public static void assertEquals(@Nullable String message, float expected,
             float actual, float delta) {
         if (floatIsDifferent(expected, actual, delta)) {
             failNotEquals(message, Float.valueOf(expected), Float.valueOf(actual));
@@ -593,7 +614,8 @@ public class Assert {
      * <code>actual</code> for which both numbers are still
      * considered equal.
      */
-    public static void assertNotEquals(String message, float unexpected,
+    // Nullable message from Assert.assertNotEquals(float unexpected, float actual, float delta)
+    public static void assertNotEquals(@Nullable String message, float unexpected,
             float actual, float delta) {
         if (!floatIsDifferent(unexpected, actual, delta)) {
             failEquals(message, actual);
@@ -642,7 +664,8 @@ public class Assert {
      * @param expected long expected value.
      * @param actual long actual value
      */
-    public static void assertEquals(String message, long expected, long actual) {
+    // Nullable message from Assert.assertEquals(long expected, long actual)
+    public static void assertEquals(@Nullable String message, long expected, long actual) {
         if (expected != actual) {
             failNotEquals(message, Long.valueOf(expected), Long.valueOf(actual));
         }
@@ -664,7 +687,8 @@ public class Assert {
      *             instead
      */
     @Deprecated
-    public static void assertEquals(String message, double expected,
+    // Nullable message from Assert.assertEquals(double expected, double actual)
+    public static void assertEquals(@Nullable String message, double expected,
             double actual) {
         fail("Use assertEquals(expected, actual, delta) to compare floating-point numbers");
     }
@@ -709,7 +733,8 @@ public class Assert {
      * okay)
      * @param object Object to check or <code>null</code>
      */
-    public static void assertNotNull(String message, Object object) {
+    // Nullable message from Assert.assertNotNull(Object object)
+    public static void assertNotNull(@Nullable String message, Object object) {
         assertTrue(message, object != null);
     }
 
@@ -731,7 +756,8 @@ public class Assert {
      * okay)
      * @param object Object to check or <code>null</code>
      */
-    public static void assertNull(String message, Object object) {
+    // Nullable message from Assert.assertNull(Object object)
+    public static void assertNull(@Nullable String message, Object object) {
         if (object == null) {
             return;
         }
@@ -748,7 +774,8 @@ public class Assert {
         assertNull(null, object);
     }
 
-    private static void failNotNull(String message, Object actual) {
+    // Nullable message from assertNull(String message, Object object)
+    private static void failNotNull(@Nullable String message, Object actual) {
         String formatted = "";
         if (message != null) {
             formatted = message + " ";
@@ -765,7 +792,8 @@ public class Assert {
      * @param expected the expected object
      * @param actual the object to compare to <code>expected</code>
      */
-    public static void assertSame(String message, Object expected, Object actual) {
+    // Nullable message from Assert.assertSame(Object expected, Object actual)
+    public static void assertSame(@Nullable String message, Object expected, Object actual) {
         if (expected == actual) {
             return;
         }
@@ -793,7 +821,8 @@ public class Assert {
      * @param unexpected the object you don't expect
      * @param actual the object to compare to <code>unexpected</code>
      */
-    public static void assertNotSame(String message, Object unexpected,
+    // Nullable message from Assert.assertNotSame(Object unexpected, Object actual)
+    public static void assertNotSame(@Nullable String message, Object unexpected,
             Object actual) {
         if (unexpected == actual) {
             failSame(message);
@@ -812,7 +841,8 @@ public class Assert {
         assertNotSame(null, unexpected, actual);
     }
 
-    private static void failSame(String message) {
+    // Nullable message from assertNotSame(String message, Object unexpected, Object actual)
+    private static void failSame(@Nullable String message) {
         String formatted = "";
         if (message != null) {
             formatted = message + " ";
@@ -820,7 +850,8 @@ public class Assert {
         fail(formatted + "expected not same");
     }
 
-    private static void failNotSame(String message, Object expected,
+    // Nullable message from assertSame(String message, Object expected, Object actual)
+    private static void failNotSame(@Nullable String message, Object expected,
             Object actual) {
         String formatted = "";
         if (message != null) {
@@ -830,12 +861,14 @@ public class Assert {
                 + ">");
     }
 
-    private static void failNotEquals(String message, Object expected,
+    // Nullable message from assertEquals(String message, Object expected, Object actual)
+    private static void failNotEquals(@Nullable String message, Object expected,
             Object actual) {
         fail(format(message, expected, actual));
     }
 
-    static String format(String message, Object expected, Object actual) {
+    // Nullable message from failNotEquals(String message, Object expected, Object actual)
+    static String format(@Nullable String message, Object expected, Object actual) {
         String formatted = "";
         if (message != null && !"".equals(message)) {
             formatted = message + " ";
@@ -997,7 +1030,8 @@ public class Assert {
      * @return the exception thrown by {@code runnable}
      * @since 4.13
      */
-    public static <T extends Throwable> T assertThrows(String message, Class<T> expectedThrowable,
+    // Nullable message from Assert.assertThrows(Class<T> expectedThrowable, ThrowingRunnable runnable)
+    public static <T extends Throwable> T assertThrows(@Nullable String message, Class<T> expectedThrowable,
             ThrowingRunnable runnable) {
         try {
             runnable.run();
@@ -1030,7 +1064,8 @@ public class Assert {
         throw new AssertionError(notThrownMessage);
     }
 
-    private static String buildPrefix(String message) {
+    // Nullable message from assertThrows(String message, Class<T> expectedThrowable, ThrowingRunnable runnable)
+    private static String buildPrefix(@Nullable String message) {
         return message != null && message.length() != 0 ? message + ": " : "";
     }
 }

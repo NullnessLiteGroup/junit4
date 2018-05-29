@@ -3,6 +3,7 @@ package org.junit.internal;
 import java.lang.reflect.Array;
 import java.util.Arrays;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.junit.Assert;
 
 /**
@@ -23,12 +24,14 @@ public abstract class ComparisonCriteria {
      * @param actuals Object array or array of arrays (multi-dimensional array) with
      * actual values
      */
-    public void arrayEquals(String message, Object expecteds, Object actuals)
+    // Nullable message from assertArrayEquals(String message, double[] expecteds, double[] actuals, double delta)
+    public void arrayEquals(@Nullable String message, Object expecteds, Object actuals)
             throws ArrayComparisonFailure {
         arrayEquals(message, expecteds, actuals, true);
     }
 
-    private void arrayEquals(String message, Object expecteds, Object actuals, boolean outer)
+    // Nullable message from arrayEquals(String message, Object expecteds, Object actuals)
+    private void arrayEquals(@Nullable String message, Object expecteds, Object actuals, boolean outer)
             throws ArrayComparisonFailure {
         if (expecteds == actuals
             || Arrays.deepEquals(new Object[] {expecteds}, new Object[] {actuals})) {
@@ -117,6 +120,10 @@ public abstract class ComparisonCriteria {
 
     private String componentTypeName(Class<?> arrayClass) {
         Class<?> componentType = arrayClass.getComponentType();
+        // [dereference.of.nullable] FALSE_POSITIVE
+        // see document of getComponentType; because the only caller to this method
+        // getToStringableArrayElement(Object array, int length, int index) ensures
+        // arrayClass is an class of array so that getComponentType will not return null
         if (componentType.isArray()) {
             return componentTypeName(componentType) + "[]";
         } else {

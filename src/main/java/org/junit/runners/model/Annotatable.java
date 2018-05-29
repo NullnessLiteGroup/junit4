@@ -1,5 +1,7 @@
 package org.junit.runners.model;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 import java.lang.annotation.Annotation;
 
 /**
@@ -16,5 +18,6 @@ public interface Annotatable {
     /**
      * Returns the annotation on the model element of the given type, or @code{null}
      */
-    <T extends Annotation> T getAnnotation(Class<T> annotationType);
+    // Nullable T returned by documentation above
+    <T extends Annotation> @Nullable T getAnnotation(Class<T> annotationType);
 }
