@@ -500,6 +500,10 @@ public abstract class ParentRunner<T> extends Runner implements Filterable,
                 childrenLock.unlock();
             }
         }
+        // [return.type.incompatible] FALSE_POSITIVE
+        // filteredChildren cannot be null at this point,
+        // because Collections.unmodifiableCollection(getChildren())
+        // will always return a non-null collection.
         return filteredChildren;
     }
 

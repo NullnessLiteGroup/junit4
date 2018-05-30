@@ -79,6 +79,8 @@ public class JUnit38ClassRunner extends Runner implements Filterable, Sortable {
     }
 
     public JUnit38ClassRunner(Test test) {
+        // [initialization.fields.uninitialized] FALSE_POSITIVE
+        // test is initialized in the helper method setTest(test);
         super();
         setTest(test);
     }
