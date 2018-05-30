@@ -183,6 +183,8 @@ public class TestRunner extends BaseTestRunner {
             }
             Test suite = getTest(testCase);
             // [dereference.of.nullable] FALSE_POSITIVE
+            // Although getTest(testCase) may return null,
+            // suite cannot be null at this point,
             // because the JUnit wiki (https://github.com/junit-team/junit4/wiki/test-runners)
             // and JUnit4 API don't introduce TestRunner and its usage.
             // Besides, the internal calls to this method in the project
