@@ -4,6 +4,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.List;
 
+import org.checkerframework.checker.initialization.qual.UnknownInitialization;
 import org.junit.internal.runners.statements.RunAfters;
 import org.junit.internal.runners.statements.RunBefores;
 import org.junit.runner.RunWith;
@@ -66,10 +67,20 @@ public class BlockJUnit4ClassRunnerWithParameters extends
                             + ", available parameters: " + parameters.length
                             + ".");
         }
+        // [dereference.of.nullable] FALSE_POSITIVE
+        // createTestUsingFieldInjection is a private method only called by
+        // createTest() on existing BlockJUnit4ClassRunnerWithParameters instance,
+        // whose getTestClass().getJavaClass() must be non-null,
+        // otherwise, the it already throws an initialization error at the beginning
         Object testClassInstance = getTestClass().getJavaClass().newInstance();
         for (FrameworkField each : annotatedFieldsByParameter) {
             Field field = each.getField();
             Parameter annotation = field.getAnnotation(Parameter.class);
+            // [dereference.of.nullable] FALSE_POSITIVE
+            // dereference of annotation is safe here because
+            // annotations cannot be null if we entered this for loop,
+            // then list returned by getAnnotatedFieldsByParameter()
+            // must contains fields annotated with Parameter
             int index = annotation.value();
             try {
                 field.set(testClassInstance, parameters[index]);
@@ -94,17 +105,21 @@ public class BlockJUnit4ClassRunnerWithParameters extends
     }
 
     @Override
-    protected String getName() {
+    // helper from testName
+    @SuppressWarnings("nullness")
+    protected String getName(@UnknownInitialization BlockJUnit4ClassRunnerWithParameters this) {
         return name;
     }
 
     @Override
-    protected String testName(FrameworkMethod method) {
+    // helper method override super requires
+    protected String testName(@UnknownInitialization BlockJUnit4ClassRunnerWithParameters this, FrameworkMethod method) {
         return method.getName() + getName();
     }
 
     @Override
-    protected void validateConstructor(List<Throwable> errors) {
+    // override requires
+    protected void validateConstructor(@UnknownInitialization BlockJUnit4ClassRunnerWithParameters this, List<Throwable> errors) {
         validateOnlyOneConstructor(errors);
         if (getInjectionType() != InjectionType.CONSTRUCTOR) {
             validateZeroArgConstructor(errors);
@@ -112,12 +127,18 @@ public class BlockJUnit4ClassRunnerWithParameters extends
     }
 
     @Override
-    protected void validateFields(List<Throwable> errors) {
+    // override requires
+    protected void validateFields(@UnknownInitialization BlockJUnit4ClassRunnerWithParameters this, List<Throwable> errors) {
         super.validateFields(errors);
         if (getInjectionType() == InjectionType.FIELD) {
             List<FrameworkField> annotatedFieldsByParameter = getAnnotatedFieldsByParameter();
             int[] usedIndices = new int[annotatedFieldsByParameter.size()];
             for (FrameworkField each : annotatedFieldsByParameter) {
+                // [dereference.of.nullable] FALSE_POSITIVE
+                // dereference of annotation is safe here because
+                // annotations cannot be null if we entered this for loop,
+                // then list returned by getAnnotatedFieldsByParameter()
+                // must contains fields annotated with Parameter
                 int index = each.getField().getAnnotation(Parameter.class)
                         .value();
                 if (index < 0 || index > annotatedFieldsByParameter.size() - 1) {
@@ -201,11 +222,13 @@ public class BlockJUnit4ClassRunnerWithParameters extends
         return annotationsWithoutRunWith;
     }
 
-    private List<FrameworkField> getAnnotatedFieldsByParameter() {
+    // helper from validateFields
+    private List<FrameworkField> getAnnotatedFieldsByParameter(@UnknownInitialization BlockJUnit4ClassRunnerWithParameters this) {
         return getTestClass().getAnnotatedFields(Parameter.class);
     }
 
-    private InjectionType getInjectionType() {
+    // helper from validateConstructor
+    private InjectionType getInjectionType(@UnknownInitialization BlockJUnit4ClassRunnerWithParameters this) {
         if (fieldsAreAnnotated()) {
             return InjectionType.FIELD;
         } else {
@@ -213,7 +236,8 @@ public class BlockJUnit4ClassRunnerWithParameters extends
         }
     }
 
-    private boolean fieldsAreAnnotated() {
+    // helper from getInjectionType
+    private boolean fieldsAreAnnotated(@UnknownInitialization BlockJUnit4ClassRunnerWithParameters this) {
         return !getAnnotatedFieldsByParameter().isEmpty();
     }
 }

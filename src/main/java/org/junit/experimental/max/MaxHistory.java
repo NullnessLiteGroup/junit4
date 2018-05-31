@@ -11,6 +11,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.junit.runner.Description;
 import org.junit.runner.Result;
 import org.junit.runner.notification.Failure;
@@ -81,7 +82,9 @@ public class MaxHistory implements Serializable {
         stream.close();
     }
 
-    Long getFailureTimestamp(Description key) {
+    // Nullable Long returned because of fFailureTimestamps.get()
+    // is called when a Failure occurs
+    @Nullable Long getFailureTimestamp(Description key) {
         return fFailureTimestamps.get(key.toString());
     }
 
@@ -94,6 +97,16 @@ public class MaxHistory implements Serializable {
     }
 
     Long getTestDuration(Description key) {
+        // [return.type.incompatible] FALSE_POSITIVE
+        // this method is accessible with in the package only,
+        // thus, not exposed to the users;
+        // the class documentation says this class
+        // "Stores a subset of the history of each test", which is only
+        // used in MaxCore: sortRequest(Request);
+        // Its caller MaxCore: run registers a
+        // RememberingListener for the MaxHistory instance,
+        // which ensures the test duration of every test
+        // is put into fDurations, before this method is called.
         return fDurations.get(key.toString());
     }
 
@@ -115,6 +128,10 @@ public class MaxHistory implements Serializable {
         @Override
         public void testFinished(Description description) throws Exception {
             long end = System.nanoTime();
+            // [unboxing.of.nullable] FALSE_POSITIVE
+            // this method is not exposed to the users in JUnit4 API;
+            // the internal calls ensures description exist in
+            // starts, which stores the start time of tests
             long start = starts.get(description);
             putTestDuration(description, end - start);
         }

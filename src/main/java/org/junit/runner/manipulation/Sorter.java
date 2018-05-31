@@ -2,6 +2,7 @@ package org.junit.runner.manipulation;
 
 import java.util.Comparator;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.junit.runner.Description;
 
 /**
@@ -35,7 +36,8 @@ public class Sorter implements Comparator<Description> {
     /**
      * Sorts the test in <code>runner</code> using <code>comparator</code>
      */
-    public void apply(Object object) {
+    // Nullable object from ParentRunner: sort(Sorter sorter)
+    public void apply(@Nullable Object object) {
         if (object instanceof Sortable) {
             Sortable sortable = (Sortable) object;
             sortable.sort(this);

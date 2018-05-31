@@ -72,8 +72,8 @@
         <connection>scm:git:git://github.com/junit-team/junit4.git</connection>
         <developerConnection>scm:git:git@github.com:junit-team/junit4.git</developerConnection>
         <url>http://github.com/junit-team/junit4/tree/master</url>
-      <tag>HEAD</tag>
-  </scm>
+        <tag>HEAD</tag>
+    </scm>
     <issueManagement>
         <system>github</system>
         <url>https://github.com/junit-team/junit4/issues</url>
@@ -101,15 +101,59 @@
     </distributionManagement>
 
     <properties>
-        <jdkVersion>1.5</jdkVersion>
+        <jdkVersion>1.8</jdkVersion>
+        <!--<jdkVersion>1.5</jdkVersion>-->
         <surefireVersion>2.19.1</surefireVersion>
         <hamcrestVersion>1.3</hamcrestVersion>
+        <!-- These properties will be set by the Maven Dependency plugin -->
+        <!--<annotatedJdk>${org.checkerframework:jdk8:jar}</annotatedJdk>-->
+        <checkerFrameworkVersion>2.5.1</checkerFrameworkVersion>
+        <!--<CHECKERFRAMEWORK>/Users/Anny/Desktop/cse403/temp/checker-framework</CHECKERFRAMEWORK>-->
         <project.build.sourceEncoding>ISO-8859-1</project.build.sourceEncoding>
+        <!--<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>-->
         <arguments />
         <gpg.keyname>67893CC4</gpg.keyname>
     </properties>
 
     <dependencies>
+        <!--Annotations from the Checker Framework: nullness, interning, locking, ...-->
+        <dependency>
+            <groupId>org.checkerframework</groupId>
+            <artifactId>checker-qual</artifactId>
+            <version>${checkerFrameworkVersion}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.checkerframework</groupId>
+            <artifactId>jdk8</artifactId>
+            <version>${checkerFrameworkVersion}</version>
+        </dependency>
+
+        <!-- Annotations from the Checker Framework: nullness, interning, locking, ... -->
+        <!--<dependency>-->
+        <!--<groupId>org.checkerframework</groupId>-->
+        <!--<artifactId>checker-qual</artifactId>-->
+        <!--<version>${checkerFrameworkVersion}</version>-->
+        <!--<scope>system</scope>-->
+        <!--<systemPath>${CHECKERFRAMEWORK}/checker/dist/checker-qual.jar</systemPath>-->
+        <!--</dependency>-->
+        <dependency>
+            <groupId>org.checkerframework</groupId>
+            <artifactId>checker</artifactId>
+            <version>${checkerFrameworkVersion}</version>
+            <scope>system</scope>
+            <!--<systemPath>${CHECKERFRAMEWORK}/checker/dist/checker.jar</systemPath>-->
+            <systemPath>${project.basedir}/lib/checker.jar</systemPath>
+        </dependency>
+        <!--&lt;!&ndash; The annotated JDK to use. &ndash;&gt;-->
+        <!--<dependency>-->
+        <!--<groupId>org.checkerframework</groupId>-->
+        <!--<artifactId>jdk8</artifactId>-->
+        <!--<version>${checkerFrameworkVersion}</version>-->
+        <!--<scope>system</scope>-->
+        <!--&lt;!&ndash;<systemPath>${CHECKERFRAMEWORK}/checker/dist/jdk8.jar</systemPath>&ndash;&gt;-->
+        <!--<systemPath>${project.basedir}/lib/jdk8.jar</systemPath>-->
+        <!--</dependency>-->
+
         <dependency>
             <groupId>org.hamcrest</groupId>
             <artifactId>hamcrest-core</artifactId>
@@ -137,6 +181,18 @@
             </resource>
         </resources>
         <plugins>
+            <plugin>
+                <!-- This plugin will set properties values using dependency information -->
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>properties</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
             <!--
             Both "org.apache" and "org.codehaus" are default providers of MOJO plugins
             which are especially dedicated to Maven projects.
@@ -144,7 +200,6 @@
             Each mojo is an executable goal in Maven, and a plugin is a distribution of
             one or more related mojos.
             For more information see http://maven.apache.org/plugin-developers/index.html
-
             The following plugins are ordered according the Maven build lifecycle.
             http://maven.apache.org/guides/introduction/introduction-to-the-lifecycle.html
             -->
@@ -220,22 +275,41 @@
                 java compiler plugin forked in extra process
                 -->
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.3</version>
+                <version>3.6.1</version>
                 <configuration>
                     <encoding>${project.build.sourceEncoding}</encoding>
+                    <!--<encoding>UTF-8</encoding>-->
                     <source>${jdkVersion}</source>
                     <target>${jdkVersion}</target>
                     <testSource>${jdkVersion}</testSource>
                     <testTarget>${jdkVersion}</testTarget>
-                    <compilerVersion>1.5</compilerVersion>
-                    <showDeprecation>true</showDeprecation>
+                    <!--<compilerVersion>1.5</compilerVersion>-->
+                    <!--<showDeprecation>true</showDeprecation>-->
                     <showWarnings>true</showWarnings>
-                    <debug>true</debug>
-                    <fork>true</fork>
+                    <!--<debug>true</debug>-->
+                    <!--<fork>true</fork>-->
                     <compilerArgs>
                         <arg>-Xlint:unchecked</arg>
+                        <!--location of the annotated JDK, which comes from a Maven dependency-->
+                        <!--<arg>-Xbootclasspath/p:${annotatedJdk}</arg>-->
+                        <!--treat Checker Framework errors as warnings-->
+                        <!--<arg>-Awarns</arg>-->
+                        <!--<arg>-Alint</arg>-->
+                        <!--<arg>-Xmaxerrs=1000</arg>-->
+                        <!--<arg>-ANullnessLite</arg>-->
                     </compilerArgs>
                     <maxmem>128m</maxmem>
+                    <!--<annotationProcessorPaths>-->
+                    <!--<path>-->
+                    <!--<groupId>org.checkerframework</groupId>-->
+                    <!--<artifactId>checker</artifactId>-->
+                    <!--<version>${checkerFrameworkVersion}</version>-->
+                    <!--</path>-->
+                    <!--</annotationProcessorPaths>-->
+                    <!--<annotationProcessors>-->
+                    <!--&lt;!&ndash; Add all the checkers you want to enable here &ndash;&gt;-->
+                    <!--<annotationProcessor>org.checkerframework.checker.nullness.NullnessChecker</annotationProcessor>-->
+                    <!--</annotationProcessors>-->
                 </configuration>
             </plugin>
             <plugin>
@@ -567,6 +641,51 @@
                 <!-- JDK 9 minimal source and target versions are 1.6 -->
                 <jdkVersion>1.6</jdkVersion>
             </properties>
+        </profile>
+
+        <profile>
+            <id>nullaway</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-compiler-plugin</artifactId>
+                        <version>3.6.1</version>
+                        <configuration>
+                            <compilerId>javac-with-errorprone</compilerId>
+                            <forceJavacCompilerUse>true</forceJavacCompilerUse>
+                            <!-- maven-compiler-plugin defaults to targeting Java 5, but our javac only supports >=6 -->
+                            <source>8</source>
+                            <target>8</target>
+                            <showWarnings>true</showWarnings>
+                            <annotationProcessorPaths>
+                                <path>
+                                    <groupId>com.uber.nullaway</groupId>
+                                    <artifactId>nullaway</artifactId>
+                                    <version>0.3.0</version>
+                                </path>
+                            </annotationProcessorPaths>
+                            <compilerArgs>
+                                <arg>-Xep:NullAway:ERROR</arg>
+                                <arg>-XepOpt:NullAway:AnnotatedPackages=org.junit</arg>
+                            </compilerArgs>
+                        </configuration>
+                        <dependencies>
+                            <dependency>
+                                <groupId>org.codehaus.plexus</groupId>
+                                <artifactId>plexus-compiler-javac-errorprone</artifactId>
+                                <version>2.8.1</version>
+                            </dependency>
+                            <!-- override plexus-compiler-javac-errorprone's dependency on Error Prone with the latest version -->
+                            <dependency>
+                                <groupId>com.google.errorprone</groupId>
+                                <artifactId>error_prone_core</artifactId>
+                                <version>2.1.3</version>
+                            </dependency>
+                        </dependencies>
+                    </plugin>
+                </plugins>
+            </build>
         </profile>
     </profiles>
 </project>

@@ -1,5 +1,7 @@
 package junit.framework;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 /**
  * A set of assert methods.  Messages are only displayed when an assert fails.
  *
@@ -17,7 +19,8 @@ public class Assert {
      * Asserts that a condition is true. If it isn't it throws
      * an AssertionFailedError with the given message.
      */
-    static public void assertTrue(String message, boolean condition) {
+    // Nullable message from Assert.assertTrue(boolean condition)
+    static public void assertTrue(@Nullable String message, boolean condition) {
         if (!condition) {
             fail(message);
         }
@@ -35,7 +38,8 @@ public class Assert {
      * Asserts that a condition is false. If it isn't it throws
      * an AssertionFailedError with the given message.
      */
-    static public void assertFalse(String message, boolean condition) {
+    // Nullable message from Assert.assertFalse(boolean condition)
+    static public void assertFalse(@Nullable String message, boolean condition) {
         assertTrue(message, !condition);
     }
 
@@ -50,7 +54,8 @@ public class Assert {
     /**
      * Fails a test with the given message.
      */
-    static public void fail(String message) {
+    // Nullable message from Assert.fail()
+    static public void fail(@Nullable String message) {
         if (message == null) {
             throw new AssertionFailedError();
         }
@@ -68,7 +73,8 @@ public class Assert {
      * Asserts that two objects are equal. If they are not
      * an AssertionFailedError is thrown with the given message.
      */
-    static public void assertEquals(String message, Object expected, Object actual) {
+    // Nullable message Assert.assertEquals(Object expected, Object actual)
+    static public void assertEquals(@Nullable String message, Object expected, Object actual) {
         if (expected == null && actual == null) {
             return;
         }
@@ -89,7 +95,8 @@ public class Assert {
     /**
      * Asserts that two Strings are equal.
      */
-    static public void assertEquals(String message, String expected, String actual) {
+    // Nullable message from Assert.assertEquals(String expected, String actual)
+    static public void assertEquals(@Nullable String message, String expected, String actual) {
         if (expected == null && actual == null) {
             return;
         }
@@ -112,7 +119,8 @@ public class Assert {
      * an AssertionFailedError is thrown with the given message.  If the expected
      * value is infinity then the delta value is ignored.
      */
-    static public void assertEquals(String message, double expected, double actual, double delta) {
+    // Nullable message from Assert.assertEquals(double expected, double actual, double delta)
+    static public void assertEquals(@Nullable String message, double expected, double actual, double delta) {
         if (Double.compare(expected, actual) == 0) {
             return;
         }
@@ -134,7 +142,8 @@ public class Assert {
      * are not an AssertionFailedError is thrown with the given message. If the
      * expected value is infinity then the delta value is ignored.
      */
-    static public void assertEquals(String message, float expected, float actual, float delta) {
+    // Nullable message from Assert.assertEquals(float expected, float actual, float delta)
+    static public void assertEquals(@Nullable String message, float expected, float actual, float delta) {
         if (Float.compare(expected, actual) == 0) {
             return;
         }
@@ -155,7 +164,8 @@ public class Assert {
      * Asserts that two longs are equal. If they are not
      * an AssertionFailedError is thrown with the given message.
      */
-    static public void assertEquals(String message, long expected, long actual) {
+    // Nullable message from Assert.assertEquals(long expected, long actual)
+    static public void assertEquals(@Nullable String message, long expected, long actual) {
         assertEquals(message, Long.valueOf(expected), Long.valueOf(actual));
     }
 
@@ -170,7 +180,8 @@ public class Assert {
      * Asserts that two booleans are equal. If they are not
      * an AssertionFailedError is thrown with the given message.
      */
-    static public void assertEquals(String message, boolean expected, boolean actual) {
+    // Nullable message from Assert.assertEquals(boolean expected, boolean actual)
+    static public void assertEquals(@Nullable String message, boolean expected, boolean actual) {
         assertEquals(message, Boolean.valueOf(expected), Boolean.valueOf(actual));
     }
 
@@ -185,7 +196,8 @@ public class Assert {
      * Asserts that two bytes are equal. If they are not
      * an AssertionFailedError is thrown with the given message.
      */
-    static public void assertEquals(String message, byte expected, byte actual) {
+    // Nullable message from Assert.assertEquals(byte expected, byte actual)
+    static public void assertEquals(@Nullable String message, byte expected, byte actual) {
         assertEquals(message, Byte.valueOf(expected), Byte.valueOf(actual));
     }
 
@@ -200,7 +212,8 @@ public class Assert {
      * Asserts that two chars are equal. If they are not
      * an AssertionFailedError is thrown with the given message.
      */
-    static public void assertEquals(String message, char expected, char actual) {
+    // Nullable message from Assert.assertEquals(char expected, char actual)
+    static public void assertEquals(@Nullable String message, char expected, char actual) {
         assertEquals(message, Character.valueOf(expected), Character.valueOf(actual));
     }
 
@@ -215,7 +228,8 @@ public class Assert {
      * Asserts that two shorts are equal. If they are not
      * an AssertionFailedError is thrown with the given message.
      */
-    static public void assertEquals(String message, short expected, short actual) {
+    // Nullable message from Assert.assertEquals(short expected, short actual)
+    static public void assertEquals(@Nullable String message, short expected, short actual) {
         assertEquals(message, Short.valueOf(expected), Short.valueOf(actual));
     }
 
@@ -230,7 +244,8 @@ public class Assert {
      * Asserts that two ints are equal. If they are not
      * an AssertionFailedError is thrown with the given message.
      */
-    static public void assertEquals(String message, int expected, int actual) {
+    // Nullable message from Assert.assertEquals(int expected, int actual)
+    static public void assertEquals(@Nullable String message, int expected, int actual) {
         assertEquals(message, Integer.valueOf(expected), Integer.valueOf(actual));
     }
 
@@ -252,7 +267,9 @@ public class Assert {
      * Asserts that an object isn't null. If it is
      * an AssertionFailedError is thrown with the given message.
      */
-    static public void assertNotNull(String message, Object object) {
+    // Nullable message from Assert.assertNotNull(Object object)
+    // Nullable object from Assert.assertNotNull(String message,@Nullable Object object)
+    static public void assertNotNull(@Nullable String message, @Nullable Object object) {
         assertTrue(message, object != null);
     }
 
@@ -281,7 +298,8 @@ public class Assert {
      * Asserts that two objects refer to the same object. If they are not
      * an AssertionFailedError is thrown with the given message.
      */
-    static public void assertSame(String message, Object expected, Object actual) {
+    // Nullable message from Assert.assertSame(Object expected, Object actual)
+    static public void assertSame(@Nullable String message, Object expected, Object actual) {
         if (expected == actual) {
             return;
         }
@@ -301,7 +319,8 @@ public class Assert {
      * refer to the same object an AssertionFailedError is thrown with the
      * given message.
      */
-    static public void assertNotSame(String message, Object expected, Object actual) {
+    // Nullable message from Assert.assertNotSame(Object expected, Object actual)
+    static public void assertNotSame(@Nullable String message, Object expected, Object actual) {
         if (expected == actual) {
             failSame(message);
         }
@@ -315,21 +334,25 @@ public class Assert {
         assertNotSame(null, expected, actual);
     }
 
-    static public void failSame(String message) {
+    // Nullable message from Assert.assertNotSame(@Nullable String message, Object expected, Object actual)
+    static public void failSame(@Nullable String message) {
         String formatted = (message != null) ? message + " " : "";
         fail(formatted + "expected not same");
     }
 
-    static public void failNotSame(String message, Object expected, Object actual) {
+    // Nullable message from Assert.assertSame(@Nullable String message, Object expected, Object actual)
+    static public void failNotSame(@Nullable String message, Object expected, Object actual) {
         String formatted = (message != null) ? message + " " : "";
         fail(formatted + "expected same:<" + expected + "> was not:<" + actual + ">");
     }
 
-    static public void failNotEquals(String message, Object expected, Object actual) {
+    // Nullable message from Assert.assertEquals(@Nullable String message, Object expected, Object actual)
+    static public void failNotEquals(@Nullable String message, Object expected, Object actual) {
         fail(format(message, expected, actual));
     }
 
-    public static String format(String message, Object expected, Object actual) {
+    // Nullable message from Assert.failNotEquals(@Nullable String message, Object expected, Object actual)
+    public static String format(@Nullable String message, Object expected, Object actual) {
         String formatted = "";
         if (message != null && message.length() > 0) {
             formatted = message + " ";

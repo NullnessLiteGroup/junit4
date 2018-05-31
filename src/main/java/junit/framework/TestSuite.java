@@ -9,6 +9,9 @@ import java.util.Enumeration;
 import java.util.List;
 import java.util.Vector;
 
+import org.checkerframework.checker.initialization.qual.UnderInitialization;
+import org.checkerframework.checker.initialization.qual.UnknownInitialization;;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.junit.internal.MethodSorter;
 import org.junit.internal.Throwables;
 
@@ -106,6 +109,16 @@ public class TestSuite implements Test {
      * Constructs an empty TestSuite.
      */
     public TestSuite() {
+        // [initialization.fields.uninitialized] FALSE_POSITIVE
+        // TestSuite is not exposed in JUnit4 API,
+        // TestSuite() and its subclass constructor ActiveTestSuite()
+        // are not internally called in this project;
+        // TestSuite() is called in the test folder,
+        // but it is okay because, fName is a private field that can
+        // only be accessed from getName();
+        // getName() is called in the test folder only when fName is
+        // ensured to be non-null or with extra control flow to prevent
+        // NPEs.
     }
 
     /**
@@ -115,10 +128,14 @@ public class TestSuite implements Test {
      * Kanton Uri
      */
     public TestSuite(final Class<?> theClass) {
+        // [initialization.fields.uninitialized] FALSE_POSITIVE
+        // fName is initialized in the helper method
+        // addTestsFromTestCase(theClass)
         addTestsFromTestCase(theClass);
     }
 
-    private void addTestsFromTestCase(final Class<?> theClass) {
+    // helper method to for the constructor of TestSuite
+    private void addTestsFromTestCase(@UnderInitialization TestSuite this, final Class<?> theClass) {
         fName = theClass.getName();
         try {
             getTestConstructor(theClass); // Avoid generating multiple error messages
@@ -134,12 +151,20 @@ public class TestSuite implements Test {
 
         Class<?> superClass = theClass;
         List<String> names = new ArrayList<String>();
+        // [argument.type.incompatible] FALSE_POSITIVE
+        // superClass cannot be nullable Class<? extends Object> here
+        // because superClass = theClass, and theClass cannot be null
+        // here, otherwise NPE will be raised at the beginning of the method
         while (Test.class.isAssignableFrom(superClass)) {
             for (Method each : MethodSorter.getDeclaredMethods(superClass)) {
                 addTestMethod(each, names, theClass);
             }
             superClass = superClass.getSuperclass();
         }
+        // [dereference.of.nullable] FALSE_POSITIVE
+        // fTests cannot be null here, it is already assigned some value
+        // up in the declaration; As a private field, it is never reassigned
+        // to be null in this class
         if (fTests.size() == 0) {
             addTest(warning("No tests found in " + theClass.getName()));
         }
@@ -159,6 +184,8 @@ public class TestSuite implements Test {
      * Constructs an empty TestSuite.
      */
     public TestSuite(String name) {
+        // [initialization.fields.uninitialized] FALSE_POSITIVE
+        // fName is initialized in the helper method setName(name)
         setName(name);
     }
 
@@ -168,12 +195,24 @@ public class TestSuite implements Test {
      * @param classes {@link TestCase}s
      */
     public TestSuite(Class<?>... classes) {
+        // [initialization.fields.uninitialized] FALSE_POSITIVE
+        // TestSuite is not exposed in JUnit4 API,
+        // TestSuite(Class<?>... classes) and the caller of this method
+        // TestSuite(Class<? extends TestCase>[] classes, String name)
+        // are not internally called in this project;
+        // TestSuite(Class<?>... classes) is called in the test folder,
+        // but it is okay because, fName is a private field that can
+        // only be accessed from getName();
+        // getName() is called in the test folder only when fName is
+        // ensured to be non-null or with extra control flow to prevent
+        // NPEs.
         for (Class<?> each : classes) {
             addTest(testCaseForClass(each));
         }
     }
 
-    private Test testCaseForClass(Class<?> each) {
+    // helper method to for the constructor of TestSuite
+    private Test testCaseForClass(@UnknownInitialization TestSuite this, Class<?> each) {
         if (TestCase.class.isAssignableFrom(each)) {
             return new TestSuite(each.asSubclass(TestCase.class));
         } else {
@@ -194,7 +233,12 @@ public class TestSuite implements Test {
     /**
      * Adds a test to the suite.
      */
-    public void addTest(Test test) {
+    // helper method to for the constructor of TestSuite
+    public void addTest(@UnknownInitialization TestSuite this, Test test) {
+        // [dereference.of.nullable] FALSE_POSITIVE
+        //  fTests cannot be null here, it is already assigned some value
+        // up in the declaration; As a private field, it is never reassigned
+        // to be null in this class
         fTests.add(test);
     }
 
@@ -246,7 +290,8 @@ public class TestSuite implements Test {
      *
      * @param name the name to set
      */
-    public void setName(String name) {
+    // helper method for the constructor of TestSuite
+    public void setName(@UnknownInitialization TestSuite this, String name) {
         fName = name;
     }
 
@@ -281,7 +326,8 @@ public class TestSuite implements Test {
         return super.toString();
     }
 
-    private void addTestMethod(Method m, List<String> names, Class<?> theClass) {
+    // call from addTestsFromTestCase: helper method to for the constructor of TestSuite
+    private void addTestMethod(@UnderInitialization TestSuite this, Method m, List<String> names, Class<?> theClass) {
         String name = m.getName();
         if (names.contains(name)) {
             return;
@@ -296,11 +342,13 @@ public class TestSuite implements Test {
         addTest(createTest(theClass, name));
     }
 
-    private boolean isPublicTestMethod(Method m) {
+    // call from addTestMethod: helper method to for the constructor of TestSuite
+    private boolean isPublicTestMethod(@UnderInitialization TestSuite this,Method m) {
         return isTestMethod(m) && Modifier.isPublic(m.getModifiers());
     }
 
-    private boolean isTestMethod(Method m) {
+    // call from addTestMethod: helper method to for the constructor of TestSuite
+    private boolean isTestMethod(@UnderInitialization TestSuite this, Method m) {
         return m.getParameterTypes().length == 0 &&
                 m.getName().startsWith("test") &&
                 m.getReturnType().equals(Void.TYPE);

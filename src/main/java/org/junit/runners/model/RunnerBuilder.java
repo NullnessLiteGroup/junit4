@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.junit.internal.runners.ErrorReportingRunner;
 import org.junit.runner.Runner;
 
@@ -46,7 +47,8 @@ public abstract class RunnerBuilder {
      * @return a Runner
      * @throws Throwable if a runner cannot be constructed
      */
-    public abstract Runner runnerForClass(Class<?> testClass) throws Throwable;
+    // Nullable Runner override from SuiteMethodBuilder:runnerForClass
+    public abstract @Nullable Runner runnerForClass(Class<?> testClass) throws Throwable;
 
     /**
      * Always returns a runner for the given test class.
@@ -61,7 +63,8 @@ public abstract class RunnerBuilder {
      * @param testClass class to be run
      * @return a Runner
      */
-    public Runner safeRunnerForClass(Class<?> testClass) {
+    // Nullable Runner returned from RunnerBuilder:runnerForClass(Class<?> testClass)
+    public @Nullable Runner safeRunnerForClass(Class<?> testClass) {
         try {
             return runnerForClass(testClass);
         } catch (Throwable e) {
@@ -69,14 +72,26 @@ public abstract class RunnerBuilder {
         }
     }
 
-    Class<?> addParent(Class<?> parent) throws InitializationError {
+    // Nullable parent from runners(Class<?> parent, Class<?>[] children)
+    // Nullable Class<?> if parent is null and called only once
+    @Nullable Class<?> addParent(@Nullable Class<?> parent) throws InitializationError {
         if (!parents.add(parent)) {
+            // [dereference.of.nullable] FALSE_POSITIVE
+            // parent cannot be null here
+            // because the underlying type of parents is HashSet;
+            // parents.add(parent) returns true if the parent doesn't exist in parents
+            // or the parent exist with the value null
+            // If we want parent to be null at this point,
+            // we need to satisfy !parents.add(null), which means
+            // null exists in parents with a old value non-null,
+            // which is a contradiction
             throw new InitializationError(String.format("class '%s' (possibly indirectly) contains itself as a SuiteClass", parent.getName()));
         }
         return parent;
     }
 
-    void removeParent(Class<?> klass) {
+    // Nullable klass from runners(Class<?> parent, Class<?>[] children)
+    void removeParent(@Nullable Class<?> klass) {
         parents.remove(klass);
     }
 
@@ -86,7 +101,8 @@ public abstract class RunnerBuilder {
      * this builder will throw an exception if it is requested for another
      * runner for {@code parent} before this call completes.
      */
-    public List<Runner> runners(Class<?> parent, Class<?>[] children)
+    // Nullable parent from new Suite(RunnerBuilder builder, Class<?>[] classes)
+    public List<Runner> runners(@Nullable Class<?> parent, Class<?>[] children)
             throws InitializationError {
         addParent(parent);
 

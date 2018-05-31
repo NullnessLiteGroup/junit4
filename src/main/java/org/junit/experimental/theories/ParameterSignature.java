@@ -1,5 +1,7 @@
 package org.junit.experimental.theories;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
@@ -63,7 +65,8 @@ public class ParameterSignature {
         this.annotations = annotations;
     }
 
-    public boolean canAcceptValue(Object candidate) {
+    // Nullable candidate from addIterableValues(ParameterSignature sig, String name, List<PotentialAssignment> list, Iterable<?> iterable)
+    public boolean canAcceptValue(@Nullable Object candidate) {
         return (candidate == null) ? !type.isPrimitive() : canAcceptType(candidate.getClass());
     }
 
@@ -99,12 +102,14 @@ public class ParameterSignature {
         return getAnnotation(type) != null;
     }
 
-    public <T extends Annotation> T findDeepAnnotation(Class<T> annotationType) {
+    // Nullable T returned from findDeepAnnotation is possible
+    public <T extends Annotation> @Nullable T findDeepAnnotation(Class<T> annotationType) {
         Annotation[] annotations2 = annotations;
         return findDeepAnnotation(annotations2, annotationType, 3);
     }
 
-    private <T extends Annotation> T findDeepAnnotation(
+    // Nullable T returned indicated by the implementation recursive method
+    private <T extends Annotation> @Nullable T findDeepAnnotation(
             Annotation[] annotations, Class<T> annotationType, int depth) {
         if (depth == 0) {
             return null;
@@ -123,7 +128,8 @@ public class ParameterSignature {
         return null;
     }
 
-    public <T extends Annotation> T getAnnotation(Class<T> annotationType) {
+    // Nullable T returned if annotationType not exist
+    public <T extends Annotation> @Nullable T getAnnotation(Class<T> annotationType) {
         for (Annotation each : getAnnotations()) {
             if (annotationType.isInstance(each)) {
                 return annotationType.cast(each);

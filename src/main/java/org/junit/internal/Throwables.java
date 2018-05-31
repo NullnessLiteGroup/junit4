@@ -1,5 +1,7 @@
 package org.junit.internal;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -42,6 +44,7 @@ public final class Throwables {
      * @return does not return anything
      * @since 4.12
      */
+    @SuppressWarnings("nullness")
     public static Exception rethrowAsException(Throwable e) throws Exception {
         Throwables.<Exception>rethrow(e);
         return null; // we never get here
@@ -57,9 +60,15 @@ public final class Throwables {
      *
      * @since 4.13
      */
-    public static String getStacktrace(Throwable exception) {
+    // Nullable exception from Failure.getTrace()
+    public static String getStacktrace(@Nullable Throwable exception) {
         StringWriter stringWriter = new StringWriter();
         PrintWriter writer = new PrintWriter(stringWriter);
+        // [dereference.of.nullable] TRUE_POSITIVE
+        // dereference of exception is unsafe here
+        // because the JUnit4 API doesn't prevent
+        // users from calling:
+        // (new Failure(null, null)).getTrace();
         exception.printStackTrace(writer);
         return stringWriter.toString();
     }
@@ -70,19 +79,34 @@ public final class Throwables {
      *
      * @return a trimmed stack trace, or the original trace if trimming wasn't possible
      */
-    public static String getTrimmedStackTrace(Throwable exception) {
+    // Nullable exception from Failure: getTrimmedTrace()
+    public static String getTrimmedStackTrace(@Nullable Throwable exception) {
         List<String> trimmedStackTraceLines = getTrimmedStackTraceLines(exception);
         if (trimmedStackTraceLines.isEmpty()) {
+            // [argument.type.incompatible] FALSE_POSITIVE
+            // exception cannot be null here,
+            // otherwise NPEs will raise in getTrimmedStackTraceLines(exception)
             return getFullStackTrace(exception);
         }
 
+        // [argument.type.incompatible] FALSE_POSITIVE
+        // exception cannot be null here,
+        // otherwise NPEs will raise in getTrimmedStackTraceLines(exception)
         StringBuilder result = new StringBuilder(exception.toString());
         appendStackTraceLines(trimmedStackTraceLines, result);
         appendStackTraceLines(getCauseStackTraceLines(exception), result);
         return result.toString();
     }
 
-    private static List<String> getTrimmedStackTraceLines(Throwable exception) {
+    // Nullable exception from Throwables.getTrimmedStackTrace
+    private static List<String> getTrimmedStackTraceLines(@Nullable Throwable exception) {
+        // [dereference.of.nullable] TRUE_POSITIVE
+        // dereference of exception is unsafe here
+        // because although Throwables is not exposed in JUnit4 API
+        // its callers are. The JUnit 4 API allow users to call:
+        // List<Failure> list = new ArrayList<>();
+        // list.add(new Failure(Description.createTestDescription(Object.class, ""), null));
+        // (new PrintableResult(list)).toString();
         List<StackTraceElement> stackTraceElements = Arrays.asList(exception.getStackTrace());
         int linesToInclude = stackTraceElements.size();
 
@@ -105,9 +129,11 @@ public final class Throwables {
         return Collections.emptyList();
     }
 
-    private static final Method getSuppressed = initGetSuppressed();
+    // Nullable field from initGetSuppressed()
+    private static final @Nullable Method getSuppressed = initGetSuppressed();
 
-    private static Method initGetSuppressed() {
+    // Nullable Method returned from implementation below
+    private static @Nullable Method initGetSuppressed() {
         try {
             return Throwable.class.getMethod("getSuppressed");
         } catch (Throwable e) {
@@ -121,6 +147,10 @@ public final class Throwables {
         }
         try {
             Throwable[] suppressed = (Throwable[]) getSuppressed.invoke(exception);
+            // [dereference.of.nullable] FALSE_POSITIVE
+            //   suppressed.length is safe in this case
+            // getSuppressed.invoke(exception) is guaranteed to return an array
+            // otherwise, it throws exception, which is caught below
             return suppressed.length != 0;
         } catch (Throwable e) {
             return false;

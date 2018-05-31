@@ -9,6 +9,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.TimeUnit;
 
+import org.checkerframework.checker.initialization.qual.UnknownInitialization;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -114,7 +116,8 @@ public class BlockJUnit4ClassRunner extends ParentRunner<FrameworkMethod> {
     }
 
     @Override
-    protected Description describeChild(FrameworkMethod method) {
+    // helper method override super requires
+    protected Description describeChild(@UnknownInitialization BlockJUnit4ClassRunner this, FrameworkMethod method) {
         Description description = methodDescriptions.get(method);
 
         if (description == null) {
@@ -127,7 +130,8 @@ public class BlockJUnit4ClassRunner extends ParentRunner<FrameworkMethod> {
     }
 
     @Override
-    protected List<FrameworkMethod> getChildren() {
+    // helper method override super requires
+    protected List<FrameworkMethod> getChildren(@UnknownInitialization BlockJUnit4ClassRunner this) {
         return computeTestMethods();
     }
 
@@ -140,12 +144,14 @@ public class BlockJUnit4ClassRunner extends ParentRunner<FrameworkMethod> {
      * methods annotated with {@code @Test} on this class and superclasses that
      * are not overridden.
      */
-    protected List<FrameworkMethod> computeTestMethods() {
+    // helper method from getChildren(BlockJUnit4ClassRunner this)
+    protected List<FrameworkMethod> computeTestMethods(@UnknownInitialization BlockJUnit4ClassRunner this) {
         return getTestClass().getAnnotatedMethods(Test.class);
     }
 
     @Override
-    protected void collectInitializationErrors(List<Throwable> errors) {
+    // helper method override super requires
+    protected void collectInitializationErrors(@UnknownInitialization BlockJUnit4ClassRunner this, List<Throwable> errors) {
         super.collectInitializationErrors(errors);
 
         validatePublicConstructor(errors);
@@ -156,13 +162,15 @@ public class BlockJUnit4ClassRunner extends ParentRunner<FrameworkMethod> {
         validateMethods(errors);
     }
 
-    private void validatePublicConstructor(List<Throwable> errors) {
+    // helper method from collectInitializationErrors(BlockJUnit4ClassRunner this, List<Throwable> errors)
+    private void validatePublicConstructor(@UnknownInitialization BlockJUnit4ClassRunner this, List<Throwable> errors) {
         if (getTestClass().getJavaClass() != null) {
             errors.addAll(PUBLIC_CLASS_VALIDATOR.validateTestClass(getTestClass()));
         }
     }
 
-    protected void validateNoNonStaticInnerClass(List<Throwable> errors) {
+    // helper method from collectInitializationErrors(BlockJUnit4ClassRunner this, List<Throwable> errors)
+    protected void validateNoNonStaticInnerClass(@UnknownInitialization BlockJUnit4ClassRunner this, List<Throwable> errors) {
         if (getTestClass().isANonStaticInnerClass()) {
             String gripe = "The inner class " + getTestClass().getName()
                     + " is not static.";
@@ -175,7 +183,8 @@ public class BlockJUnit4ClassRunner extends ParentRunner<FrameworkMethod> {
      * or if the constructor takes parameters. Override if a subclass requires
      * different validation rules.
      */
-    protected void validateConstructor(List<Throwable> errors) {
+    // helper method from collectInitializationErrors(BlockJUnit4ClassRunner this, List<Throwable> errors)
+    protected void validateConstructor(@UnknownInitialization BlockJUnit4ClassRunner this, List<Throwable> errors) {
         validateOnlyOneConstructor(errors);
         validateZeroArgConstructor(errors);
     }
@@ -184,7 +193,8 @@ public class BlockJUnit4ClassRunner extends ParentRunner<FrameworkMethod> {
      * Adds to {@code errors} if the test class has more than one constructor
      * (do not override)
      */
-    protected void validateOnlyOneConstructor(List<Throwable> errors) {
+    // helper method from validateConstructor(BlockJUnit4ClassRunner this, List<Throwable> errors)
+    protected void validateOnlyOneConstructor(@UnknownInitialization BlockJUnit4ClassRunner this, List<Throwable> errors) {
         if (!hasOneConstructor()) {
             String gripe = "Test class should have exactly one public constructor";
             errors.add(new Exception(gripe));
@@ -195,7 +205,8 @@ public class BlockJUnit4ClassRunner extends ParentRunner<FrameworkMethod> {
      * Adds to {@code errors} if the test class's single constructor takes
      * parameters (do not override)
      */
-    protected void validateZeroArgConstructor(List<Throwable> errors) {
+    // helper method from validateConstructor(BlockJUnit4ClassRunner this, List<Throwable> errors)
+    protected void validateZeroArgConstructor(@UnknownInitialization BlockJUnit4ClassRunner this, List<Throwable> errors) {
         if (!getTestClass().isANonStaticInnerClass()
                 && hasOneConstructor()
                 && (getTestClass().getOnlyConstructor().getParameterTypes().length != 0)) {
@@ -204,7 +215,15 @@ public class BlockJUnit4ClassRunner extends ParentRunner<FrameworkMethod> {
         }
     }
 
-    private boolean hasOneConstructor() {
+    // helper from validateOnlyOneConstructor
+    private boolean hasOneConstructor(@UnknownInitialization BlockJUnit4ClassRunner this) {
+        // [dereference.of.nullable] FALSE_POSITIVE
+        // getTestClass().getJavaClass() cannot be null at this point
+        // because in the validate() process, the NPEs caused by
+        // getTestClass().getJavaClass() is already caught in
+        // validateNoNonStaticInnerClass(errors), which calls
+        // getTestClass().isANonStaticInnerClass(), where the
+        // getTestClass().getJavaClass() is de-referenced
         return getTestClass().getJavaClass().getConstructors().length == 1;
     }
 
@@ -215,7 +234,8 @@ public class BlockJUnit4ClassRunner extends ParentRunner<FrameworkMethod> {
      * @deprecated
      */
     @Deprecated
-    protected void validateInstanceMethods(List<Throwable> errors) {
+    // helper method from collectInitializationErrors(BlockJUnit4ClassRunner this, List<Throwable> errors)
+    protected void validateInstanceMethods(@UnknownInitialization BlockJUnit4ClassRunner this, List<Throwable> errors) {
         validatePublicVoidNoArgMethods(After.class, false, errors);
         validatePublicVoidNoArgMethods(Before.class, false, errors);
         validateTestMethods(errors);
@@ -225,11 +245,13 @@ public class BlockJUnit4ClassRunner extends ParentRunner<FrameworkMethod> {
         }
     }
 
-    protected void validateFields(List<Throwable> errors) {
+    // helper method from collectInitializationErrors(BlockJUnit4ClassRunner this, List<Throwable> errors)
+    protected void validateFields(@UnknownInitialization BlockJUnit4ClassRunner this, List<Throwable> errors) {
         RULE_VALIDATOR.validate(getTestClass(), errors);
     }
 
-    private void validateMethods(List<Throwable> errors) {
+    // helper method from collectInitializationErrors(BlockJUnit4ClassRunner this, List<Throwable> errors)
+    private void validateMethods(@UnknownInitialization BlockJUnit4ClassRunner this, List<Throwable> errors) {
         RULE_METHOD_VALIDATOR.validate(getTestClass(), errors);
     }
 
@@ -237,7 +259,8 @@ public class BlockJUnit4ClassRunner extends ParentRunner<FrameworkMethod> {
      * Adds to {@code errors} for each method annotated with {@code @Test}that
      * is not a public, void instance method with no arguments.
      */
-    protected void validateTestMethods(List<Throwable> errors) {
+    // helper method from validateInstanceMethods(BlockJUnit4ClassRunner this, List<Throwable> errors)
+    protected void validateTestMethods(@UnknownInitialization BlockJUnit4ClassRunner this, List<Throwable> errors) {
         validatePublicVoidNoArgMethods(Test.class, false, errors);
     }
 
@@ -264,7 +287,8 @@ public class BlockJUnit4ClassRunner extends ParentRunner<FrameworkMethod> {
      * Returns the name that describes {@code method} for {@link Description}s.
      * Default implementation is the method's name
      */
-    protected String testName(FrameworkMethod method) {
+    // helper method from describeChild(BlockJUnit4ClassRunner this, FrameworkMethod method)
+    protected String testName(@UnknownInitialization BlockJUnit4ClassRunner this, FrameworkMethod method) {
         return method.getName();
     }
 
@@ -313,6 +337,10 @@ public class BlockJUnit4ClassRunner extends ParentRunner<FrameworkMethod> {
             return new Fail(e);
         }
 
+        // [argument.type.incompatible] FALSE_POSITIVE
+        // test cannot be null here, because runReflectiveCall() above,
+        // called by run(), always returns createTest(method),
+        // which returns a non-null createTest()
         Statement statement = methodInvoker(method, test);
         statement = possiblyExpectingExceptions(method, test, statement);
         statement = withPotentialTimeout(method, test, statement);
@@ -416,7 +444,8 @@ public class BlockJUnit4ClassRunner extends ParentRunner<FrameworkMethod> {
      * @return a list of MethodRules that should be applied when executing this
      *         test
      */
-    protected List<MethodRule> rules(Object target) {
+    // Nullable target from BlockJUnit4ClassRunner: withRules
+    protected List<MethodRule> rules(@Nullable Object target) {
         RuleCollector<MethodRule> collector = new RuleCollector<MethodRule>();
         getTestClass().collectAnnotatedMethodValues(target, Rule.class, MethodRule.class,
                 collector);
@@ -430,14 +459,17 @@ public class BlockJUnit4ClassRunner extends ParentRunner<FrameworkMethod> {
      * @return a list of TestRules that should be applied when executing this
      *         test
      */
-    protected List<TestRule> getTestRules(Object target) {
+    // Nullable target from withRules(FrameworkMethod method, Object target, Statement statement)
+    protected List<TestRule> getTestRules(@Nullable Object target) {
         RuleCollector<TestRule> collector = new RuleCollector<TestRule>();
         getTestClass().collectAnnotatedMethodValues(target, Rule.class, TestRule.class, collector);
         getTestClass().collectAnnotatedFieldValues(target, Rule.class, TestRule.class, collector);
         return collector.result;
     }
 
-    private Class<? extends Throwable> getExpectedException(Test annotation) {
+    // Nullable Class<? extends Throwable> returned indicated below
+    // Nullable annotation from possiblyExpectingExceptions(FrameworkMethod method, Object test, Statement next)
+    private @Nullable Class<? extends Throwable> getExpectedException(@Nullable Test annotation) {
         if (annotation == null || annotation.expected() == None.class) {
             return null;
         } else {
@@ -445,15 +477,16 @@ public class BlockJUnit4ClassRunner extends ParentRunner<FrameworkMethod> {
         }
     }
 
-    private long getTimeout(Test annotation) {
+    // Nullable annotation from withPotentialTimeout(FrameworkMethod method, Object test, Statement next)
+    private long getTimeout(@Nullable Test annotation) {
         if (annotation == null) {
             return 0;
         }
         return annotation.timeout();
     }
 
-    private static final ThreadLocal<RuleContainer> CURRENT_RULE_CONTAINER =
-            new ThreadLocal<RuleContainer>();
+    private static final ThreadLocal<@Nullable RuleContainer> CURRENT_RULE_CONTAINER =
+            new ThreadLocal<@Nullable RuleContainer>();
 
     private static class RuleCollector<T> implements MemberValueConsumer<T> {
         final List<T> result = new ArrayList<T>();

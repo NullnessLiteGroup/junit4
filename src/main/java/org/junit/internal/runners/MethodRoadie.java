@@ -10,6 +10,7 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.junit.internal.AssumptionViolatedException;
 import org.junit.runner.Description;
 import org.junit.runner.notification.Failure;
@@ -60,7 +61,8 @@ public class MethodRoadie {
             public void run() {
                 ExecutorService service = Executors.newSingleThreadExecutor();
                 Callable<Object> callable = new Callable<Object>() {
-                    public Object call() throws Exception {
+                    // Nullable Object returned when after test methods run
+                    public @Nullable Object call() throws Exception {
                         runTestMethod();
                         return null;
                     }
@@ -107,6 +109,9 @@ public class MethodRoadie {
         try {
             testMethod.invoke(test);
             if (testMethod.expectsException()) {
+                // [dereference.of.nullable] FALSE_POSITIVE
+                // testMethod.getExpectedException() could not be null
+                // because expectsException() ensures it
                 addFailure(new AssertionError("Expected exception: " + testMethod.getExpectedException().getName()));
             }
         } catch (InvocationTargetException e) {
@@ -116,6 +121,13 @@ public class MethodRoadie {
             } else if (!testMethod.expectsException()) {
                 addFailure(actual);
             } else if (testMethod.isUnexpected(actual)) {
+                // 1) [dereference.of.nullable] FALSE_POSITIVE
+                // testMethod.getExpectedException() could not be null
+                // because last if statement checks !expectsException() which ensures it
+                //
+                // 2) [dereference.of.nullable] FALSE_POSITIVE
+                // it is possible for actual to be null but NPE is raised
+                // in testMethod.isUnexpected(actual)
                 String message = "Unexpected exception, expected<" + testMethod.getExpectedException().getName() + "> but was<"
                         + actual.getClass().getName() + ">";
                 addFailure(new Exception(message, actual));
@@ -133,6 +145,22 @@ public class MethodRoadie {
                     before.invoke(test);
                 }
             } catch (InvocationTargetException e) {
+                // [throwing.nullable] TRUE_POSITIVE
+                // e.getTargetException() is nullable from the
+                // documentation of getCause(), a substitute method
+                // since the release of Java 1.4;
+                // Although e.getCause() in InvocationTargetException
+                // may be intended to be non-null in Java reflection,
+                // we decided it JUnit4 needs to be safer.
+                // @See Java API that documents getCause can be null
+                //      (https://docs.oracle.com/javase/8/docs/api/
+                //      java/lang/reflect/InvocationTargetException.html)
+                // @See StackOverFlow discussion about when InvocationTargetException
+                //      has a null cause (https://stackoverflow.com/questions/
+                //      17684484/when-is-invocationtargetexception-getcause-null)
+                // @See The blog in Oracle forum discussing the four possibilities of
+                //      getCause() (https://blogs.oracle.com/chengfang/
+                //      whats-inside-invocationtargetexception-not-just-exception)
                 throw e.getTargetException();
             }
         } catch (AssumptionViolatedException e) {
@@ -156,7 +184,8 @@ public class MethodRoadie {
         }
     }
 
-    protected void addFailure(Throwable e) {
+    // Nullable e from MethodRoadie.runTestMethod()
+    protected void addFailure(@Nullable Throwable e) {
         notifier.fireTestFailure(new Failure(description, e));
     }
 }

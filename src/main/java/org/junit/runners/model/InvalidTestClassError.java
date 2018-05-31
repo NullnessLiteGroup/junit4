@@ -14,11 +14,13 @@ public class InvalidTestClassError extends InitializationError {
 
     private final String message;
 
+    // Nullable offendingTestClass from validate(ParentRunner<T> this)
     public InvalidTestClassError(Class<?> offendingTestClass, List<Throwable> validationErrors) {
         super(validationErrors);
         this.message = createMessage(offendingTestClass, validationErrors);
     }
 
+    // Nullable testClass from the constructor
     private static String createMessage(Class<?> testClass, List<Throwable> validationErrors) {
         StringBuilder sb = new StringBuilder();
         sb.append(String.format("Invalid test class '%s':", testClass.getName()));

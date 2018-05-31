@@ -2,6 +2,7 @@ package org.junit.internal.requests;
 
 import java.util.Comparator;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.junit.runner.Description;
 import org.junit.runner.Request;
 import org.junit.runner.Runner;
@@ -17,7 +18,8 @@ public class SortingRequest extends Request {
     }
 
     @Override
-    public Runner getRunner() {
+    // Nullable Runner returned if the given request cannot build a runner
+    public @Nullable Runner getRunner() {
         Runner runner = request.getRunner();
         new Sorter(comparator).apply(runner);
         return runner;

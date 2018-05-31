@@ -4,6 +4,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -39,7 +40,8 @@ public class TestMethod {
         return timeout;
     }
 
-    protected Class<? extends Throwable> getExpectedException() {
+    // Nullable Class<? extends Throwable> returned indicated below
+    protected @Nullable Class<? extends Throwable> getExpectedException() {
         Test annotation = method.getAnnotation(Test.class);
         if (annotation == null || annotation.expected() == None.class) {
             return null;
@@ -48,7 +50,17 @@ public class TestMethod {
         }
     }
 
-    boolean isUnexpected(Throwable exception) {
+    // Nullable exception from MethodRoadie.runTestMethod()
+    boolean isUnexpected(@Nullable Throwable exception) {
+        // [dereference.of.nullable] FALSE_POSITIVE
+        // getExpectedException() will not return null in this case
+        // because 1). TestMethod is not exposed in the JUnit4 API
+        // 2). the only caller in this project MethodRoadie: runTestMethod()
+        // checks the expectsException() == true before it calls this method;
+        //
+        // [dereference.of.nullable] TRUE_POSITIVE
+        // exception can be null,
+        // if e.getTargetException() is null from MethodRoadie.runTestMethod()
         return !getExpectedException().isAssignableFrom(exception.getClass());
     }
 

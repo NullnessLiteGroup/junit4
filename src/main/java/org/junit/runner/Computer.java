@@ -1,5 +1,6 @@
 package org.junit.runner;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.junit.runners.Suite;
 import org.junit.runners.model.InitializationError;
 import org.junit.runners.model.RunnerBuilder;
@@ -27,7 +28,9 @@ public class Computer {
             Class<?>[] classes) throws InitializationError {
         return new Suite(new RunnerBuilder() {
             @Override
-            public Runner runnerForClass(Class<?> testClass) throws Throwable {
+            // Nullable Runner returned required for its public method from Computer,
+            // and JUnit4 API does not prevent parameters like NullBuilder
+            public @Nullable Runner runnerForClass(Class<?> testClass) throws Throwable {
                 return getRunner(builder, testClass);
             }
         }, classes) {
@@ -46,7 +49,8 @@ public class Computer {
     /**
      * Create a single-class runner for {@code testClass}, using {@code builder}
      */
-    protected Runner getRunner(RunnerBuilder builder, Class<?> testClass) throws Throwable {
+    // Nullable Runner returned from getSuite(final RunnerBuilder builder, Class<?>[] classes)
+    protected @Nullable Runner getRunner(RunnerBuilder builder, Class<?> testClass) throws Throwable {
         return builder.runnerForClass(testClass);
     }
 }

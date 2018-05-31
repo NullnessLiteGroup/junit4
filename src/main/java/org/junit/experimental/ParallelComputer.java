@@ -4,6 +4,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.junit.runner.Computer;
 import org.junit.runner.Runner;
 import org.junit.runners.ParentRunner;
@@ -29,7 +30,9 @@ public class ParallelComputer extends Computer {
         return new ParallelComputer(false, true);
     }
 
-    private static Runner parallelize(Runner runner) {
+    // Nullable runner from getRunner(RunnerBuilder builder, Class<?> testClass)
+    // Nullable runner returned if runner passed in is null
+    private static @Nullable Runner parallelize(@Nullable Runner runner) {
         if (runner instanceof ParentRunner) {
             ((ParentRunner<?>) runner).setScheduler(new RunnerScheduler() {
                 private final ExecutorService fService = Executors.newCachedThreadPool();
@@ -52,14 +55,21 @@ public class ParallelComputer extends Computer {
     }
 
     @Override
+    // Nullable Runner returned by super.getSuite(builder, classes) and parallelize(suite)
     public Runner getSuite(RunnerBuilder builder, java.lang.Class<?>[] classes)
             throws InitializationError {
         Runner suite = super.getSuite(builder, classes);
+        // [return.type.incompatible] FALSE_POSITIVE
+        // 1) suite is a non-null Runner returned by super.getSuite(builder, classes);
+        // 2) also, parallelize(suite) will return non-null Runner, because Suite
+        // is subclass of ParentRunner and parallelize(suite)
+        // just set a scheduler to it (no null reassignment)
         return this.classes ? parallelize(suite) : suite;
     }
 
     @Override
-    protected Runner getRunner(RunnerBuilder builder, Class<?> testClass)
+    // Nullable Runner returned from getSuite(RunnerBuilder builder, Class<?>[] classes)
+    protected @Nullable Runner getRunner(RunnerBuilder builder, Class<?> testClass)
             throws Throwable {
         Runner runner = super.getRunner(builder, testClass);
         return methods ? parallelize(runner) : runner;

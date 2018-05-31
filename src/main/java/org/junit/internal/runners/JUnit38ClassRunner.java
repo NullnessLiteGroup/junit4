@@ -7,6 +7,8 @@ import junit.framework.TestCase;
 import junit.framework.TestListener;
 import junit.framework.TestResult;
 import junit.framework.TestSuite;
+import org.checkerframework.checker.initialization.qual.UnknownInitialization;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.junit.runner.Describable;
 import org.junit.runner.Description;
 import org.junit.runner.Runner;
@@ -38,7 +40,8 @@ public class JUnit38ClassRunner extends Runner implements Filterable, Sortable {
         }
 
         // Implement junit.framework.TestListener
-        public void addError(Test test, Throwable e) {
+        // Nullable e from override super
+        public void addError(Test test, @Nullable Throwable e) {
             Failure failure = new Failure(asDescription(test), e);
             notifier.fireTestFailure(failure);
         }
@@ -68,6 +71,7 @@ public class JUnit38ClassRunner extends Runner implements Filterable, Sortable {
         }
     }
 
+    // Nullable test from setTest(JUnit38ClassRunner this, Test test)
     private volatile Test test;
 
     public JUnit38ClassRunner(Class<?> klass) {
@@ -75,6 +79,8 @@ public class JUnit38ClassRunner extends Runner implements Filterable, Sortable {
     }
 
     public JUnit38ClassRunner(Test test) {
+        // [initialization.fields.uninitialized] FALSE_POSITIVE
+        // test is initialized in the helper method setTest(test);
         super();
         setTest(test);
     }
@@ -117,7 +123,6 @@ public class JUnit38ClassRunner extends Runner implements Filterable, Sortable {
             TestDecorator decorator = (TestDecorator) test;
             return makeDescription(decorator.getTest());
         } else {
-            // This is the best we can do in this case
             return Description.createSuiteDescription(test.getClass());
         }
     }
@@ -170,7 +175,8 @@ public class JUnit38ClassRunner extends Runner implements Filterable, Sortable {
         }
     }
 
-    private void setTest(Test test) {
+    // helper method for constructor of JUnit38ClassRunner
+    private void setTest(@UnknownInitialization JUnit38ClassRunner this, Test test) {
         this.test = test;
     }
 

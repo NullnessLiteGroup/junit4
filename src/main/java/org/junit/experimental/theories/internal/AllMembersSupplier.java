@@ -7,6 +7,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.junit.Assume;
 import org.junit.experimental.theories.DataPoint;
 import org.junit.experimental.theories.DataPoints;
@@ -29,7 +30,8 @@ public class AllMembersSupplier extends ParameterSupplier {
         }
 
         @Override
-        public Object getValue() throws CouldNotGenerateValueException {
+        // Nullable Object returned from invokeExplosively
+        public @Nullable Object getValue() throws CouldNotGenerateValueException {
             try {
                 return method.invokeExplosively(null);
             } catch (IllegalArgumentException e) {
@@ -118,9 +120,10 @@ public class AllMembersSupplier extends ParameterSupplier {
             }
         }
     }
-    
+
+    // Nullable value from addMultiPointFields(ParameterSignature sig, List<PotentialAssignment> list)
     private void addDataPointsValues(Class<?> type, ParameterSignature sig, String name, 
-            List<PotentialAssignment> list, Object value) {
+            List<PotentialAssignment> list, @Nullable Object value) {
         if (type.isArray()) {
             addArrayValues(sig, name, list, value);
         }
@@ -129,7 +132,9 @@ public class AllMembersSupplier extends ParameterSupplier {
         }
     }
 
-    private void addArrayValues(ParameterSignature sig, String name, List<PotentialAssignment> list, Object array) {
+    // Nullable array from addDataPointsValues(Class<?> type, ParameterSignature sig, String name,
+    //            List<PotentialAssignment> list, Object value)
+    private void addArrayValues(ParameterSignature sig, String name, List<PotentialAssignment> list, @Nullable Object array) {
         for (int i = 0; i < Array.getLength(array); i++) {
             Object value = Array.get(array, i);
             if (sig.canAcceptValue(value)) {
@@ -137,8 +142,31 @@ public class AllMembersSupplier extends ParameterSupplier {
             }
         }
     }
-    
-    private void addIterableValues(ParameterSignature sig, String name, List<PotentialAssignment> list, Iterable<?> iterable) {
+
+    // Nullable array from addDataPointsValues(Class<?> type, ParameterSignature sig, String name,
+    //            List<PotentialAssignment> list, Object value)
+    private void addIterableValues(ParameterSignature sig, String name, List<PotentialAssignment> list, @Nullable Iterable<?> iterable) {
+        // [dereference.of.nullable] TRUE_POSITIVE
+        // dereference of possibly-null reference iterable
+        // Although JUnit4 API documented that users can use @DataPoints
+        // to annotate the iterable-typed static field, which is used as
+        // parameters for corresponding theories methods, it doesn't explicitly
+        // say that users cannot assign null to the field. Plus, the implementation
+        // doesn't check whether the iterable passed into this method is null, so
+        // we consider dereference iterable is unsafe here.
+        //
+        // One example to raise NPEs here is:
+        // @RunWith(Theories.class)
+        // public class Empty {
+        //    @DataPoints
+        //    public static List<String> dataPoints = null;
+        //    @Theory
+        //    public void testList(List<String> list) {
+        //        for (String s: list) {
+        //            System.out.println(s);
+        //        }
+        //    }
+        // }
         Iterator<?> iterator = iterable.iterator();
         int i = 0;
         while (iterator.hasNext()) {
@@ -150,7 +178,8 @@ public class AllMembersSupplier extends ParameterSupplier {
         }
     }
 
-    private Object getStaticFieldValue(final Field field) {
+    // Nullable Object returned if the static field value is null
+    private @Nullable Object getStaticFieldValue(final Field field) {
         try {
             return field.get(null);
         } catch (IllegalArgumentException e) {

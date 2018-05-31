@@ -1,5 +1,7 @@
 package org.junit.experimental.theories.internal;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
@@ -14,7 +16,8 @@ public class ParameterizedAssertionError extends AssertionError {
     }
 
     @Override
-    public boolean equals(Object obj) {
+    // override super requires
+    public boolean equals(@Nullable Object obj) {
         return obj instanceof ParameterizedAssertionError && toString().equals(obj.toString());
     }
 
