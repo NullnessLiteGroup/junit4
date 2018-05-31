@@ -113,6 +113,7 @@ public class AssumptionTest {
     @Test
     public void assumeNotNullThrowsExceptionForNullArray() {
         try {
+            // [FALSE_POSITIVE]
             // This is a false positive, since this method is used to test whether 
             // the method "assumeNotNull" in Assume.java (line 82) throws an AssumptionViolatedException
             // if we pass null as its argument. If it doesn't, then that is a real error as we can see
