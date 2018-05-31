@@ -3,6 +3,7 @@ package org.junit.rules;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.jetbrains.annotations.NotNull;
 import org.junit.runner.Description;
 import org.junit.runners.model.MultipleFailureException;
 import org.junit.runners.model.Statement;
@@ -39,17 +40,18 @@ import org.junit.runners.model.Statement;
  * @since 4.7
  */
 public abstract class ExternalResource implements TestRule {
-    public Statement apply(Statement base, Description description) {
+    @NotNull
+    public Statement apply(@NotNull Statement base, Description description) {
         return statement(base);
     }
 
-    private Statement statement(final Statement base) {
+    private Statement statement(@NotNull final Statement base) {
         return new Statement() {
             @Override
             public void evaluate() throws Throwable {
                 before();
 
-                List<Throwable> errors = new ArrayList<Throwable>();
+                @NotNull List<Throwable> errors = new ArrayList<Throwable>();
                 try {
                     base.evaluate();
                 } catch (Throwable t) {

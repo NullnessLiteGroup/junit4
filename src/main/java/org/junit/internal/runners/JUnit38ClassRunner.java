@@ -7,6 +7,7 @@ import junit.framework.TestCase;
 import junit.framework.TestListener;
 import junit.framework.TestResult;
 import junit.framework.TestSuite;
+import org.jetbrains.annotations.NotNull;
 import org.junit.runner.Describable;
 import org.junit.runner.Description;
 import org.junit.runner.Runner;
@@ -39,13 +40,13 @@ public class JUnit38ClassRunner extends Runner implements Filterable, Sortable {
 
         // Implement junit.framework.TestListener
         public void addError(Test test, Throwable e) {
-            Failure failure = new Failure(asDescription(test), e);
+            @NotNull Failure failure = new Failure(asDescription(test), e);
             notifier.fireTestFailure(failure);
         }
 
         private Description asDescription(Test test) {
             if (test instanceof Describable) {
-                Describable facade = (Describable) test;
+                @NotNull Describable facade = (Describable) test;
                 return facade.getDescription();
             }
             return Description.createTestDescription(getEffectiveClass(test), getName(test));
@@ -81,11 +82,12 @@ public class JUnit38ClassRunner extends Runner implements Filterable, Sortable {
 
     @Override
     public void run(RunNotifier notifier) {
-        TestResult result = new TestResult();
+        @NotNull TestResult result = new TestResult();
         result.addListener(createAdaptingListener(notifier));
         getTest().run(result);
     }
 
+    @NotNull
     public TestListener createAdaptingListener(final RunNotifier notifier) {
         return new OldTestClassAdaptingListener(notifier);
     }
@@ -97,13 +99,13 @@ public class JUnit38ClassRunner extends Runner implements Filterable, Sortable {
 
     private static Description makeDescription(Test test) {
         if (test instanceof TestCase) {
-            TestCase tc = (TestCase) test;
+            @NotNull TestCase tc = (TestCase) test;
             return Description.createTestDescription(tc.getClass(), tc.getName(),
                     getAnnotations(tc));
         } else if (test instanceof TestSuite) {
-            TestSuite ts = (TestSuite) test;
+            @NotNull TestSuite ts = (TestSuite) test;
             String name = ts.getName() == null ? createSuiteDescription(ts) : ts.getName();
-            Description description = Description.createSuiteDescription(name);
+            @NotNull Description description = Description.createSuiteDescription(name);
             int n = ts.testCount();
             for (int i = 0; i < n; i++) {
                 Description made = makeDescription(ts.testAt(i));
@@ -111,10 +113,10 @@ public class JUnit38ClassRunner extends Runner implements Filterable, Sortable {
             }
             return description;
         } else if (test instanceof Describable) {
-            Describable adapter = (Describable) test;
+            @NotNull Describable adapter = (Describable) test;
             return adapter.getDescription();
         } else if (test instanceof TestDecorator) {
-            TestDecorator decorator = (TestDecorator) test;
+            @NotNull TestDecorator decorator = (TestDecorator) test;
             return makeDescription(decorator.getTest());
         } else {
             // This is the best we can do in this case
@@ -129,6 +131,9 @@ public class JUnit38ClassRunner extends Runner implements Filterable, Sortable {
     private static Annotation[] getAnnotations(TestCase test) {
         try {
             Method m = test.getClass().getMethod(test.getName());
+            /*
+               [FALSE_POSITIVE]  => call hierachy
+             */
             return m.getDeclaredAnnotations();
         } catch (SecurityException e) {
         } catch (NoSuchMethodException e) {
@@ -138,17 +143,17 @@ public class JUnit38ClassRunner extends Runner implements Filterable, Sortable {
 
     private static String createSuiteDescription(TestSuite ts) {
         int count = ts.countTestCases();
-        String example = count == 0 ? "" : String.format(" [example: %s]", ts.testAt(0));
+        @NotNull String example = count == 0 ? "" : String.format(" [example: %s]", ts.testAt(0));
         return String.format("TestSuite with %s tests%s", count, example);
     }
 
-    public void filter(Filter filter) throws NoTestsRemainException {
+    public void filter(@NotNull Filter filter) throws NoTestsRemainException {
         if (getTest() instanceof Filterable) {
-            Filterable adapter = (Filterable) getTest();
+            @NotNull Filterable adapter = (Filterable) getTest();
             adapter.filter(filter);
         } else if (getTest() instanceof TestSuite) {
-            TestSuite suite = (TestSuite) getTest();
-            TestSuite filtered = new TestSuite(suite.getName());
+            @NotNull TestSuite suite = (TestSuite) getTest();
+            @NotNull TestSuite filtered = new TestSuite(suite.getName());
             int n = suite.testCount();
             for (int i = 0; i < n; i++) {
                 Test test = suite.testAt(i);
@@ -165,7 +170,7 @@ public class JUnit38ClassRunner extends Runner implements Filterable, Sortable {
 
     public void sort(Sorter sorter) {
         if (getTest() instanceof Sortable) {
-            Sortable adapter = (Sortable) getTest();
+            @NotNull Sortable adapter = (Sortable) getTest();
             adapter.sort(sorter);
         }
     }

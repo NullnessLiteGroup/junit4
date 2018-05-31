@@ -1,5 +1,6 @@
 package org.junit.runner.manipulation;
 
+import org.jetbrains.annotations.NotNull;
 import org.junit.runner.Description;
 import org.junit.runner.Request;
 
@@ -44,7 +45,7 @@ public abstract class Filter {
      * Returns a {@code Filter} that only runs the single method described by
      * {@code desiredDescription}
      */
-    public static Filter matchMethodDescription(final Description desiredDescription) {
+    public static Filter matchMethodDescription(@NotNull final Description desiredDescription) {
         return new Filter() {
             @Override
             public boolean shouldRun(Description description) {
@@ -53,7 +54,7 @@ public abstract class Filter {
                 }
 
                 // explicitly check if any children want to run
-                for (Description each : description.getChildren()) {
+                for (@NotNull Description each : description.getChildren()) {
                     if (shouldRun(each)) {
                         return true;
                     }
@@ -93,7 +94,7 @@ public abstract class Filter {
         if (!(child instanceof Filterable)) {
             return;
         }
-        Filterable filterable = (Filterable) child;
+        @NotNull Filterable filterable = (Filterable) child;
         filterable.filter(this);
     }
 
@@ -101,11 +102,11 @@ public abstract class Filter {
      * Returns a new Filter that accepts the intersection of the tests accepted
      * by this Filter and {@code second}
      */
-    public Filter intersect(final Filter second) {
+    public Filter intersect(@NotNull final Filter second) {
         if (second == this || second == ALL) {
             return this;
         }
-        final Filter first = this;
+        @NotNull final Filter first = this;
         return new Filter() {
             @Override
             public boolean shouldRun(Description description) {
@@ -113,6 +114,7 @@ public abstract class Filter {
                         && second.shouldRun(description);
             }
 
+            @NotNull
             @Override
             public String describe() {
                 return first.describe() + " and " + second.describe();

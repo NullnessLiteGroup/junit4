@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.jetbrains.annotations.NotNull;
 import org.junit.experimental.categories.Categories.CategoryFilter;
 import org.junit.runner.manipulation.Filter;
 
@@ -31,12 +32,12 @@ public final class IncludeCategories extends CategoryFilterFactory {
      * @param categories Category classes.
      */
     @Override
-    protected Filter createFilter(List<Class<?>> categories) {
+    protected Filter createFilter(@NotNull List<Class<?>> categories) {
         return new IncludesAny(categories);
     }
 
     private static class IncludesAny extends CategoryFilter {
-        public IncludesAny(List<Class<?>> categories) {
+        public IncludesAny(@NotNull List<Class<?>> categories) {
             this(new HashSet<Class<?>>(categories));
         }
 
@@ -44,6 +45,7 @@ public final class IncludeCategories extends CategoryFilterFactory {
             super(true, categories, true, null);
         }
 
+        @NotNull
         @Override
         public String describe() {
             return "includes " + super.describe();

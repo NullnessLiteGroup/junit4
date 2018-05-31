@@ -10,6 +10,8 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.junit.internal.AssumptionViolatedException;
 import org.junit.runner.Description;
 import org.junit.runner.notification.Failure;
@@ -58,14 +60,14 @@ public class MethodRoadie {
         runBeforesThenTestThenAfters(new Runnable() {
 
             public void run() {
-                ExecutorService service = Executors.newSingleThreadExecutor();
-                Callable<Object> callable = new Callable<Object>() {
+                @NotNull ExecutorService service = Executors.newSingleThreadExecutor();
+                @NotNull Callable<Object> callable = new Callable<Object>() {
                     public Object call() throws Exception {
                         runTestMethod();
                         return null;
                     }
                 };
-                Future<Object> result = service.submit(callable);
+                @NotNull Future<Object> result = service.submit(callable);
                 service.shutdown();
                 try {
                     boolean terminated = service.awaitTermination(timeout,
@@ -91,7 +93,7 @@ public class MethodRoadie {
         });
     }
 
-    public void runBeforesThenTestThenAfters(Runnable test) {
+    public void runBeforesThenTestThenAfters(@NotNull Runnable test) {
         try {
             runBefores();
             test.run();
@@ -108,6 +110,16 @@ public class MethodRoadie {
             testMethod.invoke(test);
             if (testMethod.expectsException()) {
                 addFailure(new AssertionError("Expected exception: " + testMethod.getExpectedException().getName()));
+                /*
+                   [FALSE_POSITIVE]
+                   This is a false positve. Let's look at the condition of the above if-branch (line 111):
+                   testMethod.expectsException(). By looking at its implementation
+                   (src/main/java/org/junit/internal/runners/TestMethod.java: line 66), we know that it returns false
+                   if getExpectedException() (TestMethod.java: line 45) returns null.
+                   If the error we (line 112) get is as it says, it means testMethod.getExpectedException() returns null.
+                   But in this case, testMethod.expectsException() will always be false, meaning that we will never reach
+                   the error (line 112). So this is a false positive.
+                 */
             }
         } catch (InvocationTargetException e) {
             Throwable actual = e.getTargetException();
@@ -116,8 +128,18 @@ public class MethodRoadie {
             } else if (!testMethod.expectsException()) {
                 addFailure(actual);
             } else if (testMethod.isUnexpected(actual)) {
-                String message = "Unexpected exception, expected<" + testMethod.getExpectedException().getName() + "> but was<"
+                @NotNull String message = "Unexpected exception, expected<" + testMethod.getExpectedException().getName() + "> but was<"
                         + actual.getClass().getName() + ">";
+                /*
+                   [FALSE_POSITIVE]
+                   This is a false positve. Let's look at the condition of the above else-if-branch (line 130):
+                   !testMethod.expectsException(). By looking at its implementation
+                   (src/main/java/org/junit/internal/runners/TestMethod.java: line 66), we know that it returns false
+                   if getExpectedException() (TestMethod.java: line 45) returns null.
+                   If the error we get (line 131) is as it says, it means testMethod.getExpectedException() returns null.
+                   But in this case, !testMethod.expectsException() will always be true, meaning that we will enter the
+                   else-if-branch and never reach this error (ine 131).
+                 */
                 addFailure(new Exception(message, actual));
             }
         } catch (Throwable e) {
@@ -128,8 +150,8 @@ public class MethodRoadie {
     private void runBefores() throws FailedBefore {
         try {
             try {
-                List<Method> befores = testMethod.getBefores();
-                for (Method before : befores) {
+                @NotNull List<Method> befores = testMethod.getBefores();
+                for (@NotNull Method before : befores) {
                     before.invoke(test);
                 }
             } catch (InvocationTargetException e) {
@@ -144,8 +166,8 @@ public class MethodRoadie {
     }
 
     private void runAfters() {
-        List<Method> afters = testMethod.getAfters();
-        for (Method after : afters) {
+        @NotNull List<Method> afters = testMethod.getAfters();
+        for (@NotNull Method after : afters) {
             try {
                 after.invoke(test);
             } catch (InvocationTargetException e) {

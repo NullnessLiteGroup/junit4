@@ -2,6 +2,7 @@ package junit.framework;
 
 import java.util.List;
 
+import org.jetbrains.annotations.NotNull;
 import org.junit.Ignore;
 import org.junit.runner.Describable;
 import org.junit.runner.Description;
@@ -58,18 +59,20 @@ public class JUnit4TestAdapter implements Test, Filterable, Sortable, Describabl
         return fNewTestClass;
     }
 
+    @NotNull
     public Description getDescription() {
         Description description = fRunner.getDescription();
         return removeIgnored(description);
     }
 
-    private Description removeIgnored(Description description) {
+    @NotNull
+    private Description removeIgnored(@NotNull Description description) {
         if (isIgnored(description)) {
             return Description.EMPTY;
         }
-        Description result = description.childlessCopy();
-        for (Description each : description.getChildren()) {
-            Description child = removeIgnored(each);
+        @NotNull Description result = description.childlessCopy();
+        for (@NotNull Description each : description.getChildren()) {
+            @NotNull Description child = removeIgnored(each);
             if (!child.isEmpty()) {
                 result.addChild(child);
             }
@@ -86,11 +89,11 @@ public class JUnit4TestAdapter implements Test, Filterable, Sortable, Describabl
         return fNewTestClass.getName();
     }
 
-    public void filter(Filter filter) throws NoTestsRemainException {
+    public void filter(@NotNull Filter filter) throws NoTestsRemainException {
         filter.apply(fRunner);
     }
 
-    public void sort(Sorter sorter) {
+    public void sort(@NotNull Sorter sorter) {
         sorter.apply(fRunner);
     }
 }

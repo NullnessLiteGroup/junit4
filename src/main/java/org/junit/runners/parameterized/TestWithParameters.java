@@ -6,6 +6,8 @@ import static org.junit.internal.Checks.notNull;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.junit.runners.model.TestClass;
 
 /**
@@ -20,10 +22,11 @@ public class TestWithParameters {
 
     private final TestClass testClass;
 
+    @NotNull
     private final List<Object> parameters;
 
     public TestWithParameters(String name, TestClass testClass,
-            List<Object> parameters) {
+                              @NotNull List<Object> parameters) {
         notNull(name, "The name is missing.");
         notNull(testClass, "The test class is missing.");
         notNull(parameters, "The parameters are missing.");
@@ -40,6 +43,7 @@ public class TestWithParameters {
         return testClass;
     }
 
+    @NotNull
     public List<Object> getParameters() {
         return parameters;
     }
@@ -53,7 +57,7 @@ public class TestWithParameters {
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(@Nullable Object obj) {
         if (this == obj) {
             return true;
         }
@@ -63,12 +67,13 @@ public class TestWithParameters {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        TestWithParameters other = (TestWithParameters) obj;
+        @NotNull TestWithParameters other = (TestWithParameters) obj;
         return name.equals(other.name)
                 && parameters.equals(other.parameters)
                 && testClass.equals(other.testClass);
     }
 
+    @NotNull
     @Override
     public String toString() {
         return testClass.getName() + " '" + name + "' with parameters "

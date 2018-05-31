@@ -9,6 +9,8 @@ import junit.framework.TestResult;
 import junit.framework.TestSuite;
 import junit.runner.BaseTestRunner;
 import junit.runner.Version;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * A command line based tool to run tests.
@@ -72,8 +74,9 @@ public class TestRunner extends BaseTestRunner {
      * }
      * </pre>
      */
-    static public TestResult run(Test test) {
-        TestRunner runner = new TestRunner();
+    @NotNull
+    static public TestResult run(@NotNull Test test) {
+        @NotNull TestRunner runner = new TestRunner();
         return runner.doRun(test);
     }
 
@@ -81,8 +84,8 @@ public class TestRunner extends BaseTestRunner {
      * Runs a single test and waits until the user
      * types RETURN.
      */
-    static public void runAndWait(Test suite) {
-        TestRunner aTestRunner = new TestRunner();
+    static public void runAndWait(@NotNull Test suite) {
+        @NotNull TestRunner aTestRunner = new TestRunner();
         aTestRunner.doRun(suite, true);
     }
 
@@ -101,16 +104,19 @@ public class TestRunner extends BaseTestRunner {
     /**
      * Creates the TestResult to be used for the test run.
      */
+    @NotNull
     protected TestResult createTestResult() {
         return new TestResult();
     }
 
-    public TestResult doRun(Test test) {
+    @NotNull
+    public TestResult doRun(@NotNull Test test) {
         return doRun(test, false);
     }
 
-    public TestResult doRun(Test suite, boolean wait) {
-        TestResult result = createTestResult();
+    @NotNull
+    public TestResult doRun(@NotNull Test suite, boolean wait) {
+        @NotNull TestResult result = createTestResult();
         result.addListener(fPrinter);
         long startTime = System.currentTimeMillis();
         suite.run(result);
@@ -131,10 +137,10 @@ public class TestRunner extends BaseTestRunner {
         }
     }
 
-    public static void main(String[] args) {
-        TestRunner aTestRunner = new TestRunner();
+    public static void main(@NotNull String[] args) {
+        @NotNull TestRunner aTestRunner = new TestRunner();
         try {
-            TestResult r = aTestRunner.start(args);
+            @NotNull TestResult r = aTestRunner.start(args);
             if (!r.wasSuccessful()) {
                 System.exit(FAILURE_EXIT);
             }
@@ -149,9 +155,10 @@ public class TestRunner extends BaseTestRunner {
      * Starts a test run. Analyzes the command line arguments and runs the given
      * test suite.
      */
-    public TestResult start(String[] args) throws Exception {
+    @NotNull
+    public TestResult start(@NotNull String[] args) throws Exception {
         String testCase = "";
-        String method = "";
+        @NotNull String method = "";
         boolean wait = false;
 
         for (int i = 0; i < args.length; i++) {
@@ -179,15 +186,24 @@ public class TestRunner extends BaseTestRunner {
             if (!method.equals("")) {
                 return runSingleMethod(testCase, method, wait);
             }
-            Test suite = getTest(testCase);
+            @Nullable Test suite = getTest(testCase);
             return doRun(suite, wait);
+            /*
+               [FALSE_POSITIVE]
+               This is a false positive.
+               Because the JUnit wiki (https://github.com/junit-team/junit4/wiki/test-runners)
+               and JUnit4 API doesn't introduce TestRunner and its usage.
+               Besides, the internal calls to this method in the project
+               will never get this line
+             */
         } catch (Exception e) {
             throw new Exception("Could not create and run test suite: " + e);
         }
     }
 
+    @NotNull
     protected TestResult runSingleMethod(String testCase, String method, boolean wait) throws Exception {
-        Class<? extends TestCase> testClass = loadSuiteClass(testCase).asSubclass(TestCase.class);
+        @NotNull Class<? extends TestCase> testClass = loadSuiteClass(testCase).asSubclass(TestCase.class);
         Test test = TestSuite.createTest(testClass, method);
         return doRun(test, wait);
     }

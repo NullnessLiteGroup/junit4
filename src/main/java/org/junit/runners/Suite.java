@@ -8,6 +8,8 @@ import java.lang.annotation.Target;
 import java.util.Collections;
 import java.util.List;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.junit.internal.builders.AllDefaultPossibilitiesBuilder;
 import org.junit.runner.Description;
 import org.junit.runner.Runner;
@@ -47,9 +49,10 @@ public class Suite extends ParentRunner<Runner> {
         /**
          * @return the classes to be run
          */
-        Class<?>[] value();
+        @NotNull Class<?>[] value();
     }
 
+    @NotNull
     private static Class<?>[] getAnnotatedClasses(Class<?> klass) throws InitializationError {
         SuiteClasses annotation = klass.getAnnotation(SuiteClasses.class);
         if (annotation == null) {
@@ -58,6 +61,7 @@ public class Suite extends ParentRunner<Runner> {
         return annotation.value();
     }
 
+    @NotNull
     private final List<Runner> runners;
 
     /**
@@ -66,7 +70,7 @@ public class Suite extends ParentRunner<Runner> {
      * @param klass the root class
      * @param builder builds runners for classes in the suite
      */
-    public Suite(Class<?> klass, RunnerBuilder builder) throws InitializationError {
+    public Suite(@NotNull Class<?> klass, @NotNull RunnerBuilder builder) throws InitializationError {
         this(builder, klass, getAnnotatedClasses(klass));
     }
 
@@ -77,7 +81,7 @@ public class Suite extends ParentRunner<Runner> {
      * @param builder builds runners for classes in the suite
      * @param classes the classes in the suite
      */
-    public Suite(RunnerBuilder builder, Class<?>[] classes) throws InitializationError {
+    public Suite(RunnerBuilder builder, @NotNull Class<?>[] classes) throws InitializationError {
         this(null, builder.runners(null, classes));
     }
 
@@ -87,7 +91,7 @@ public class Suite extends ParentRunner<Runner> {
      * @param klass the root of the suite
      * @param suiteClasses the classes in the suite
      */
-    protected Suite(Class<?> klass, Class<?>[] suiteClasses) throws InitializationError {
+    protected Suite(@Nullable Class<?> klass, @NotNull Class<?>[] suiteClasses) throws InitializationError {  // changed
         this(new AllDefaultPossibilitiesBuilder(), klass, suiteClasses);
     }
 
@@ -98,7 +102,7 @@ public class Suite extends ParentRunner<Runner> {
      * @param klass the root of the suite
      * @param suiteClasses the classes in the suite
      */
-    protected Suite(RunnerBuilder builder, Class<?> klass, Class<?>[] suiteClasses) throws InitializationError {
+    protected Suite(RunnerBuilder builder, @Nullable Class<?> klass, @NotNull Class<?>[] suiteClasses) throws InitializationError {  // changed
         this(klass, builder.runners(klass, suiteClasses));
     }
 
@@ -108,7 +112,7 @@ public class Suite extends ParentRunner<Runner> {
      * @param klass root of the suite
      * @param runners for each class in the suite, a {@link Runner}
      */
-    protected Suite(Class<?> klass, List<Runner> runners) throws InitializationError {
+    protected Suite(Class<?> klass, @NotNull List<Runner> runners) throws InitializationError {
         super(klass);
         this.runners = Collections.unmodifiableList(runners);
     }
@@ -119,12 +123,12 @@ public class Suite extends ParentRunner<Runner> {
     }
 
     @Override
-    protected Description describeChild(Runner child) {
+    protected Description describeChild(@NotNull Runner child) {
         return child.getDescription();
     }
 
     @Override
-    protected void runChild(Runner runner, final RunNotifier notifier) {
+    protected void runChild(@NotNull Runner runner, final RunNotifier notifier) {
         runner.run(notifier);
     }
 }

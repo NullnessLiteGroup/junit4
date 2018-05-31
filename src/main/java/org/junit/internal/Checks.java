@@ -1,5 +1,7 @@
 package org.junit.internal;
 
+import org.jetbrains.annotations.Nullable;
+
 /** @since 4.13 */
 public final class Checks {
 
@@ -12,7 +14,8 @@ public final class Checks {
      * @return the passed-in value, if not {@code null}
      * @throws NullPointerException if {@code value} is {@code null}
      */
-    public static <T> T notNull(T value) {
+    @Nullable
+    public static <T> T notNull(@Nullable T value) {
         if (value == null) {
             throw new NullPointerException();
         }
@@ -28,7 +31,8 @@ public final class Checks {
      * @return the passed-in value, if not {@code null}
      * @throws NullPointerException if {@code value} is {@code null}
      */
-    public static <T> T notNull(T value, String message) {
+    @Nullable
+    public static <T> T notNull(@Nullable T value, String message) {
         if (value == null) {
             throw new NullPointerException(message);
         }

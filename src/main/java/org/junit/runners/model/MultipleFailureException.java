@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.jetbrains.annotations.NotNull;
 import org.junit.TestCouldNotBeSkippedException;
 import org.junit.internal.AssumptionViolatedException;
 import org.junit.internal.Throwables;
@@ -23,6 +24,7 @@ public class MultipleFailureException extends Exception {
      * serialization compatibility. 
      * See https://github.com/junit-team/junit4/issues/976
      */
+    @NotNull
     private final List<Throwable> fErrors;
 
     public MultipleFailureException(List<Throwable> errors) {
@@ -39,15 +41,17 @@ public class MultipleFailureException extends Exception {
         }
     }
 
+    @NotNull
     public List<Throwable> getFailures() {
         return Collections.unmodifiableList(fErrors);
     }
 
+    @NotNull
     @Override
     public String getMessage() {
-        StringBuilder sb = new StringBuilder(
+        @NotNull StringBuilder sb = new StringBuilder(
                 String.format("There were %d errors:", fErrors.size()));
-        for (Throwable e : fErrors) {
+        for (@NotNull Throwable e : fErrors) {
             sb.append(String.format("%n  %s(%s)", e.getClass().getName(), e.getMessage()));
         }
         return sb.toString();
@@ -55,21 +59,21 @@ public class MultipleFailureException extends Exception {
 
     @Override
     public void printStackTrace() {
-        for (Throwable e: fErrors) {
+        for (@NotNull Throwable e: fErrors) {
             e.printStackTrace();
         }
     }
     
     @Override
     public void printStackTrace(PrintStream s) {
-        for (Throwable e: fErrors) {
+        for (@NotNull Throwable e: fErrors) {
             e.printStackTrace(s);
         }
     }
     
     @Override
     public void printStackTrace(PrintWriter s) {
-        for (Throwable e: fErrors) {
+        for (@NotNull Throwable e: fErrors) {
             e.printStackTrace(s);
         }
     }
@@ -90,6 +94,13 @@ public class MultipleFailureException extends Exception {
         }
         if (errors.size() == 1) {
             throw Throwables.rethrowAsException(errors.get(0));
+            /*
+               [FALSE_POSITIVE]
+               This is a false positive. By looking at the implementation of Throwables.rethrowAsException()
+               (src/main/java/org/junit/internal/Throwables.java: line 48),
+               we know that it never arrives at line 50 (return null;). Since Throwables.rethrowAsException()
+               never returns null, we cannot meet a NullPointerException here.
+             */
         }
 
         /*

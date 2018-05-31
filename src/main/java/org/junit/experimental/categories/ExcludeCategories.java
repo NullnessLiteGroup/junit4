@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.jetbrains.annotations.NotNull;
 import org.junit.experimental.categories.Categories.CategoryFilter;
 import org.junit.runner.manipulation.Filter;
 
@@ -31,12 +32,12 @@ public final class ExcludeCategories extends CategoryFilterFactory {
      * @param categories Category classes.
      */
     @Override
-    protected Filter createFilter(List<Class<?>> categories) {
+    protected Filter createFilter(@NotNull List<Class<?>> categories) {
         return new ExcludesAny(categories);
     }
 
     private static class ExcludesAny extends CategoryFilter {
-        public ExcludesAny(List<Class<?>> categories) {
+        public ExcludesAny(@NotNull List<Class<?>> categories) {
             this(new HashSet<Class<?>>(categories));
         }
 
@@ -44,6 +45,7 @@ public final class ExcludeCategories extends CategoryFilterFactory {
             super(true, null, true, categories);
         }
 
+        @NotNull
         @Override
         public String describe() {
             return "excludes " + super.describe();

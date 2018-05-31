@@ -6,6 +6,8 @@ import java.util.Collections;
 import java.util.List;
 
 import junit.framework.TestSuite;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.junit.internal.requests.SortingRequest;
 import org.junit.internal.runners.ErrorReportingRunner;
 import org.junit.internal.runners.JUnit38ClassRunner;
@@ -38,20 +40,20 @@ public class MaxCore {
      * @deprecated use storedLocally()
      */
     @Deprecated
-    public static MaxCore forFolder(String folderName) {
+    public static MaxCore forFolder(@NotNull String folderName) {
         return storedLocally(new File(folderName));
     }
 
     /**
      * Create a new MaxCore from a serialized file stored at storedResults
      */
-    public static MaxCore storedLocally(File storedResults) {
+    public static MaxCore storedLocally(@NotNull File storedResults) {
         return new MaxCore(storedResults);
     }
 
     private final MaxHistory history;
 
-    private MaxCore(File storedResults) {
+    private MaxCore(@NotNull File storedResults) {
         history = MaxHistory.forFolder(storedResults);
     }
 
@@ -60,6 +62,7 @@ public class MaxCore {
      *
      * @return a {@link Result} describing the details of the test run and the failed tests.
      */
+    @NotNull
     public Result run(Class<?> testClass) {
         return run(Request.aClass(testClass));
     }
@@ -70,6 +73,7 @@ public class MaxCore {
      * @param request the request describing tests
      * @return a {@link Result} describing the details of the test run and the failed tests.
      */
+    @NotNull
     public Result run(Request request) {
         return run(request, new JUnitCore());
     }
@@ -84,7 +88,8 @@ public class MaxCore {
      * @param core a JUnitCore to delegate to.
      * @return a {@link Result} describing the details of the test run and the failed tests.
      */
-    public Result run(Request request, JUnitCore core) {
+    @NotNull
+    public Result run(Request request, @NotNull JUnitCore core) {
         core.addListener(history.listener());
         return core.run(sortRequest(request).getRunner());
     }
@@ -97,17 +102,18 @@ public class MaxCore {
             // We'll pay big karma points for this
             return request;
         }
-        List<Description> leaves = findLeaves(request);
+        @NotNull List<Description> leaves = findLeaves(request);
         Collections.sort(leaves, history.testComparator());
         return constructLeafRequest(leaves);
     }
 
     private Request constructLeafRequest(List<Description> leaves) {
-        final List<Runner> runners = new ArrayList<Runner>();
-        for (Description each : leaves) {
+        @NotNull final List<Runner> runners = new ArrayList<Runner>();
+        for (@NotNull Description each : leaves) {
             runners.add(buildRunner(each));
         }
         return new Request() {
+            @Nullable
             @Override
             public Runner getRunner() {
                 try {
@@ -120,18 +126,53 @@ public class MaxCore {
         };
     }
 
+    @Nullable
     private Runner buildRunner(Description each) {
         if (each.toString().equals("TestSuite with 0 tests")) {
+            /*
+               [FALSE_POSITIVE]
+               This is a false positive. By looking at the implementation of toString()
+               (src/main/java/org/junit/runner/Description.java: line 280),
+               we know that it calls getDisplayName() (Description.java: line 196) which returns the
+               field "fDisplayName".
+               fDisplayName is first declared Nullable, but it is never null:
+               by looking at the constructor (Description.java: line 177),
+               we can see that the constructor checks the passing parameters: if the parameter "displayName" is null,
+               it throws an exception; otherwise, it assigns displayName to fDisplayName. So without an exception,
+               fDisplayName won't be null, which means calling getDisplayName() won't get null and thus calling
+               toString() won't get null.
+               Therefore, each.toString().equals() won't cause a NullPointerException.
+             */
             return Suite.emptySuite();
         }
         if (each.toString().startsWith(MALFORMED_JUNIT_3_TEST_CLASS_PREFIX)) {
+            /*
+               [FALSE_POSITIVE]
+               This is a false positive. By looking at the implementation of toString()
+               (src/main/java/org/junit/runner/Description.java: line 280),
+               we know that it calls getDisplayName() (Description.java: line 196) which returns the
+               field "fDisplayName".
+               fDisplayName is first declared Nullable. But fDisplayName is never null:
+               by looking at the constructor (Description.java: line 177),
+               we can see that the constructor checks the passing parameters: if the parameter "displayName" is null,
+               it throws an exception; otherwise, it assigns displayName to fDisplayName. So without an exception,
+               fDisplayName won't be null, which means calling getDisplayName() won't get null and thus calling
+               toString() won't get null.
+               Therefore, each.toString().startsWith() won't cause a NullPointerException.
+             */
+
             // This is cheating, because it runs the whole class
             // to get the warning for this method, but we can't do better,
             // because JUnit 3.8's
             // thrown away which method the warning is for.
             return new JUnit38ClassRunner(new TestSuite(getMalformedTestClass(each)));
+            // [FALSE_POSITIVE]
+            // cheating methods for JUnit4 test purpose only
+            // because its caller buildRunner(Description each) only calls
+            // this method when each is ensured to have MALFORMED_JUNIT_3_TEST_CLASS_PREFIX
+            // which is not exposed to users
         }
-        Class<?> type = each.getTestClass();
+        @Nullable Class<?> type = each.getTestClass();
         if (type == null) {
             throw new RuntimeException("Can't build a runner from description [" + each + "]");
         }
@@ -145,6 +186,20 @@ public class MaxCore {
     private Class<?> getMalformedTestClass(Description each) {
         try {
             return Class.forName(each.toString().replace(MALFORMED_JUNIT_3_TEST_CLASS_PREFIX, ""));
+            /*
+               [FALSE_POSITIVE]
+               This is a false positive. By looking at the implementation of toString()
+               (src/main/java/org/junit/runner/Description.java: line 280),
+               we know that it calls getDisplayName() (Description.java: line 196) which returns the
+               field "fDisplayName".
+               fDisplayName is first declared Nullable. But fDisplayName is never null:
+               by looking at the constructor (Description.java: line 177),
+               we can see that the constructor checks the passing parameters: if the parameter "displayName" is null,
+               it throws an exception; otherwise, it assigns displayName to fDisplayName. So without an exception,
+               fDisplayName won't be null, which means calling getDisplayName() won't get null and thus calling
+               toString() won't get null.
+               Therefore, each.toString().replace() won't cause a NullPointerException.
+             */
         } catch (ClassNotFoundException e) {
             return null;
         }
@@ -155,25 +210,41 @@ public class MaxCore {
      * @return a list of method-level tests to run, sorted in the order
      *         specified in the class comment.
      */
+    @NotNull
     public List<Description> sortedLeavesForTest(Request request) {
         return findLeaves(sortRequest(request));
     }
 
+    @NotNull
     private List<Description> findLeaves(Request request) {
-        List<Description> results = new ArrayList<Description>();
+        @NotNull List<Description> results = new ArrayList<Description>();
         findLeaves(null, request.getRunner().getDescription(), results);
         return results;
     }
 
-    private void findLeaves(Description parent, Description description, List<Description> results) {
+    private void findLeaves(Description parent, Description description, @NotNull List<Description> results) {
         if (description.getChildren().isEmpty()) {
             if (description.toString().equals("warning(junit.framework.TestSuite$1)")) {
+                /*
+                   [FALSE_POSITIVE]
+                   This is a false positive. By looking at the implementation of toString()
+                   (src/main/java/org/junit/runner/Description.java: line 280),
+                   we know that it calls getDisplayName() (Description.java: line 196) which returns the
+                   field "fDisplayName".
+                   fDisplayName is first declared Nullable. But fDisplayName is never null:
+                   by looking at the constructor (Description.java: line 177),
+                   we can see that the constructor checks the passing parameters: if the parameter "displayName" is null,
+                   it throws an exception; otherwise, it assigns displayName to fDisplayName. So without an exception,
+                   fDisplayName won't be null, which means calling getDisplayName() won't get null and thus calling
+                   toString() won't get null.
+                   Therefore, each.toString().equals() won't cause a NullPointerException.
+                 */
                 results.add(Description.createSuiteDescription(MALFORMED_JUNIT_3_TEST_CLASS_PREFIX + parent));
             } else {
                 results.add(description);
             }
         } else {
-            for (Description each : description.getChildren()) {
+            for (@NotNull Description each : description.getChildren()) {
                 findLeaves(description, each, results);
             }
         }

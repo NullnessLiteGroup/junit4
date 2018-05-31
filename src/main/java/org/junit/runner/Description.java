@@ -1,5 +1,8 @@
 package org.junit.runner;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.io.Serializable;
 import java.lang.annotation.Annotation;
 import java.util.ArrayList;
@@ -82,7 +85,8 @@ public class Description implements Serializable {
      * @param annotations meta-data about the test, for downstream interpreters
      * @return a <code>Description</code> named <code>name</code>
      */
-    public static Description createTestDescription(Class<?> clazz, String name, Annotation... annotations) {
+    public static Description createTestDescription(@NotNull Class<?> clazz, String name, Annotation... annotations) {
+
         return new Description(clazz, formatDisplayName(name, clazz.getName()), annotations);
     }
 
@@ -95,7 +99,13 @@ public class Description implements Serializable {
      * @param name the name of the test (a method name for test annotated with {@link org.junit.Test})
      * @return a <code>Description</code> named <code>name</code>
      */
-    public static Description createTestDescription(Class<?> clazz, String name) {
+    public static Description createTestDescription(@Nullable Class<?> clazz, String name) {  // changed
+        /*
+           [TRUE_POSITIVE]
+           clazz.getName() can raise a NullPointerException
+           because JUnit4 API doesn't restrict users from calling:
+           Description.createTestDescription((Class<Object>) null, "");
+         */
         return new Description(clazz, formatDisplayName(name, clazz.getName()));
     }
 
@@ -120,7 +130,7 @@ public class Description implements Serializable {
      * @param testClass A {@link Class} containing tests
      * @return a <code>Description</code> of <code>testClass</code>
      */
-    public static Description createSuiteDescription(Class<?> testClass) {
+    public static Description createSuiteDescription(@NotNull Class<?> testClass) {
         return new Description(testClass, testClass.getName(), testClass.getAnnotations());
     }
 
@@ -131,7 +141,7 @@ public class Description implements Serializable {
      * @param annotations meta-data about the test, for downstream interpreters
      * @return a <code>Description</code> of <code>testClass</code>
      */
-    public static Description createSuiteDescription(Class<?> testClass, Annotation... annotations) {
+    public static Description createSuiteDescription(@NotNull Class<?> testClass, Annotation... annotations) {
         return new Description(testClass, testClass.getName(), annotations);
     }
 
@@ -153,7 +163,9 @@ public class Description implements Serializable {
      * See https://github.com/junit-team/junit4/issues/976
      */
     private final Collection<Description> fChildren = new ConcurrentLinkedQueue<Description>();
+    @Nullable
     private final String fDisplayName;
+    @Nullable
     private final Serializable fUniqueId;
     private final Annotation[] fAnnotations;
     private volatile /* write-once */ Class<?> fTestClass;
@@ -162,7 +174,7 @@ public class Description implements Serializable {
         this(clazz, displayName, displayName, annotations);
     }
 
-    private Description(Class<?> testClass, String displayName, Serializable uniqueId, Annotation... annotations) {
+    private Description(Class<?> testClass, @Nullable String displayName, @Nullable Serializable uniqueId, Annotation... annotations) {
         if ((displayName == null) || (displayName.length() == 0)) {
             throw new IllegalArgumentException(
                     "The display name must not be empty.");
@@ -180,6 +192,7 @@ public class Description implements Serializable {
     /**
      * @return a user-understandable label
      */
+    @Nullable
     public String getDisplayName() {
         return fDisplayName;
     }
@@ -197,6 +210,7 @@ public class Description implements Serializable {
      * Gets the copy of the children of this {@code Description}.
      * Returns an empty list if there are no children.
      */
+    @NotNull
     public ArrayList<Description> getChildren() {
         return new ArrayList<Description>(fChildren);
     }
@@ -223,7 +237,7 @@ public class Description implements Serializable {
             return 1;
         }
         int result = 0;
-        for (Description child : fChildren) {
+        for (@NotNull Description child : fChildren) {
             result += child.testCount();
         }
         return result;
@@ -231,6 +245,15 @@ public class Description implements Serializable {
 
     @Override
     public int hashCode() {
+        /*
+           [FALSE_POSITIVE]
+           This is a false positive. By looking at the declaration of fUniqueId, we know
+           that it might be null. But looking at the constructor (line 177), we can see that
+           it checks the passing parameters: if the parameter "uniqueId" is null, it throws an
+           exception; otherwise, it assigns uniqueId to fUniqueId. So without an exception,
+           fUniqueId won't be null, which means calling fUniqueId.hashCode() won't cause
+           a NullPointerException here.
+         */
         return fUniqueId.hashCode();
     }
 
@@ -239,10 +262,23 @@ public class Description implements Serializable {
         if (!(obj instanceof Description)) {
             return false;
         }
-        Description d = (Description) obj;
+        @NotNull Description d = (Description) obj;
+        /*
+           [FALSE_POSITIVE]
+           This is a false positive. By looking at the declaration of fUniqueId, we know
+           that it might be null. But looking at the constructor (line 177), we can see that
+           it checks the passing parameters: if the parameter "uniqueId" is null, it throws an
+           exception; otherwise, it assigns uniqueId to fUniqueId. So without an exception,
+           fUniqueId won't be null, which means
+
+
+           calling fUniqueId.hashCode() won't cause
+           a NullPointerException here.
+         */
         return fUniqueId.equals(d.fUniqueId);
     }
 
+    @Nullable
     @Override
     public String toString() {
         return getDisplayName();
@@ -259,6 +295,7 @@ public class Description implements Serializable {
      * @return a copy of this description, with no children (on the assumption that some of the
      *         children will be added back)
      */
+    @NotNull
     public Description childlessCopy() {
         return new Description(fTestClass, fDisplayName, fAnnotations);
     }
@@ -267,8 +304,9 @@ public class Description implements Serializable {
      * @return the annotation of type annotationType that is attached to this description node,
      *         or null if none exists
      */
-    public <T extends Annotation> T getAnnotation(Class<T> annotationType) {
-        for (Annotation each : fAnnotations) {
+    @Nullable
+    public <T extends Annotation> T getAnnotation(@NotNull Class<T> annotationType) {
+        for (@NotNull Annotation each : fAnnotations) {
             if (each.annotationType().equals(annotationType)) {
                 return annotationType.cast(each);
             }
@@ -279,6 +317,7 @@ public class Description implements Serializable {
     /**
      * @return all of the annotations attached to this description node
      */
+    @NotNull
     public Collection<Annotation> getAnnotations() {
         return Arrays.asList(fAnnotations);
     }
@@ -287,6 +326,7 @@ public class Description implements Serializable {
      * @return If this describes a method invocation,
      *         the class of the test instance.
      */
+    @Nullable
     public Class<?> getTestClass() {
         if (fTestClass != null) {
             return fTestClass;
@@ -321,7 +361,18 @@ public class Description implements Serializable {
 
     private String methodAndClassNamePatternGroupOrDefault(int group,
             String defaultString) {
-        Matcher matcher = METHOD_AND_CLASS_NAME_PATTERN.matcher(toString());
+        @NotNull Matcher matcher = METHOD_AND_CLASS_NAME_PATTERN.matcher(toString());
+        /*
+           [FALSE_POSITIVE]
+           This is a false positive because toString() will never return null. Let's look
+           at the implementation of toString() (line 280): it calls getDisplayName(), and
+           getDisplayName() returns the field "fDisplayName".
+           The constructor checks its parameter "displayName": if "displayName" is null, it
+           throws an exception; otherwise, it assigns "displayName" to fDisplayName.
+           Therefore, without an exception, fDisplayName will never be null, which means getDisplayName()
+           won't return null, which then means getDisplayName() won't return null. Thus toString()
+           won't return null and this is a false positive.
+         */
         return matcher.matches() ? matcher.group(group) : defaultString;
     }
 }

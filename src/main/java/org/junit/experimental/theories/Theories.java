@@ -7,6 +7,8 @@ import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.junit.Assert;
 import org.junit.Assume;
 import org.junit.experimental.theories.internal.Assignments;
@@ -79,16 +81,23 @@ public class Theories extends BlockJUnit4ClassRunner {
     }
 
     @Override
-    protected void collectInitializationErrors(List<Throwable> errors) {
+    protected void collectInitializationErrors(@NotNull List<Throwable> errors) {
         super.collectInitializationErrors(errors);
         validateDataPointFields(errors);
         validateDataPointMethods(errors);
     }
 
-    private void validateDataPointFields(List<Throwable> errors) {
+    private void validateDataPointFields(@NotNull List<Throwable> errors) {
         Field[] fields = getTestClass().getJavaClass().getDeclaredFields();
+        /*
+           [FALSE_POSITIVE]
+           This is a true positive because getJavaClass() might return null.
+           By looking at the implementation of getJavaClass()
+           (src/main/java/org/junit/runners/model/TestClass.java), we know that "clazz"
+           may be null because it can be initialized as null in the constructor.
+         */
 
-        for (Field field : fields) {
+        for (@NotNull Field field : fields) {
             if (field.getAnnotation(DataPoint.class) == null && field.getAnnotation(DataPoints.class) == null) {
                 continue;
             }
@@ -101,10 +110,17 @@ public class Theories extends BlockJUnit4ClassRunner {
         }
     }
 
-    private void validateDataPointMethods(List<Throwable> errors) {
+    private void validateDataPointMethods(@NotNull List<Throwable> errors) {
         Method[] methods = getTestClass().getJavaClass().getDeclaredMethods();
+        /*
+           [FALSE_POSITIVE]
+           This is a true positive because getJavaClass() might return null.
+           By looking at the implementation of getJavaClass()
+           (src/main/java/org/junit/runners/model/TestClass.java), we know that "clazz"
+           may be null because it can be initialized as null in the constructor.
+         */
         
-        for (Method method : methods) {
+        for (@NotNull Method method : methods) {
             if (method.getAnnotation(DataPoint.class) == null && method.getAnnotation(DataPoints.class) == null) {
                 continue;
             }
@@ -118,13 +134,13 @@ public class Theories extends BlockJUnit4ClassRunner {
     }
 
     @Override
-    protected void validateConstructor(List<Throwable> errors) {
+    protected void validateConstructor(@NotNull List<Throwable> errors) {
         validateOnlyOneConstructor(errors);
     }
 
     @Override
-    protected void validateTestMethods(List<Throwable> errors) {
-        for (FrameworkMethod each : computeTestMethods()) {
+    protected void validateTestMethods(@NotNull List<Throwable> errors) {
+        for (@NotNull FrameworkMethod each : computeTestMethods()) {
             if (each.getAnnotation(Theory.class) != null) {
                 each.validatePublicVoid(false, errors);
                 each.validateNoTypeParametersOnArgs(errors);
@@ -132,7 +148,17 @@ public class Theories extends BlockJUnit4ClassRunner {
                 each.validatePublicVoidNoArg(false, errors);
             }
             
-            for (ParameterSignature signature : ParameterSignature.signatures(each.getMethod())) {
+            for (@NotNull ParameterSignature signature : ParameterSignature.signatures(each.getMethod())) {
+                /*
+                   [FALSE_POSITIVE]
+                   This is a false positive. By looking at the implementation of
+                   getMethod() (src/main/java/org/junit/runners/model/FrameworkMethod.java),
+                   we get to know that it returns the field called "method" which might be null.
+                   However, the constructor of FrameworkMethod checks its parameter: if the passing
+                   parameter is null, it throws an exception; otherwise, it assigns the parameter
+                   to the field "method". This means without an exception, each.getMethod() won't
+                   return null.
+                 */
                 ParametersSuppliedBy annotation = signature.findDeepAnnotation(ParametersSuppliedBy.class);
                 if (annotation != null) {
                     validateParameterSupplier(annotation.value(), errors);
@@ -141,7 +167,7 @@ public class Theories extends BlockJUnit4ClassRunner {
         }
     }
 
-    private void validateParameterSupplier(Class<? extends ParameterSupplier> supplierClass, List<Throwable> errors) {
+    private void validateParameterSupplier(Class<? extends ParameterSupplier> supplierClass, @NotNull List<Throwable> errors) {
         Constructor<?>[] constructors = supplierClass.getConstructors();
         
         if (constructors.length != 1) {
@@ -156,10 +182,11 @@ public class Theories extends BlockJUnit4ClassRunner {
         }
     }
 
+    @NotNull
     @Override
     protected List<FrameworkMethod> computeTestMethods() {
-        List<FrameworkMethod> testMethods = new ArrayList<FrameworkMethod>(super.computeTestMethods());
-        List<FrameworkMethod> theoryMethods = getTestClass().getAnnotatedMethods(Theory.class);
+        @NotNull List<FrameworkMethod> testMethods = new ArrayList<FrameworkMethod>(super.computeTestMethods());
+        @NotNull List<FrameworkMethod> theoryMethods = getTestClass().getAnnotatedMethods(Theory.class);
         testMethods.removeAll(theoryMethods);
         testMethods.addAll(theoryMethods);
         return testMethods;
@@ -176,6 +203,7 @@ public class Theories extends BlockJUnit4ClassRunner {
         private final FrameworkMethod testMethod;
         private final TestClass testClass;
 
+        @NotNull
         private List<AssumptionViolatedException> fInvalidParameters = new ArrayList<AssumptionViolatedException>();
 
         public TheoryAnchor(FrameworkMethod testMethod, TestClass testClass) {
@@ -191,6 +219,16 @@ public class Theories extends BlockJUnit4ClassRunner {
         public void evaluate() throws Throwable {
             runWithAssignment(Assignments.allUnassigned(
                     testMethod.getMethod(), getTestClass()));
+            /*
+                [FALSE_POSITIVE]
+                This is a false positive. By looking at the implementation of
+                getMethod() (src/main/java/org/junit/runners/model/FrameworkMethod.java),
+                we get to know that it returns the field called "method" which might be null.
+                However, the constructor of FrameworkMethod checks its parameter: if the passing
+                parameter is null, it throws an exception; otherwise, it assigns the parameter
+                to the field "method". This means without an exception, testMethod.getMethod() won't
+                return null.
+             */
             
             //if this test method is not annotated with Theory, then no successes is a valid case
             boolean hasTheoryAnnotation = testMethod.getAnnotation(Theory.class) != null;
@@ -201,7 +239,7 @@ public class Theories extends BlockJUnit4ClassRunner {
             }
         }
 
-        protected void runWithAssignment(Assignments parameterAssignment)
+        protected void runWithAssignment(@NotNull Assignments parameterAssignment)
                 throws Throwable {
             if (!parameterAssignment.isComplete()) {
                 runWithIncompleteAssignment(parameterAssignment);
@@ -210,7 +248,7 @@ public class Theories extends BlockJUnit4ClassRunner {
             }
         }
 
-        protected void runWithIncompleteAssignment(Assignments incomplete)
+        protected void runWithIncompleteAssignment(@NotNull Assignments incomplete)
                 throws Throwable {
             for (PotentialAssignment source : incomplete
                     .potentialsForNextUnassigned()) {
@@ -218,7 +256,7 @@ public class Theories extends BlockJUnit4ClassRunner {
             }
         }
 
-        protected void runWithCompleteAssignment(final Assignments complete)
+        protected void runWithCompleteAssignment(@NotNull final Assignments complete)
                 throws Throwable {
             new BlockJUnit4ClassRunner(getTestClass()) {
                 @Override
@@ -227,9 +265,10 @@ public class Theories extends BlockJUnit4ClassRunner {
                     // do nothing
                 }
 
+                @NotNull
                 @Override
-                public Statement methodBlock(FrameworkMethod method) {
-                    final Statement statement = super.methodBlock(method);
+                public Statement methodBlock(@NotNull FrameworkMethod method) {
+                    @Nullable final Statement statement = super.methodBlock(method);
                     return new Statement() {
                         @Override
                         public void evaluate() throws Throwable {
@@ -247,14 +286,16 @@ public class Theories extends BlockJUnit4ClassRunner {
                     };
                 }
 
+                @NotNull
                 @Override
-                protected Statement methodInvoker(FrameworkMethod method, Object test) {
+                protected Statement methodInvoker(@NotNull FrameworkMethod method, Object test) {
                     return methodCompletesWithParameters(method, complete, test);
                 }
 
+                @NotNull
                 @Override
                 public Object createTest() throws Exception {
-                    Object[] params = complete.getConstructorArguments();
+                    @NotNull Object[] params = complete.getConstructorArguments();
                     
                     if (!nullsOk()) {
                         Assume.assumeNotNull(params);
@@ -266,11 +307,11 @@ public class Theories extends BlockJUnit4ClassRunner {
         }
 
         private Statement methodCompletesWithParameters(
-                final FrameworkMethod method, final Assignments complete, final Object freshInstance) {
+                @NotNull final FrameworkMethod method, @NotNull final Assignments complete, final Object freshInstance) {
             return new Statement() {
                 @Override
                 public void evaluate() throws Throwable {
-                    final Object[] values = complete.getMethodArguments();
+                    @NotNull final Object[] values = complete.getMethodArguments();
                     
                     if (!nullsOk()) {
                         Assume.assumeNotNull(values);
@@ -285,7 +326,7 @@ public class Theories extends BlockJUnit4ClassRunner {
             fInvalidParameters.add(e);
         }
 
-        protected void reportParameterizedError(Throwable e, Object... params)
+        protected void reportParameterizedError(Throwable e, @NotNull Object... params)
                 throws Throwable {
             if (params.length == 0) {
                 throw e;
@@ -297,6 +338,16 @@ public class Theories extends BlockJUnit4ClassRunner {
         private boolean nullsOk() {
             Theory annotation = testMethod.getMethod().getAnnotation(
                     Theory.class);
+            /*
+                [FALSE_POSITIVE]
+                This is a false positive. By looking at the implementation of
+                getMethod() (src/main/java/org/junit/runners/model/FrameworkMethod.java),
+                we get to know that it returns the field called "method" which might be null.
+                However, the constructor of FrameworkMethod checks its parameter: if the passing
+                parameter is null, it throws an exception; otherwise, it assigns the parameter
+                to the field "method". This means without an exception, testMethod.getMethod() won't
+                return null.
+             */
             if (annotation == null) {
                 return false;
             }

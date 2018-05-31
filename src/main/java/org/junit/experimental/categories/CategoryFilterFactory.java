@@ -3,6 +3,7 @@ package org.junit.experimental.categories;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.jetbrains.annotations.NotNull;
 import org.junit.internal.Classes;
 import org.junit.runner.FilterFactory;
 import org.junit.runner.FilterFactoryParams;
@@ -18,8 +19,19 @@ abstract class CategoryFilterFactory implements FilterFactory {
      *
      * @param params Parameters needed to create the {@link Filter}
      */
-    public Filter createFilter(FilterFactoryParams params) throws FilterNotCreatedException {
+    public Filter createFilter(@NotNull FilterFactoryParams params) throws FilterNotCreatedException {
         try {
+            /*
+               [FALSE_POSITIVE]
+               This is a false positive. By looking at the implementation of params.getArgs(),
+               we know that it returns the field "args" of a FilterFactoryParams instance
+               (src/main/java/org/junit/runner/FilterFactoryParams.java).
+               However, this "args" field can never be null, because the constructor (FilterFactoryParams.java: line 11)
+               checks the parameter:
+               if the parameter "args" is null, it throws an exception; otherwise, it assigns the parameter
+               to its field, "args". Therefore, without an exception being thrown, the field "args" won't be
+               null, which means params.getArgs() will never be null.
+             */
             return createFilter(parseCategories(params.getArgs()));
         } catch (ClassNotFoundException e) {
             throw new FilterNotCreatedException(e);
@@ -33,8 +45,9 @@ abstract class CategoryFilterFactory implements FilterFactory {
      */
     protected abstract Filter createFilter(List<Class<?>> categories);
 
+    @NotNull
     private List<Class<?>> parseCategories(String categories) throws ClassNotFoundException {
-        List<Class<?>> categoryClasses = new ArrayList<Class<?>>();
+        @NotNull List<Class<?>> categoryClasses = new ArrayList<Class<?>>();
 
         for (String category : categories.split(",")) {
             /*

@@ -4,6 +4,7 @@ import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestResult;
 import junit.framework.TestSuite;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * A TestSuite for active Tests. It runs each
@@ -17,7 +18,7 @@ public class ActiveTestSuite extends TestSuite {
     public ActiveTestSuite() {
     }
 
-    public ActiveTestSuite(Class<? extends TestCase> theClass) {
+    public ActiveTestSuite(@NotNull Class<? extends TestCase> theClass) {
         super(theClass);
     }
 
@@ -25,20 +26,20 @@ public class ActiveTestSuite extends TestSuite {
         super(name);
     }
 
-    public ActiveTestSuite(Class<? extends TestCase> theClass, String name) {
+    public ActiveTestSuite(@NotNull Class<? extends TestCase> theClass, String name) {
         super(theClass, name);
     }
 
     @Override
-    public void run(TestResult result) {
+    public void run(@NotNull TestResult result) {
         fActiveTestDeathCount = 0;
         super.run(result);
         waitUntilFinished();
     }
 
     @Override
-    public void runTest(final Test test, final TestResult result) {
-        Thread t = new Thread() {
+    public void runTest(@NotNull final Test test, final TestResult result) {
+        @NotNull Thread t = new Thread() {
             @Override
             public void run() {
                 try {

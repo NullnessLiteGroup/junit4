@@ -2,6 +2,7 @@ package org.junit.runner.notification;
 
 import java.io.Serializable;
 
+import org.jetbrains.annotations.NotNull;
 import org.junit.internal.Throwables;
 import org.junit.runner.Description;
 
@@ -58,6 +59,7 @@ public class Failure implements Serializable {
         return fThrownException;
     }
 
+    @NotNull
     @Override
     public String toString() {
         return getTestHeader() + ": " + fThrownException.getMessage();

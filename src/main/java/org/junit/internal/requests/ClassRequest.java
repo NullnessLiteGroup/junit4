@@ -3,6 +3,8 @@ package org.junit.internal.requests;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.junit.internal.builders.AllDefaultPossibilitiesBuilder;
 import org.junit.internal.builders.SuiteMethodBuilder;
 import org.junit.runner.Request;
@@ -47,6 +49,7 @@ public class ClassRequest extends Request {
 
     private class CustomAllDefaultPossibilitiesBuilder extends AllDefaultPossibilitiesBuilder {
 
+        @NotNull
         @Override
         protected RunnerBuilder suiteMethodBuilder() {
             return new CustomSuiteMethodBuilder();
@@ -60,8 +63,9 @@ public class ClassRequest extends Request {
      */
     private class CustomSuiteMethodBuilder extends SuiteMethodBuilder {
 
+        @Nullable
         @Override
-        public Runner runnerForClass(Class<?> testClass) throws Throwable {
+        public Runner runnerForClass(@NotNull Class<?> testClass) throws Throwable {
             if (testClass == fTestClass && !canUseSuiteMethod) {
                 return null;
             }

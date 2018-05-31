@@ -6,6 +6,8 @@ import java.util.Comparator;
 import java.util.IdentityHashMap;
 import java.util.List;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.junit.Rule;
 import org.junit.rules.MethodRule;
 import org.junit.rules.TestRule;
@@ -52,8 +54,9 @@ class RuleContainer {
     /**
      * Returns entries in the order how they should be applied, i.e. inner-to-outer.
      */
+    @NotNull
     private List<RuleEntry> getSortedEntries() {
-        List<RuleEntry> ruleEntries = new ArrayList<RuleEntry>(
+        @NotNull List<RuleEntry> ruleEntries = new ArrayList<RuleEntry>(
                 methodRules.size() + testRules.size());
         for (MethodRule rule : methodRules) {
             ruleEntries.add(new RuleEntry(rule, RuleEntry.TYPE_METHOD_RULE, orderValues.get(rule)));
@@ -68,13 +71,14 @@ class RuleContainer {
     /**
      * Applies all the rules ordered accordingly to the specified {@code statement}.
      */
+    @NotNull  // changed
     public Statement apply(FrameworkMethod method, Description description, Object target,
-            Statement statement) {
+                           Statement statement) {
         if (methodRules.isEmpty() && testRules.isEmpty()) {
             return statement;
         }
-        Statement result = statement;
-        for (RuleEntry ruleEntry : getSortedEntries()) {
+        @NotNull Statement result = statement;  // changed
+        for (@NotNull RuleEntry ruleEntry : getSortedEntries()) {
             if (ruleEntry.type == RuleEntry.TYPE_TEST_RULE) {
                 result = ((TestRule) ruleEntry.rule).apply(result, description);
             } else {
@@ -88,9 +92,10 @@ class RuleContainer {
      * Returns rule instances in the order how they should be applied, i.e. inner-to-outer.
      * VisibleForTesting
      */
+    @NotNull
     List<Object> getSortedRules() {
-        List<Object> result = new ArrayList<Object>();
-        for (RuleEntry entry : getSortedEntries()) {
+        @NotNull List<Object> result = new ArrayList<Object>();
+        for (@NotNull RuleEntry entry : getSortedEntries()) {
             result.add(entry.rule);
         }
         return result;
@@ -104,7 +109,7 @@ class RuleContainer {
         final int type;
         final int order;
 
-        RuleEntry(Object rule, int type, Integer order) {
+        RuleEntry(Object rule, int type, @Nullable Integer order) {
             this.rule = rule;
             this.type = type;
             this.order = order != null ? order.intValue() : Rule.DEFAULT_ORDER;

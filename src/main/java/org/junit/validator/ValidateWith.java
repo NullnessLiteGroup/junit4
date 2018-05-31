@@ -1,5 +1,7 @@
 package org.junit.validator;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.lang.annotation.Inherited;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -15,5 +17,5 @@ import java.lang.annotation.RetentionPolicy;
 @Retention(RetentionPolicy.RUNTIME)
 @Inherited
 public @interface ValidateWith {
-    Class<? extends AnnotationValidator> value();
+    @NotNull Class<? extends AnnotationValidator> value();
 }

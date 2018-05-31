@@ -3,6 +3,8 @@ package org.junit.internal.runners;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.junit.runner.Description;
 import org.junit.runner.Runner;
 import org.junit.runner.notification.Failure;
@@ -15,17 +17,18 @@ import static java.util.Collections.singletonList;
 public class ErrorReportingRunner extends Runner {
     private final List<Throwable> causes;
 
+    @NotNull
     private final String classNames;
 
     public ErrorReportingRunner(Class<?> testClass, Throwable cause) {
         this(cause, testClass);
     }
     
-    public ErrorReportingRunner(Throwable cause, Class<?>... testClasses) {
+    public ErrorReportingRunner(Throwable cause, @Nullable Class<?>... testClasses) {
         if (testClasses == null || testClasses.length == 0) {
             throw new NullPointerException("Test classes cannot be null or empty");
         }
-        for (Class<?> testClass : testClasses) {
+        for (@Nullable Class<?> testClass : testClasses) {
             if (testClass == null) {
                 throw new NullPointerException("Test class cannot be null");
             }
@@ -34,9 +37,10 @@ public class ErrorReportingRunner extends Runner {
         causes = getCauses(cause);
     }
     
+    @NotNull
     @Override
     public Description getDescription() {
-        Description description = Description.createSuiteDescription(classNames);
+        @NotNull Description description = Description.createSuiteDescription(classNames);
         for (Throwable each : causes) {
             description.addChild(describeCause());
         }
@@ -44,15 +48,15 @@ public class ErrorReportingRunner extends Runner {
     }
 
     @Override
-    public void run(RunNotifier notifier) {
+    public void run(@NotNull RunNotifier notifier) {
         for (Throwable each : causes) {
             runCause(each, notifier);
         }
     }
 
     private String getClassNames(Class<?>... testClasses) {
-        final StringBuilder builder = new StringBuilder();
-        for (Class<?> testClass : testClasses) {
+        @NotNull final StringBuilder builder = new StringBuilder();
+        for (@NotNull Class<?> testClass : testClasses) {
             if (builder.length() != 0) {
                 builder.append(", ");
             }
@@ -84,7 +88,7 @@ public class ErrorReportingRunner extends Runner {
     }
 
     private void runCause(Throwable child, RunNotifier notifier) {
-        Description description = describeCause();
+        @NotNull Description description = describeCause();
         notifier.fireTestStarted(description);
         notifier.fireTestFailure(new Failure(description, child));
         notifier.fireTestFinished(description);

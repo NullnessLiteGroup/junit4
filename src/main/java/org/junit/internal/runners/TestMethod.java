@@ -4,6 +4,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -39,6 +41,7 @@ public class TestMethod {
         return timeout;
     }
 
+    @Nullable
     protected Class<? extends Throwable> getExpectedException() {
         Test annotation = method.getAnnotation(Test.class);
         if (annotation == null || annotation.expected() == None.class) {
@@ -48,18 +51,28 @@ public class TestMethod {
         }
     }
 
-    boolean isUnexpected(Throwable exception) {
+    boolean isUnexpected(@NotNull Throwable exception) {
         return !getExpectedException().isAssignableFrom(exception.getClass());
+        /*
+           [FALSE_POSITIVE]
+           This is a false positive.
+           getExpectedException() will not return null in this case
+           because 1). TestMethod is not exposed in the JUnit4 API
+           2). the only caller in this project MethodRoadie: runTestMethod()
+           checks the expectsException() == true before it calls this method;
+         */
     }
 
     boolean expectsException() {
         return getExpectedException() != null;
     }
 
+    @NotNull
     List<Method> getBefores() {
         return testClass.getAnnotatedMethods(Before.class);
     }
 
+    @NotNull
     List<Method> getAfters() {
         return testClass.getAnnotatedMethods(After.class);
     }

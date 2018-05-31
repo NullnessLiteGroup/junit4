@@ -10,6 +10,8 @@ import java.util.concurrent.FutureTask;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.junit.internal.management.ManagementFactory;
 import org.junit.internal.management.ThreadMXBean;
 import org.junit.runners.model.MultipleFailureException;
@@ -18,6 +20,7 @@ import org.junit.runners.model.TestTimedOutException;
 
 public class FailOnTimeout extends Statement {
     private final Statement originalStatement;
+    @Nullable
     private final TimeUnit timeUnit;
     private final long timeout;
     private final boolean lookForStuckThread;
@@ -58,6 +61,7 @@ public class FailOnTimeout extends Statement {
     public static class Builder {
         private boolean lookForStuckThread = false;
         private long timeout = 0;
+        @Nullable
         private TimeUnit unit = TimeUnit.SECONDS;
 
         private Builder() {
@@ -76,7 +80,8 @@ public class FailOnTimeout extends Statement {
          * @param unit the time unit of the {@code timeout} argument
          * @return {@code this} for method chaining.
          */
-        public Builder withTimeout(long timeout, TimeUnit unit) {
+        @NotNull
+        public Builder withTimeout(long timeout, @Nullable TimeUnit unit) {
             if (timeout < 0) {
                 throw new IllegalArgumentException("timeout must be non-negative");
             }
@@ -97,6 +102,7 @@ public class FailOnTimeout extends Statement {
          * @param enable {@code true} to enable the feature
          * @return {@code this} for method chaining.
          */
+        @NotNull
         public Builder withLookingForStuckThread(boolean enable) {
             this.lookForStuckThread = enable;
             return this;
@@ -108,7 +114,8 @@ public class FailOnTimeout extends Statement {
          *
          * @param statement
          */
-        public FailOnTimeout build(Statement statement) {
+        @NotNull
+        public FailOnTimeout build(@Nullable Statement statement) {
             if (statement == null) {
                 throw new NullPointerException("statement cannot be null");
             }
@@ -118,10 +125,10 @@ public class FailOnTimeout extends Statement {
 
     @Override
     public void evaluate() throws Throwable {
-        CallableStatement callable = new CallableStatement();
-        FutureTask<Throwable> task = new FutureTask<Throwable>(callable);
-        ThreadGroup threadGroup = new ThreadGroup("FailOnTimeoutGroup");
-        Thread thread = new Thread(threadGroup, task, "Time-limited test");
+        @NotNull CallableStatement callable = new CallableStatement();
+        @NotNull FutureTask<Throwable> task = new FutureTask<Throwable>(callable);
+        @NotNull ThreadGroup threadGroup = new ThreadGroup("FailOnTimeoutGroup");
+        @NotNull Thread thread = new Thread(threadGroup, task, "Time-limited test");
         thread.setDaemon(true);
         thread.start();
         callable.awaitStarted();
@@ -136,10 +143,20 @@ public class FailOnTimeout extends Statement {
      * test failed, an exception indicating a timeout if the test timed out, or
      * {@code null} if the test passed.
      */
-    private Throwable getResult(FutureTask<Throwable> task, Thread thread) {
+    private Throwable getResult(@NotNull FutureTask<Throwable> task, @NotNull Thread thread) {
         try {
             if (timeout > 0) {
                 return task.get(timeout, timeUnit);
+                /*
+                   [FALSE_POSITIVE]
+                   This is a false positive because timeUnit will never be null. timeUnit is initialized in the
+                   constructor (line 49): timeUnit = builder.unit (builder is the parameter of the constructor).
+                   So let's analyze builder.unit: builder is of type Builder  and
+                   the field "unit" is initialized in withTimeout() (line 84). withTimeout() first checks its parameter
+                   "unit": if "unit" is null, it throws an exception; otherwise, "this.unit = unit;". Therefore, without
+                   an exception being thrown, builder.unit will never be null and thus timeUnit won't be null. So this
+                   error is a false positive.
+                 */
             } else {
                 return task.get();
             }
@@ -153,16 +170,28 @@ public class FailOnTimeout extends Statement {
         }
     }
 
+    @NotNull
     private Exception createTimeoutException(Thread thread) {
         StackTraceElement[] stackTrace = thread.getStackTrace();
-        final Thread stuckThread = lookForStuckThread ? getStuckThread(thread) : null;
-        Exception currThreadException = new TestTimedOutException(timeout, timeUnit);
-        if (stackTrace != null) {
+        @Nullable final Thread stuckThread = lookForStuckThread ? getStuckThread(thread) : null;
+        /*
+           [FALSE_POSITIVE]
+           This is a false positive because timeUnit will never be null. timeUnit is initialized in the
+           constructor (line 49): timeUnit = builder.unit (builder is the parameter of the constructor).
+           So let's analyze builder.unit: builder is of type Builder and
+           the field "unit" is initialized in withTimeout() (line 84). withTimeout() first checks its parameter
+           "unit": if "unit" is null, it throws an exception; otherwise, "this.unit = unit;". Therefore, without
+           an exception being thrown, builder.unit will never be null and thus timeUnit won't be null. So this
+           error is a false positive.
+         */
+        @NotNull Exception currThreadException = new TestTimedOutException(timeout, timeUnit);
+        //noinspection ConstantConditions
+        if (stackTrace != null) {  // This error is not related to NullPointerException and thus we ignore it.
             currThreadException.setStackTrace(stackTrace);
             thread.interrupt();
         }
         if (stuckThread != null) {
-            Exception stuckThreadException = 
+            @NotNull Exception stuckThreadException =
                 new Exception("Appears to be stuck in thread " +
                                stuckThread.getName());
             stuckThreadException.setStackTrace(getStackTrace(stuckThread));
@@ -198,7 +227,7 @@ public class FailOnTimeout extends Statement {
      * to {@code mainThread}.
      */
     private Thread getStuckThread(Thread mainThread) {
-        List<Thread> threadsInGroup = getThreadsInGroup(mainThread.getThreadGroup());
+        @NotNull List<Thread> threadsInGroup = getThreadsInGroup(mainThread.getThreadGroup());
         if (threadsInGroup.isEmpty()) {
             return null;
         }
@@ -208,9 +237,9 @@ public class FailOnTimeout extends Statement {
         // If just one, we return that (unless it equals threadMain).  If there's more
         // than one, pick the one that's using the most CPU time, if this feature is
         // supported.
-        Thread stuckThread = null;
+        @Nullable Thread stuckThread = null;
         long maxCpuTime = 0;
-        for (Thread thread : threadsInGroup) {
+        for (@NotNull Thread thread : threadsInGroup) {
             if (thread.getState() == Thread.State.RUNNABLE) {
                 long threadCpuTime = cpuTime(thread);
                 if (stuckThread == null || threadCpuTime > maxCpuTime) {
@@ -230,11 +259,12 @@ public class FailOnTimeout extends Statement {
      * if this cannot be determined, e.g. because new threads are being created at an
      * extremely fast rate.
      */
+    @NotNull
     private List<Thread> getThreadsInGroup(ThreadGroup group) {
         final int activeThreadCount = group.activeCount(); // this is just an estimate
         int threadArraySize = Math.max(activeThreadCount * 2, 100);
         for (int loopCount = 0; loopCount < 5; loopCount++) {
-            Thread[] threads = new Thread[threadArraySize];
+            @NotNull Thread[] threads = new Thread[threadArraySize];
             int enumCount = group.enumerate(threads);
             if (enumCount < threadArraySize) {
                 return Arrays.asList(threads).subList(0, enumCount);
@@ -254,7 +284,7 @@ public class FailOnTimeout extends Statement {
      * @param thr The thread to query.
      * @return The CPU time used by {@code thr}, or 0 if it cannot be determined.
      */
-    private long cpuTime(Thread thr) {
+    private long cpuTime(@NotNull Thread thr) {
         ThreadMXBean mxBean = ManagementFactory.getThreadMXBean();
         if (mxBean.isThreadCpuTimeSupported()) {
             try {
@@ -268,6 +298,7 @@ public class FailOnTimeout extends Statement {
     private class CallableStatement implements Callable<Throwable> {
         private final CountDownLatch startLatch = new CountDownLatch(1);
 
+        @Nullable
         public Throwable call() throws Exception {
             try {
                 startLatch.countDown();

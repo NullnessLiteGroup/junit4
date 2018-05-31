@@ -1,5 +1,6 @@
 package org.junit.runner;
 
+import org.jetbrains.annotations.NotNull;
 import org.junit.runners.Suite;
 import org.junit.runners.model.InitializationError;
 import org.junit.runners.model.RunnerBuilder;
@@ -23,14 +24,15 @@ public class Computer {
      * Create a suite for {@code classes}, building Runners with {@code builder}.
      * Throws an InitializationError if Runner construction fails
      */
-    public Runner getSuite(final RunnerBuilder builder,
-            Class<?>[] classes) throws InitializationError {
+    public Runner getSuite(@NotNull final RunnerBuilder builder,
+                           Class<?>[] classes) throws InitializationError {
         return new Suite(new RunnerBuilder() {
             @Override
             public Runner runnerForClass(Class<?> testClass) throws Throwable {
                 return getRunner(builder, testClass);
             }
         }, classes) {
+            @NotNull
             @Override
             protected String getName() {
                 /*
@@ -46,7 +48,7 @@ public class Computer {
     /**
      * Create a single-class runner for {@code testClass}, using {@code builder}
      */
-    protected Runner getRunner(RunnerBuilder builder, Class<?> testClass) throws Throwable {
+    protected Runner getRunner(@NotNull RunnerBuilder builder, Class<?> testClass) throws Throwable {
         return builder.runnerForClass(testClass);
     }
 }

@@ -6,6 +6,8 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 import java.util.List;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.junit.internal.runners.model.ReflectiveCallable;
 
 /**
@@ -17,12 +19,13 @@ import org.junit.internal.runners.model.ReflectiveCallable;
  * @since 4.5
  */
 public class FrameworkMethod extends FrameworkMember<FrameworkMethod> {
+    @Nullable
     private final Method method;
 
     /**
      * Returns a new {@code FrameworkMethod} for {@code method}
      */
-    public FrameworkMethod(Method method) {
+    public FrameworkMethod(@Nullable Method method) {
         if (method == null) {
             throw new NullPointerException(
                     "FrameworkMethod cannot be created without an underlying method.");
@@ -42,6 +45,7 @@ public class FrameworkMethod extends FrameworkMember<FrameworkMethod> {
     /**
      * Returns the underlying Java method
      */
+    @Nullable
     public Method getMethod() {
         return method;
     }
@@ -57,6 +61,18 @@ public class FrameworkMethod extends FrameworkMember<FrameworkMethod> {
             @Override
             protected Object runReflectiveCall() throws Throwable {
                 return method.invoke(target, params);
+                /*
+                   [FALSE_POSITIVE]
+                   All errors in this class are false positives. The private field "method"
+                   is defined but not initialized (line 23) and thus it can only be annotated as "Nullable".
+                   But we can see that the constructor (line 28) first checks its parameter: if the parameter is null,
+                   it throws an exception; otherwise, it assigns the parameter to "method". So without an exception being
+                   thrown, the field "method" will never be null.
+                   However, since "method" is annotated Nullable when it is declared,
+                   all function calls on "method" will cause NullPointerException.
+                   And unfortunately, (all the errors are in the same pattern and) we cannot add any annotations
+                   to eliminate any of them.
+                 */
             }
         }.run();
     }
@@ -66,7 +82,7 @@ public class FrameworkMethod extends FrameworkMember<FrameworkMethod> {
      */
     @Override
     public String getName() {
-        return method.getName();
+        return method.getName();  // [FALSE_POSITIVE]
     }
 
     /**
@@ -79,9 +95,9 @@ public class FrameworkMethod extends FrameworkMember<FrameworkMethod> {
      * <li>is not static (given {@code isStatic is true}).
      * </ul>
      */
-    public void validatePublicVoidNoArg(boolean isStatic, List<Throwable> errors) {
+    public void validatePublicVoidNoArg(boolean isStatic, @NotNull List<Throwable> errors) {
         validatePublicVoid(isStatic, errors);
-        if (method.getParameterTypes().length != 0) {
+        if (method.getParameterTypes().length != 0) {  // [FALSE_POSITIVE]
             errors.add(new Exception("Method " + method.getName() + " should have no parameters"));
         }
     }
@@ -96,29 +112,29 @@ public class FrameworkMethod extends FrameworkMember<FrameworkMethod> {
      * <li>is not static (given {@code isStatic is true}).
      * </ul>
      */
-    public void validatePublicVoid(boolean isStatic, List<Throwable> errors) {
+    public void validatePublicVoid(boolean isStatic, @NotNull List<Throwable> errors) {
         if (isStatic() != isStatic) {
-            String state = isStatic ? "should" : "should not";
-            errors.add(new Exception("Method " + method.getName() + "() " + state + " be static"));
+            @NotNull String state = isStatic ? "should" : "should not";
+            errors.add(new Exception("Method " + method.getName() + "() " + state + " be static"));  // [FALSE_POSITIVE]
         }
         if (!isPublic()) {
-            errors.add(new Exception("Method " + method.getName() + "() should be public"));
+            errors.add(new Exception("Method " + method.getName() + "() should be public"));  // [FALSE_POSITIVE]
         }
-        if (method.getReturnType() != Void.TYPE) {
+        if (method.getReturnType() != Void.TYPE) {  // [FALSE_POSITIVE]
             errors.add(new Exception("Method " + method.getName() + "() should be void"));
         }
     }
 
     @Override
     protected int getModifiers() {
-        return method.getModifiers();
+        return method.getModifiers();  // [FALSE_POSITIVE]
     }
 
     /**
      * Returns the return type of the method
      */
     public Class<?> getReturnType() {
-        return method.getReturnType();
+        return method.getReturnType();  // [FALSE_POSITIVE]
     }
 
     /**
@@ -134,7 +150,7 @@ public class FrameworkMethod extends FrameworkMember<FrameworkMethod> {
      */
     @Override
     public Class<?> getDeclaringClass() {
-        return method.getDeclaringClass();
+        return method.getDeclaringClass();  // [FALSE_POSITIVE]
     }
 
     public void validateNoTypeParametersOnArgs(List<Throwable> errors) {
@@ -142,7 +158,7 @@ public class FrameworkMethod extends FrameworkMember<FrameworkMethod> {
     }
 
     @Override
-    public boolean isShadowedBy(FrameworkMethod other) {
+    public boolean isShadowedBy(@NotNull FrameworkMethod other) {
         if (!other.getName().equals(getName())) {
             return false;
         }
@@ -159,21 +175,21 @@ public class FrameworkMethod extends FrameworkMember<FrameworkMethod> {
 
     @Override
     boolean isBridgeMethod() {
-        return method.isBridge();
+        return method.isBridge();  // [FALSE_POSITIVE]
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(@NotNull Object obj) {
         if (!FrameworkMethod.class.isInstance(obj)) {
             return false;
         }
-        return ((FrameworkMethod) obj).method.equals(method);
+        return ((FrameworkMethod) obj).method.equals(method);  // [FALSE_POSITIVE]
     }
 
     @Override
     public int hashCode() {
         return method.hashCode();
-    }
+    }  // [FALSE_POSITIVE]
 
     /**
      * Returns true if this is a no-arg method that returns a value assignable
@@ -187,30 +203,30 @@ public class FrameworkMethod extends FrameworkMember<FrameworkMethod> {
     @Deprecated
     public boolean producesType(Type type) {
         return getParameterTypes().length == 0 && type instanceof Class<?>
-                && ((Class<?>) type).isAssignableFrom(method.getReturnType());
+                && ((Class<?>) type).isAssignableFrom(method.getReturnType());  // [FALSE_POSITIVE]
     }
 
     private Class<?>[] getParameterTypes() {
-        return method.getParameterTypes();
+        return method.getParameterTypes();  // [FALSE_POSITIVE]
     }
 
     /**
      * Returns the annotations on this method
      */
     public Annotation[] getAnnotations() {
-        return method.getAnnotations();
+        return method.getAnnotations();  // [FALSE_POSITIVE]
     }
 
     /**
      * Returns the annotation of type {@code annotationType} on this method, if
      * one exists.
      */
-    public <T extends Annotation> T getAnnotation(Class<T> annotationType) {
-        return method.getAnnotation(annotationType);
+    public <T extends Annotation> T getAnnotation(@NotNull Class<T> annotationType) {
+        return method.getAnnotation(annotationType);  // [FALSE_POSITIVE]
     }
 
     @Override
     public String toString() {
         return method.toString();
-    }
+    }  // [FALSE_POSITIVE]
 }

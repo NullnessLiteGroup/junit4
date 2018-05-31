@@ -1,5 +1,7 @@
 package org.junit.experimental.theories;
 
+import org.jetbrains.annotations.NotNull;
+
 import static java.lang.String.format;
 
 public abstract class PotentialAssignment {
@@ -14,8 +16,9 @@ public abstract class PotentialAssignment {
         }
     }
 
-    public static PotentialAssignment forValue(final String name, final Object value) {
+    public static PotentialAssignment forValue(final String name, @NotNull final Object value) {
         return new PotentialAssignment() {
+            @NotNull
             @Override
             public Object getValue() {
                 return value;
@@ -30,7 +33,8 @@ public abstract class PotentialAssignment {
             public String getDescription() {
                 String valueString;
 
-                if (value == null) {
+                //noinspection ConstantConditions
+                if (value == null) {  // This is not related to NullPointerException. So ignore it.
                     valueString = "null";
                 } else {
                     try {

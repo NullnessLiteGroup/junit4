@@ -5,6 +5,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.junit.internal.runners.ErrorReportingRunner;
 import org.junit.runner.Runner;
 
@@ -69,8 +71,18 @@ public abstract class RunnerBuilder {
         }
     }
 
-    Class<?> addParent(Class<?> parent) throws InitializationError {
+    @Nullable  // changed
+    Class<?> addParent(@Nullable Class<?> parent) throws InitializationError { // changed
         if (!parents.add(parent)) {
+            // [FALSE_POSITIVE]
+            // This is a false positive. parents is a HashSet. If parent is null,
+            // the first time we call parents.add(parent), we get true.
+            // the only caller of this addParent() method is runners() (line 120),
+            // and by looking at the implementation of runners() we can see that every
+            // time it adds an element into parents, it immediately removes that element from parents (see try-finally block)
+            // Therefore, every time we add null to parents, we immediately remove it, and thus if parent is null,
+            // parents.add(parent) will never return false, which means when parent is null, we never need to call parent.getName().
+            // So it won't cause a NullPointerException and this is a false positive.
             throw new InitializationError(String.format("class '%s' (possibly indirectly) contains itself as a SuiteClass", parent.getName()));
         }
         return parent;
@@ -86,7 +98,8 @@ public abstract class RunnerBuilder {
      * this builder will throw an exception if it is requested for another
      * runner for {@code parent} before this call completes.
      */
-    public List<Runner> runners(Class<?> parent, Class<?>[] children)
+    @NotNull
+    public List<Runner> runners(@Nullable Class<?> parent, @NotNull Class<?>[] children)  // changed
             throws InitializationError {
         addParent(parent);
 
@@ -97,13 +110,15 @@ public abstract class RunnerBuilder {
         }
     }
 
-    public List<Runner> runners(Class<?> parent, List<Class<?>> children)
+    @NotNull
+    public List<Runner> runners(@NotNull Class<?> parent, @NotNull List<Class<?>> children)
             throws InitializationError {
         return runners(parent, children.toArray(new Class<?>[0]));
     }
 
+    @NotNull
     private List<Runner> runners(Class<?>[] children) {
-        List<Runner> runners = new ArrayList<Runner>();
+        @NotNull List<Runner> runners = new ArrayList<Runner>();
         for (Class<?> each : children) {
             Runner childRunner = safeRunnerForClass(each);
             if (childRunner != null) {

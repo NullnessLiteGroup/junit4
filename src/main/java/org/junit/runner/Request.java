@@ -2,6 +2,7 @@ package org.junit.runner;
 
 import java.util.Comparator;
 
+import org.jetbrains.annotations.NotNull;
 import org.junit.internal.builders.AllDefaultPossibilitiesBuilder;
 import org.junit.internal.requests.ClassRequest;
 import org.junit.internal.requests.FilterRequest;
@@ -34,8 +35,9 @@ public abstract class Request {
      * @param methodName the name of the test
      * @return a <code>Request</code> that will cause a single test be run
      */
+    @NotNull
     public static Request method(Class<?> clazz, String methodName) {
-        Description method = Description.createTestDescription(clazz, methodName);
+        @NotNull Description method = Description.createTestDescription(clazz, methodName);
         return Request.aClass(clazz).filterWith(method);
     }
 
@@ -71,7 +73,7 @@ public abstract class Request {
      */
     public static Request classes(Computer computer, Class<?>... classes) {
         try {
-            AllDefaultPossibilitiesBuilder builder = new AllDefaultPossibilitiesBuilder();
+            @NotNull AllDefaultPossibilitiesBuilder builder = new AllDefaultPossibilitiesBuilder();
             Runner suite = computer.getSuite(builder, classes);
             return runner(suite);
         } catch (InitializationError e) {
@@ -103,8 +105,9 @@ public abstract class Request {
      * @param runner the runner to return
      * @return a <code>Request</code> that will run the given runner when invoked
      */
-    public static Request runner(final Runner runner) {
+    public static Request runner(@NotNull final Runner runner) {
         return new Request() {
+            @NotNull
             @Override
             public Runner getRunner() {
                 return runner;
@@ -126,6 +129,7 @@ public abstract class Request {
      * @param filter The {@link Filter} to apply to this Request
      * @return the filtered Request
      */
+    @NotNull
     public Request filterWith(Filter filter) {
         return new FilterRequest(this, filter);
     }
@@ -140,6 +144,7 @@ public abstract class Request {
      * @param desiredDescription {@code Description} of those tests that should be run
      * @return the filtered Request
      */
+    @NotNull
     public Request filterWith(Description desiredDescription) {
         return filterWith(Filter.matchMethodDescription(desiredDescription));
     }
@@ -166,6 +171,7 @@ public abstract class Request {
      * @param comparator definition of the order of the tests in this Request
      * @return a Request with ordered Tests
      */
+    @NotNull
     public Request sortWith(Comparator<Description> comparator) {
         return new SortingRequest(this, comparator);
     }

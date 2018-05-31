@@ -4,6 +4,8 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.List;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.junit.internal.runners.statements.RunAfters;
 import org.junit.internal.runners.statements.RunBefores;
 import org.junit.runner.RunWith;
@@ -26,6 +28,7 @@ public class BlockJUnit4ClassRunnerWithParameters extends
         CONSTRUCTOR, FIELD
     }
 
+    @NotNull
     private final Object[] parameters;
 
     private final String name;
@@ -40,7 +43,7 @@ public class BlockJUnit4ClassRunnerWithParameters extends
 
     @Override
     public Object createTest() throws Exception {
-        InjectionType injectionType = getInjectionType();
+        @NotNull InjectionType injectionType = getInjectionType();
         switch (injectionType) {
             case CONSTRUCTOR:
                 return createTestUsingConstructorInjection();
@@ -57,7 +60,7 @@ public class BlockJUnit4ClassRunnerWithParameters extends
     }
 
     private Object createTestUsingFieldInjection() throws Exception {
-        List<FrameworkField> annotatedFieldsByParameter = getAnnotatedFieldsByParameter();
+        @NotNull List<FrameworkField> annotatedFieldsByParameter = getAnnotatedFieldsByParameter();
         if (annotatedFieldsByParameter.size() != parameters.length) {
             throw new Exception(
                     "Wrong number of parameters and @Parameter fields."
@@ -66,15 +69,36 @@ public class BlockJUnit4ClassRunnerWithParameters extends
                             + ", available parameters: " + parameters.length
                             + ".");
         }
+         /*
+           [FALSE_POSITIVE]
+           getTestClass().getJavaClass() cannot be null at this point
+           because in the validate() process, the NullPointerException caused by
+           getTestClass().getJavaClass() is already caught in
+           validateNoNonStaticInnerClass(errors) which calls
+           getTestClass().isANonStaticInnerClass(), where the
+           getTestClass().getJavaClass() is dereferenced
+        */
         Object testClassInstance = getTestClass().getJavaClass().newInstance();
-        for (FrameworkField each : annotatedFieldsByParameter) {
-            Field field = each.getField();
+
+        for (@NotNull FrameworkField each : annotatedFieldsByParameter) {
+            @Nullable Field field = each.getField();
+            /*
+               [FALSE_POSITIVE]
+               This is a false positive. By looking at the implementation of
+               getField() (src/main/java/org/junit/runners/model/FrameworkField.java),
+               we get to know that it returns the field called "field" which might be null.
+               However, the constructor of FrameworkField checks its parameter: if the passing
+               parameter is null, it throws an exception; otherwise, it assigns the parameter
+               to the field "field". This means without an exception, each.getField() won't
+               return null (i.e. field (line 84) is not null). And therefore, calling field.getAnnotation()
+               (line 96) won't cause a NullPointerException.
+             */
             Parameter annotation = field.getAnnotation(Parameter.class);
             int index = annotation.value();
             try {
                 field.set(testClassInstance, parameters[index]);
             } catch (IllegalAccessException e) {
-                IllegalAccessException wrappedException = new IllegalAccessException(
+                @NotNull IllegalAccessException wrappedException = new IllegalAccessException(
                         "Cannot set parameter '" + field.getName()
                                 + "'. Ensure that the field '" + field.getName()
                                 + "' is public.");
@@ -98,8 +122,9 @@ public class BlockJUnit4ClassRunnerWithParameters extends
         return name;
     }
 
+    @NotNull
     @Override
-    protected String testName(FrameworkMethod method) {
+    protected String testName(@NotNull FrameworkMethod method) {
         return method.getName() + getName();
     }
 
@@ -112,14 +137,25 @@ public class BlockJUnit4ClassRunnerWithParameters extends
     }
 
     @Override
-    protected void validateFields(List<Throwable> errors) {
+    protected void validateFields(@NotNull List<Throwable> errors) {
         super.validateFields(errors);
         if (getInjectionType() == InjectionType.FIELD) {
-            List<FrameworkField> annotatedFieldsByParameter = getAnnotatedFieldsByParameter();
-            int[] usedIndices = new int[annotatedFieldsByParameter.size()];
-            for (FrameworkField each : annotatedFieldsByParameter) {
+            @NotNull List<FrameworkField> annotatedFieldsByParameter = getAnnotatedFieldsByParameter();
+            @NotNull int[] usedIndices = new int[annotatedFieldsByParameter.size()];
+            for (@NotNull FrameworkField each : annotatedFieldsByParameter) {
                 int index = each.getField().getAnnotation(Parameter.class)
                         .value();
+                /*
+                   [FALSE_POSITIVE]
+                   This is a false positive. By looking at the implementation of
+                   getField() (src/main/java/org/junit/runners/model/FrameworkField.java),
+                   we get to know that it returns the field called "field" which might be null.
+                   However, the constructor of FrameworkField checks its parameter: if the passing
+                   parameter is null, it throws an exception; otherwise, it assigns the parameter
+                   to the field "field". This means without an exception, each.getField() won't
+                   return null. Therefore, calling each.getField().getAnnotation()
+                   (line 146) won't cause a NullPointerException.
+                 */
                 if (index < 0 || index > annotatedFieldsByParameter.size() - 1) {
                     errors.add(new Exception("Invalid @Parameter value: "
                             + index + ". @Parameter fields counted: "
@@ -151,8 +187,9 @@ public class BlockJUnit4ClassRunnerWithParameters extends
         return statement;
     }
 
-    private Statement withBeforeParams(Statement statement) {
-        List<FrameworkMethod> befores = getTestClass()
+    @NotNull
+    private Statement withBeforeParams(@NotNull Statement statement) {
+        @NotNull List<FrameworkMethod> befores = getTestClass()
                 .getAnnotatedMethods(Parameterized.BeforeParam.class);
         return befores.isEmpty() ? statement : new RunBeforeParams(statement, befores);
     }
@@ -163,14 +200,26 @@ public class BlockJUnit4ClassRunnerWithParameters extends
         }
 
         @Override
-        protected void invokeMethod(FrameworkMethod method) throws Throwable {
+        protected void invokeMethod(@NotNull FrameworkMethod method) throws Throwable {
             int paramCount = method.getMethod().getParameterTypes().length;
+            /*
+               [FALSE_POSITIVE]
+               This is a false positive. By looking at the implementation of
+               getMethod() (src/main/java/org/junit/runners/model/FrameworkMethod.java),
+               we get to know that it returns the field called "method" which might be null.
+               However, the constructor of FrameworkMethod checks its parameter: if the passing
+               parameter is null, it throws an exception; otherwise, it assigns the parameter
+               to the field "method". This means without an exception, method.getMethod() won't
+               return null. Therefore, calling method.getMethod().getParameterTypes()
+               (line 204) won't cause a NullPointerException.
+             */
             method.invokeExplosively(null, paramCount == 0 ? (Object[]) null : parameters);
         }
     }
 
-    private Statement withAfterParams(Statement statement) {
-        List<FrameworkMethod> afters = getTestClass()
+    @NotNull
+    private Statement withAfterParams(@NotNull Statement statement) {
+        @NotNull List<FrameworkMethod> afters = getTestClass()
                 .getAnnotatedMethods(Parameterized.AfterParam.class);
         return afters.isEmpty() ? statement : new RunAfterParams(statement, afters);
     }
@@ -181,18 +230,30 @@ public class BlockJUnit4ClassRunnerWithParameters extends
         }
 
         @Override
-        protected void invokeMethod(FrameworkMethod method) throws Throwable {
+        protected void invokeMethod(@NotNull FrameworkMethod method) throws Throwable {
             int paramCount = method.getMethod().getParameterTypes().length;
+            /*
+               [FALSE_POSITIVE]
+               This is a false positive. By looking at the implementation of
+               getMethod() (src/main/java/org/junit/runners/model/FrameworkMethod.java),
+               we get to know that it returns the field called "method" which might be null.
+               However, the constructor of FrameworkMethod checks its parameter: if the passing
+               parameter is null, it throws an exception; otherwise, it assigns the parameter
+               to the field "method". This means without an exception, method.getMethod() won't
+               return null. Therefore, calling method.getMethod().getParameterTypes()
+               (line 234) won't cause a NullPointerException.
+             */
             method.invokeExplosively(null, paramCount == 0 ? (Object[]) null : parameters);
         }
     }
 
+    @NotNull
     @Override
     protected Annotation[] getRunnerAnnotations() {
         Annotation[] allAnnotations = super.getRunnerAnnotations();
-        Annotation[] annotationsWithoutRunWith = new Annotation[allAnnotations.length - 1];
+        @NotNull Annotation[] annotationsWithoutRunWith = new Annotation[allAnnotations.length - 1];
         int i = 0;
-        for (Annotation annotation: allAnnotations) {
+        for (@NotNull Annotation annotation: allAnnotations) {
             if (!annotation.annotationType().equals(RunWith.class)) {
                 annotationsWithoutRunWith[i] = annotation;
                 ++i;
@@ -201,10 +262,12 @@ public class BlockJUnit4ClassRunnerWithParameters extends
         return annotationsWithoutRunWith;
     }
 
+    @NotNull
     private List<FrameworkField> getAnnotatedFieldsByParameter() {
         return getTestClass().getAnnotatedFields(Parameter.class);
     }
 
+    @NotNull
     private InjectionType getInjectionType() {
         if (fieldsAreAnnotated()) {
             return InjectionType.FIELD;

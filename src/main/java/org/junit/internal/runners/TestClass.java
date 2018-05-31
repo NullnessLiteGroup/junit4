@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.jetbrains.annotations.NotNull;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -27,23 +28,27 @@ public class TestClass {
         this.klass = klass;
     }
 
+    @NotNull
     public List<Method> getTestMethods() {
         return getAnnotatedMethods(Test.class);
     }
 
+    @NotNull
     List<Method> getBefores() {
         return getAnnotatedMethods(BeforeClass.class);
     }
 
+    @NotNull
     List<Method> getAfters() {
         return getAnnotatedMethods(AfterClass.class);
     }
 
-    public List<Method> getAnnotatedMethods(Class<? extends Annotation> annotationClass) {
-        List<Method> results = new ArrayList<Method>();
-        for (Class<?> eachClass : getSuperClasses(klass)) {
+    @NotNull
+    public List<Method> getAnnotatedMethods(@NotNull Class<? extends Annotation> annotationClass) {
+        @NotNull List<Method> results = new ArrayList<Method>();
+        for (@NotNull Class<?> eachClass : getSuperClasses(klass)) {
             Method[] methods = MethodSorter.getDeclaredMethods(eachClass);
-            for (Method eachMethod : methods) {
+            for (@NotNull Method eachMethod : methods) {
                 Annotation annotation = eachMethod.getAnnotation(annotationClass);
                 if (annotation != null && !isShadowed(eachMethod, results)) {
                     results.add(eachMethod);
@@ -60,8 +65,8 @@ public class TestClass {
         return annotation.equals(Before.class) || annotation.equals(BeforeClass.class);
     }
 
-    private boolean isShadowed(Method method, List<Method> results) {
-        for (Method each : results) {
+    private boolean isShadowed(@NotNull Method method, List<Method> results) {
+        for (@NotNull Method each : results) {
             if (isShadowed(method, each)) {
                 return true;
             }
@@ -84,8 +89,9 @@ public class TestClass {
         return true;
     }
 
+    @NotNull
     private List<Class<?>> getSuperClasses(Class<?> testClass) {
-        List<Class<?>> results = new ArrayList<Class<?>>();
+        @NotNull List<Class<?>> results = new ArrayList<Class<?>>();
         Class<?> current = testClass;
         while (current != null) {
             results.add(current);

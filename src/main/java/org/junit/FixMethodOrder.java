@@ -5,6 +5,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import org.jetbrains.annotations.NotNull;
 import org.junit.runners.MethodSorters;
 
 /**
@@ -37,5 +38,5 @@ public @interface FixMethodOrder {
     /**
      * Optionally specify <code>value</code> to have the methods executed in a particular order
      */
-    MethodSorters value() default MethodSorters.DEFAULT;
+    @NotNull MethodSorters value() default MethodSorters.DEFAULT;
 }

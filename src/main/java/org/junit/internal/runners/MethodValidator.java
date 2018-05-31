@@ -6,6 +6,7 @@ import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.jetbrains.annotations.NotNull;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -34,7 +35,7 @@ public class MethodValidator {
         validateTestMethods(Before.class, false);
         validateTestMethods(Test.class, false);
 
-        List<Method> methods = testClass.getAnnotatedMethods(Test.class);
+        @NotNull List<Method> methods = testClass.getAnnotatedMethods(Test.class);
         if (methods.size() == 0) {
             errors.add(new Exception("No runnable methods"));
         }
@@ -45,6 +46,7 @@ public class MethodValidator {
         validateTestMethods(AfterClass.class, true);
     }
 
+    @NotNull
     public List<Throwable> validateMethodsForDefaultRunner() {
         validateNoArgConstructor();
         validateStaticMethods();
@@ -66,13 +68,13 @@ public class MethodValidator {
         }
     }
 
-    private void validateTestMethods(Class<? extends Annotation> annotation,
-            boolean isStatic) {
-        List<Method> methods = testClass.getAnnotatedMethods(annotation);
+    private void validateTestMethods(@NotNull Class<? extends Annotation> annotation,
+                                     boolean isStatic) {
+        @NotNull List<Method> methods = testClass.getAnnotatedMethods(annotation);
 
-        for (Method each : methods) {
+        for (@NotNull Method each : methods) {
             if (Modifier.isStatic(each.getModifiers()) != isStatic) {
-                String state = isStatic ? "should" : "should not";
+                @NotNull String state = isStatic ? "should" : "should not";
                 errors.add(new Exception("Method " + each.getName() + "() "
 						+ state + " be static"));
             }

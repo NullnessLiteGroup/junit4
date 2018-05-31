@@ -2,6 +2,7 @@ package org.junit.internal.runners.statements;
 
 import java.util.List;
 
+import org.jetbrains.annotations.NotNull;
 import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.Statement;
 
@@ -20,7 +21,7 @@ public class RunBefores extends Statement {
 
     @Override
     public void evaluate() throws Throwable {
-        for (FrameworkMethod before : befores) {
+        for (@NotNull FrameworkMethod before : befores) {
             invokeMethod(before);
         }
         next.evaluate();
@@ -29,7 +30,7 @@ public class RunBefores extends Statement {
     /**
      * @since 4.13
      */
-    protected void invokeMethod(FrameworkMethod method) throws Throwable {
+    protected void invokeMethod(@NotNull FrameworkMethod method) throws Throwable {
         method.invokeExplosively(target);
     }
 }

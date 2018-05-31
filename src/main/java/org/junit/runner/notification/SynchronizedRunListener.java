@@ -1,5 +1,6 @@
 package org.junit.runner.notification;
 
+import org.jetbrains.annotations.NotNull;
 import org.junit.runner.Description;
 import org.junit.runner.Result;
 
@@ -122,7 +123,7 @@ final class SynchronizedRunListener extends RunListener {
         if (!(other instanceof SynchronizedRunListener)) {
             return false;
         }
-        SynchronizedRunListener that = (SynchronizedRunListener) other;
+        @NotNull SynchronizedRunListener that = (SynchronizedRunListener) other;
         
         return listener.equals(that.listener);
     }

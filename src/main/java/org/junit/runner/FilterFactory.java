@@ -1,5 +1,6 @@
 package org.junit.runner;
 
+import org.jetbrains.annotations.NotNull;
 import org.junit.runner.manipulation.Filter;
 
 /**
@@ -18,7 +19,7 @@ public interface FilterFactory {
      */
     @SuppressWarnings("serial")
     class FilterNotCreatedException extends Exception {
-        public FilterNotCreatedException(Exception exception) {
+        public FilterNotCreatedException(@NotNull Exception exception) {
             super(exception.getMessage(), exception);
         }
     }

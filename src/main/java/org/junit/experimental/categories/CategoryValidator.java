@@ -10,6 +10,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.jetbrains.annotations.NotNull;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -42,10 +43,10 @@ public final class CategoryValidator extends AnnotationValidator {
      */
     @Override
     public List<Exception> validateAnnotatedMethod(FrameworkMethod method) {
-        List<Exception> errors = new ArrayList<Exception>();
+        @NotNull List<Exception> errors = new ArrayList<Exception>();
         Annotation[] annotations = method.getAnnotations();
-        for (Annotation annotation : annotations) {
-            for (Class<?> clazz : INCOMPATIBLE_ANNOTATIONS) {
+        for (@NotNull Annotation annotation : annotations) {
+            for (@NotNull Class<?> clazz : INCOMPATIBLE_ANNOTATIONS) {
                 if (annotation.annotationType().isAssignableFrom(clazz)) {
                     addErrorMessage(errors, clazz);
                 }

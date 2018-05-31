@@ -4,6 +4,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
+import org.jetbrains.annotations.NotNull;
 import org.junit.runner.Computer;
 import org.junit.runner.Runner;
 import org.junit.runners.ParentRunner;
@@ -34,7 +35,7 @@ public class ParallelComputer extends Computer {
             ((ParentRunner<?>) runner).setScheduler(new RunnerScheduler() {
                 private final ExecutorService fService = Executors.newCachedThreadPool();
 
-                public void schedule(Runnable childStatement) {
+                public void schedule(@NotNull Runnable childStatement) {
                     fService.submit(childStatement);
                 }
 
@@ -52,14 +53,14 @@ public class ParallelComputer extends Computer {
     }
 
     @Override
-    public Runner getSuite(RunnerBuilder builder, java.lang.Class<?>[] classes)
+    public Runner getSuite(@NotNull RunnerBuilder builder, java.lang.Class<?>[] classes)
             throws InitializationError {
         Runner suite = super.getSuite(builder, classes);
         return this.classes ? parallelize(suite) : suite;
     }
 
     @Override
-    protected Runner getRunner(RunnerBuilder builder, Class<?> testClass)
+    protected Runner getRunner(@NotNull RunnerBuilder builder, Class<?> testClass)
             throws Throwable {
         Runner runner = super.getRunner(builder, testClass);
         return methods ? parallelize(runner) : runner;

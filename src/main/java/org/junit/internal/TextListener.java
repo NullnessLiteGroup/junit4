@@ -4,6 +4,7 @@ import java.io.PrintStream;
 import java.text.NumberFormat;
 import java.util.List;
 
+import org.jetbrains.annotations.NotNull;
 import org.junit.runner.Description;
 import org.junit.runner.Result;
 import org.junit.runner.notification.Failure;
@@ -22,7 +23,7 @@ public class TextListener extends RunListener {
     }
 
     @Override
-    public void testRunFinished(Result result) {
+    public void testRunFinished(@NotNull Result result) {
         printHeader(result.getRunTime());
         printFailures(result);
         printFooter(result);
@@ -56,7 +57,7 @@ public class TextListener extends RunListener {
         getWriter().println("Time: " + elapsedTimeAsString(runTime));
     }
 
-    protected void printFailures(Result result) {
+    protected void printFailures(@NotNull Result result) {
         List<Failure> failures = result.getFailures();
         if (failures.isEmpty()) {
             return;
@@ -67,17 +68,17 @@ public class TextListener extends RunListener {
             getWriter().println("There were " + failures.size() + " failures:");
         }
         int i = 1;
-        for (Failure each : failures) {
+        for (@NotNull Failure each : failures) {
             printFailure(each, "" + i++);
         }
     }
 
-    protected void printFailure(Failure each, String prefix) {
+    protected void printFailure(@NotNull Failure each, String prefix) {
         getWriter().println(prefix + ") " + each.getTestHeader());
         getWriter().print(each.getTrimmedTrace());
     }
 
-    protected void printFooter(Result result) {
+    protected void printFooter(@NotNull Result result) {
         if (result.wasSuccessful()) {
             getWriter().println();
             getWriter().print("OK");

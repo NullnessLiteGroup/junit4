@@ -10,6 +10,7 @@ import junit.framework.TestFailure;
 import junit.framework.TestListener;
 import junit.framework.TestResult;
 import junit.runner.BaseTestRunner;
+import org.jetbrains.annotations.NotNull;
 
 public class ResultPrinter implements TestListener {
     PrintStream fWriter;
@@ -21,7 +22,7 @@ public class ResultPrinter implements TestListener {
 
     /* API for use by textui.TestRunner */
 
-    synchronized void print(TestResult result, long runTime) {
+    synchronized void print(@NotNull TestResult result, long runTime) {
         printHeader(runTime);
         printErrors(result);
         printFailures(result);
@@ -40,15 +41,15 @@ public class ResultPrinter implements TestListener {
         getWriter().println("Time: " + elapsedTimeAsString(runTime));
     }
 
-    protected void printErrors(TestResult result) {
+    protected void printErrors(@NotNull TestResult result) {
         printDefects(result.errors(), result.errorCount(), "error");
     }
 
-    protected void printFailures(TestResult result) {
+    protected void printFailures(@NotNull TestResult result) {
         printDefects(result.failures(), result.failureCount(), "failure");
     }
 
-    protected void printDefects(Enumeration<TestFailure> booBoos, int count, String type) {
+    protected void printDefects(@NotNull Enumeration<TestFailure> booBoos, int count, String type) {
         if (count == 0) return;
         if (count == 1) {
             getWriter().println("There was " + count + " " + type + ":");
@@ -60,22 +61,22 @@ public class ResultPrinter implements TestListener {
         }
     }
 
-    public void printDefect(TestFailure booBoo, int count) { // only public for testing purposes
+    public void printDefect(@NotNull TestFailure booBoo, int count) { // only public for testing purposes
         printDefectHeader(booBoo, count);
         printDefectTrace(booBoo);
     }
 
-    protected void printDefectHeader(TestFailure booBoo, int count) {
+    protected void printDefectHeader(@NotNull TestFailure booBoo, int count) {
         // I feel like making this a println, then adding a line giving the throwable a chance to print something
         // before we get to the stack trace.
         getWriter().print(count + ") " + booBoo.failedTest());
     }
 
-    protected void printDefectTrace(TestFailure booBoo) {
+    protected void printDefectTrace(@NotNull TestFailure booBoo) {
         getWriter().print(BaseTestRunner.getFilteredTrace(booBoo.trace()));
     }
 
-    protected void printFooter(TestResult result) {
+    protected void printFooter(@NotNull TestResult result) {
         if (result.wasSuccessful()) {
             getWriter().println();
             getWriter().print("OK");

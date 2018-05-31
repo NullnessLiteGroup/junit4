@@ -1,5 +1,6 @@
 package org.junit.rules;
 
+import org.jetbrains.annotations.NotNull;
 import org.junit.runner.Description;
 
 /**
@@ -28,7 +29,7 @@ public class TestName extends TestWatcher {
     private volatile String name;
 
     @Override
-    protected void starting(Description d) {
+    protected void starting(@NotNull Description d) {
         name = d.getMethodName();
     }
 
