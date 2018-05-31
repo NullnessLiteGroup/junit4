@@ -22,18 +22,15 @@ public class SpecificDataPointsSupplier extends AllMembersSupplier {
     
     @NotNull
     @Override
-    protected Collection<Field> getSingleDataPointFields(@NotNull ParameterSignature sig) {
-        Collection<Field> fields = super.getSingleDataPointFields(sig);        
+    protected Collection<Field> getSingleDataPointFields(ParameterSignature sig) {
+        Collection<Field> fields = super.getSingleDataPointFields(sig);
+        // [FALSE_POSITIVE]
+        // dereference of getAnnotation(FromDataPoints.class) is safe here
+        // since annotation DataPoints will only be considered effective,
+        // checked in getDataPointsFields(sig),
+        // if it is paired with annotation FromDataPoints
+        // the other errors in this class are also false positives (they are in the same pattern)
         String requestedName = sig.getAnnotation(FromDataPoints.class).value();
-        /*
-          All six errors in this class are true positives (they are in the same pattern).
-          We can see from the implementation of getAnnotation()
-          (src/main/java/org/junit/experimental/theories/ParameterSignature.java: line 135)
-          that if the field "annotations" (ParameterSignature.java: line 65) is initialized as
-          an empty array (ParameterSignature.java: line 69),
-          getAnnotations() (ParameterSignature.java: line 101) will return an empty ArrayList
-          and then getAnnotation() will return null, which means testedOn will be null.
-         */
 
         @NotNull List<Field> fieldsWithMatchingNames = new ArrayList<Field>();
         
@@ -51,7 +48,7 @@ public class SpecificDataPointsSupplier extends AllMembersSupplier {
     @Override
     protected Collection<Field> getDataPointsFields(@NotNull ParameterSignature sig) {
         Collection<Field> fields = super.getDataPointsFields(sig);        
-        String requestedName = sig.getAnnotation(FromDataPoints.class).value();
+        String requestedName = sig.getAnnotation(FromDataPoints.class).value();  // [FALSE_POSITIVE]
         
         @NotNull List<Field> fieldsWithMatchingNames = new ArrayList<Field>();
         
@@ -69,12 +66,12 @@ public class SpecificDataPointsSupplier extends AllMembersSupplier {
     @Override
     protected Collection<FrameworkMethod> getSingleDataPointMethods(@NotNull ParameterSignature sig) {
         Collection<FrameworkMethod> methods = super.getSingleDataPointMethods(sig);
-        String requestedName = sig.getAnnotation(FromDataPoints.class).value();
+        String requestedName = sig.getAnnotation(FromDataPoints.class).value();  // [FALSE_POSITIVE]
         
         @NotNull List<FrameworkMethod> methodsWithMatchingNames = new ArrayList<FrameworkMethod>();
         
         for (@NotNull FrameworkMethod method : methods) {
-            String[] methodNames = method.getAnnotation(DataPoint.class).value();
+            String[] methodNames = method.getAnnotation(DataPoint.class).value();  // [FALSE_POSITIVE]
             if (Arrays.asList(methodNames).contains(requestedName)) {
                 methodsWithMatchingNames.add(method);
             }
@@ -87,12 +84,12 @@ public class SpecificDataPointsSupplier extends AllMembersSupplier {
     @Override
     protected Collection<FrameworkMethod> getDataPointsMethods(@NotNull ParameterSignature sig) {
         Collection<FrameworkMethod> methods = super.getDataPointsMethods(sig);
-        String requestedName = sig.getAnnotation(FromDataPoints.class).value();
+        String requestedName = sig.getAnnotation(FromDataPoints.class).value();  // [FALSE_POSITIVE]
         
         @NotNull List<FrameworkMethod> methodsWithMatchingNames = new ArrayList<FrameworkMethod>();
         
         for (@NotNull FrameworkMethod method : methods) {
-            String[] methodNames = method.getAnnotation(DataPoints.class).value();
+            String[] methodNames = method.getAnnotation(DataPoints.class).value();  // [FALSE_POSITIVE]
             if (Arrays.asList(methodNames).contains(requestedName)) {
                 methodsWithMatchingNames.add(method);
             }

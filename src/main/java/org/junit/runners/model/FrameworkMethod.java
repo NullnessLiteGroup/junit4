@@ -62,6 +62,7 @@ public class FrameworkMethod extends FrameworkMember<FrameworkMethod> {
             protected Object runReflectiveCall() throws Throwable {
                 return method.invoke(target, params);
                 /*
+                   [FALSE_POSITIVE]
                    All errors in this class are false positives. The private field "method"
                    is defined but not initialized (line 23) and thus it can only be annotated as "Nullable".
                    But we can see that the constructor (line 28) first checks its parameter: if the parameter is null,
@@ -81,7 +82,7 @@ public class FrameworkMethod extends FrameworkMember<FrameworkMethod> {
      */
     @Override
     public String getName() {
-        return method.getName();
+        return method.getName();  // [FALSE_POSITIVE]
     }
 
     /**
@@ -96,7 +97,7 @@ public class FrameworkMethod extends FrameworkMember<FrameworkMethod> {
      */
     public void validatePublicVoidNoArg(boolean isStatic, @NotNull List<Throwable> errors) {
         validatePublicVoid(isStatic, errors);
-        if (method.getParameterTypes().length != 0) {
+        if (method.getParameterTypes().length != 0) {  // [FALSE_POSITIVE]
             errors.add(new Exception("Method " + method.getName() + " should have no parameters"));
         }
     }
@@ -114,26 +115,26 @@ public class FrameworkMethod extends FrameworkMember<FrameworkMethod> {
     public void validatePublicVoid(boolean isStatic, @NotNull List<Throwable> errors) {
         if (isStatic() != isStatic) {
             @NotNull String state = isStatic ? "should" : "should not";
-            errors.add(new Exception("Method " + method.getName() + "() " + state + " be static"));
+            errors.add(new Exception("Method " + method.getName() + "() " + state + " be static"));  // [FALSE_POSITIVE]
         }
         if (!isPublic()) {
-            errors.add(new Exception("Method " + method.getName() + "() should be public"));
+            errors.add(new Exception("Method " + method.getName() + "() should be public"));  // [FALSE_POSITIVE]
         }
-        if (method.getReturnType() != Void.TYPE) {
+        if (method.getReturnType() != Void.TYPE) {  // [FALSE_POSITIVE]
             errors.add(new Exception("Method " + method.getName() + "() should be void"));
         }
     }
 
     @Override
     protected int getModifiers() {
-        return method.getModifiers();
+        return method.getModifiers();  // [FALSE_POSITIVE]
     }
 
     /**
      * Returns the return type of the method
      */
     public Class<?> getReturnType() {
-        return method.getReturnType();
+        return method.getReturnType();  // [FALSE_POSITIVE]
     }
 
     /**
@@ -149,7 +150,7 @@ public class FrameworkMethod extends FrameworkMember<FrameworkMethod> {
      */
     @Override
     public Class<?> getDeclaringClass() {
-        return method.getDeclaringClass();
+        return method.getDeclaringClass();  // [FALSE_POSITIVE]
     }
 
     public void validateNoTypeParametersOnArgs(List<Throwable> errors) {
@@ -174,7 +175,7 @@ public class FrameworkMethod extends FrameworkMember<FrameworkMethod> {
 
     @Override
     boolean isBridgeMethod() {
-        return method.isBridge();
+        return method.isBridge();  // [FALSE_POSITIVE]
     }
 
     @Override
@@ -182,13 +183,13 @@ public class FrameworkMethod extends FrameworkMember<FrameworkMethod> {
         if (!FrameworkMethod.class.isInstance(obj)) {
             return false;
         }
-        return ((FrameworkMethod) obj).method.equals(method);
+        return ((FrameworkMethod) obj).method.equals(method);  // [FALSE_POSITIVE]
     }
 
     @Override
     public int hashCode() {
         return method.hashCode();
-    }
+    }  // [FALSE_POSITIVE]
 
     /**
      * Returns true if this is a no-arg method that returns a value assignable
@@ -202,18 +203,18 @@ public class FrameworkMethod extends FrameworkMember<FrameworkMethod> {
     @Deprecated
     public boolean producesType(Type type) {
         return getParameterTypes().length == 0 && type instanceof Class<?>
-                && ((Class<?>) type).isAssignableFrom(method.getReturnType());
+                && ((Class<?>) type).isAssignableFrom(method.getReturnType());  // [FALSE_POSITIVE]
     }
 
     private Class<?>[] getParameterTypes() {
-        return method.getParameterTypes();
+        return method.getParameterTypes();  // [FALSE_POSITIVE]
     }
 
     /**
      * Returns the annotations on this method
      */
     public Annotation[] getAnnotations() {
-        return method.getAnnotations();
+        return method.getAnnotations();  // [FALSE_POSITIVE]
     }
 
     /**
@@ -221,11 +222,11 @@ public class FrameworkMethod extends FrameworkMember<FrameworkMethod> {
      * one exists.
      */
     public <T extends Annotation> T getAnnotation(@NotNull Class<T> annotationType) {
-        return method.getAnnotation(annotationType);
+        return method.getAnnotation(annotationType);  // [FALSE_POSITIVE]
     }
 
     @Override
     public String toString() {
         return method.toString();
-    }
+    }  // [FALSE_POSITIVE]
 }

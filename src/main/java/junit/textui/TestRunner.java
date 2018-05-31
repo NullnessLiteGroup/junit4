@@ -189,10 +189,12 @@ public class TestRunner extends BaseTestRunner {
             @Nullable Test suite = getTest(testCase);
             return doRun(suite, wait);
             /*
-              This is a false positive. If testCase.equals(""), then getTest(testCase) will
-              return null and suite will be null. But testCase.equals("") is checked on line 181,
-              so testCase is not an empty string and thus getTest(testCase) won't return null. Therefore,
-              suite is not null and this is a false positive.
+               [FALSE_POSITIVE]
+               This is a false positive.
+               Because the JUnit wiki (https://github.com/junit-team/junit4/wiki/test-runners)
+               and JUnit4 API doesn't introduce TestRunner and its usage.
+               Besides, the internal calls to this method in the project
+               will never get this line
              */
         } catch (Exception e) {
             throw new Exception("Could not create and run test suite: " + e);

@@ -130,6 +130,8 @@ public abstract class BaseTestRunner implements TestListener {
         try {
             test = (Test) suiteMethod.invoke(null); // static method
             if (test == null) {
+                // Not related to our evaluation. Ignore it.
+                //noinspection ConstantConditions
                 return test;
             }
         } catch (InvocationTargetException e) {

@@ -132,15 +132,7 @@ public class JUnit38ClassRunner extends Runner implements Filterable, Sortable {
         try {
             Method m = test.getClass().getMethod(test.getName());
             /*
-               This is a true positive: test.getName() might be null and thus it violates
-               the contract of getMethod() which requires the parameter to be NotNull.
-               By looking at the implementation of getName(), we can see that it returns
-               fName, a field of TestCase (src/main/java/junit/framework/TestCase.java). It is
-               possible that fName is initialized as null: in the no-arg constructor (TestCase.java: line 91),
-               fName is initialized as null (althoug this no-arg constructor is not intended
-               to be used by mere mortals without calling setName()). Also, in the "normal" constructor (line 98),
-               fName is assigned as the parameter which might be null.
-               Therefore, fName might be null, and test.getName() might return null and then cause the violation.
+               [FALSE_POSITIVE]  => call hierachy
              */
             return m.getDeclaredAnnotations();
         } catch (SecurityException e) {

@@ -210,7 +210,7 @@ public abstract class ParentRunner<T> extends Runner implements Filterable,
      *
      * @return {@code Statement}
      */
-    @Nullable
+    @NotNull  // changed
     protected Statement classBlock(final RunNotifier notifier) {
         @Nullable Statement statement = childrenInvoker(notifier);
         if (!areAllChildrenIgnored()) {
@@ -218,9 +218,10 @@ public abstract class ParentRunner<T> extends Runner implements Filterable,
             statement = withAfterClasses(statement);
             statement = withClassRules(statement);
             /*
-              ? This is a false positive because every assignment to statement (line 215, 217, and 218)
-              guarantees statement to be NotNull. (Although line 215 says statement is Nullable, by checking
-              childrenInvoker()'s implementation, we know that its return type is always NotNull.)
+               [FALSE_POSITIVE]
+               This is a false positive because every assignment to statement (line 215, 217, and 218)
+               guarantees statement to be NotNull. (Although line 215 says statement is Nullable, by checking
+               childrenInvoker()'s implementation, we know that it always returns a Statement instance.)
              */
         }
         return statement;
@@ -229,11 +230,12 @@ public abstract class ParentRunner<T> extends Runner implements Filterable,
     private boolean areAllChildrenIgnored() {
         for (T child : getFilteredChildren()) {
             /*
-              This is a false positive because getFilteredChildren() will never return null.
-              Look at its implementation (line 522): it checks if filteredChildren is null.
-              If filteredChildren is, then "filteredChildren = Collections.unmodifiableCollection(getChildren());"
-              will let filteredChildren be assigned to a NotNull instance. Later, it returns filteredChildren
-              which now is guaranteed to be a NotNull variable.
+               [FALSE_POSITIVE]
+               This is a false positive because getFilteredChildren() will never return null.
+               Look at its implementation (line 522): it checks if filteredChildren is null.
+               If filteredChildren is, then "filteredChildren = Collections.unmodifiableCollection(getChildren());"
+               will let filteredChildren be assigned to a NotNull instance. Later, it returns filteredChildren
+               which now is guaranteed to be a NotNull variable.
              */
             if (!isIgnored(child)) {
                 return false;
@@ -329,11 +331,12 @@ public abstract class ParentRunner<T> extends Runner implements Filterable,
         try {
             for (final T each : getFilteredChildren()) {
                 /*
-                  This is a false positive because getFilteredChildren() will never return null.
-                  Look at its implementation (line 522): it checks if filteredChildren is null.
-                  If filteredChildren is, then "filteredChildren = Collections.unmodifiableCollection(getChildren());"
-                  will let filteredChildren be assigned to a NotNull instance. Later, it returns filteredChildren
-                  which now is guaranteed to be a NotNull variable.
+                   [FALSE_POSITIVE]
+                   This is a false positive because getFilteredChildren() will never return null.
+                   Look at its implementation (line 522): it checks if filteredChildren is null.
+                   If filteredChildren is, then "filteredChildren = Collections.unmodifiableCollection(getChildren());"
+                   will let filteredChildren be assigned to a NotNull instance. Later, it returns filteredChildren
+                   which now is guaranteed to be a NotNull variable.
                  */
                 currentScheduler.schedule(new Runnable() {
                     public void run() {
@@ -408,11 +411,12 @@ public abstract class ParentRunner<T> extends Runner implements Filterable,
 
         for (T child : getFilteredChildren()) {
             /*
-              This is a false positive because getFilteredChildren() will never return null.
-              Look at its implementation (line 522): it checks if filteredChildren is null.
-              If filteredChildren is, then "filteredChildren = Collections.unmodifiableCollection(getChildren());"
-              will let filteredChildren be assigned to a NotNull instance. Later, it returns filteredChildren
-              which now is guaranteed to be a NotNull variable.
+               [FALSE_POSITIVE]
+               This is a false positive because getFilteredChildren() will never return null.
+               Look at its implementation (line 522): it checks if filteredChildren is null.
+               If filteredChildren is, then "filteredChildren = Collections.unmodifiableCollection(getChildren());"
+               will let filteredChildren be assigned to a NotNull instance. Later, it returns filteredChildren
+               which now is guaranteed to be a NotNull variable.
              */
             description.addChild(describeChild(child));
         }
@@ -425,12 +429,8 @@ public abstract class ParentRunner<T> extends Runner implements Filterable,
                 getDescription());
         testNotifier.fireTestSuiteStarted();
         try {
-            @Nullable Statement statement = classBlock(notifier);
+            @NotNull Statement statement = classBlock(notifier);  // changed
             statement.evaluate();
-            /*
-              This is a false positive because by looking at the implementation of classBlock() (line 214),
-              we know that its return type is always NotNull.
-             */
         } catch (AssumptionViolatedException e) {
             testNotifier.addFailedAssumption(e);
         } catch (StoppedByUserException e) {
@@ -451,11 +451,12 @@ public abstract class ParentRunner<T> extends Runner implements Filterable,
         try {
             @NotNull List<T> children = new ArrayList<T>(getFilteredChildren());
             /*
-              This is a false positive because getFilteredChildren() will never be null.
-              Look at its implementation (line 522): it checks if filteredChildren is null.
-              If filteredChildren is, then "filteredChildren = Collections.unmodifiableCollection(getChildren());"
-              will let filteredChildren be assigned to a NotNull instance. Later, it returns filteredChildren
-              which now is guaranteed to be a NotNull variable.
+               [FALSE_POSITIVE]
+               This is a false positive because getFilteredChildren() will never be null.
+               Look at its implementation (line 522): it checks if filteredChildren is null.
+               If filteredChildren is, then "filteredChildren = Collections.unmodifiableCollection(getChildren());"
+               will let filteredChildren be assigned to a NotNull instance. Later, it returns filteredChildren
+               which now is guaranteed to be a NotNull variable.
              */
             for (@NotNull Iterator<T> iter = children.iterator(); iter.hasNext(); ) {
                 T each = iter.next();
@@ -472,8 +473,10 @@ public abstract class ParentRunner<T> extends Runner implements Filterable,
             filteredChildren = Collections.unmodifiableCollection(children);
             if (filteredChildren.isEmpty()) {
                 /*
-                  This is a false positive because filteredChildren won't be null
-                  Becuase unmodifiableCollection() (line 472) will always return an instance (thus not return null).
+                   [FALSE_POSITIVE]
+                   This is a false positive because filteredChildren won't be null
+                   Becuase Collections.unmodifiableCollection() (line 468) will always return an instance
+                   (thus not return null).
                  */
                 throw new NoTestsRemainException();
             }
@@ -487,8 +490,12 @@ public abstract class ParentRunner<T> extends Runner implements Filterable,
         try {
             for (T each : getFilteredChildren()) {
                 /*
-                  This is a false positive because getFilteredChildren() will never return null.
-                  Look at its implementation  (line 522)
+                   [FALSE_POSITIVE]
+                   This is a false positive because getFilteredChildren() will never return null.
+                   Look at its implementation (line 522): it checks if filteredChildren is null.
+                   If filteredChildren is, then "filteredChildren = Collections.unmodifiableCollection(getChildren());"
+                   will let filteredChildren be assigned to a NotNull instance. Later, it returns filteredChildren
+                   which now is guaranteed to be a NotNull variable.
                  */
                 sorter.apply(each);
             }
@@ -508,13 +515,16 @@ public abstract class ParentRunner<T> extends Runner implements Filterable,
         @NotNull List<Throwable> errors = new ArrayList<Throwable>();
         collectInitializationErrors(errors);
         if (!errors.isEmpty()) {
+            // [FALSE_POSITIVE]
+            // Dereference of testClass cannot raise a NullPointerException here
+            // since testClass is initialized non-null before validate()
+            // is called in the constructor.
+            //
+            // And then, dereference of testClass.getJavaClass() is safe here because
+            // new ParentRunner(null) {...} will never enter this if-branch,
+            // because it will not cause error in collectInitializationErrors(errors),
+            // which never de-reference testClass.getJavaClass() directly or indirectly
             throw new InvalidTestClassError(testClass.getJavaClass(), errors);
-            /*
-              This is a true positive because getJavaClass() might return null.
-              By looking at the implementation of getJavaClass()
-              (src/main/java/org/junit/runners/model/TestClass.java), we know that "clazz"
-              may be null because it can be initialized as null in the constructor.
-            */
         }
     }
 

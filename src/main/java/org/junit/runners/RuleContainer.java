@@ -71,13 +71,13 @@ class RuleContainer {
     /**
      * Applies all the rules ordered accordingly to the specified {@code statement}.
      */
-    @Nullable
+    @NotNull  // changed
     public Statement apply(FrameworkMethod method, Description description, Object target,
                            Statement statement) {
         if (methodRules.isEmpty() && testRules.isEmpty()) {
             return statement;
         }
-        @Nullable Statement result = statement;
+        @NotNull Statement result = statement;  // changed
         for (@NotNull RuleEntry ruleEntry : getSortedEntries()) {
             if (ruleEntry.type == RuleEntry.TYPE_TEST_RULE) {
                 result = ((TestRule) ruleEntry.rule).apply(result, description);

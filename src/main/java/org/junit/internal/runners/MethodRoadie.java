@@ -111,9 +111,14 @@ public class MethodRoadie {
             if (testMethod.expectsException()) {
                 addFailure(new AssertionError("Expected exception: " + testMethod.getExpectedException().getName()));
                 /*
-                  This is a true positive. By looking at the implementation of testMethod.getExpectedException(), we get
-                  to know that it might return null (src/main/java/org/junit/internal/runners/Testmethod.java: line 48).
-                  So there exists a potential NullPointerException.
+                   [FALSE_POSITIVE]
+                   This is a false positve. Let's look at the condition of the above if-branch (line 111):
+                   testMethod.expectsException(). By looking at its implementation
+                   (src/main/java/org/junit/internal/runners/TestMethod.java: line 61), we know that it returns false
+                   if getExpectedException() (TestMethod.java: line 45) returns null.
+                   If the error we (line 112) get is as it says, it means testMethod.getExpectedException() returns null.
+                   But in this case, testMethod.expectsException() will always be false, meaning that we will never reach
+                   the error (line 112). So this is a false positive.
                  */
             }
         } catch (InvocationTargetException e) {
@@ -126,9 +131,14 @@ public class MethodRoadie {
                 @NotNull String message = "Unexpected exception, expected<" + testMethod.getExpectedException().getName() + "> but was<"
                         + actual.getClass().getName() + ">";
                 /*
-                  This is a true positive. By looking at the implementation of testMethod.getExpectedException(), we get
-                  to know that it might return null (src/main/java/org/junit/internal/runners/Testmethod.java: line 48).
-                  So there exists a potential NullPointerException.
+                   [FALSE_POSITIVE]
+                   This is a false positve. Let's look at the condition of the above else-if-branch (line 127):
+                   !testMethod.expectsException(). By looking at its implementation
+                   (src/main/java/org/junit/internal/runners/TestMethod.java: line 61), we know that it returns false
+                   if getExpectedException() (TestMethod.java: line 45) returns null.
+                   If the error we get (line 130) is as it says, it means testMethod.getExpectedException() returns null.
+                   But in this case, !testMethod.expectsException() will always be true, meaning that we will enter the
+                   else-if-branch and never reach this error (ine 130).
                  */
                 addFailure(new Exception(message, actual));
             }

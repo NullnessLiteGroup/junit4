@@ -39,14 +39,15 @@ public class FrameworkField extends FrameworkMember<FrameworkField> {
     public String getName() {
         return getField().getName();
         /*
-          This is a false positive. By looking at the implementation of
-          getField() (line 101),
-          we get to know that it returns the field called "field" which might be null.
-          However, the constructor (line 21) checks its parameter: if the passing
-          parameter is null, it throws an exception; otherwise, it assigns the parameter
-          to the field "field". This means without an exception, field won't
-          be null. And therefore, getField() won't return null and getField().getName()
-          won't cause a NullPointerException.
+           [FALSE_POSITIVE]
+           This is a false positive. By looking at the implementation of
+           getField() (line 101),
+           we get to know that it returns the field called "field" which might be null.
+           However, the constructor (line 21) checks its parameter: if the passing
+           parameter is null, it throws an exception; otherwise, it assigns the parameter
+           to the field "field". This means without an exception, field won't
+           be null. And therefore, getField() won't return null and getField().getName()
+           won't cause a NullPointerException.
          */
     }
 
@@ -54,21 +55,23 @@ public class FrameworkField extends FrameworkMember<FrameworkField> {
         return field.getAnnotations();
     }
     /*
-      This is a false positive. By looking at the constructor (line 21),
-      we get to know that it first checks its parameter: if the passing
-      parameter is null, it throws an exception; otherwise, it assigns the parameter
-      to the field "field". This means without an exception, field will never
-      be null. And therefore, field.getAnnotations() won't cause a NullPointerException.
+       [FALSE_POSITIVE]
+       This is a false positive. By looking at the constructor (line 21),
+       we get to know that it first checks its parameter: if the passing
+       parameter is null, it throws an exception; otherwise, it assigns the parameter
+       to the field "field". This means without an exception, field will never
+       be null. And therefore, field.getAnnotations() won't cause a NullPointerException.
      */
 
     public <T extends Annotation> T getAnnotation(@NotNull Class<T> annotationType) {
         return field.getAnnotation(annotationType);
         /*
-          This is a false positive. By looking at the constructor (line 21),
-          we get to know that it first checks its parameter: if the passing
-          parameter is null, it throws an exception; otherwise, it assigns the parameter
-          to the field "field". This means without an exception, field will never
-          be null. And therefore, field.getAnnotations() won't cause a NullPointerException.
+           [FALSE_POSITIVE]
+           This is a false positive. By looking at the constructor (line 21),
+           we get to know that it first checks its parameter: if the passing
+           parameter is null, it throws an exception; otherwise, it assigns the parameter
+           to the field "field". This means without an exception, field will never
+           be null. And therefore, field.getAnnotations() won't cause a NullPointerException.
          */
     }
 
@@ -87,11 +90,12 @@ public class FrameworkField extends FrameworkMember<FrameworkField> {
         return field.getModifiers();
     }
     /*
-      This is a false positive. By looking at the constructor (line 21),
-      we get to know that it first checks its parameter: if the passing
-      parameter is null, it throws an exception; otherwise, it assigns the parameter
-      to the field "field". This means without an exception, field will never
-      be null. And therefore, field.getModifiers() won't cause a NullPointerException.
+       [FALSE_POSITIVE]
+       This is a false positive. By looking at the constructor (line 21),
+       we get to know that it first checks its parameter: if the passing
+       parameter is null, it throws an exception; otherwise, it assigns the parameter
+       to the field "field". This means without an exception, field will never
+       be null. And therefore, field.getModifiers() won't cause a NullPointerException.
      */
 
     /**
@@ -111,11 +115,12 @@ public class FrameworkField extends FrameworkMember<FrameworkField> {
         return field.getType();
     }
     /*
-      This is a false positive. By looking at the constructor (line 21),
-      we get to know that it first checks its parameter: if the passing
-      parameter is null, it throws an exception; otherwise, it assigns the parameter
-      to the field "field". This means without an exception, field will never
-      be null. And therefore, field.getType() won't cause a NullPointerException.
+       [FALSE_POSITIVE]
+       This is a false positive. By looking at the constructor (line 21),
+       we get to know that it first checks its parameter: if the passing
+       parameter is null, it throws an exception; otherwise, it assigns the parameter
+       to the field "field". This means without an exception, field will never
+       be null. And therefore, field.getType() won't cause a NullPointerException.
      */
     
     @Override
@@ -123,11 +128,12 @@ public class FrameworkField extends FrameworkMember<FrameworkField> {
         return field.getDeclaringClass();
     }
     /*
-      This is a false positive. By looking at the constructor (line 21),
-      we get to know that it first checks its parameter: if the passing
-      parameter is null, it throws an exception; otherwise, it assigns the parameter
-      to the field "field". This means without an exception, field will never
-      be null. And therefore, field.getDeclaringClass() won't cause a NullPointerException.
+       [FALSE_POSITIVE]
+       This is a false positive. By looking at the constructor (line 21),
+       we get to know that it first checks its parameter: if the passing
+       parameter is null, it throws an exception; otherwise, it assigns the parameter
+       to the field "field". This means without an exception, field will never
+       be null. And therefore, field.getDeclaringClass() won't cause a NullPointerException.
      */
 
     /**
@@ -136,11 +142,12 @@ public class FrameworkField extends FrameworkMember<FrameworkField> {
     public Object get(Object target) throws IllegalArgumentException, IllegalAccessException {
         return field.get(target);
         /*
-          This is a false positive. By looking at the constructor (line 21),
-          we get to know that it first checks its parameter: if the passing
-          parameter is null, it throws an exception; otherwise, it assigns the parameter
-          to the field "field". This means without an exception, field will never
-          be null. And therefore, field.get() won't cause a NullPointerException.
+           [FALSE_POSITIVE]
+           This is a false positive. By looking at the constructor (line 21),
+           we get to know that it first checks its parameter: if the passing
+           parameter is null, it throws an exception; otherwise, it assigns the parameter
+           to the field "field". This means without an exception, field will never
+           be null. And therefore, field.get() won't cause a NullPointerException.
          */
     }
 
@@ -150,10 +157,11 @@ public class FrameworkField extends FrameworkMember<FrameworkField> {
         return field.toString();
     }
     /*
-      This is a false positive. By looking at the constructor (line 21),
-      we get to know that it first checks its parameter: if the passing
-      parameter is null, it throws an exception; otherwise, it assigns the parameter
-      to the field "field". This means without an exception, field will never
-      be null. And therefore, field.toString() won't cause a NullPointerException.
+       [FALSE_POSITIVE]
+       This is a false positive. By looking at the constructor (line 21),
+       we get to know that it first checks its parameter: if the passing
+       parameter is null, it throws an exception; otherwise, it assigns the parameter
+       to the field "field". This means without an exception, field will never
+       be null. And therefore, field.toString() won't cause a NullPointerException.
      */
 }

@@ -301,19 +301,15 @@ public class Parameterized extends Suite {
         validatePublicStaticVoidMethods(Parameterized.AfterParam.class, parameterCount, errors);
         if (!errors.isEmpty()) {
             throw new InvalidTestClassError(getTestClass().getJavaClass(), errors);
-            /*
-              This is a true positive. By looking at the implementation of getJavaClass(), we know that
-              its return type is Nullable (and we've checked through TestClass.java where getJavaClass() is
-              implemented in order to ensure that getJavaClass() might return null).
-              And this contradicts the implementation of InvalidTestClassError()
-              (src/main/java/org/junit/runners/model/InvalidTestClassError.java)
-              which requires its first parameter to be NotNull.
-
-              However, we cannot change that annotation to Nullable in order to eliminate this error,
-              because if we change it to Nullable, createMessage() (InvalidTestClassError.java: line 22)
-              will then call testClass.getName() (InvalidTestClassError.java: line 27),
-              which will cause a NullPointerException.
-             */
+             /*
+               [FALSE_POSITIVE]
+               getTestClass().getJavaClass() cannot be null at this point
+               because in the validate() process, the NullPointerException caused by
+               getTestClass().getJavaClass() is already caught in
+               validateNoNonStaticInnerClass(errors) which calls
+               getTestClass().isANonStaticInnerClass(), where the
+               getTestClass().getJavaClass() is dereferenced
+            */
         }
     }
 
@@ -326,14 +322,15 @@ public class Parameterized extends Suite {
             if (parameterCount != null) {
                 int methodParameterCount = fm.getMethod().getParameterTypes().length;
                 /*
-                  This is a false positive.
-                  By looking at src/main/java/org/junit/runners/model/FrameworkMethod.java (where getMethod() is implemented),
-                  we get to know that although the return type of fm.getMethod() is annotated Nullable,
-                  actually it will never return null
-                  (because the constructor of FrameworkMethod checks for nullity of its parameter
-                  and will throw an exception if the parameter is actually null; otherwise, it initializes its field "method"
-                  using the parameter).
-                  Since fm.getMethod() won't return null, this error is a false positive.
+                   [FALSE_POSITIVE]
+                   This is a false positive.
+                   By looking at src/main/java/org/junit/runners/model/FrameworkMethod.java (where getMethod() is implemented),
+                   we get to know that although the return type of fm.getMethod() is annotated Nullable,
+                   actually it will never return null
+                   (because the constructor of FrameworkMethod checks for nullity of its parameter
+                   and will throw an exception if the parameter is actually null; otherwise, it initializes its field "method"
+                   using the parameter).
+                   Since fm.getMethod() won't return null, this error is a false positive.
                  */
                 if (methodParameterCount != 0 && methodParameterCount != parameterCount) {
                     errors.add(new Exception("Method " + fm.getName()
@@ -353,17 +350,6 @@ public class Parameterized extends Suite {
             this.description = Description
                     .createTestDescription(testClass.getJavaClass(),
                             methodName + "() assumption violation");
-            /*
-              This is a true positive. By looking at the implementation of getJavaClass(), we know that
-              its return type is Nullable (see src/main/java/org/junit/runners/model/TestClass.java).
-              And this contradicts the implementation of createTestDescription()
-              (src/main/java/org/junit/runner/Description.java: line 101)
-              which requires its first parameter to be NotNull.
-
-              However, we cannot change that annotation to Nullable in order to eliminate this error,
-              because if we change it to Nullable, calling clazz.getName() (Description.java: line 102)
-              will cause a NullPointerException.
-             */
             this.exception = exception;
         }
 
@@ -415,11 +401,9 @@ public class Parameterized extends Suite {
                 return Collections.singletonList(runnerOverride);
             }
             Parameters parameters = parametersMethod.getAnnotation(Parameters.class);
-            /*
-              ? Calling getAnnotation() will always get an exception. And thus IntelliJ reports
-              calling parameters.name() may throw a NullPointerException.
-              This is not related to our evaluation. So ignore it.
-             */
+            // [FALSE_POSITIVE]
+            // parameters cannot be null here because parametersMethod
+            // is initialized to be an instance of FrameworkMethod with annotations
             return Collections.unmodifiableList(createRunnersForParameters(
                     allParameters, parameters.name(),
                     getParametersRunnerFactory()));

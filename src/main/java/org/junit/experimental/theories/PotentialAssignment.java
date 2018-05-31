@@ -33,10 +33,8 @@ public abstract class PotentialAssignment {
             public String getDescription() {
                 String valueString;
 
-                if (value == null) {
-                    /*
-                      This is not related to NullPointerException. So ignore it.
-                     */
+                //noinspection ConstantConditions
+                if (value == null) {  // This is not related to NullPointerException. So ignore it.
                     valueString = "null";
                 } else {
                     try {

@@ -101,11 +101,6 @@ public class BlockJUnit4ClassRunner extends ParentRunner<FrameworkMethod> {
                 @Override
                 public void evaluate() throws Throwable {
                     methodBlock(method).evaluate();
-                    /*
-                       This is a true positive. By looking at the implementation of methodBlock(),
-                       we get to know that it may return null. Specifically, withRules() (line 349)
-                       may return null.
-                     */
                 }
             };
             runLeaf(statement, description, notifier);
@@ -127,11 +122,14 @@ public class BlockJUnit4ClassRunner extends ParentRunner<FrameworkMethod> {
 
         if (description == null) {
             /*
-               This is a true positive. Although getTestClass() will never return null,
-               getJavaClass() might. By looking at the implementation of getJavaClass()
-               (src/main/java/org/junit/runners/model/TestClass.java), we know that "clazz"
-               may be null because it can be initialized as null in the constructor (TestClass.java: line 50).
-             */
+               [FALSE_POSITIVE]
+               getTestClass().getJavaClass() cannot be null at this point
+               because in the validate() process, the NullPointerException caused by
+               getTestClass().getJavaClass() is already caught in
+               validateNoNonStaticInnerClass(errors) which calls
+               getTestClass().isANonStaticInnerClass(), where the
+               getTestClass().getJavaClass() is dereferenced
+            */
             description = Description.createTestDescription(getTestClass().getJavaClass(),
                     testName(method), method.getAnnotations());
             methodDescriptions.putIfAbsent(method, description);
@@ -218,13 +216,17 @@ public class BlockJUnit4ClassRunner extends ParentRunner<FrameworkMethod> {
         }
     }
 
+
     private boolean hasOneConstructor() {
         /*
-          This is a true positive because getJavaClass() might return null.
-          By looking at the implementation of getJavaClass()
-          (src/main/java/org/junit/runners/model/TestClass.java), we know that "clazz"
-          may be null because it can be initialized as null in the constructor (TestClass.java: line 50).
-         */
+           [FALSE_POSITIVE]
+           getTestClass().getJavaClass() cannot be null at this point
+           because in the validate() process, the NullPointerException caused by
+           getTestClass().getJavaClass() is already caught in
+           validateNoNonStaticInnerClass(errors) which calls
+           getTestClass().isANonStaticInnerClass(), where the
+           getTestClass().getJavaClass() is dereferenced
+        */
         return getTestClass().getJavaClass().getConstructors().length == 1;
     }
 
@@ -320,7 +322,7 @@ public class BlockJUnit4ClassRunner extends ParentRunner<FrameworkMethod> {
      * This can be overridden in subclasses, either by overriding this method,
      * or the implementations creating each sub-statement.
      */
-    @Nullable
+    @NotNull  // changed
     protected Statement methodBlock(@NotNull final FrameworkMethod method) {
         Object test;
         try {
@@ -334,19 +336,13 @@ public class BlockJUnit4ClassRunner extends ParentRunner<FrameworkMethod> {
             return new Fail(e);
         }
 
-        @Nullable Statement statement = methodInvoker(method, test);
-        /*
-          This is a false positive.
-          By checking the implementation of methodInvoker()
-          (src/main/java/org/junit/experimental/theories/Theories.java),
-          we get to know that it always returns a NotNull object.
-          So, statement can never be null.
-         */
-        statement = possiblyExpectingExceptions(method, test, statement);
-        statement = withPotentialTimeout(method, test, statement);
-        statement = withBefores(method, test, statement);
-        statement = withAfters(method, test, statement);
-        statement = withRules(method, test, statement);
+        @NotNull Statement statement = methodInvoker(method, test);  // never null  // changed
+
+        statement = possiblyExpectingExceptions(method, test, statement);  // never null; either an instance of ExpectException or statement
+        statement = withPotentialTimeout(method, test, statement);  // never null; return statement or an instance of FailOnTimeout
+        statement = withBefores(method, test, statement);  // never null; return either statement or an instance of RunBefores
+        statement = withAfters(method, test, statement);  // never null; return either statement or an instance of RunAfters
+        statement = withRules(method, test, statement);  // never null
         return statement;
     }
 
@@ -423,7 +419,7 @@ public class BlockJUnit4ClassRunner extends ParentRunner<FrameworkMethod> {
                 target);
     }
 
-    @Nullable
+    @NotNull  // changed
     private Statement withRules(@NotNull FrameworkMethod method, Object target, Statement statement) {
         @NotNull RuleContainer ruleContainer = new RuleContainer();
         CURRENT_RULE_CONTAINER.set(ruleContainer);

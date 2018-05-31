@@ -216,8 +216,9 @@ public class TestClass implements Annotatable {
     public Constructor<?> getOnlyConstructor() {
         Constructor<?>[] constructors = clazz.getConstructors();
         /*
-          This is a true positive. "clazz" might be null (we know it from both its annotation (line 38) and
-          its initialization (line 51~52)), and thus class.getConstructors() might raise NullPointerException.
+           [TRUE_POSITIVE]
+           This is a true positive. "clazz" might be null (we know it from both its annotation (line 38) and
+           its initialization (line 51~52)), and thus class.getConstructors() might raise NullPointerException.
          */
         Assert.assertEquals(1, constructors.length);
         return constructors[0];
@@ -322,16 +323,18 @@ public class TestClass implements Annotatable {
     public boolean isPublic() {
         return Modifier.isPublic(clazz.getModifiers());
         /*
-          This is a true positive. "clazz" might be null (we know it from both its annotation (line 38) and
-          its initialization (line 51~52)), and thus class.getConstructors() might raise NullPointerException.
+           [TRUE_POSITIVE]
+           This is a true positive. "clazz" might be null (we know it from both its annotation (line 38) and
+           its initialization (line 51~52)), and thus class.getConstructors() might raise NullPointerException.
          */
     }
 
     public boolean isANonStaticInnerClass() {
         return clazz.isMemberClass() && !isStatic(clazz.getModifiers());
         /*
-          This is a true positive. "clazz" might be null (we know it from both its annotation (line 38) and
-          its initialization (line 51~52)), and thus class.getConstructors() might raise NullPointerException.
+           [TRUE_POSITIVE]
+           This is a true positive. "clazz" might be null (we know it from both its annotation (line 38) and
+           its initialization (line 51~52)), and thus class.getConstructors() might raise NullPointerException.
          */
     }
 
@@ -372,6 +375,8 @@ public class TestClass implements Annotatable {
         public int compare(@NotNull FrameworkMethod left, @NotNull FrameworkMethod right) {
             return NAME_ASCENDING.compare(left.getMethod(), right.getMethod());
             /*
+                [FALSE_POSITIVE]
+                [FALSE_POSITIVE]
                 These two are false positives. By looking at the implementation of
                 getMethod() (src/main/java/org/junit/runners/model/FrameworkMethod.java),
                 we get to know that it returns the field called "method" which might be null.

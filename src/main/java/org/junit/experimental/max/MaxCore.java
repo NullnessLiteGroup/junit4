@@ -130,33 +130,35 @@ public class MaxCore {
     private Runner buildRunner(Description each) {
         if (each.toString().equals("TestSuite with 0 tests")) {
             /*
-              This is a false positive. By looking at the implementation of toString()
-              (src/main/java/org/junit/runner/Description.java: line 271),
-              we know that it calls getDisplayName() (Description.java: line 189) which returns the
-              field "fDisplayName".
-              fDisplayName is first declared Nullable. But fDisplayName is never null:
-              by looking at the constructor (Description.java: line 170),
-              we can see that the constructor checks the passing parameters: if the parameter "displayName" is null,
-              it throws an exception; otherwise, it assigns displayName to fDisplayName. So without an exception,
-              fDisplayName won't be null, which means calling getDisplayName() won't get null and thus calling
-              toString() won't get null.
-              Therefore, each.toString().equals() won't cause a NullPointerException.
+               [FALSE_POSITIVE]
+               This is a false positive. By looking at the implementation of toString()
+               (src/main/java/org/junit/runner/Description.java: line 271),
+               we know that it calls getDisplayName() (Description.java: line 189) which returns the
+               field "fDisplayName".
+               fDisplayName is first declared Nullable, but it is never null:
+               by looking at the constructor (Description.java: line 170),
+               we can see that the constructor checks the passing parameters: if the parameter "displayName" is null,
+               it throws an exception; otherwise, it assigns displayName to fDisplayName. So without an exception,
+               fDisplayName won't be null, which means calling getDisplayName() won't get null and thus calling
+               toString() won't get null.
+               Therefore, each.toString().equals() won't cause a NullPointerException.
              */
             return Suite.emptySuite();
         }
         if (each.toString().startsWith(MALFORMED_JUNIT_3_TEST_CLASS_PREFIX)) {
             /*
-              This is a false positive. By looking at the implementation of toString()
-              (src/main/java/org/junit/runner/Description.java: line 271),
-              we know that it calls getDisplayName() (Description.java: line 189) which returns the
-              field "fDisplayName".
-              fDisplayName is first declared Nullable. But fDisplayName is never null:
-              by looking at the constructor (Description.java: line 170),
-              we can see that the constructor checks the passing parameters: if the parameter "displayName" is null,
-              it throws an exception; otherwise, it assigns displayName to fDisplayName. So without an exception,
-              fDisplayName won't be null, which means calling getDisplayName() won't get null and thus calling
-              toString() won't get null.
-              Therefore, each.toString().startsWith() won't cause a NullPointerException.
+               [FALSE_POSITIVE]
+               This is a false positive. By looking at the implementation of toString()
+               (src/main/java/org/junit/runner/Description.java: line 271),
+               we know that it calls getDisplayName() (Description.java: line 189) which returns the
+               field "fDisplayName".
+               fDisplayName is first declared Nullable. But fDisplayName is never null:
+               by looking at the constructor (Description.java: line 170),
+               we can see that the constructor checks the passing parameters: if the parameter "displayName" is null,
+               it throws an exception; otherwise, it assigns displayName to fDisplayName. So without an exception,
+               fDisplayName won't be null, which means calling getDisplayName() won't get null and thus calling
+               toString() won't get null.
+               Therefore, each.toString().startsWith() won't cause a NullPointerException.
              */
 
             // This is cheating, because it runs the whole class
@@ -164,11 +166,11 @@ public class MaxCore {
             // because JUnit 3.8's
             // thrown away which method the warning is for.
             return new JUnit38ClassRunner(new TestSuite(getMalformedTestClass(each)));
-            /*
-               This is a true positive because getMalformedTestClass(each) might return null, which violates the
-               contract that TestSuite() requires a NotNull parameter.
-               (If getMalformedTestClass(each) catches a ClassNotFoundException, it will return null. (line 201))
-             */
+            // [FALSE_POSITIVE]
+            // cheating methods for JUnit4 test purpose only
+            // because its caller buildRunner(Description each) only calls
+            // this method when each is ensured to have MALFORMED_JUNIT_3_TEST_CLASS_PREFIX
+            // which is not exposed to users
         }
         @Nullable Class<?> type = each.getTestClass();
         if (type == null) {
@@ -185,17 +187,18 @@ public class MaxCore {
         try {
             return Class.forName(each.toString().replace(MALFORMED_JUNIT_3_TEST_CLASS_PREFIX, ""));
             /*
-              This is a false positive. By looking at the implementation of toString()
-              (src/main/java/org/junit/runner/Description.java: line 271),
-              we know that it calls getDisplayName() (Description.java: line 189) which returns the
-              field "fDisplayName".
-              fDisplayName is first declared Nullable. But fDisplayName is never null:
-              by looking at the constructor (Description.java: line 170),
-              we can see that the constructor checks the passing parameters: if the parameter "displayName" is null,
-              it throws an exception; otherwise, it assigns displayName to fDisplayName. So without an exception,
-              fDisplayName won't be null, which means calling getDisplayName() won't get null and thus calling
-              toString() won't get null.
-              Therefore, each.toString().replace() won't cause a NullPointerException.
+               [FALSE_POSITIVE]
+               This is a false positive. By looking at the implementation of toString()
+               (src/main/java/org/junit/runner/Description.java: line 271),
+               we know that it calls getDisplayName() (Description.java: line 189) which returns the
+               field "fDisplayName".
+               fDisplayName is first declared Nullable. But fDisplayName is never null:
+               by looking at the constructor (Description.java: line 170),
+               we can see that the constructor checks the passing parameters: if the parameter "displayName" is null,
+               it throws an exception; otherwise, it assigns displayName to fDisplayName. So without an exception,
+               fDisplayName won't be null, which means calling getDisplayName() won't get null and thus calling
+               toString() won't get null.
+               Therefore, each.toString().replace() won't cause a NullPointerException.
              */
         } catch (ClassNotFoundException e) {
             return null;
@@ -223,17 +226,18 @@ public class MaxCore {
         if (description.getChildren().isEmpty()) {
             if (description.toString().equals("warning(junit.framework.TestSuite$1)")) {
                 /*
-                  This is a false positive. By looking at the implementation of toString()
-                  (src/main/java/org/junit/runner/Description.java: line 271),
-                  we know that it calls getDisplayName() (Description.java: line 189) which returns the
-                  field "fDisplayName".
-                  fDisplayName is first declared Nullable. But fDisplayName is never null:
-                  by looking at the constructor (Description.java: line 170),
-                  we can see that the constructor checks the passing parameters: if the parameter "displayName" is null,
-                  it throws an exception; otherwise, it assigns displayName to fDisplayName. So without an exception,
-                  fDisplayName won't be null, which means calling getDisplayName() won't get null and thus calling
-                  toString() won't get null.
-                  Therefore, each.toString().equals() won't cause a NullPointerException.
+                   [FALSE_POSITIVE]
+                   This is a false positive. By looking at the implementation of toString()
+                   (src/main/java/org/junit/runner/Description.java: line 271),
+                   we know that it calls getDisplayName() (Description.java: line 189) which returns the
+                   field "fDisplayName".
+                   fDisplayName is first declared Nullable. But fDisplayName is never null:
+                   by looking at the constructor (Description.java: line 170),
+                   we can see that the constructor checks the passing parameters: if the parameter "displayName" is null,
+                   it throws an exception; otherwise, it assigns displayName to fDisplayName. So without an exception,
+                   fDisplayName won't be null, which means calling getDisplayName() won't get null and thus calling
+                   toString() won't get null.
+                   Therefore, each.toString().equals() won't cause a NullPointerException.
                  */
                 results.add(Description.createSuiteDescription(MALFORMED_JUNIT_3_TEST_CLASS_PREFIX + parent));
             } else {

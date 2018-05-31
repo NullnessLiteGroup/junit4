@@ -271,6 +271,7 @@ public class Assert {
             /*
               Ignore this error. It is not related to NullPointerException.
              */
+            //noinspection ConstantConditions
             assertNull("Expected: <null> but was: " + object.toString(), object);
         }
     }

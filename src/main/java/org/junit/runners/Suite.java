@@ -33,7 +33,8 @@ public class Suite extends ParentRunner<Runner> {
     public static Runner emptySuite() {
         try {
             return new Suite((Class<?>) null, new Class<?>[0]);
-            /*
+            /*  // false
+               [FALSE_POSITIVE]
               This is a true positive. By looking at the implementation of Suite() (line 124),
               we know that it requires its first parameter "klass" to be NotNull. If we change that annotation
               to Nullable, it will cause another (violation) error at line 101 because this constructor is calling
@@ -100,19 +101,6 @@ public class Suite extends ParentRunner<Runner> {
      */
     public Suite(RunnerBuilder builder, @NotNull Class<?>[] classes) throws InitializationError {
         this(null, builder.runners(null, classes));
-        /*
-          This is a true positive. By looking at the implementation builder.runners()
-          (src/main/java/org/junit/runners/model/RunnerBuilder.java: line 92),
-          we know that it requires the first parameter
-          to be NotNull. If we change that annotation to Nullable, when builder.runners() calls addParent()
-          (RunnerBuilder.java: line 94), there will be another violation due to the annotation. By continually
-          change the respective annotation of addParent() to Nullable, there occurs a potential NullPointerException
-          (RunnerBuilder.java: line 75), because addParent() calls parents.add() which indicates that parents variable
-          should never be null.
-          So, we cannot change any annotation to eliminate the original error.
-          And it is a true positive because if we change the annotations continuously
-          (due to the violations), we finally will meet a potential NullPointerException.
-         */
     }
 
     /**
@@ -121,7 +109,7 @@ public class Suite extends ParentRunner<Runner> {
      * @param klass the root of the suite
      * @param suiteClasses the classes in the suite
      */
-    protected Suite(@NotNull Class<?> klass, @NotNull Class<?>[] suiteClasses) throws InitializationError {
+    protected Suite(@Nullable Class<?> klass, @NotNull Class<?>[] suiteClasses) throws InitializationError {  // changed
         this(new AllDefaultPossibilitiesBuilder(), klass, suiteClasses);
     }
 
@@ -132,7 +120,7 @@ public class Suite extends ParentRunner<Runner> {
      * @param klass the root of the suite
      * @param suiteClasses the classes in the suite
      */
-    protected Suite(RunnerBuilder builder, @NotNull Class<?> klass, @NotNull Class<?>[] suiteClasses) throws InitializationError {
+    protected Suite(RunnerBuilder builder, @Nullable Class<?> klass, @NotNull Class<?>[] suiteClasses) throws InitializationError {  // changed
         this(klass, builder.runners(klass, suiteClasses));
     }
 

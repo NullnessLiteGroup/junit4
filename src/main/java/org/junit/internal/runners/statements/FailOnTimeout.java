@@ -148,13 +148,14 @@ public class FailOnTimeout extends Statement {
             if (timeout > 0) {
                 return task.get(timeout, timeUnit);
                 /*
-                  This is a false positive because timeUnit will never be null. timeUnit is initialized in the
-                  constructor (line 49): timeUnit = builder.unit (builder is the parameter of the constructor).
-                  So let's analyze builder.unit: builder is of type Builder which is defined on line 69 and
-                  the field "unit" is initialized in withTimeout() (line 84). withTimeout() first checks its parameter
-                  "unit": if "unit" is null, it throws an exception; otherwise, "this.unit = unit;". Therefore, without
-                  an exception being thrown, builder.unit will never be null and thus timeUnit won't be null. So this
-                  error is a false positive.
+                   [FALSE_POSITIVE]
+                   This is a false positive because timeUnit will never be null. timeUnit is initialized in the
+                   constructor (line 49): timeUnit = builder.unit (builder is the parameter of the constructor).
+                   So let's analyze builder.unit: builder is of type Builder  and
+                   the field "unit" is initialized in withTimeout() (line 84). withTimeout() first checks its parameter
+                   "unit": if "unit" is null, it throws an exception; otherwise, "this.unit = unit;". Therefore, without
+                   an exception being thrown, builder.unit will never be null and thus timeUnit won't be null. So this
+                   error is a false positive.
                  */
             } else {
                 return task.get();
@@ -174,15 +175,17 @@ public class FailOnTimeout extends Statement {
         StackTraceElement[] stackTrace = thread.getStackTrace();
         @Nullable final Thread stuckThread = lookForStuckThread ? getStuckThread(thread) : null;
         /*
-          This is a false positive because timeUnit will never be null. timeUnit is initialized in the
-          constructor (line 49): timeUnit = builder.unit (builder is the parameter of the constructor).
-          So let's analyze builder.unit: builder is of type Builder which is defined on line 69 and
-          the field "unit" is initialized in withTimeout() (line 84). withTimeout() first checks its parameter
-          "unit": if "unit" is null, it throws an exception; otherwise, "this.unit = unit;". Therefore, without
-          an exception being thrown, builder.unit will never be null and thus timeUnit won't be null. So this
-          error is a false positive.
+           [FALSE_POSITIVE]
+           This is a false positive because timeUnit will never be null. timeUnit is initialized in the
+           constructor (line 49): timeUnit = builder.unit (builder is the parameter of the constructor).
+           So let's analyze builder.unit: builder is of type Builder and
+           the field "unit" is initialized in withTimeout() (line 84). withTimeout() first checks its parameter
+           "unit": if "unit" is null, it throws an exception; otherwise, "this.unit = unit;". Therefore, without
+           an exception being thrown, builder.unit will never be null and thus timeUnit won't be null. So this
+           error is a false positive.
          */
         @NotNull Exception currThreadException = new TestTimedOutException(timeout, timeUnit);
+        //noinspection ConstantConditions
         if (stackTrace != null) {  // This error is not related to NullPointerException and thus we ignore it.
             currThreadException.setStackTrace(stackTrace);
             thread.interrupt();

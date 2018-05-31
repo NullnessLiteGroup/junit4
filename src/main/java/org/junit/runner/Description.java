@@ -86,6 +86,7 @@ public class Description implements Serializable {
      * @return a <code>Description</code> named <code>name</code>
      */
     public static Description createTestDescription(@NotNull Class<?> clazz, String name, Annotation... annotations) {
+
         return new Description(clazz, formatDisplayName(name, clazz.getName()), annotations);
     }
 
@@ -98,7 +99,13 @@ public class Description implements Serializable {
      * @param name the name of the test (a method name for test annotated with {@link org.junit.Test})
      * @return a <code>Description</code> named <code>name</code>
      */
-    public static Description createTestDescription(@NotNull Class<?> clazz, String name) {
+    public static Description createTestDescription(@Nullable Class<?> clazz, String name) {  // changed
+        /*
+           [TRUE_POSITIVE]
+           clazz.getName() can raise a NullPointerException
+           because JUnit4 API doesn't restrict users from calling:
+           Description.createTestDescription((Class<Object>) null, "");
+         */
         return new Description(clazz, formatDisplayName(name, clazz.getName()));
     }
 
@@ -239,12 +246,13 @@ public class Description implements Serializable {
     @Override
     public int hashCode() {
         /*
-          This is a false positive. By looking at the declaration of fUniqueId, we know
-          that it might be null. But looking at the constructor (line 170), we can see that
-          it checks the passing parameters: if the parameter "uniqueId" is null, it throws an
-          exception; otherwise, it assigns uniqueId to fUniqueId. So without an exception,
-          fUniqueId won't be null, which means calling fUniqueId.hashCode() won't cause
-          a NullPointerException here.
+           [FALSE_POSITIVE]
+           This is a false positive. By looking at the declaration of fUniqueId, we know
+           that it might be null. But looking at the constructor (line 177), we can see that
+           it checks the passing parameters: if the parameter "uniqueId" is null, it throws an
+           exception; otherwise, it assigns uniqueId to fUniqueId. So without an exception,
+           fUniqueId won't be null, which means calling fUniqueId.hashCode() won't cause
+           a NullPointerException here.
          */
         return fUniqueId.hashCode();
     }
@@ -256,12 +264,13 @@ public class Description implements Serializable {
         }
         @NotNull Description d = (Description) obj;
         /*
-          This is a false positive. By looking at the declaration of fUniqueId, we know
-          that it might be null. But looking at the constructor (line 170), we can see that
-          it checks the passing parameters: if the parameter "uniqueId" is null, it throws an
-          exception; otherwise, it assigns uniqueId to fUniqueId. So without an exception,
-          fUniqueId won't be null, which means calling fUniqueId.hashCode() won't cause
-          a NullPointerException here.
+           [FALSE_POSITIVE]
+           This is a false positive. By looking at the declaration of fUniqueId, we know
+           that it might be null. But looking at the constructor (line 177), we can see that
+           it checks the passing parameters: if the parameter "uniqueId" is null, it throws an
+           exception; otherwise, it assigns uniqueId to fUniqueId. So without an exception,
+           fUniqueId won't be null, which means calling fUniqueId.hashCode() won't cause
+           a NullPointerException here.
          */
         return fUniqueId.equals(d.fUniqueId);
     }
@@ -351,14 +360,15 @@ public class Description implements Serializable {
             String defaultString) {
         @NotNull Matcher matcher = METHOD_AND_CLASS_NAME_PATTERN.matcher(toString());
         /*
-          This is a false positive because toString() will never return null. Let's look
-          at the implementation of toString() (line 271): it calls getDisplayName(), and
-          getDisplayName() returns the field "fDisplayName".
-          The constructor checks its parameter "displayName": if "displayName" is null, it
-          throws an exception; otherwise, it assigns "displayName" to fDisplayName.
-          Therefore, without an exception, fDisplayName will never be null, which means getDisplayName()
-          won't return null, which then means getDisplayName() won't return null. Thus toString()
-          won't return null and this is a false positive.
+           [FALSE_POSITIVE]
+           This is a false positive because toString() will never return null. Let's look
+           at the implementation of toString() (line 280): it calls getDisplayName(), and
+           getDisplayName() returns the field "fDisplayName".
+           The constructor checks its parameter "displayName": if "displayName" is null, it
+           throws an exception; otherwise, it assigns "displayName" to fDisplayName.
+           Therefore, without an exception, fDisplayName will never be null, which means getDisplayName()
+           won't return null, which then means getDisplayName() won't return null. Thus toString()
+           won't return null and this is a false positive.
          */
         return matcher.matches() ? matcher.group(group) : defaultString;
     }

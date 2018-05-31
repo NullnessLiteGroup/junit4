@@ -95,9 +95,11 @@ public class MultipleFailureException extends Exception {
         if (errors.size() == 1) {
             throw Throwables.rethrowAsException(errors.get(0));
             /*
-              Throwables.rethrowAsException(errors.get(0)) returns null and IntelliJ treats
-              "throw Throwables.rethrowAsException(errors.get(0));" as "throwing a NullPointerException".
-              But this is not related to our evaluation. So ignore it.
+               [FALSE_POSITIVE]
+               This is a false positive. By looking at the implementation of Throwables.rethrowAsException()
+               (src/main/java/org/junit/internal/Throwables.java: line 48),
+               we know that it never arrives at line 50 (return null;). Since Throwables.rethrowAsException()
+               never returns null, we cannot meet a NullPointerException here.
              */
         }
 

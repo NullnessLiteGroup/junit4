@@ -22,10 +22,15 @@ abstract class CategoryFilterFactory implements FilterFactory {
     public Filter createFilter(@NotNull FilterFactoryParams params) throws FilterNotCreatedException {
         try {
             /*
-               This is a true positive. params.getArgs() might return null
-               because params's args might be initialized as null in the constructor.
-               This "violates the contract" that parseCategories() requires a NotNull
-               parameter.
+               [FALSE_POSITIVE]
+               This is a false positive. By looking at the implementation of params.getArgs(),
+               we know that it returns the field "args" of a FilterFactoryParams instance
+               (src/main/java/org/junit/runner/FilterFactoryParams.java).
+               However, this "args" field can never be null, because the constructor (FilterFactoryParams.java: line 11)
+               checks the parameter:
+               if the parameter "args" is null, it throws an exception; otherwise, it assigns the parameter
+               to its field, "args". Therefore, without an exception being thrown, the field "args" won't be
+               null, which means params.getArgs() will never be null.
              */
             return createFilter(parseCategories(params.getArgs()));
         } catch (ClassNotFoundException e) {

@@ -54,7 +54,12 @@ public class TestMethod {
     boolean isUnexpected(@NotNull Throwable exception) {
         return !getExpectedException().isAssignableFrom(exception.getClass());
         /*
-          This is a true positive because getExpectedException() might return null. (line 48)
+           [FALSE_POSITIVE]
+           This is a false positive.
+           getExpectedException() will not return null in this case
+           because 1). TestMethod is not exposed in the JUnit4 API
+           2). the only caller in this project MethodRoadie: runTestMethod()
+           checks the expectsException() == true before it calls this method;
          */
     }
 
