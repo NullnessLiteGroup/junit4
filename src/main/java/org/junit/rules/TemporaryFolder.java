@@ -234,7 +234,7 @@ public class TemporaryFolder extends ExternalResource {
         return createTemporaryFolderIn(getRoot());
         /*
            [FALSE_POSITIVE]
-           This is a false positve because getRoot() (line 267) will never return null.
+           This is a false positve because getRoot() (line 268) will never return null.
            It either returns a File instance or throw an IllegalStatementException.
          */
     }

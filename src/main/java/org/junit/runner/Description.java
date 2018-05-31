@@ -269,7 +269,10 @@ public class Description implements Serializable {
            that it might be null. But looking at the constructor (line 177), we can see that
            it checks the passing parameters: if the parameter "uniqueId" is null, it throws an
            exception; otherwise, it assigns uniqueId to fUniqueId. So without an exception,
-           fUniqueId won't be null, which means calling fUniqueId.hashCode() won't cause
+           fUniqueId won't be null, which means
+
+
+           calling fUniqueId.hashCode() won't cause
            a NullPointerException here.
          */
         return fUniqueId.equals(d.fUniqueId);

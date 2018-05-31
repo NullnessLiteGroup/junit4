@@ -33,24 +33,6 @@ public class Suite extends ParentRunner<Runner> {
     public static Runner emptySuite() {
         try {
             return new Suite((Class<?>) null, new Class<?>[0]);
-            /*  // false
-               [FALSE_POSITIVE]
-              This is a true positive. By looking at the implementation of Suite() (line 124),
-              we know that it requires its first parameter "klass" to be NotNull. If we change that annotation
-              to Nullable, it will cause another (violation) error at line 101 because this constructor is calling
-              another Suite constructor (line 135) which requires the respective parameter to be NotNull.
-              If we continually change that constructor's parameter annotation, there will be a violation
-              at line 125 when the method is calling builder.runners(klass, suiteClasses) because builder.runners()
-              (src/main/java/org/junit/runners/model/RunnerBuilder.java: line 92) requires its first parameter
-              to be NotNull. If we again change that annotation to Nullable, when builder.runners() calls addParent()
-              (RunnerBuilder.java: line 94), there will be another violation due to the annotation. By continually
-              change addParent()'s annotation, there finally occurs a potential NullPointerException
-              (RunnerBuilder.java: line 75), because it calls parents.add() which indicates that parents variable
-              should never be null.
-              So, we cannot change any annotation to eliminate the original error.
-              And it is a true positive because if we change the annotations continuously
-              (due to the violations), we finally will meet a potential NullPointerException.
-             */
         } catch (InitializationError e) {
             throw new RuntimeException("This shouldn't be possible");
         }

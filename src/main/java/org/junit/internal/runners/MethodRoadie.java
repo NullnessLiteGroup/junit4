@@ -114,7 +114,7 @@ public class MethodRoadie {
                    [FALSE_POSITIVE]
                    This is a false positve. Let's look at the condition of the above if-branch (line 111):
                    testMethod.expectsException(). By looking at its implementation
-                   (src/main/java/org/junit/internal/runners/TestMethod.java: line 61), we know that it returns false
+                   (src/main/java/org/junit/internal/runners/TestMethod.java: line 66), we know that it returns false
                    if getExpectedException() (TestMethod.java: line 45) returns null.
                    If the error we (line 112) get is as it says, it means testMethod.getExpectedException() returns null.
                    But in this case, testMethod.expectsException() will always be false, meaning that we will never reach
@@ -132,13 +132,13 @@ public class MethodRoadie {
                         + actual.getClass().getName() + ">";
                 /*
                    [FALSE_POSITIVE]
-                   This is a false positve. Let's look at the condition of the above else-if-branch (line 127):
+                   This is a false positve. Let's look at the condition of the above else-if-branch (line 130):
                    !testMethod.expectsException(). By looking at its implementation
-                   (src/main/java/org/junit/internal/runners/TestMethod.java: line 61), we know that it returns false
+                   (src/main/java/org/junit/internal/runners/TestMethod.java: line 66), we know that it returns false
                    if getExpectedException() (TestMethod.java: line 45) returns null.
-                   If the error we get (line 130) is as it says, it means testMethod.getExpectedException() returns null.
+                   If the error we get (line 131) is as it says, it means testMethod.getExpectedException() returns null.
                    But in this case, !testMethod.expectsException() will always be true, meaning that we will enter the
-                   else-if-branch and never reach this error (ine 130).
+                   else-if-branch and never reach this error (ine 131).
                  */
                 addFailure(new Exception(message, actual));
             }

@@ -132,11 +132,11 @@ public class MaxCore {
             /*
                [FALSE_POSITIVE]
                This is a false positive. By looking at the implementation of toString()
-               (src/main/java/org/junit/runner/Description.java: line 271),
-               we know that it calls getDisplayName() (Description.java: line 189) which returns the
+               (src/main/java/org/junit/runner/Description.java: line 280),
+               we know that it calls getDisplayName() (Description.java: line 196) which returns the
                field "fDisplayName".
                fDisplayName is first declared Nullable, but it is never null:
-               by looking at the constructor (Description.java: line 170),
+               by looking at the constructor (Description.java: line 177),
                we can see that the constructor checks the passing parameters: if the parameter "displayName" is null,
                it throws an exception; otherwise, it assigns displayName to fDisplayName. So without an exception,
                fDisplayName won't be null, which means calling getDisplayName() won't get null and thus calling
@@ -149,11 +149,11 @@ public class MaxCore {
             /*
                [FALSE_POSITIVE]
                This is a false positive. By looking at the implementation of toString()
-               (src/main/java/org/junit/runner/Description.java: line 271),
-               we know that it calls getDisplayName() (Description.java: line 189) which returns the
+               (src/main/java/org/junit/runner/Description.java: line 280),
+               we know that it calls getDisplayName() (Description.java: line 196) which returns the
                field "fDisplayName".
                fDisplayName is first declared Nullable. But fDisplayName is never null:
-               by looking at the constructor (Description.java: line 170),
+               by looking at the constructor (Description.java: line 177),
                we can see that the constructor checks the passing parameters: if the parameter "displayName" is null,
                it throws an exception; otherwise, it assigns displayName to fDisplayName. So without an exception,
                fDisplayName won't be null, which means calling getDisplayName() won't get null and thus calling
@@ -189,11 +189,11 @@ public class MaxCore {
             /*
                [FALSE_POSITIVE]
                This is a false positive. By looking at the implementation of toString()
-               (src/main/java/org/junit/runner/Description.java: line 271),
-               we know that it calls getDisplayName() (Description.java: line 189) which returns the
+               (src/main/java/org/junit/runner/Description.java: line 280),
+               we know that it calls getDisplayName() (Description.java: line 196) which returns the
                field "fDisplayName".
                fDisplayName is first declared Nullable. But fDisplayName is never null:
-               by looking at the constructor (Description.java: line 170),
+               by looking at the constructor (Description.java: line 177),
                we can see that the constructor checks the passing parameters: if the parameter "displayName" is null,
                it throws an exception; otherwise, it assigns displayName to fDisplayName. So without an exception,
                fDisplayName won't be null, which means calling getDisplayName() won't get null and thus calling
@@ -228,11 +228,11 @@ public class MaxCore {
                 /*
                    [FALSE_POSITIVE]
                    This is a false positive. By looking at the implementation of toString()
-                   (src/main/java/org/junit/runner/Description.java: line 271),
-                   we know that it calls getDisplayName() (Description.java: line 189) which returns the
+                   (src/main/java/org/junit/runner/Description.java: line 280),
+                   we know that it calls getDisplayName() (Description.java: line 196) which returns the
                    field "fDisplayName".
                    fDisplayName is first declared Nullable. But fDisplayName is never null:
-                   by looking at the constructor (Description.java: line 170),
+                   by looking at the constructor (Description.java: line 177),
                    we can see that the constructor checks the passing parameters: if the parameter "displayName" is null,
                    it throws an exception; otherwise, it assigns displayName to fDisplayName. So without an exception,
                    fDisplayName won't be null, which means calling getDisplayName() won't get null and thus calling

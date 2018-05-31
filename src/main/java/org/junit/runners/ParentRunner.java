@@ -232,7 +232,7 @@ public abstract class ParentRunner<T> extends Runner implements Filterable,
             /*
                [FALSE_POSITIVE]
                This is a false positive because getFilteredChildren() will never return null.
-               Look at its implementation (line 522): it checks if filteredChildren is null.
+               Look at its implementation (line 532): it checks if filteredChildren is null.
                If filteredChildren is, then "filteredChildren = Collections.unmodifiableCollection(getChildren());"
                will let filteredChildren be assigned to a NotNull instance. Later, it returns filteredChildren
                which now is guaranteed to be a NotNull variable.
@@ -333,7 +333,7 @@ public abstract class ParentRunner<T> extends Runner implements Filterable,
                 /*
                    [FALSE_POSITIVE]
                    This is a false positive because getFilteredChildren() will never return null.
-                   Look at its implementation (line 522): it checks if filteredChildren is null.
+                   Look at its implementation (line 532): it checks if filteredChildren is null.
                    If filteredChildren is, then "filteredChildren = Collections.unmodifiableCollection(getChildren());"
                    will let filteredChildren be assigned to a NotNull instance. Later, it returns filteredChildren
                    which now is guaranteed to be a NotNull variable.
@@ -413,7 +413,7 @@ public abstract class ParentRunner<T> extends Runner implements Filterable,
             /*
                [FALSE_POSITIVE]
                This is a false positive because getFilteredChildren() will never return null.
-               Look at its implementation (line 522): it checks if filteredChildren is null.
+               Look at its implementation (line 532): it checks if filteredChildren is null.
                If filteredChildren is, then "filteredChildren = Collections.unmodifiableCollection(getChildren());"
                will let filteredChildren be assigned to a NotNull instance. Later, it returns filteredChildren
                which now is guaranteed to be a NotNull variable.
@@ -453,7 +453,7 @@ public abstract class ParentRunner<T> extends Runner implements Filterable,
             /*
                [FALSE_POSITIVE]
                This is a false positive because getFilteredChildren() will never be null.
-               Look at its implementation (line 522): it checks if filteredChildren is null.
+               Look at its implementation (line 532): it checks if filteredChildren is null.
                If filteredChildren is, then "filteredChildren = Collections.unmodifiableCollection(getChildren());"
                will let filteredChildren be assigned to a NotNull instance. Later, it returns filteredChildren
                which now is guaranteed to be a NotNull variable.
@@ -475,7 +475,7 @@ public abstract class ParentRunner<T> extends Runner implements Filterable,
                 /*
                    [FALSE_POSITIVE]
                    This is a false positive because filteredChildren won't be null
-                   Becuase Collections.unmodifiableCollection() (line 468) will always return an instance
+                   Becuase Collections.unmodifiableCollection() (line 473) will always return an instance
                    (thus not return null).
                  */
                 throw new NoTestsRemainException();
@@ -492,7 +492,7 @@ public abstract class ParentRunner<T> extends Runner implements Filterable,
                 /*
                    [FALSE_POSITIVE]
                    This is a false positive because getFilteredChildren() will never return null.
-                   Look at its implementation (line 522): it checks if filteredChildren is null.
+                   Look at its implementation (line 532): it checks if filteredChildren is null.
                    If filteredChildren is, then "filteredChildren = Collections.unmodifiableCollection(getChildren());"
                    will let filteredChildren be assigned to a NotNull instance. Later, it returns filteredChildren
                    which now is guaranteed to be a NotNull variable.
