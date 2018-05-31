@@ -8,6 +8,7 @@ import java.lang.reflect.InvocationTargetException;
 /**
  * Reflective wrapper around {@link java.lang.management.ManagementFactory}
  */
+@SuppressWarnings("nullness")
 public class ManagementFactory {
   private static final class FactoryHolder {
     private static final Class<?> MANAGEMENT_FACTORY_CLASS;

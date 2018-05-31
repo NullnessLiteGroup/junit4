@@ -38,6 +38,7 @@ public class JUnit4ClassRunner extends Runner implements Filterable, Sortable {
     }
 
     // helper method for the constructor
+    @SuppressWarnings("nullness")
     protected List<Method> getTestMethods(@UnderInitialization JUnit4ClassRunner this) {
         // [dereference.of.nullable] FALSE_POSITIVE
         // testClass is only assigned in constructor
@@ -46,6 +47,7 @@ public class JUnit4ClassRunner extends Runner implements Filterable, Sortable {
     }
 
     // helper method for the constructor
+    @SuppressWarnings("nullness")
     protected void validate(@UnderInitialization JUnit4ClassRunner this) throws InitializationError {
         // [argument.type.incompatible] FALSE_POSITIVE
         //  testClass is only assigned in constructor

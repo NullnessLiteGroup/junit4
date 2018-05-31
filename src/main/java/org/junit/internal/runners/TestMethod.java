@@ -51,6 +51,7 @@ public class TestMethod {
     }
 
     // Nullable exception from MethodRoadie.runTestMethod()
+    @SuppressWarnings("nullness")
     boolean isUnexpected(@Nullable Throwable exception) {
         // [dereference.of.nullable] FALSE_POSITIVE
         // getExpectedException() will not return null in this case

@@ -207,7 +207,7 @@ public class TestClass implements Annotatable {
      * Returns the only public constructor in the class, or throws an {@code
      * AssertionError} if there are more or less than one.
      */
-
+    @SuppressWarnings("nullness")
     public Constructor<?> getOnlyConstructor() {
         // [dereference.of.nullable] TRUE_POSITIVE
         // TestClass class is exposed in JUnit4 API,
@@ -314,6 +314,7 @@ public class TestClass implements Annotatable {
         }
     }
 
+    @SuppressWarnings("nullness")
     public boolean isPublic() {
         // [dereference.of.nullable] TRUE_POSITIVE
         // TestClass class is exposed in JUnit4 API,
@@ -322,6 +323,7 @@ public class TestClass implements Annotatable {
         return Modifier.isPublic(clazz.getModifiers());
     }
 
+    @SuppressWarnings("nullness")
     public boolean isANonStaticInnerClass() {
         // [dereference.of.nullable] TRUE_POSITIVE
         // TestClass class is exposed in JUnit4 API,

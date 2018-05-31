@@ -295,6 +295,7 @@ public class Parameterized extends Suite {
     }
 
     // helper method for Parameterized
+    @SuppressWarnings("nullness")
     private void validateBeforeParamAndAfterParamMethods(@UnderInitialization Parameterized this, Integer parameterCount)
             throws InvalidTestClassError {
         List<Throwable> errors = new ArrayList<Throwable>();
@@ -380,6 +381,7 @@ public class Parameterized extends Suite {
                     allParameters.isEmpty() ? 0 : normalizeParameters(allParameters.get(0)).length;
         }
 
+        @SuppressWarnings("nullness")
         private List<Runner> createRunners() throws Exception {
             if (runnerOverride != null) {
                 return Collections.singletonList(runnerOverride);

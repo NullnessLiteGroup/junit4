@@ -20,6 +20,7 @@ public class AnnotationValidatorFactory {
      *
      * @since 4.12
      */
+    @SuppressWarnings("nullness")
     public AnnotationValidator createAnnotationValidator(ValidateWith validateWithAnnotation) {
         AnnotationValidator validator = VALIDATORS_FOR_ANNOTATION_TYPES.get(validateWithAnnotation);
         if (validator != null) {

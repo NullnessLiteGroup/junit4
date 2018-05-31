@@ -130,6 +130,7 @@ public class JUnitCore {
      * Do not use. Testing purposes only.
      */
     // Nullable runner from run(Request request) exposed in JUnit4 API
+    @SuppressWarnings("nullness")
     public Result run(@Nullable Runner runner) {
         Result result = new Result();
         RunListener listener = result.createListener();

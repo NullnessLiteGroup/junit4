@@ -84,6 +84,7 @@ public abstract class TestCase extends Assert implements Test {
      * No-arg constructor to enable serialization. This method
      * is not intended to be used by mere mortals without calling setName().
      */
+    @SuppressWarnings("nullness")
     public TestCase() {
         // [assignment.type.incompatible] FALSE_POSITIVE
         // TestCase is not exposed to users in JUnit4 API,
@@ -162,6 +163,7 @@ public abstract class TestCase extends Assert implements Test {
      *
      * @throws Throwable if any exception is thrown
      */
+    @SuppressWarnings("nullness")
     protected void runTest() throws Throwable {
         assertNotNull("TestCase.fName cannot be null", fName); // Some VMs crash when calling getMethod(null,null);
         Method runMethod = null;

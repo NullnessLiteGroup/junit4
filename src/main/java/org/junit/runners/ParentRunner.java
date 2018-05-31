@@ -347,6 +347,7 @@ public abstract class ParentRunner<T> extends Runner implements Filterable,
      * Returns a {@link TestClass} object wrapping the class to be executed.
      */
     // from applyValidators(ParentRunner<T> this, List<Throwable> errors)
+    @SuppressWarnings("nullness")
     public final TestClass getTestClass(@UnknownInitialization ParentRunner<T> this) {
         // [return.type.incompatible] FALSE_POSITIVE
         // both ParentRunner constructors ensure testClass non-null
@@ -470,6 +471,7 @@ public abstract class ParentRunner<T> extends Runner implements Filterable,
     //
 
     // helper method for the constructor of ParentRunner
+    @SuppressWarnings("nullness")
     private void validate(@UnknownInitialization ParentRunner<T> this) throws InitializationError {
         List<Throwable> errors = new ArrayList<Throwable>();
         collectInitializationErrors(errors);
@@ -489,6 +491,7 @@ public abstract class ParentRunner<T> extends Runner implements Filterable,
     }
 
     // helper method from filter(@UnknownInitialization ParentRunner<T> this, Filter filter)
+    @SuppressWarnings("nullness")
     private Collection<T> getFilteredChildren(@UnknownInitialization ParentRunner<T> this) {
         if (filteredChildren == null) {
             childrenLock.lock();

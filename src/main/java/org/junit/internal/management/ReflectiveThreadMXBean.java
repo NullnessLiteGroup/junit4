@@ -12,6 +12,7 @@ final class ReflectiveThreadMXBean implements ThreadMXBean {
   private final Object threadMxBean;
 
 
+  @SuppressWarnings("nullness")
   private static final class Holder {
     static final Method getThreadCpuTimeMethod;
     static final Method isThreadCpuTimeSupportedMethod;
@@ -53,6 +54,7 @@ final class ReflectiveThreadMXBean implements ThreadMXBean {
   /**
    * {@inheritDoc}
    */
+  @SuppressWarnings("nullness")
   public long getThreadCpuTime(long id) {
     if (Holder.getThreadCpuTimeMethod != null) {
       Exception error = null;
@@ -82,6 +84,7 @@ final class ReflectiveThreadMXBean implements ThreadMXBean {
   /**
    * {@inheritDoc}
    */
+  @SuppressWarnings("nullness")
   public boolean isThreadCpuTimeSupported() {
     if (Holder.isThreadCpuTimeSupportedMethod != null) {
       try {

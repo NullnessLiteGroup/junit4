@@ -89,6 +89,7 @@ public class Theories extends BlockJUnit4ClassRunner {
     }
 
     // helper from collectInitializationErrors
+    @SuppressWarnings("nullness")
     private void validateDataPointFields(@UnknownInitialization Theories this, List<Throwable> errors) {
         // [dereference.of.nullable] FALSE_POSITIVE
         // dereference of getTestClass().getJavaClass() is safe here
@@ -111,6 +112,7 @@ public class Theories extends BlockJUnit4ClassRunner {
     }
 
     // helper from collectInitializationErrors
+    @SuppressWarnings("nullness")
     private void validateDataPointMethods(@UnknownInitialization Theories this, List<Throwable> errors) {
         // [dereference.of.nullable] FALSE_POSITIVE
         // dereference of getTestClass().getJavaClass() is safe here
@@ -241,6 +243,7 @@ public class Theories extends BlockJUnit4ClassRunner {
                 throws Throwable {
             new BlockJUnit4ClassRunner(getTestClass()) {
                 @Override
+                @SuppressWarnings("nullness")
                 protected void collectInitializationErrors(
                         // [override.receiver.invalid] FALSE_POSITIVE
                         // We cannot annotate the anonymous type @UnknownInitialization
@@ -275,6 +278,7 @@ public class Theories extends BlockJUnit4ClassRunner {
                 }
 
                 @Override
+                @SuppressWarnings("nullness")
                 public Object createTest() throws Exception {
                     // Nullable params from Assignments.getConstructorArguments()
                     @Nullable Object[] params = complete.getConstructorArguments();
@@ -292,6 +296,7 @@ public class Theories extends BlockJUnit4ClassRunner {
         }
 
         // Nullable freshInstance from methodInvoker(FrameworkMethod method, Object test)
+        @SuppressWarnings("nullness")
         private Statement methodCompletesWithParameters(
                 final FrameworkMethod method, final Assignments complete, final @Nullable Object freshInstance) {
             return new Statement() {

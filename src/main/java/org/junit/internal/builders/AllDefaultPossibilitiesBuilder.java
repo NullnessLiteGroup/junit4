@@ -26,6 +26,7 @@ public class AllDefaultPossibilitiesBuilder extends RunnerBuilder {
     }
 
     @Override
+    @SuppressWarnings("nullness")
     public Runner runnerForClass(Class<?> testClass) throws Throwable {
         List<RunnerBuilder> builders = Arrays.asList(
                 ignoredBuilder(),

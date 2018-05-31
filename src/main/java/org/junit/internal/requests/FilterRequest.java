@@ -31,6 +31,7 @@ public final class FilterRequest extends Request {
     }
 
     @Override
+    @SuppressWarnings("nullness")
     public Runner getRunner() {
         try {
             Runner runner = request.getRunner();

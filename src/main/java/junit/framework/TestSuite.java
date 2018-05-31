@@ -108,6 +108,7 @@ public class TestSuite implements Test {
     /**
      * Constructs an empty TestSuite.
      */
+    @SuppressWarnings("nullness")
     public TestSuite() {
         // [initialization.fields.uninitialized] FALSE_POSITIVE
         // TestSuite is not exposed in JUnit4 API,
@@ -127,6 +128,7 @@ public class TestSuite implements Test {
      * Parts of this method were written at 2337 meters in the Hueffihuette,
      * Kanton Uri
      */
+    @SuppressWarnings("nullness")
     public TestSuite(final Class<?> theClass) {
         // [initialization.fields.uninitialized] FALSE_POSITIVE
         // fName is initialized in the helper method
@@ -135,6 +137,7 @@ public class TestSuite implements Test {
     }
 
     // helper method to for the constructor of TestSuite
+    @SuppressWarnings("nullness")
     private void addTestsFromTestCase(@UnderInitialization TestSuite this, final Class<?> theClass) {
         fName = theClass.getName();
         try {
@@ -183,6 +186,7 @@ public class TestSuite implements Test {
     /**
      * Constructs an empty TestSuite.
      */
+    @SuppressWarnings("nullness")
     public TestSuite(String name) {
         // [initialization.fields.uninitialized] FALSE_POSITIVE
         // fName is initialized in the helper method setName(name)
@@ -194,6 +198,7 @@ public class TestSuite implements Test {
      *
      * @param classes {@link TestCase}s
      */
+    @SuppressWarnings("nullness")
     public TestSuite(Class<?>... classes) {
         // [initialization.fields.uninitialized] FALSE_POSITIVE
         // TestSuite is not exposed in JUnit4 API,
@@ -234,6 +239,7 @@ public class TestSuite implements Test {
      * Adds a test to the suite.
      */
     // helper method to for the constructor of TestSuite
+    @SuppressWarnings("nullness")
     public void addTest(@UnknownInitialization TestSuite this, Test test) {
         // [dereference.of.nullable] FALSE_POSITIVE
         //  fTests cannot be null here, it is already assigned some value

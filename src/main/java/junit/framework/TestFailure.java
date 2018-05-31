@@ -43,6 +43,7 @@ public class TestFailure {
      * Returns a short description of the failure.
      */
     @Override
+    @SuppressWarnings("nullness")
     public String toString() {
         // [dereference.of.nullable] FALSE_POSITIVE
         // Although thrownException can be initialized as null
@@ -64,6 +65,7 @@ public class TestFailure {
      * Returns a String containing the message from the thrown exception.
      */
     // Nullable String returned from null detailed message of an exception (e.g. FileNotFoundException())
+    @SuppressWarnings("nullness")
     public @Nullable String exceptionMessage() {
         // [dereference.of.nullable] FALSE_POSITIVE
         // although thrownException() can be null,

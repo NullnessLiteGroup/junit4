@@ -16,6 +16,7 @@ public class EnumSupplier extends ParameterSupplier {
     }
 
     @Override
+    @SuppressWarnings("nullness")
     public List<PotentialAssignment> getValueSources(ParameterSignature sig) {
         Object[] enumValues = enumType.getEnumConstants();
         

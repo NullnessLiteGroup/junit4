@@ -57,6 +57,7 @@ public class BlockJUnit4ClassRunnerWithParameters extends
         return getTestClass().getOnlyConstructor().newInstance(parameters);
     }
 
+    @SuppressWarnings("nullness")
     private Object createTestUsingFieldInjection() throws Exception {
         List<FrameworkField> annotatedFieldsByParameter = getAnnotatedFieldsByParameter();
         if (annotatedFieldsByParameter.size() != parameters.length) {
@@ -126,8 +127,9 @@ public class BlockJUnit4ClassRunnerWithParameters extends
         }
     }
 
-    @Override
     // override requires
+    @Override
+    @SuppressWarnings("nullness")
     protected void validateFields(@UnknownInitialization BlockJUnit4ClassRunnerWithParameters this, List<Throwable> errors) {
         super.validateFields(errors);
         if (getInjectionType() == InjectionType.FIELD) {

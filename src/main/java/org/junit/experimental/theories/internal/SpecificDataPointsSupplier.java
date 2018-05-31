@@ -20,6 +20,7 @@ public class SpecificDataPointsSupplier extends AllMembersSupplier {
     }
     
     @Override
+    @SuppressWarnings("nullness")
     protected Collection<Field> getSingleDataPointFields(ParameterSignature sig) {
         Collection<Field> fields = super.getSingleDataPointFields(sig);
         // [dereference.of.nullable] FALSE_POSITIVE
@@ -46,6 +47,7 @@ public class SpecificDataPointsSupplier extends AllMembersSupplier {
     }
     
     @Override
+    @SuppressWarnings("nullness")
     protected Collection<Field> getDataPointsFields(ParameterSignature sig) {
         Collection<Field> fields = super.getDataPointsFields(sig);
         // [dereference.of.nullable] FALSE_POSITIVE
@@ -72,6 +74,7 @@ public class SpecificDataPointsSupplier extends AllMembersSupplier {
     }
     
     @Override
+    @SuppressWarnings("nullness")
     protected Collection<FrameworkMethod> getSingleDataPointMethods(ParameterSignature sig) {
         Collection<FrameworkMethod> methods = super.getSingleDataPointMethods(sig);
         // [dereference.of.nullable] FALSE_POSITIVE
@@ -98,6 +101,7 @@ public class SpecificDataPointsSupplier extends AllMembersSupplier {
     }
     
     @Override
+    @SuppressWarnings("nullness")
     protected Collection<FrameworkMethod> getDataPointsMethods(ParameterSignature sig) {
         Collection<FrameworkMethod> methods = super.getDataPointsMethods(sig);
         // [dereference.of.nullable] FALSE_POSITIVE

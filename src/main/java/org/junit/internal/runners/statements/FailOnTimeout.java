@@ -200,6 +200,7 @@ public class FailOnTimeout extends Statement {
      * to {@code mainThread}.
      */
     // Nullable Thread indicated in documentation above
+    @SuppressWarnings("nullness")
     private @Nullable Thread getStuckThread(Thread mainThread) {
         // [argument.type.incompatible] FALSE_POSITIVE
         // mainThread.getThreadGroup() cannot be null because mainThread

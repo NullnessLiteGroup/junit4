@@ -78,6 +78,7 @@ public class JUnit38ClassRunner extends Runner implements Filterable, Sortable {
         this(new TestSuite(klass.asSubclass(TestCase.class)));
     }
 
+    @SuppressWarnings("nullness")
     public JUnit38ClassRunner(Test test) {
         // [initialization.fields.uninitialized] FALSE_POSITIVE
         // test is initialized in the helper method setTest(test);

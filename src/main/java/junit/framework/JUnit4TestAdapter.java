@@ -36,6 +36,7 @@ public class JUnit4TestAdapter implements Test, Filterable, Sortable, Describabl
         this(newTestClass, JUnit4TestAdapterCache.getDefault());
     }
 
+    @SuppressWarnings("nullness")
     public JUnit4TestAdapter(final Class<?> newTestClass, JUnit4TestAdapterCache cache) {
         fCache = cache;
         fNewTestClass = newTestClass;

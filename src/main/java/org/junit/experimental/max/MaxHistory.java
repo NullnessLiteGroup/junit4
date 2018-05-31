@@ -96,6 +96,7 @@ public class MaxHistory implements Serializable {
         return !fDurations.containsKey(key.toString());
     }
 
+    @SuppressWarnings("nullness")
     Long getTestDuration(Description key) {
         // [return.type.incompatible] FALSE_POSITIVE
         // this method is accessible with in the package only,
@@ -126,6 +127,7 @@ public class MaxHistory implements Serializable {
         }
 
         @Override
+        @SuppressWarnings("nullness")
         public void testFinished(Description description) throws Exception {
             long end = System.nanoTime();
             // [unboxing.of.nullable] FALSE_POSITIVE

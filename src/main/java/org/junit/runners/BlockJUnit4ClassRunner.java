@@ -216,6 +216,7 @@ public class BlockJUnit4ClassRunner extends ParentRunner<FrameworkMethod> {
     }
 
     // helper from validateOnlyOneConstructor
+    @SuppressWarnings("nullness")
     private boolean hasOneConstructor(@UnknownInitialization BlockJUnit4ClassRunner this) {
         // [dereference.of.nullable] FALSE_POSITIVE
         // getTestClass().getJavaClass() cannot be null at this point
@@ -324,6 +325,7 @@ public class BlockJUnit4ClassRunner extends ParentRunner<FrameworkMethod> {
      * This can be overridden in subclasses, either by overriding this method,
      * or the implementations creating each sub-statement.
      */
+    @SuppressWarnings("nullness")
     protected Statement methodBlock(final FrameworkMethod method) {
         Object test;
         try {

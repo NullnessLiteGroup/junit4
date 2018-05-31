@@ -13,6 +13,7 @@ import java.util.List;
 final class ReflectiveRuntimeMXBean implements RuntimeMXBean {
   private final Object runtimeMxBean;
 
+  @SuppressWarnings("nullness")
   private static final class Holder {
     private static final Method getInputArgumentsMethod;
     static {
@@ -43,7 +44,7 @@ final class ReflectiveRuntimeMXBean implements RuntimeMXBean {
   /**
    * {@inheritDoc}
    */
-  @SuppressWarnings("unchecked")
+  @SuppressWarnings({"unchecked","nullness"})
   public List<String> getInputArguments() {
     if (Holder.getInputArgumentsMethod != null) {
       try {

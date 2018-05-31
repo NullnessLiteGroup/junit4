@@ -51,6 +51,7 @@ public class ResultMatchers {
     /**
      * Matches if the result has exactly one failure, and it contains {@code string}
      */
+    @SuppressWarnings("nullness")
     public static Matcher<Object> hasSingleFailureContaining(final String string) {
         return new BaseMatcher<Object>() {
             // Nullable item override super requires

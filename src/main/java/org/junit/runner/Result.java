@@ -25,6 +25,7 @@ import org.junit.runner.notification.RunListener;
  */
 public class Result implements Serializable {
     private static final long serialVersionUID = 1L;
+    @SuppressWarnings("nullness")
     private static final ObjectStreamField[] serialPersistentFields =
             // [dereference.of.nullable] FALSE_POSITIVE
             // de-referencing lookup() cannot raise NPE in this case,
@@ -41,6 +42,7 @@ public class Result implements Serializable {
     /** Only set during deserialization process. */
     private SerializedForm serializedForm;
 
+    @SuppressWarnings("nullness")
     public Result() {
         // [initialization.fields.uninitialized] FALSE_POSITIVE
         //  serializedForm is uninitialized with purpose, see
@@ -54,6 +56,7 @@ public class Result implements Serializable {
         startTime = new AtomicLong();
     }
 
+    @SuppressWarnings("nullness")
     private Result(SerializedForm serializedForm) {
         // [initialization.fields.uninitialized] FALSE_POSITIVE
         //  serializedForm is uninitialized with purpose, see
@@ -70,6 +73,7 @@ public class Result implements Serializable {
     /**
      * @return the number of tests run
      */
+    @SuppressWarnings("nullness")
     public int getRunCount() {
         // [dereference.of.nullable] FALSE_POSITIVE
         //  count.get() cannot raise NPE
@@ -104,6 +108,7 @@ public class Result implements Serializable {
     /**
      * @return the number of tests ignored during the run
      */
+    @SuppressWarnings("nullness")
     public int getIgnoreCount() {
         // [dereference.of.nullable] FALSE_POSITIVE
         //  ignoreCount.get() cannot raise NPE
@@ -149,6 +154,7 @@ public class Result implements Serializable {
         }
 
         @Override
+        @SuppressWarnings("nullness")
         public void testFinished(Description description) throws Exception {
             // [dereference.of.nullable] FALSE_POSITIVE
             //  count.get() cannot raise NPE
@@ -165,6 +171,7 @@ public class Result implements Serializable {
         }
 
         @Override
+        @SuppressWarnings("nullness")
         public void testIgnored(Description description) throws Exception {
             // [dereference.of.nullable] FALSE_POSITIVE
             //  ignoreCount.get() cannot raise NPE

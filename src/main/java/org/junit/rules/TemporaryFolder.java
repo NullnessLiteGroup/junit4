@@ -65,6 +65,7 @@ public class TemporaryFolder extends ExternalResource {
      * If {@code null} then system default temporary-file directory is used.
      */
     // Nullable parentFolder from new TemporaryFolder()
+    @SuppressWarnings("nullness")
     public TemporaryFolder(@Nullable File parentFolder) {
         // [initialization.fields.uninitialized] FALSE_POSITIVE
         // uninitialized folder is safe here
@@ -80,6 +81,7 @@ public class TemporaryFolder extends ExternalResource {
      * Create a {@link TemporaryFolder} initialized with
      * values from a builder.
      */
+    @SuppressWarnings("nullness")
     protected TemporaryFolder(Builder builder) {
         // [initialization.fields.uninitialized] FALSE_POSITIVE
         // uninitialized folder is safe here
@@ -109,6 +111,7 @@ public class TemporaryFolder extends ExternalResource {
         private File parentFolder;
         private boolean assureDeletion;
 
+        @SuppressWarnings("nullness")
         protected Builder() {}
         // [initialization.fields.uninitialized] FALSE_POSITIVE
         // it is okay for parentFolder to be uninitialized
@@ -200,6 +203,7 @@ public class TemporaryFolder extends ExternalResource {
      * and a directory named {@code "child"} will be created under the newly-created
      * {@code "parent"} directory.
      */
+    @SuppressWarnings("nullness")
     public File newFolder(String... paths) throws IOException {
         if (paths.length == 0) {
             throw new IllegalArgumentException("must pass at least one path");
@@ -249,6 +253,7 @@ public class TemporaryFolder extends ExternalResource {
     }
 
     // Nullable parentFolder from create()
+    @SuppressWarnings("nullness")
     private File createTemporaryFolderIn(@Nullable File parentFolder) throws IOException {
         File createdFolder = null;
         for (int i = 0; i < TEMP_DIR_ATTEMPTS; ++i) {
