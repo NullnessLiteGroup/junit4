@@ -240,7 +240,7 @@ public class TemporaryFolder extends ExternalResource {
     }
 
     private File createTemporaryFolderIn(File parentFolder) throws IOException {
-        @Nullable File createdFolder = null;
+        File createdFolder = null;
         for (int i = 0; i < TEMP_DIR_ATTEMPTS; ++i) {
             // Use createTempFile to get a suitable folder name.
             String suffix = ".tmp";
