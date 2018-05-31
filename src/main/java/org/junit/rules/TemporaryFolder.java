@@ -66,6 +66,12 @@ public class TemporaryFolder extends ExternalResource {
      */
     // Nullable parentFolder from new TemporaryFolder()
     public TemporaryFolder(@Nullable File parentFolder) {
+        // [initialization.fields.uninitialized] FALSE_POSITIVE
+        // uninitialized folder is safe here
+        // because the three methods accessing folder catch
+        // the case when folder is null;
+        // See these methods: getRoot(), delete(), tryDelete();
+        // Note delete() calls tryDelete() to catch the null case;
         this.parentFolder = parentFolder;
         this.assureDeletion = false;
     }
@@ -75,6 +81,12 @@ public class TemporaryFolder extends ExternalResource {
      * values from a builder.
      */
     protected TemporaryFolder(Builder builder) {
+        // [initialization.fields.uninitialized] FALSE_POSITIVE
+        // uninitialized folder is safe here
+        // because the three methods accessing folder catch
+        // the case when folder is null;
+        // See these methods: getRoot(), delete(), tryDelete();
+        // Note delete() calls tryDelete() to catch the null case;
         this.parentFolder = builder.parentFolder;
         this.assureDeletion = builder.assureDeletion;
     }
@@ -98,6 +110,10 @@ public class TemporaryFolder extends ExternalResource {
         private boolean assureDeletion;
 
         protected Builder() {}
+        // [initialization.fields.uninitialized] FALSE_POSITIVE
+        // it is okay for parentFolder to be uninitialized
+        // because the private field parentFolder is never
+        // de-referenced in the Builder class
 
         /**
          * Specifies which folder to use for creating temporary resources.

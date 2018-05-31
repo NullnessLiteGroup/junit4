@@ -94,6 +94,16 @@ public class MaxHistory implements Serializable {
     }
 
     Long getTestDuration(Description key) {
+        // [return.type.incompatible] FALSE_POSITIVE
+        // this method is accessible with in the package only,
+        // thus, not exposed to the users;
+        // the class documentation says this class
+        // "Stores a subset of the history of each test", which is only
+        // used in MaxCore: sortRequest(Request);
+        // Its caller MaxCore: run registers a
+        // RememberingListener for the MaxHistory instance,
+        // which ensures the test duration of every test
+        // is put into fDurations, before this method is called.
         return fDurations.get(key.toString());
     }
 
@@ -115,6 +125,10 @@ public class MaxHistory implements Serializable {
         @Override
         public void testFinished(Description description) throws Exception {
             long end = System.nanoTime();
+            // [unboxing.of.nullable] FALSE_POSITIVE
+            // this method is not exposed to the users in JUnit4 API;
+            // the internal calls ensures description exist in
+            // starts, which stores the start time of tests
             long start = starts.get(description);
             putTestDuration(description, end - start);
         }
