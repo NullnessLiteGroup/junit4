@@ -66,6 +66,9 @@ public class TestClass implements Annotatable {
     }
 
     protected void scanAnnotatedMembers(@NotNull Map<Class<? extends Annotation>, List<FrameworkMethod>> methodsForAnnotations, @NotNull Map<Class<? extends Annotation>, List<FrameworkField>> fieldsForAnnotations) {
+        // [FALSE_POSITIVE]
+        // getSuperClasses(clazz) will return an empty list if clazz is null (line 185 in this file)
+        // In that case, the following for loop will be skipped, which means it will not raise NPE
         for (Class<?> eachClass : getSuperClasses(clazz)) {
             for (Method eachMethod : MethodSorter.getDeclaredMethods(eachClass)) {
                 addToAnnotationLists(new FrameworkMethod(eachMethod), methodsForAnnotations);
