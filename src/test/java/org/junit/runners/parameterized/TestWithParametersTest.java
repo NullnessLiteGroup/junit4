@@ -29,6 +29,7 @@ public class TestWithParametersTest {
     public void cannotBeCreatedWithoutAName() {
         thrown.expect(NullPointerException.class);
         thrown.expectMessage("The name is missing.");
+        // [FALSE_POSITIVE]
         // This is a false positive, since this method is used to check whether TestWithParameters class can be created
         // without a name. In TestWithParameters.java line 27, we can see the constructor of TestWithParameters uses
         // notnull to check whether the name is null, and throws a NullPointerException if it is. This is exactly what 
@@ -40,6 +41,7 @@ public class TestWithParametersTest {
     public void cannotBeCreatedWithoutTestClass() {
         thrown.expect(NullPointerException.class);
         thrown.expectMessage("The test class is missing.");
+        // [FALSE_POSITIVE]
         // This is a false positive, since this method is used to check whether TestWithParameters class can be created
         // without a TestClass. In TestWithParameters.java line 28, we can see the constructor of TestWithParameters uses
         // notnull to check whether the TestClass is null, and throws a NullPointerException if it is. This is exactly what 
@@ -51,6 +53,7 @@ public class TestWithParametersTest {
     public void cannotBeCreatedWithoutParameters() {
         thrown.expect(NullPointerException.class);
         thrown.expectMessage("The parameters are missing.");
+        // [FALSE_POSITIVE]
         // This is a false positive, since this method is used to check whether TestWithParameters class can be created
         // without parameters (In this case, a not-null list). In TestWithParameters.java line 29, we can see the 
         // constructor of TestWithParameters uses notnull to check whether the argument parameters is null, and
