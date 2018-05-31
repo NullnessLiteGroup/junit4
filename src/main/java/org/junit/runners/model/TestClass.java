@@ -323,6 +323,10 @@ public class TestClass implements Annotatable {
     }
 
     public boolean isANonStaticInnerClass() {
+        // [dereferenced expression clazz is @Nullable] [TRUE_POSITIVE]
+        // TestClass class is exposed in JUnit4 API,
+        // so users can call the following code to raise NPEs here:
+        // (new TestClass(null)).isANonStaticInnerClass();
         return clazz.isMemberClass() && !isStatic(clazz.getModifiers());
     }
 
