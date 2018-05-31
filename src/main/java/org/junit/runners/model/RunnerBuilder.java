@@ -79,13 +79,14 @@ public abstract class RunnerBuilder {
         if (!parents.add(parent)) {
             // [dereference.of.nullable] FALSE_POSITIVE
             // parent cannot be null here
-            // because the underlying type of parents is HashSet;
-            // parents.add(parent) returns true if the parent doesn't exist in parents
-            // or the parent exist with the value null
-            // If we want parent to be null at this point,
-            // we need to satisfy !parents.add(null), which means
-            // null exists in parents with a old value non-null,
-            // which is a contradiction
+            // because parents is initialized to be an empty HashSet at declaration
+            // parents is a private final variable so that it can only be accessed through
+            // this class;
+            // the only place changes parents is at the caller of this method
+            // RunnerBuilder: runners(Class<?> parent, Class<?>[] children)
+            // but everytime it add something to parents,
+            // it removes it when the method exit.
+            // Plus, indicated by the error info below, null cannot contain null as a SuiteClass;
             throw new InitializationError(String.format("class '%s' (possibly indirectly) contains itself as a SuiteClass", parent.getName()));
         }
         return parent;
