@@ -315,6 +315,10 @@ public class TestClass implements Annotatable {
     }
 
     public boolean isPublic() {
+        // [dereferenced expression clazz is @Nullable] [TRUE_POSITIVE]
+        // TestClass class is exposed in JUnit4 API,
+        // so users can call the following code to raise NPEs here:
+        // (new TestClass(null)).isPublic();
         return Modifier.isPublic(clazz.getModifiers());
     }
 
