@@ -171,6 +171,7 @@ public abstract class TestCase extends Assert implements Test {
         }
 
         /**
+            [FALSE_POSITIVE]
             This is a false positive because runMethod won't be null (line 182). 
             runMethod is first declared null (line 162).
             And then, the only statement which may change it is (line 168) 

@@ -7,6 +7,8 @@ import java.io.IOException;
 
 import org.junit.Rule;
 
+import com.sun.istack.internal.Nullable;
+
 /**
  * The TemporaryFolder Rule allows creation of files and folders that should
  * be deleted when the test method finishes (whether it passes or
@@ -212,6 +214,7 @@ public class TemporaryFolder extends ExternalResource {
         }
         if (!lastMkdirsCallSuccessful) {
             /**
+                [FALSE_POSITIVE]
                 This is a false positive because relativePath won't be null (line 227). 
                 relativePath is first declared null (line 239).
                 And then it guarantees to enter the for-loop the program checked paths.length before
@@ -237,7 +240,7 @@ public class TemporaryFolder extends ExternalResource {
     }
 
     private File createTemporaryFolderIn(File parentFolder) throws IOException {
-        File createdFolder = null;
+        @Nullable File createdFolder = null;
         for (int i = 0; i < TEMP_DIR_ATTEMPTS; ++i) {
             // Use createTempFile to get a suitable folder name.
             String suffix = ".tmp";
@@ -253,6 +256,7 @@ public class TemporaryFolder extends ExternalResource {
             tmpFile.delete();
         }
         /**
+            [FALSE_POSITIVE]
             This is a false positive because createFolder won't be null (line 268). 
             createFolder is first declared null (line 240).
             And then it guarantees to enter the for-loop because TEMP_DIR_ATTEMPTS is greater than 0.
