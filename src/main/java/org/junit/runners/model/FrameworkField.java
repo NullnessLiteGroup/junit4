@@ -4,6 +4,8 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.List;
 
+import org.checkerframework.checker.initialization.qual.UnknownInitialization;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.junit.runners.BlockJUnit4ClassRunner;
 
 /**
@@ -41,7 +43,8 @@ public class FrameworkField extends FrameworkMember<FrameworkField> {
         return field.getAnnotations();
     }
 
-    public <T extends Annotation> T getAnnotation(Class<T> annotationType) {
+    // Nullable T returned if annotationType does not exist
+    public <T extends Annotation> @Nullable T getAnnotation(Class<T> annotationType) {
         return field.getAnnotation(annotationType);
     }
 
@@ -56,7 +59,12 @@ public class FrameworkField extends FrameworkMember<FrameworkField> {
     }
 
     @Override
-    protected int getModifiers() {
+    // UnknownInit override super requires
+    protected int getModifiers(@UnknownInitialization FrameworkField this) {
+        // [dereference.of.nullable] FALSE_POSITIVE
+        // dereference of field is safe here
+        // because field is a final field initialized
+        // as non-null in the constructor
         return field.getModifiers();
     }
 
@@ -84,7 +92,11 @@ public class FrameworkField extends FrameworkMember<FrameworkField> {
     /**
      * Attempts to retrieve the value of this field on {@code target}
      */
-    public Object get(Object target) throws IllegalArgumentException, IllegalAccessException {
+    // Nullable target from TestClass.collectAnnotatedFieldValues(Object test,
+    //            Class<? extends Annotation> annotationClass, Class<T> valueClass,
+    //            MemberValueConsumer<T> consumer)
+    // Nullable Object returned if target not exist as key
+    public @Nullable Object get(@Nullable Object target) throws IllegalArgumentException, IllegalAccessException {
         return field.get(target);
     }
 

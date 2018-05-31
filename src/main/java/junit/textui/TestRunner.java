@@ -9,6 +9,7 @@ import junit.framework.TestResult;
 import junit.framework.TestSuite;
 import junit.runner.BaseTestRunner;
 import junit.runner.Version;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 /**
  * A command line based tool to run tests.
@@ -87,7 +88,8 @@ public class TestRunner extends BaseTestRunner {
     }
 
     @Override
-    public void testFailed(int status, Test test, Throwable e) {
+    // Nullable e override from BaseTestRunner
+    public void testFailed(int status, Test test, @Nullable Throwable e) {
     }
 
     @Override
@@ -180,6 +182,13 @@ public class TestRunner extends BaseTestRunner {
                 return runSingleMethod(testCase, method, wait);
             }
             Test suite = getTest(testCase);
+            // [dereference.of.nullable] FALSE_POSITIVE
+            // Although getTest(testCase) may return null,
+            // suite cannot be null at this point,
+            // because the JUnit wiki (https://github.com/junit-team/junit4/wiki/test-runners)
+            // and JUnit4 API don't introduce TestRunner and its usage.
+            // Besides, the internal calls to this method in the project
+            // ensures the suite to be non-null.
             return doRun(suite, wait);
         } catch (Exception e) {
             throw new Exception("Could not create and run test suite: " + e);

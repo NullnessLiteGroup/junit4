@@ -13,6 +13,8 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+import org.checkerframework.checker.initialization.qual.UnderInitialization;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.junit.internal.AssumptionViolatedException;
 import org.junit.runner.Description;
 import org.junit.runner.Runner;
@@ -292,17 +294,26 @@ public class Parameterized extends Suite {
         validateBeforeParamAndAfterParamMethods(runnersFactory.parameterCount);
     }
 
-    private void validateBeforeParamAndAfterParamMethods(Integer parameterCount)
+    // helper method for Parameterized
+    private void validateBeforeParamAndAfterParamMethods(@UnderInitialization Parameterized this, Integer parameterCount)
             throws InvalidTestClassError {
         List<Throwable> errors = new ArrayList<Throwable>();
         validatePublicStaticVoidMethods(Parameterized.BeforeParam.class, parameterCount, errors);
         validatePublicStaticVoidMethods(Parameterized.AfterParam.class, parameterCount, errors);
         if (!errors.isEmpty()) {
+            // [argument.type.incompatible] FALSE_POSITIVE
+            // getTestClass().getJavaClass() cannot be null here
+            // because Users can not call Parameterized(null) by the documents
+            // Parameterized(klass) is not called internally in source folder
+            // and it's not called with null klass in the test folder;
+            // Note FilterableTest.FilteredRunner is the subclass of Parameterized
+            // but it is never instantiated;
             throw new InvalidTestClassError(getTestClass().getJavaClass(), errors);
         }
     }
 
     private void validatePublicStaticVoidMethods(
+            @UnderInitialization Parameterized this,
             Class<? extends Annotation> annotation, Integer parameterCount,
             List<Throwable> errors) {
         List<FrameworkMethod> methods = getTestClass().getAnnotatedMethods(annotation);
@@ -348,7 +359,8 @@ public class Parameterized extends Suite {
         private final FrameworkMethod parametersMethod;
         private final List<Object> allParameters;
         private final int parameterCount;
-        private final Runner runnerOverride;
+        // Nullable runnerOverride indicated from createRunners()
+        private final @Nullable Runner runnerOverride;
 
         private RunnersFactory(Class<?> klass) throws Throwable {
             testClass = new TestClass(klass);
@@ -373,6 +385,10 @@ public class Parameterized extends Suite {
                 return Collections.singletonList(runnerOverride);
             }
             Parameters parameters = parametersMethod.getAnnotation(Parameters.class);
+            // [dereference.of.nullable] FALSE_POSITIVE
+            // parameters cannot be null here because parametersMethod
+            // is initialized to be a FrameworkMethod with annotation
+            // Parameters
             return Collections.unmodifiableList(createRunnersForParameters(
                     allParameters, parameters.name(),
                     getParametersRunnerFactory()));

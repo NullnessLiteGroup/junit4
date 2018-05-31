@@ -4,6 +4,7 @@ import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Comparator;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.junit.FixMethodOrder;
 
 public class MethodSorter {
@@ -62,11 +63,12 @@ public class MethodSorter {
     private MethodSorter() {
     }
 
-    private static Comparator<Method> getSorter(FixMethodOrder fixMethodOrder) {
+    // Nullable FixMethodOrder from MethodSorter.getDeclaredMethods(Class<?> clazz)
+    // Nullable Comparator<Method> returned if @fixMethodOrder(value=RUNTIME) calls JVM(null)
+    private static @Nullable Comparator<Method> getSorter(@Nullable FixMethodOrder fixMethodOrder) {
         if (fixMethodOrder == null) {
             return DEFAULT;
         }
-
         return fixMethodOrder.value().getComparator();
     }
 }

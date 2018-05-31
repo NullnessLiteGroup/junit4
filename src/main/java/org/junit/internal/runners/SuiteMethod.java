@@ -5,6 +5,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 
 import junit.framework.Test;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 /**
  * Runner for use with JUnit 3.8.x-style AllTests classes
@@ -34,8 +35,31 @@ public class SuiteMethod extends JUnit38ClassRunner {
             }
             suite = (Test) suiteMethod.invoke(null); // static method
         } catch (InvocationTargetException e) {
+            // [throwing.nullable] TRUE_POSITIVE
+            // e.getCause() is nullable from the Java API;
+            // Although e.getCause() in InvocationTargetException
+            // may be intended to be non-null in Java reflection,
+            // we decided it JUnit4 needs to be safer.
+            // @See Java API that documents getCause can be null
+            //      (https://docs.oracle.com/javase/8/docs/api/
+            //      java/lang/reflect/InvocationTargetException.html)
+            // @See StackOverFlow discussion about when InvocationTargetException
+            //      has a null cause (https://stackoverflow.com/questions/
+            //      17684484/when-is-invocationtargetexception-getcause-null)
+            // @See The blog in Oracle forum discussing the four possibilities of
+            //      getCause() (https://blogs.oracle.com/chengfang/
+            //      whats-inside-invocationtargetexception-not-just-exception)
             throw e.getCause();
         }
+        // [return.type.incompatible] FALSE_POSITIVE
+        // suite cannot be null here
+        // SuiteMethod is an internal class not exposed to users in JUnit4 API
+        // its two callers: 1) AllTests is documented not used programmatically
+        // although it is exposed to users
+        // 2) SuiteMethodBuilder.runnerForClass ensures the klass here has a public
+        // static suite method with no parameter.
+        // And we checked all tests files and noticed that all public static suite()
+        // methods return non-null Test
         return suite;
     }
 }

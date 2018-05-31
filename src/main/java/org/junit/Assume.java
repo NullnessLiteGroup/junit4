@@ -6,6 +6,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.nullValue;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.hamcrest.Matcher;
 
 /**
@@ -79,7 +80,8 @@ public class Assume {
      * If called with a {@code null} array or one or more {@code null} elements in {@code objects},
      * the test will halt and be ignored.
      */
-    public static void assumeNotNull(Object... objects) {
+    // Nullable objects from Theories: createTest()
+    public static void assumeNotNull(@Nullable Object... objects) {
         assumeThat(objects, notNullValue());
         assumeThat(asList(objects), everyItem(notNullValue()));
     }

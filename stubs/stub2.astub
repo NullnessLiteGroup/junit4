@@ -1,0 +1,21 @@
+// stub file for the Nullness Checker
+// The method being invoked permits null.
+import org.checkerframework.checker.nullness.qual.Nullable;
+
+package org.hamcrest;
+
+public interface Matcher<T> {
+	// Nullable item from ThrowableMessageMatcher: matchesSafely(T item)
+    boolean matches(@Nullable Object item);
+	// Nullable item from ThrowableMessageMatcher: describeMismatchSafely(T item, Description description)
+	void describeMismatch(@Nullable Object item, Description mismatchDescription);
+}
+
+public interface Description {
+	// Nullable value from AssumptionViolatedException: describeTo(Description description)
+    Description appendValue(@Nullable Object value);
+}
+
+//public class MatcherAssert {
+//	public static <T> void assertThat(@Nullable String reason, T actual, Matcher<? super T> matcher);
+//}

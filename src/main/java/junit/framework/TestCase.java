@@ -85,6 +85,11 @@ public abstract class TestCase extends Assert implements Test {
      * is not intended to be used by mere mortals without calling setName().
      */
     public TestCase() {
+        // [assignment.type.incompatible] FALSE_POSITIVE
+        // TestCase is not exposed to users in JUnit4 API,
+        // and developers never called this constructor
+        // from this project and the other constructor
+        // is always called with a non-null name
         fName = null;
     }
 
@@ -169,6 +174,9 @@ public abstract class TestCase extends Assert implements Test {
         } catch (NoSuchMethodException e) {
             fail("Method \"" + fName + "\" not found");
         }
+        // [dereference.of.nullable] FALSE_POSITIVE
+        // de-referencing runMethod cannot raise NPE here
+        // since we catch NoSuchMethodException above
         if (!Modifier.isPublic(runMethod.getModifiers())) {
             fail("Method \"" + fName + "\" should be public");
         }
@@ -177,6 +185,22 @@ public abstract class TestCase extends Assert implements Test {
             runMethod.invoke(this);
         } catch (InvocationTargetException e) {
             e.fillInStackTrace();
+            // [throwing.nullable] TRUE_POSITIVE
+            // e.getTargetException() is nullable from the
+            // documentation of getCause(), a substitute method
+            // since the release of Java 1.4;
+            // Although e.getCause() in InvocationTargetException
+            // may be intended to be non-null in Java reflection,
+            // we decided it JUnit4 needs to be safer.
+            // @See Java API that documents getCause can be null
+            //      (https://docs.oracle.com/javase/8/docs/api/
+            //      java/lang/reflect/InvocationTargetException.html)
+            // @See StackOverFlow discussion about when InvocationTargetException
+            //      has a null cause (https://stackoverflow.com/questions/
+            //      17684484/when-is-invocationtargetexception-getcause-null)
+            // @See The blog in Oracle forum discussing the four possibilities of
+            //      getCause() (https://blogs.oracle.com/chengfang/
+            //      whats-inside-invocationtargetexception-not-just-exception)
             throw e.getTargetException();
         } catch (IllegalAccessException e) {
             e.fillInStackTrace();

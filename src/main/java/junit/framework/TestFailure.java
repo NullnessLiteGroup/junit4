@@ -1,5 +1,6 @@
 package junit.framework;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.junit.internal.Throwables;
 
 
@@ -11,12 +12,14 @@ import org.junit.internal.Throwables;
  */
 public class TestFailure {
     protected Test fFailedTest;
-    protected Throwable fThrownException;
+    // Nullable thrownException from the constructor
+    protected @Nullable Throwable fThrownException;
 
     /**
      * Constructs a TestFailure with the given test and exception.
      */
-    public TestFailure(Test failedTest, Throwable thrownException) {
+    // Nullable thrownException from TestResult: addError
+    public TestFailure(Test failedTest, @Nullable Throwable thrownException) {
         fFailedTest = failedTest;
         fThrownException = thrownException;
     }
@@ -31,7 +34,8 @@ public class TestFailure {
     /**
      * Gets the thrown exception.
      */
-    public Throwable thrownException() {
+    // Nullable thrownException from the constructor
+    public @Nullable Throwable thrownException() {
         return fThrownException;
     }
 
@@ -40,6 +44,11 @@ public class TestFailure {
      */
     @Override
     public String toString() {
+        // [dereference.of.nullable] FALSE_POSITIVE
+        // Although thrownException can be initialized as null
+        // TestFailure isn't exposed in JUnit4 API, so users are
+        // unaware of this method; Besides, toString() specified
+        // for this TestFailure is never called from this project.
         return fFailedTest + ": " + fThrownException.getMessage();
     }
     
@@ -54,7 +63,15 @@ public class TestFailure {
     /**
      * Returns a String containing the message from the thrown exception.
      */
-    public String exceptionMessage() {
+    // Nullable String returned from null detailed message of an exception (e.g. FileNotFoundException())
+    public @Nullable String exceptionMessage() {
+        // [dereference.of.nullable] FALSE_POSITIVE
+        // although thrownException() can be null,
+        // but NPEs will never be raised here, because
+        // TestFailure is not exposed in the JUnit4 API,
+        // and the project never calls this method except
+        // two calls from the the test, where the thrownException()
+        // is ensured to be non-null
         return thrownException().getMessage();
     }
 

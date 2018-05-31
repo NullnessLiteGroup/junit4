@@ -3,6 +3,7 @@ package org.junit.internal.builders;
 import java.util.Arrays;
 import java.util.List;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.junit.runner.Runner;
 import org.junit.runners.model.RunnerBuilder;
 
@@ -39,6 +40,13 @@ public class AllDefaultPossibilitiesBuilder extends RunnerBuilder {
                 return runner;
             }
         }
+        // [return.type.incompatible] FALSE_POSITIVE
+        // we never reach this line,
+        // because at least JUnit4Builder().safeRunnerForClass(testClass)
+        // will never return null runner;
+        // even if it has Initialization error, the
+        // safeRunnerForClass will ensure a runner
+        // returned for that throwable.
         return null;
     }
 

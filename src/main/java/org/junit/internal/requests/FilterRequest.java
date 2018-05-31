@@ -35,6 +35,12 @@ public final class FilterRequest extends Request {
         try {
             Runner runner = request.getRunner();
             fFilter.apply(runner);
+            // [return.type.incompatible] FALSE_POSITIVE
+            // runner cannot be null here, because FilterRequest
+            // is not exposed in JUnit4 API, and the constructor
+            // is only called from JUnitCommandLineParseResult: createRequest()
+            // and Request: method(); Both of them ensures the underlying
+            // runner returns non-null runner
             return runner;
         } catch (NoTestsRemainException e) {
             return new ErrorReportingRunner(Filter.class, new Exception(String

@@ -7,6 +7,8 @@ import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.checkerframework.checker.initialization.qual.UnknownInitialization;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.junit.Assert;
 import org.junit.Assume;
 import org.junit.experimental.theories.internal.Assignments;
@@ -79,13 +81,20 @@ public class Theories extends BlockJUnit4ClassRunner {
     }
 
     @Override
-    protected void collectInitializationErrors(List<Throwable> errors) {
+    // helper method override super requires
+    protected void collectInitializationErrors(@UnknownInitialization Theories this, List<Throwable> errors) {
         super.collectInitializationErrors(errors);
         validateDataPointFields(errors);
         validateDataPointMethods(errors);
     }
 
-    private void validateDataPointFields(List<Throwable> errors) {
+    // helper from collectInitializationErrors
+    private void validateDataPointFields(@UnknownInitialization Theories this, List<Throwable> errors) {
+        // [dereference.of.nullable] FALSE_POSITIVE
+        // dereference of getTestClass().getJavaClass() is safe here
+        // although JUnit4 API allows users to call new Theories(null),
+        // the NPEs raised here is shadowed by validateNoNonStaticInnerClass(errors)
+        // from super.collectInitializationErrors(errors);
         Field[] fields = getTestClass().getJavaClass().getDeclaredFields();
 
         for (Field field : fields) {
@@ -101,7 +110,13 @@ public class Theories extends BlockJUnit4ClassRunner {
         }
     }
 
-    private void validateDataPointMethods(List<Throwable> errors) {
+    // helper from collectInitializationErrors
+    private void validateDataPointMethods(@UnknownInitialization Theories this, List<Throwable> errors) {
+        // [dereference.of.nullable] FALSE_POSITIVE
+        // dereference of getTestClass().getJavaClass() is safe here
+        // although JUnit4 API allows users to call new Theories(null),
+        // the NPEs raised here is shadowed by validateNoNonStaticInnerClass(errors)
+        // from super.collectInitializationErrors(errors);
         Method[] methods = getTestClass().getJavaClass().getDeclaredMethods();
         
         for (Method method : methods) {
@@ -118,12 +133,14 @@ public class Theories extends BlockJUnit4ClassRunner {
     }
 
     @Override
-    protected void validateConstructor(List<Throwable> errors) {
+    // override super requires
+    protected void validateConstructor(@UnknownInitialization Theories this, List<Throwable> errors) {
         validateOnlyOneConstructor(errors);
     }
 
     @Override
-    protected void validateTestMethods(List<Throwable> errors) {
+    // override super requires
+    protected void validateTestMethods(@UnknownInitialization Theories this, List<Throwable> errors) {
         for (FrameworkMethod each : computeTestMethods()) {
             if (each.getAnnotation(Theory.class) != null) {
                 each.validatePublicVoid(false, errors);
@@ -141,7 +158,8 @@ public class Theories extends BlockJUnit4ClassRunner {
         }
     }
 
-    private void validateParameterSupplier(Class<? extends ParameterSupplier> supplierClass, List<Throwable> errors) {
+    // helper from validateTestMethods
+    private void validateParameterSupplier(@UnknownInitialization Theories this, Class<? extends ParameterSupplier> supplierClass, List<Throwable> errors) {
         Constructor<?>[] constructors = supplierClass.getConstructors();
         
         if (constructors.length != 1) {
@@ -157,7 +175,8 @@ public class Theories extends BlockJUnit4ClassRunner {
     }
 
     @Override
-    protected List<FrameworkMethod> computeTestMethods() {
+    // override super requires
+    protected List<FrameworkMethod> computeTestMethods(@UnknownInitialization Theories this) {
         List<FrameworkMethod> testMethods = new ArrayList<FrameworkMethod>(super.computeTestMethods());
         List<FrameworkMethod> theoryMethods = getTestClass().getAnnotatedMethods(Theory.class);
         testMethods.removeAll(theoryMethods);
@@ -223,6 +242,8 @@ public class Theories extends BlockJUnit4ClassRunner {
             new BlockJUnit4ClassRunner(getTestClass()) {
                 @Override
                 protected void collectInitializationErrors(
+                        // [override.receiver.invalid] FALSE_POSITIVE
+                        // We cannot annotate the anonymous type @UnknownInitialization
                         List<Throwable> errors) {
                     // do nothing
                 }
@@ -248,34 +269,44 @@ public class Theories extends BlockJUnit4ClassRunner {
                 }
 
                 @Override
-                protected Statement methodInvoker(FrameworkMethod method, Object test) {
+                // Nullable test override super required
+                protected Statement methodInvoker(FrameworkMethod method, @Nullable Object test) {
                     return methodCompletesWithParameters(method, complete, test);
                 }
 
                 @Override
                 public Object createTest() throws Exception {
-                    Object[] params = complete.getConstructorArguments();
+                    // Nullable params from Assignments.getConstructorArguments()
+                    @Nullable Object[] params = complete.getConstructorArguments();
                     
                     if (!nullsOk()) {
                         Assume.assumeNotNull(params);
                     }
-                    
+
+                    // [argument.type.incompatible] FALSE_POSITIVE
+                    // params cannot be null array or array with null objects here
+                    // because Assume.assumeNotNull(params) will catch it
                     return getTestClass().getOnlyConstructor().newInstance(params);
                 }
             }.methodBlock(testMethod).evaluate();
         }
 
+        // Nullable freshInstance from methodInvoker(FrameworkMethod method, Object test)
         private Statement methodCompletesWithParameters(
-                final FrameworkMethod method, final Assignments complete, final Object freshInstance) {
+                final FrameworkMethod method, final Assignments complete, final @Nullable Object freshInstance) {
             return new Statement() {
                 @Override
                 public void evaluate() throws Throwable {
-                    final Object[] values = complete.getMethodArguments();
+                    // Nullable values from Assignments.getMethodArguments()
+                    final @Nullable Object[] values = complete.getMethodArguments();
                     
                     if (!nullsOk()) {
                         Assume.assumeNotNull(values);
                     }
-                    
+
+                    // [argument.type.incompatible] FALSE_POSITIVE
+                    // values cannot be null array or array with null objects here
+                    // because Assume.assumeNotNull(values) will catch it
                     method.invokeExplosively(freshInstance, values);
                 }
             };

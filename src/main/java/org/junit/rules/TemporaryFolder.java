@@ -5,6 +5,7 @@ import static org.junit.Assert.fail;
 import java.io.File;
 import java.io.IOException;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.junit.Rule;
 
 /**
@@ -40,7 +41,8 @@ import org.junit.Rule;
  * @since 4.7
  */
 public class TemporaryFolder extends ExternalResource {
-    private final File parentFolder;
+    // Nullable parentFolder from constructor
+    private final @Nullable File parentFolder;
     private final boolean assureDeletion;
     private File folder;
 
@@ -62,7 +64,8 @@ public class TemporaryFolder extends ExternalResource {
      * @param parentFolder folder where temporary resources will be created.
      * If {@code null} then system default temporary-file directory is used.
      */
-    public TemporaryFolder(File parentFolder) {
+    // Nullable parentFolder from new TemporaryFolder()
+    public TemporaryFolder(@Nullable File parentFolder) {
         this.parentFolder = parentFolder;
         this.assureDeletion = false;
     }
@@ -212,6 +215,11 @@ public class TemporaryFolder extends ExternalResource {
         }
         if (!lastMkdirsCallSuccessful) {
             throw new IOException(
+                    // [dereference.of.nullable] FALSE_POSITIVE
+                    // de-referencing relativePath is safe in this case
+                    // this relativePath is from the execution of the loop above
+                    // because paths.length is ensure to be positive from the code above
+                    // thus, relativePath at this point must be some nonnull object
                     "a folder with the path \'" + relativePath.getPath() + "\' already exists");
         }
         return file;
@@ -224,7 +232,8 @@ public class TemporaryFolder extends ExternalResource {
         return createTemporaryFolderIn(getRoot());
     }
 
-    private File createTemporaryFolderIn(File parentFolder) throws IOException {
+    // Nullable parentFolder from create()
+    private File createTemporaryFolderIn(@Nullable File parentFolder) throws IOException {
         File createdFolder = null;
         for (int i = 0; i < TEMP_DIR_ATTEMPTS; ++i) {
             // Use createTempFile to get a suitable folder name.
@@ -240,6 +249,15 @@ public class TemporaryFolder extends ExternalResource {
             }
             tmpFile.delete();
         }
+        // [dereference.of.nullable] FALSE_POSITIVE
+        // dereference of parentFolder cannot cause NPEs
+        // because NPEs only happen when create() is called when
+        // parentFolder = null, but it is documented not to use create()
+        //
+        // [dereference.of.nullable] FALSE_POSITIVE
+        // dereference createdFolder cannot cause NPE
+        // this createdFolder can only come from the loop above, which
+        // is initialized at every iteration
         throw new IOException("Unable to create temporary directory in: "
             + parentFolder.toString() + ". Tried " + TEMP_DIR_ATTEMPTS + " times. "
             + "Last attempted to create: " + createdFolder.toString());

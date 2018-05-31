@@ -10,6 +10,7 @@ import java.util.concurrent.FutureTask;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.junit.internal.management.ManagementFactory;
 import org.junit.internal.management.ThreadMXBean;
 import org.junit.runners.model.MultipleFailureException;
@@ -136,7 +137,8 @@ public class FailOnTimeout extends Statement {
      * test failed, an exception indicating a timeout if the test timed out, or
      * {@code null} if the test passed.
      */
-    private Throwable getResult(FutureTask<Throwable> task, Thread thread) {
+    // Nullable Throwable returned by documentation above
+    private @Nullable Throwable getResult(FutureTask<Throwable> task, Thread thread) {
         try {
             if (timeout > 0) {
                 return task.get(timeout, timeUnit);
@@ -197,7 +199,14 @@ public class FailOnTimeout extends Statement {
      * problem or if the thread cannot be determined.  The return value is never equal 
      * to {@code mainThread}.
      */
-    private Thread getStuckThread(Thread mainThread) {
+    // Nullable Thread indicated in documentation above
+    private @Nullable Thread getStuckThread(Thread mainThread) {
+        // [argument.type.incompatible] FALSE_POSITIVE
+        // mainThread.getThreadGroup() cannot be null because mainThread
+        // is created from evaluate() according to the document above,
+        // and evaluate() initialize the ThreadGroup to be non-null,
+        // and ThreadGroup is never reassigned from the Thread class.
+        // Plus, FailOnTimeout is not exposed in JUnit4 API.
         List<Thread> threadsInGroup = getThreadsInGroup(mainThread.getThreadGroup());
         if (threadsInGroup.isEmpty()) {
             return null;
@@ -268,7 +277,8 @@ public class FailOnTimeout extends Statement {
     private class CallableStatement implements Callable<Throwable> {
         private final CountDownLatch startLatch = new CountDownLatch(1);
 
-        public Throwable call() throws Exception {
+        // Nullable Throwable from implementation below
+        public @Nullable Throwable call() throws Exception {
             try {
                 startLatch.countDown();
                 originalStatement.evaluate();

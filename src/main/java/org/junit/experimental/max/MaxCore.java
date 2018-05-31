@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.List;
 
 import junit.framework.TestSuite;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.junit.internal.requests.SortingRequest;
 import org.junit.internal.runners.ErrorReportingRunner;
 import org.junit.internal.runners.JUnit38ClassRunner;
@@ -137,15 +138,36 @@ public class MaxCore {
         }
         String methodName = each.getMethodName();
         if (methodName == null) {
+            // [return.type.incompatible] FALSE_POSITIVE
+            // Request.aClass(type).getRunner() cannot be null here
+            // because it eventually called ClassRequest(type).getRunner(),
+            // which uses CustomAllDefaultPossibilitiesBuilder to avoid null runner;
+            // CustomAllDefaultPossibilitiesBuilder extends from
+            // AllDefaultPossibilitiesBuilder, which never returns a null Runner;
             return Request.aClass(type).getRunner();
         }
+        // [return.type.incompatible] FALSE_POSITIVE
+        // Request.method(type, methodName).getRunner() cannot be null here
+        // because it eventually called ClassRequest(type).getRunner() from
+        // FilterRequest().getRunner(),
+        // and uses CustomAllDefaultPossibilitiesBuilder to avoid null runner;
+        // CustomAllDefaultPossibilitiesBuilder extends from
+        // AllDefaultPossibilitiesBuilder, which never returns a null Runner;
         return Request.method(type, methodName).getRunner();
     }
 
+    // Nullable Class<?> returned if throw ClassNotFoundException
     private Class<?> getMalformedTestClass(Description each) {
         try {
             return Class.forName(each.toString().replace(MALFORMED_JUNIT_3_TEST_CLASS_PREFIX, ""));
         } catch (ClassNotFoundException e) {
+            // [return.type.incompatible] FALSE_POSITIVE
+            // we never reach this line
+            // cheating methods if user test is in JUnit3 style
+            // keyword MALFORMED_JUNIT_3_TEST_CLASS_PREFIX is not exposed to users
+            // we can see MALFORMED_JUNIT_3_TEST_CLASS_PREFIX is only used in
+            // MaxCore: findLeaves when we get description: "warning(junit.framework.TestSuite$1)"
+            // so the class exists and is already examined by the JUnit4 runner.
             return null;
         }
     }
@@ -161,11 +183,16 @@ public class MaxCore {
 
     private List<Description> findLeaves(Request request) {
         List<Description> results = new ArrayList<Description>();
+        // [dereference.of.nullable] TRUE_POSITIVE
+        // dereference of request.getRunner() is unsafe here
+        // because JUnit4 API doesn't prevent users from calling:
+        // MaxCore.storedLocally(new File("/* some path */")).sortRequest(Request.runner(null));
         findLeaves(null, request.getRunner().getDescription(), results);
         return results;
     }
 
-    private void findLeaves(Description parent, Description description, List<Description> results) {
+    // Nullable parent from MaxCore: findLeaves(Request request)
+    private void findLeaves(@Nullable Description parent, Description description, List<Description> results) {
         if (description.getChildren().isEmpty()) {
             if (description.toString().equals("warning(junit.framework.TestSuite$1)")) {
                 results.add(Description.createSuiteDescription(MALFORMED_JUNIT_3_TEST_CLASS_PREFIX + parent));
