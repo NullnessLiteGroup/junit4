@@ -213,6 +213,10 @@ public class TestClass implements Annotatable {
      */
 
     public Constructor<?> getOnlyConstructor() {
+        // [dereferenced expression clazz is @Nullable] [TRUE_POSITIVE]
+        // TestClass class is exposed in JUnit4 API,
+        // so users can call the following code to raise NPEs here:
+        // (new TestClass(null)).getOnlyConstructor();
         Constructor<?>[] constructors = clazz.getConstructors();
         Assert.assertEquals(1, constructors.length);
         return constructors[0];
