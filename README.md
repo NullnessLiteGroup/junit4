@@ -15,7 +15,7 @@ We used the forked JUnit4 source code to evaluate our project: [Nullness_Lite](h
 
 ## Branches we created for evaluation
 
-| Evaluation of __ | Branch Name |
+| The Checker Being Evaluated | Branch Name |
 |--|--|
 | The Nullness_Lite Option | annos_nl_all |
 | 1) All variables initialized | annos_nl_init |
