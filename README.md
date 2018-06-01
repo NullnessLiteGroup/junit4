@@ -14,7 +14,6 @@ For more information, please visit:
 We used the forked JUnit4 source code to evaluate our project: [Nullness_Lite](https://github.com/weifanjiang/Nullness_Lite)
 
 ## Branches we created for evaluation
-
 | The Checker Being Evaluated | Branch Name |
 |--|--|
 | The Nullness_Lite Option | annos_nl_all |
@@ -30,3 +29,6 @@ We used the forked JUnit4 source code to evaluate our project: [Nullness_Lite](h
 | NullAway with annotations added by Infer Nullity | Nullaway_Intellij |
 | NullAway with annotations required for the Nullness Checker | Nullaway_nc |
 | NullAway with annotations required for NullnessLite | Nullaway_nl |
+
+## Edits in the Source Files
+We only added additional Comments that provides infomation for our evaluation process. For more infomation, please look at the Evaluation section in our project's [report](https://github.com/weifanjiang/Nullness_Lite/blob/master/reports/week10/Report-10.pdf).
