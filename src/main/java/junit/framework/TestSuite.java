@@ -184,6 +184,8 @@ public class TestSuite implements Test {
      * Constructs an empty TestSuite.
      */
     public TestSuite(String name) {
+        // [initialization.fields.uninitialized] FALSE_POSITIVE
+        // fName is initialized in the helper method setName(name)
         setName(name);
     }
 
@@ -193,6 +195,17 @@ public class TestSuite implements Test {
      * @param classes {@link TestCase}s
      */
     public TestSuite(Class<?>... classes) {
+        // [initialization.fields.uninitialized] FALSE_POSITIVE
+        // TestSuite is not exposed in JUnit4 API,
+        // TestSuite(Class<?>... classes) and the caller of this method
+        // TestSuite(Class<? extends TestCase>[] classes, String name)
+        // are not internally called in this project;
+        // TestSuite(Class<?>... classes) is called in the test folder,
+        // but it is okay because, fName is a private field that can
+        // only be accessed from getName();
+        // getName() is called in the test folder only when fName is
+        // ensured to be non-null or with extra control flow to prevent
+        // NPEs.
         for (Class<?> each : classes) {
             addTest(testCaseForClass(each));
         }
