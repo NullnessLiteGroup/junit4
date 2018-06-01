@@ -265,6 +265,7 @@ public class Assert {
      */
     static public void assertNull(Object object) {
         if (object != null) {
+            //noinspection ConstantConditions
             assertNull("Expected: <null> but was: " + object.toString(), object);
         }
     }

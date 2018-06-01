@@ -89,7 +89,7 @@ public class MultipleFailureException extends Exception {
             return;
         }
         /*
-	  [FALSE_POSITIVE]
+	      [FALSE_POSITIVE]
           This is a false positive. Since we've checked above to ensure that errors is not empty,
           errors.get(0) won't cause NullPointerException.
           Then the only possible cause of NullPointerException is Throwables.rethrowAsException(Throwable e)
