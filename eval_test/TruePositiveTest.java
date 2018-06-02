@@ -1,5 +1,3 @@
-package nltest;
-
 import org.junit.Test;
 import org.junit.experimental.max.MaxCore;
 import org.junit.experimental.results.PrintableResult;
