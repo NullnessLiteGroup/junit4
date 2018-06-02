@@ -1,12 +1,13 @@
-package practice;
+package nltest;
 
 import org.junit.Test;
 import org.junit.experimental.max.MaxCore;
 import org.junit.experimental.results.PrintableResult;
 import org.junit.experimental.results.ResultMatchers;
-import org.junit.runner.Description;
-import org.junit.runner.JUnitCore;
-import org.junit.runner.Request;
+import org.junit.experimental.theories.DataPoints;
+import org.junit.experimental.theories.Theories;
+import org.junit.experimental.theories.Theory;
+import org.junit.runner.*;
 import org.junit.runner.notification.Failure;
 import org.junit.runners.model.TestClass;
 
@@ -59,7 +60,7 @@ public class TruePositiveTest {
 
     @Test(expected=NullPointerException.class)
     public void testMaxCore() {
-        MaxCore.storedLocally(new File("/* some path */")).sortRequest(Request.runner(null));
+        MaxCore.storedLocally(new File("some_path")).sortRequest(Request.runner(null));
     }
 
     @Test(expected=NullPointerException.class)
@@ -82,5 +83,22 @@ public class TruePositiveTest {
         List<Failure> list = new ArrayList<>();
         list.add(new Failure(Description.createTestDescription(Object.class, ""), null));
         (new PrintableResult(list)).toString();
+    }
+
+    @Test(expected=NullPointerException.class)
+    public void testAllMembersSupplier() throws Throwable {
+        Class[] classes = new Class[]{TruePositiveTest.TestAllMembersSupplier.class};
+        final Result result = JUnitCore.runClasses(classes);
+        for (final Failure failure : result.getFailures()) {
+            throw failure.getException();
+        }
+    }
+
+    @RunWith(Theories.class)
+    public static class TestAllMembersSupplier {
+        @DataPoints
+        public static List<String> dataPoints = null;
+        @Theory
+        public void testList(List<String> list) { }
     }
 }
