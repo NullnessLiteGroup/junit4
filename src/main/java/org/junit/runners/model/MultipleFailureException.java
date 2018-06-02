@@ -96,7 +96,8 @@ public class MultipleFailureException extends Exception {
           By looking at the implementation of Throwables.rethrowAsException(Throwable e), we get to know that
           although there is a statement "return null;" inside it, it will never reach that line (due to the
           developer's comments).
-          So this is a false positive, and we cannot add any annotations to eliminate it (@NotNull does not support jdk 1.5).
+          So this is a false positive, and we cannot add any annotations to eliminate it
+          (annotation NotNull does not support jdk 1.5).
         **/
         if (errors.size() == 1) {
             throw Throwables.rethrowAsException(errors.get(0));
