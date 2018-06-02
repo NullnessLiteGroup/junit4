@@ -132,7 +132,12 @@ public class JUnit38ClassRunner extends Runner implements Filterable, Sortable {
         try {
             Method m = test.getClass().getMethod(test.getName());
             /*
-               [FALSE_POSITIVE]  => call hierachy
+               [FALSE_POSITIVE]
+               This is a false positive.
+               Let's take a look at the implementation of
+               getName() (TestCase.java: line 505) and the constructor of TestCase (TestCase.java: line 98)
+               (src/main/java/junit/framework/TestCase.java). We get to know that if test is NotNull
+               (as it's said at line 131), test.getName() will always return a String.
              */
             return m.getDeclaredAnnotations();
         } catch (SecurityException e) {
