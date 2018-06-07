@@ -87,6 +87,10 @@ public class MaxCore {
      */
     public Result run(Request request, JUnitCore core) {
         core.addListener(history.listener());
+        // [argument.type.incompatible] FALSE_POSITIVE
+        // the developers documented that JUnitCore.run(Runner runner)
+        // is only for testing purpose. And the internal
+        // implementation ensures the runner is non-null
         return core.run(sortRequest(request).getRunner());
     }
 
