@@ -113,6 +113,10 @@ public class JUnitCore {
      * @return a {@link Result} describing the details of the test run and the failed tests.
      */
     public Result run(Request request) {
+        // [argument.type.incompatible] FALSE_POSITIVE
+        // the developers documented that run(Runner runner)
+        // is only for testing purpose. And the internal
+        // implementation ensures the runner is non-null
         return run(request.getRunner());
     }
 
