@@ -86,7 +86,7 @@ public class ErrorReportingRunner extends Runner {
             return ((org.junit.internal.runners.InitializationError) cause)
                     .getCauses();
         }
-        // [return.type.incompatible] SPECIAL_CASE
+        // [return.type.incompatible] FALSE_POSITIVE
         // List<Nullable Throwable> is incompatible with List<Throwable>
         // by the Checker Framework, see section 24.1.2 in the manual of
         // the Checker Framework (https://checkerframework.org/manual/#generics)
