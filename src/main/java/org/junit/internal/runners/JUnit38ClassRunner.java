@@ -107,6 +107,11 @@ public class JUnit38ClassRunner extends Runner implements Filterable, Sortable {
         } else if (test instanceof TestSuite) {
             TestSuite ts = (TestSuite) test;
             String name = ts.getName() == null ? createSuiteDescription(ts) : ts.getName();
+            // [argument.type.incompatible] FALSE_POSITIVE
+            // name cannot be null in this case because
+            // we set name to getName() only if getName() is non-null
+            // and we didn't call ts.setName(null) to invalidate the dataflow fact
+            // besides, createSuiteDescription(ts) always return non-null object;
             Description description = Description.createSuiteDescription(name);
             int n = ts.testCount();
             for (int i = 0; i < n; i++) {
