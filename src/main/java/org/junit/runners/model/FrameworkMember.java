@@ -49,7 +49,7 @@ public abstract class FrameworkMember<T extends FrameworkMember<T>> implements
 
     abstract boolean isBridgeMethod();
 
-    // helper method from isPublic(@UnknownInitialization FrameworkMember<T> this)
+    // helper method from isPublic(UnknownInitialization FrameworkMember<T> this)
     protected abstract int getModifiers(@UnknownInitialization FrameworkMember<T> this);
 
     /**

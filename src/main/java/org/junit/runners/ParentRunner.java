@@ -121,14 +121,14 @@ public abstract class ParentRunner<T> extends Runner implements Filterable,
     /**
      * Returns a list of objects that define the children of this Runner.
      */
-    // helper method for getFilteredChildren(@UnknownInitialization ParentRunner<T> this)
+    // helper method for getFilteredChildren(UnknownInitialization ParentRunner<T> this)
     protected abstract List<T> getChildren(@UnknownInitialization ParentRunner<T> this);
 
     /**
      * Returns a {@link Description} for {@code child}, which can be assumed to
      * be an element of the list returned by {@link ParentRunner#getChildren()}
      */
-    // helper method from shouldRun(@UnknownInitialization ParentRunner<T> this, Filter filter, T each)
+    // helper method from shouldRun(UnknownInitialization ParentRunner<T> this, Filter filter, T each)
     protected abstract Description describeChild(@UnknownInitialization ParentRunner<T> this, T child);
 
     /**
@@ -149,7 +149,7 @@ public abstract class ParentRunner<T> extends Runner implements Filterable,
      * {@code @BeforeClass} or {@code @AfterClass} that is not
      * {@code public static void} with no arguments.
      */
-    // called from helper method validate(@UnknownInitialization ParentRunner<T> this) for the constructor of ParentRunner
+    // called from helper method validate(UnknownInitialization ParentRunner<T> this) for the constructor of ParentRunner
     protected void collectInitializationErrors(@UnknownInitialization ParentRunner<T> this, List<Throwable> errors) {
         validatePublicVoidNoArgMethods(BeforeClass.class, true, errors);
         validatePublicVoidNoArgMethods(AfterClass.class, true, errors);
@@ -157,7 +157,7 @@ public abstract class ParentRunner<T> extends Runner implements Filterable,
         applyValidators(errors);
     }
 
-    // called from helper method collectInitializationErrors(@UnknownInitialization ParentRunner<T> this, List<Throwable> errors)
+    // called from helper method collectInitializationErrors(UnknownInitialization ParentRunner<T> this, List<Throwable> errors)
     // for the constructor of ParentRunner
     private void applyValidators(@UnknownInitialization ParentRunner<T> this, List<Throwable> errors) {
         if (getTestClass().getJavaClass() != null) {
@@ -178,7 +178,7 @@ public abstract class ParentRunner<T> extends Runner implements Filterable,
      * <li>is not static (given {@code isStatic is true}).
      * </ul>
      */
-    // called from helper method collectInitializationErrors(@UnknownInitialization ParentRunner<T> this, List<Throwable> errors)
+    // called from helper method collectInitializationErrors(UnknownInitialization ParentRunner<T> this, List<Throwable> errors)
     // for the constructor of ParentRunner
     protected void validatePublicVoidNoArgMethods(@UnknownInitialization ParentRunner<T> this, Class<? extends Annotation> annotation,
             boolean isStatic, List<Throwable> errors) {
@@ -189,7 +189,7 @@ public abstract class ParentRunner<T> extends Runner implements Filterable,
         }
     }
 
-    // called from helper method collectInitializationErrors(@UnknownInitialization ParentRunner<T> this, List<Throwable> errors)
+    // called from helper method collectInitializationErrors(UnknownInitialization ParentRunner<T> this, List<Throwable> errors)
     // for the constructor of ParentRunner
     private void validateClassRules(@UnknownInitialization ParentRunner<T> this, List<Throwable> errors) {
         CLASS_RULE_VALIDATOR.validate(getTestClass(), errors);
@@ -488,7 +488,7 @@ public abstract class ParentRunner<T> extends Runner implements Filterable,
         }
     }
 
-    // helper method from filter(@UnknownInitialization ParentRunner<T> this, Filter filter)
+    // helper method from filter(UnknownInitialization ParentRunner<T> this, Filter filter)
     private Collection<T> getFilteredChildren(@UnknownInitialization ParentRunner<T> this) {
         if (filteredChildren == null) {
             childrenLock.lock();
@@ -507,7 +507,7 @@ public abstract class ParentRunner<T> extends Runner implements Filterable,
         return filteredChildren;
     }
 
-    // helper method from filter(@UnknownInitialization ParentRunner<T> this, Filter filter)
+    // helper method from filter(UnknownInitialization ParentRunner<T> this, Filter filter)
     private boolean shouldRun(@UnknownInitialization ParentRunner<T> this, Filter filter, T each) {
         return filter.shouldRun(describeChild(each));
     }
