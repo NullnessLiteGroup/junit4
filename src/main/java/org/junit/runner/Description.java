@@ -1,5 +1,6 @@
 package org.junit.runner;
 
+import com.sun.istack.internal.NotNull;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -99,13 +100,7 @@ public class Description implements Serializable {
      * @param name the name of the test (a method name for test annotated with {@link org.junit.Test})
      * @return a <code>Description</code> named <code>name</code>
      */
-    public static Description createTestDescription(@Nullable Class<?> clazz, String name) {  // changed
-        /*
-           [TRUE_POSITIVE]
-           clazz.getName() can raise a NullPointerException
-           because JUnit4 API doesn't restrict users from calling:
-           Description.createTestDescription((Class<Object>) null, "");
-         */
+    public static Description createTestDescription(@NotNull Class<?> clazz, String name) {
         return new Description(clazz, formatDisplayName(name, clazz.getName()));
     }
 
