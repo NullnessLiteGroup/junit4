@@ -13,6 +13,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
+import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.junit.runner.notification.Failure;
 import org.junit.runner.notification.RunListener;
@@ -39,14 +40,9 @@ public class Result implements Serializable {
     private final AtomicLong startTime;
 
     /** Only set during deserialization process. */
-    private SerializedForm serializedForm;
+    private @MonotonicNonNull SerializedForm serializedForm;
 
     public Result() {
-        // [initialization.fields.uninitialized] FALSE_POSITIVE
-        //  serializedForm is uninitialized with purpose, see
-        // comments on declaration of serializedForm;
-        // also note that the private field, serializedForm is
-        // never directly de-referenced in this class;
         count = new AtomicInteger();
         ignoreCount = new AtomicInteger();
         failures = new CopyOnWriteArrayList<Failure>();
@@ -55,11 +51,6 @@ public class Result implements Serializable {
     }
 
     private Result(SerializedForm serializedForm) {
-        // [initialization.fields.uninitialized] FALSE_POSITIVE
-        //  serializedForm is uninitialized with purpose, see
-        // comments on declaration of serializedForm;
-        // also note that the private field, serializedForm is
-        // never directly de-referenced in this class;
         count = serializedForm.fCount;
         ignoreCount = serializedForm.fIgnoreCount;
         failures = new CopyOnWriteArrayList<Failure>(serializedForm.fFailures);
@@ -132,6 +123,9 @@ public class Result implements Serializable {
     }
 
     private Object readResolve()  {
+        // [argument.type.incompatible] FALSE_POSITIVE
+        // readResolve() is never called by other methods
+        // so we never reach this line
         return new Result(serializedForm);
     }
 
