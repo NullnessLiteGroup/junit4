@@ -268,7 +268,7 @@ public class Assert {
      * an AssertionFailedError is thrown with the given message.
      */
     // Nullable message from Assert.assertNotNull(Object object)
-    // Nullable object from Assert.assertNotNull(String message,@Nullable Object object)
+    // Nullable object from Assert.assertNotNull(String message,Nullable Object object)
     static public void assertNotNull(@Nullable String message, @Nullable Object object) {
         assertTrue(message, object != null);
     }
@@ -334,24 +334,24 @@ public class Assert {
         assertNotSame(null, expected, actual);
     }
 
-    // Nullable message from Assert.assertNotSame(@Nullable String message, Object expected, Object actual)
+    // Nullable message from Assert.assertNotSame(Nullable String message, Object expected, Object actual)
     static public void failSame(@Nullable String message) {
         String formatted = (message != null) ? message + " " : "";
         fail(formatted + "expected not same");
     }
 
-    // Nullable message from Assert.assertSame(@Nullable String message, Object expected, Object actual)
+    // Nullable message from Assert.assertSame(Nullable String message, Object expected, Object actual)
     static public void failNotSame(@Nullable String message, Object expected, Object actual) {
         String formatted = (message != null) ? message + " " : "";
         fail(formatted + "expected same:<" + expected + "> was not:<" + actual + ">");
     }
 
-    // Nullable message from Assert.assertEquals(@Nullable String message, Object expected, Object actual)
+    // Nullable message from Assert.assertEquals(Nullable String message, Object expected, Object actual)
     static public void failNotEquals(@Nullable String message, Object expected, Object actual) {
         fail(format(message, expected, actual));
     }
 
-    // Nullable message from Assert.failNotEquals(@Nullable String message, Object expected, Object actual)
+    // Nullable message from Assert.failNotEquals(Nullable String message, Object expected, Object actual)
     public static String format(@Nullable String message, Object expected, Object actual) {
         String formatted = "";
         if (message != null && message.length() > 0) {
