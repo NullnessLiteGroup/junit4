@@ -335,6 +335,10 @@ public class Parameterized extends Suite {
 
         AssumptionViolationRunner(TestClass testClass, String methodName,
                 AssumptionViolatedException exception) {
+            // [argument.type.incompatible] FALSE_POSITIVE
+            // testClass.getJavaClass() cannot be null
+            // because its only caller RunnersFactory(Class<?> klass)
+            // indicates a NonNull klass is wrapped in testClass
             this.description = Description
                     .createTestDescription(testClass.getJavaClass(),
                             methodName + "() assumption violation");

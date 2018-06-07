@@ -104,12 +104,7 @@ public class Description implements Serializable {
      * @return a <code>Description</code> named <code>name</code>
      */
     // Nullable name from JUnit38ClassRunner.asDescription(Test test)
-    // Nullable clazz for its public static method
-    public static Description createTestDescription(@Nullable Class<?> clazz, @Nullable String name) {
-        // [dereference.of.nullable] TRUE_POSITIVE
-        // clazz.getName() can raise NPEs
-        // the JUnit4 API doesn't disallow users to call:
-        // Description.createTestDescription((Class<Object>) null, "");
+    public static Description createTestDescription(Class<?> clazz, @Nullable String name) {
         return new Description(clazz, formatDisplayName(name, clazz.getName()));
     }
 
