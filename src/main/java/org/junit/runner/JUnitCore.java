@@ -113,6 +113,10 @@ public class JUnitCore {
      * @return a {@link Result} describing the details of the test run and the failed tests.
      */
     public Result run(Request request) {
+        // [argument.type.incompatible] FALSE_POSITIVE
+        // the developers documented that run(Runner runner)
+        // is only for testing purpose. And the internal
+        // implementation ensures the runner is non-null
         return run(request.getRunner());
     }
 
@@ -129,17 +133,11 @@ public class JUnitCore {
     /**
      * Do not use. Testing purposes only.
      */
-    // Nullable runner from run(Request request) exposed in JUnit4 API
-    public Result run(@Nullable Runner runner) {
+    public Result run(Runner runner) {
         Result result = new Result();
         RunListener listener = result.createListener();
         notifier.addFirstListener(listener);
         try {
-            // [dereference.of.nullable] TRUE_POSITIVE
-            // dereference of runner is unsafe here
-            // because the JUnit4 API doesn't disallow users
-            // to call:
-            // (new JUnitCore()).run(Request.runner(null));
             notifier.fireTestRunStarted(runner.getDescription());
             runner.run(notifier);
             notifier.fireTestRunFinished(result);
