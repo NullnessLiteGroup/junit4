@@ -268,7 +268,7 @@ public class Assert {
      * an AssertionFailedError is thrown with the given message.
      */
     // Nullable message from Assert.assertNotNull(Object object)
-    // Nullable object from Assert.assertNotNull(String message, Nullable Object object)
+    // Nullable object from Assert.assertNotNull(String message,Nullable Object object)
     static public void assertNotNull(@Nullable String message, @Nullable Object object) {
         assertTrue(message, object != null);
     }
