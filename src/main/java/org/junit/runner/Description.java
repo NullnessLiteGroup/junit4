@@ -1,6 +1,5 @@
 package org.junit.runner;
 
-import com.sun.istack.internal.NotNull;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
