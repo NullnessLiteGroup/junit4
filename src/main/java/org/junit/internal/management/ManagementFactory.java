@@ -78,7 +78,7 @@ public class ManagementFactory {
     private static final ThreadMXBean THREAD_MX_BEAN =
         getBean(FactoryHolder.getBeanObject("getThreadMXBean"));
 
-    //  @Nullable threadMxBean indicated from implementation
+    //  Nullable threadMxBean indicated from implementation
     private static final ThreadMXBean getBean(@Nullable Object threadMxBean) {
       return threadMxBean != null
           ? new ReflectiveThreadMXBean(threadMxBean) : new FakeThreadMXBean();

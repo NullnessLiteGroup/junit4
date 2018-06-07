@@ -243,7 +243,7 @@ public class Theories extends BlockJUnit4ClassRunner {
                 @Override
                 protected void collectInitializationErrors(
                         // [override.receiver.invalid] FALSE_POSITIVE
-                        // We cannot annotate the anonymous type @UnknownInitialization
+                        // We cannot annotate the anonymous type UnknownInitialization
                         List<Throwable> errors) {
                     // do nothing
                 }
