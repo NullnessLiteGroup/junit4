@@ -133,17 +133,11 @@ public class JUnitCore {
     /**
      * Do not use. Testing purposes only.
      */
-    // Nullable runner from run(Request request) exposed in JUnit4 API
-    public Result run(@Nullable Runner runner) {
+    public Result run(Runner runner) {
         Result result = new Result();
         RunListener listener = result.createListener();
         notifier.addFirstListener(listener);
         try {
-            // [dereference.of.nullable] TRUE_POSITIVE
-            // dereference of runner is unsafe here
-            // because the JUnit4 API doesn't disallow users
-            // to call:
-            // (new JUnitCore()).run(Request.runner(null));
             notifier.fireTestRunStarted(runner.getDescription());
             runner.run(notifier);
             notifier.fireTestRunFinished(result);
