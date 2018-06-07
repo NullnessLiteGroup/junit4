@@ -102,7 +102,7 @@ public class TestSuite implements Test {
         };
     }
 
-    private @MonotonicNonNull String fName;
+    private @Nullable String fName;
 
     private Vector<Test> fTests = new Vector<Test>(10); // Cannot convert this to List because it is used directly by some test runners
 
@@ -171,14 +171,15 @@ public class TestSuite implements Test {
     /**
      * Constructs an empty TestSuite.
      */
-    public TestSuite(String name) {
+    // Nullable name from JUnit38ClassRunner.filter(Filter filter)
+    public TestSuite(@Nullable String name) {
         setName(name);
     }
 
     /**
      * Constructs a TestSuite from the given array of classes.
      *
-     * @param classes {@link TestCase}s
+     * @param classes {@link TestCase}
      */
     public TestSuite(Class<?>... classes) {
         for (Class<?> each : classes) {
@@ -240,7 +241,8 @@ public class TestSuite implements Test {
      * test suites have a name and this method
      * can return null.
      */
-    public String getName() {
+    // Nullable String returned due to documentation above
+    public @Nullable String getName() {
         return fName;
     }
 
@@ -266,7 +268,8 @@ public class TestSuite implements Test {
      * @param name the name to set
      */
     // helper method for the constructor of TestSuite
-    public void setName(@UnknownInitialization TestSuite this, String name) {
+    // Nullable name from TestSuite(String name)
+    public void setName(@UnknownInitialization TestSuite this, @Nullable String name) {
         fName = name;
     }
 
@@ -296,6 +299,12 @@ public class TestSuite implements Test {
     @Override
     public String toString() {
         if (getName() != null) {
+            // [return.type.incompatible] FALSE_POSITIVE
+            // getName() will not be null in this case
+            // because we ensured getName() is non-null above
+            // However, we cannot reduce this false-positive by
+            // annotate deterministic because users can
+            // change fName by setName(String name)
             return getName();
         }
         return super.toString();
