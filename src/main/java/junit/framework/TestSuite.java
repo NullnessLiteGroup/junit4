@@ -11,6 +11,7 @@ import java.util.Vector;
 
 import org.checkerframework.checker.initialization.qual.UnderInitialization;
 import org.checkerframework.checker.initialization.qual.UnknownInitialization;;
+import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.junit.internal.MethodSorter;
 import org.junit.internal.Throwables;
@@ -101,7 +102,7 @@ public class TestSuite implements Test {
         };
     }
 
-    private String fName;
+    private @MonotonicNonNull String fName;
 
     private Vector<Test> fTests = new Vector<Test>(10); // Cannot convert this to List because it is used directly by some test runners
 
@@ -109,16 +110,6 @@ public class TestSuite implements Test {
      * Constructs an empty TestSuite.
      */
     public TestSuite() {
-        // [initialization.fields.uninitialized] FALSE_POSITIVE
-        // TestSuite is not exposed in JUnit4 API,
-        // TestSuite() and its subclass constructor ActiveTestSuite()
-        // are not internally called in this project;
-        // TestSuite() is called in the test folder,
-        // but it is okay because, fName is a private field that can
-        // only be accessed from getName();
-        // getName() is called in the test folder only when fName is
-        // ensured to be non-null or with extra control flow to prevent
-        // NPEs.
     }
 
     /**
@@ -128,9 +119,6 @@ public class TestSuite implements Test {
      * Kanton Uri
      */
     public TestSuite(final Class<?> theClass) {
-        // [initialization.fields.uninitialized] FALSE_POSITIVE
-        // fName is initialized in the helper method
-        // addTestsFromTestCase(theClass)
         addTestsFromTestCase(theClass);
     }
 
@@ -184,8 +172,6 @@ public class TestSuite implements Test {
      * Constructs an empty TestSuite.
      */
     public TestSuite(String name) {
-        // [initialization.fields.uninitialized] FALSE_POSITIVE
-        // fName is initialized in the helper method setName(name)
         setName(name);
     }
 
@@ -195,17 +181,6 @@ public class TestSuite implements Test {
      * @param classes {@link TestCase}s
      */
     public TestSuite(Class<?>... classes) {
-        // [initialization.fields.uninitialized] FALSE_POSITIVE
-        // TestSuite is not exposed in JUnit4 API,
-        // TestSuite(Class<?>... classes) and the caller of this method
-        // TestSuite(Class<? extends TestCase>[] classes, String name)
-        // are not internally called in this project;
-        // TestSuite(Class<?>... classes) is called in the test folder,
-        // but it is okay because, fName is a private field that can
-        // only be accessed from getName();
-        // getName() is called in the test folder only when fName is
-        // ensured to be non-null or with extra control flow to prevent
-        // NPEs.
         for (Class<?> each : classes) {
             addTest(testCaseForClass(each));
         }
