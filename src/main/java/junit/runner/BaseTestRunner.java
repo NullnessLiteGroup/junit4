@@ -20,6 +20,7 @@ import junit.framework.Test;
 import junit.framework.TestListener;
 import junit.framework.TestSuite;
 
+import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.junit.internal.Throwables;
 
@@ -28,13 +29,9 @@ import org.junit.internal.Throwables;
  * This class was born live on stage in Sardinia during XP2000.
  */
 public abstract class BaseTestRunner implements TestListener {
-    // [initialization.fields.uninitialized] FALSE_POSITIVE
-    //  fPreference is a safe field, which will not raise NPE
-    // because it's private, and the only place to access it
-    // getPreferences() ensures the returned value non-null
     public static final String SUITE_METHODNAME = "suite";
 
-    private static Properties fPreferences;
+    private static @MonotonicNonNull Properties fPreferences;
     static int fgMaxMessageLength = 500;
     static boolean fgFilterStack = true;
     boolean fLoading = true;
