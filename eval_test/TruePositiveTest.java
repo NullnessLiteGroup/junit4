@@ -22,11 +22,6 @@ public class TruePositiveTest {
         Description.createTestDescription((Class<Object>) null, "", (Annotation[]) null);
     }
 
-    @Test(expected=NullPointerException.class)
-    public void testDescription2() {
-        Description.createTestDescription((Class<Object>) null, "");
-    }
-
     static Failure failure = (new Failure(Description.createTestDescription(Object.class, ""), null));
 
     @Test(expected=NullPointerException.class)
@@ -59,11 +54,6 @@ public class TruePositiveTest {
     @Test(expected=NullPointerException.class)
     public void testMaxCore() {
         MaxCore.storedLocally(new File("some_path")).sortRequest(Request.runner(null));
-    }
-
-    @Test(expected=NullPointerException.class)
-    public void testJUnitCore() {
-        (new JUnitCore()).run(Request.runner(null));
     }
 
     @Test(expected=NullPointerException.class)
